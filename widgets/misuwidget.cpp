@@ -25,7 +25,7 @@ bool MisuWidget::event(QEvent *event)
 
         QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
         foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
-            qDebug() << "touch wnote:" << id << " tid:" << touchPoint.id() <<  " x:" << touchPoint.pos().x() << " y:" << touchPoint.pos().y() << " t: " << t ;
+            //qDebug() << "touch wnote:" << id << " tid:" << touchPoint.id() <<  " x:" << touchPoint.pos().x() << " y:" << touchPoint.pos().y() << " t: " << t ;
             emit touchEvent(touchPoint.id(),event->type(),touchPoint.pos().x(),touchPoint.pos().y(),t);
         }
         return true;
@@ -37,7 +37,7 @@ bool MisuWidget::event(QEvent *event)
 
         const QMouseEvent * meve = static_cast<QMouseEvent *>(event);
 
-        qDebug() << "mouse wnote " << id  << " x:" << meve->pos().x() << " y:" << meve->pos().y() << " t: " << t;
+        //qDebug() << "mouse wnote " << id  << " x:" << meve->pos().x() << " y:" << meve->pos().y() << " t: " << t;
         emit touchEvent(9999, event->type(), meve->pos().x(),meve->pos().y(),t);
         return true;
     }
