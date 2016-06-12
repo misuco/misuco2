@@ -1,0 +1,79 @@
+#include "freqtriple.h"
+#include <math.h>
+
+FreqTriple::FreqTriple()
+{
+    setFreq(freq_a);
+}
+
+FreqTriple::~FreqTriple()
+{
+
+}
+
+float FreqTriple::getFreq() const
+{
+    return freq;
+}
+
+void FreqTriple::setFreq(float f)
+{
+    freq = f;
+    midinote = round(Log2(f/(freq_a/64.0))*12.0-3);
+    pitch = calcPitch(midinote,freq);
+    calcHue();
+}
+
+int FreqTriple::getMidinote() const
+{
+    return midinote;
+}
+
+void FreqTriple::setMidinote(int value)
+{
+    midinote = value;
+    pitch=0;
+    freq=calcFreq(midinote,pitch);
+    calcHue();
+}
+
+int FreqTriple::getPitch() const
+{
+    return pitch;
+}
+
+void FreqTriple::setPitch(int value)
+{
+    pitch = value;
+    freq=calcFreq(midinote,pitch);
+}
+
+int FreqTriple::getHue() const
+{
+    return hue;
+}
+
+float FreqTriple::calcPitch(int midinote, float f) {
+    return round(Log2(f/calcMidi2Fequal(midinote))*12*8192/2);
+}
+
+float FreqTriple::calcFreq(int midinote, int pitch) {
+    return pow(2.0,(float)pitch*2.0/12.0/8192.0)*calcMidi2Fequal(midinote);
+}
+
+double FreqTriple::Log2( double n )
+{
+    // log(n)/log(2) is log2.
+    return log( n ) / log( 2 );
+}
+
+float FreqTriple::calcMidi2Fequal(int x)
+{
+    int oct=(x+3)/12;
+    float p=(x+3)%12;
+    return (freq_a / 64.0f) * (pow(2.0 , (double)((float)oct*1200.0f+100.0f*p) / 1200.0f));
+}
+
+void FreqTriple::calcHue() {
+    hue=midinote%12*30;
+}
