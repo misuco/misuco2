@@ -18,7 +18,9 @@ public:
 
     struct eventStackElement {
         int eventId;
-        int fieldId;
+        int row;
+        int col;
+        float f;
     };
 
     explicit MisuWidget(QWidget *parent = 0);
