@@ -17,7 +17,7 @@ protected:
 signals:
 
 public slots:
-    void processTouchEvent(int id, int state, int x, int y, long t);
+    void processTouchEvent(misuTouchEvent e);
 
 private:
     QString cap;

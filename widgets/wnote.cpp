@@ -27,7 +27,7 @@ void wNote::paintEvent(QPaintEvent *)
     painter.drawText(0,0,width(),height(),0,cap);
 }
 
-void wNote::processTouchEvent(int id, int state, int x, int y, long t)
+void wNote::processTouchEvent(misuTouchEvent e)
 {
 
 }

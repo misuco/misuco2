@@ -20,13 +20,16 @@ protected:
     void resizeEvent(QResizeEvent *E);
 
 public slots:
-    void processTouchEvent(int id, int state, int x, int y, long t);
+    void processTouchEvent(misuTouchEvent e);
 
 private:
     // working memory
     MWPlayfield fields[MAX_ROWS][MAX_COLS];
     int rows;
     int cols;
+
+    // event stack/hashmap
+
 
     // configuration
     MWScale Scale;

@@ -4,9 +4,11 @@
 #include <QWidget>
 
 class MisuWidget : public QWidget
-{
+{    
+    Q_OBJECT
 
-    struct point {
+public:
+    struct misuTouchEvent {
         int id;
         int x;
         int y;
@@ -14,8 +16,11 @@ class MisuWidget : public QWidget
         long t;
     };
 
-    Q_OBJECT
-public:
+    struct eventStackElement {
+        int eventId;
+        int fieldId;
+    };
+
     explicit MisuWidget(QWidget *parent = 0);
     ~MisuWidget();
 
@@ -24,11 +29,10 @@ protected:
     int id;
 
 signals:
-    void touchEvent(int,int,int,int,long);
+    void touchEvent(misuTouchEvent e);
 
 public slots:
-    virtual void processTouchEvent(int id, int state, int x, int y, long t)=0;
-
+    virtual void processTouchEvent(misuTouchEvent e)=0;
 };
 
 #endif // MISUWIDGET_H

@@ -20,7 +20,7 @@ MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent)
     bendVertTop=-1;
     bendVertBot=-1;
 
-    QObject::connect(this,SIGNAL(touchEvent(int,int,int,int,long)),this,SLOT(processTouchEvent(int,int,int,int,long)));
+    QObject::connect(this,SIGNAL(touchEvent(misuTouchEvent)),this,SLOT(processTouchEvent(misuTouchEvent)));
 
     config();
 }
@@ -243,7 +243,7 @@ void MWPlayArea::resizeEvent(QResizeEvent *E)
     calcGeo();
 }
 
-void MWPlayArea::processTouchEvent(int id, int state, int x, int y, long t)
+void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
-    qDebug() << "MWPlayArea::processPoint " << id << " x " << x << " y " << y << " t " << t;
+    qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
 }
