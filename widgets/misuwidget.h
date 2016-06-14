@@ -18,6 +18,8 @@ public:
 
     struct eventStackElement {
         int eventId;
+        int voiceId;
+        int midinote;
         int row;
         int col;
         float f;

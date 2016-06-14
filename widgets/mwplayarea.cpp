@@ -2,9 +2,9 @@
 #include <QDebug>
 #include <QLinearGradient>
 #include <QRadialGradient>
+#include "comm/senderdebug.h"
 
 MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
-    //painter(this),
     linearGrad(QPointF(0,1),QPointF(0,1))
 {
     Scale.basenote=1;
@@ -29,6 +29,8 @@ MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
     }
 
     QObject::connect(this,SIGNAL(touchEvent(misuTouchEvent)),this,SLOT(processTouchEvent(misuTouchEvent)));
+
+    out = new SenderDebug();
 
     config();
 }
@@ -267,37 +269,55 @@ void MWPlayArea::resizeEvent(QResizeEvent *E)
 
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
-    qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
+    //qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
+
     int row=e.y*rows/height();
     int col=e.x*cols/width();
-    qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
+    MWPlayfield * pf = &fields[row][col];
+    //qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
+
+    float freq=pf->f1.getFreq();
+    int midinote=pf->f1.getMidinote();
+    int pitch=pf->f1.getPitch();
+    int velocity=127;
 
     switch(e.state) {
     case Qt::TouchPointPressed:
         es->eventId=e.id;
+        es->voiceId=nextVoiceId++;
+        es->midinote=midinote;
         es->row=row;
         es->col=col;
-        fields[row][col].pressed++;
+        pf->pressed++;
+        out->noteOn(chan,es->voiceId,freq,midinote,pitch,velocity);
         //paintField(row,col);
         update();
         break;
     case Qt::TouchPointMoved:
         if(row!=es->row || col!=es->col) {
-            fields[es->row][es->col].pressed--;
+            MWPlayfield * ppf = &fields[es->row][es->col];
+            ppf->pressed--;
+            out->noteOff(chan,es->voiceId,es->midinote);
+
+            es->voiceId=nextVoiceId++;
+            es->midinote=midinote;
+            out->noteOn(chan,es->voiceId,freq,midinote,pitch,velocity);
+
             es->row=row;
             es->col=col;
-            fields[row][col].pressed++;
+            pf->pressed++;
             //paintField(row,col);
             update();
         }
         break;
     case Qt::TouchPointReleased:
+        out->noteOff(chan,es->voiceId,es->midinote);
         es->eventId=-1;
         es->row=-1;
         es->col=-1;
-        fields[row][col].pressed--;
+        pf->pressed--;
         //paintField(row,col);
         update();
         break;
