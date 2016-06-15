@@ -3,6 +3,7 @@
 #include <QLinearGradient>
 #include <QRadialGradient>
 #include "comm/senderdebug.h"
+#include "comm/sendermobilesynth.h"
 
 MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1))
@@ -30,7 +31,8 @@ MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
 
     QObject::connect(this,SIGNAL(touchEvent(misuTouchEvent)),this,SLOT(processTouchEvent(misuTouchEvent)));
 
-    out = new SenderDebug();
+    //out = new SenderDebug();
+    out = new SenderMobileSynth();
 
     config();
 }
