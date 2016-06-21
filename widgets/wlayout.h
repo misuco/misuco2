@@ -3,6 +3,9 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include "widgets/mwplayarea.h"
+#include "widgets/mwbasenotesetter.h"
+#include "comm/sendermobilesynth.h"
 
 class wlayout : public QWidget
 {
@@ -18,7 +21,8 @@ public slots:
 private:
     QGridLayout *layout;
     QWidget * widgets[160];
-
+    MWPlayArea PlayArea;
+    MWBaseNoteSetter * BaseNoteSetter[];
 };
 
 #endif // WLAYOUT_H

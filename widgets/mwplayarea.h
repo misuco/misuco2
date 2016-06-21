@@ -12,17 +12,33 @@
 
 class MWPlayArea : public MisuWidget
 {
+    Q_OBJECT
 
 public:
+    struct eventStackElement {
+        int eventId;
+        int voiceId;
+        int midinote;
+        int row;
+        int col;
+        float f;
+    };
+
     MWPlayArea(QWidget *parent);
     ~MWPlayArea();
+    virtual void processTouchEvent(misuTouchEvent e);
+
+    void setOut(ISender *value);
 
 protected:
     void paintEvent(QPaintEvent *E);
     void resizeEvent(QResizeEvent *E);
 
 public slots:
-    void processTouchEvent(misuTouchEvent e);
+    void setBaseNote(int b);
+    void setBaseOct(int o);
+    void setTopOct(int o);
+    void setBscale(int n, bool v);
 
 private:
     // INFRASTRUCTURE
@@ -39,7 +55,6 @@ private:
     int cols;
     // - event stack/hashmap
     eventStackElement eventStack[EVENT_STACK_SIZE];
-    int nextVoiceId = 0;
     int chan = 0;
 
     // CONFIGURATION

@@ -34,14 +34,16 @@ void SenderDebug::pc(int chan, int v1)
     qDebug() << "SenderDebug::pc(" <<  chan << "," << v1 << ")";
 }
 
-void SenderDebug::noteOn(int chan, int voiceId, float v1, int midinote, int pitch, int v2)
+int SenderDebug::noteOn(int chan, float v1, int midinote, int pitch, int v2)
 {
+    int voiceId=nextVid++;
     qDebug() << "SenderDebug::noteOn(" << chan << "," << voiceId << "," << v1 << "," << v2 << "," << midinote << "," << pitch << ")";
+    return voiceId;
 }
 
-void SenderDebug::noteOff(int chan, int voiceId, int midinote)
+void SenderDebug::noteOff(int voiceId)
 {
-    qDebug() << "SenderDebug::noteOff(" << chan << "," << voiceId << "," << midinote << ")";
+    qDebug() << "SenderDebug::noteOff(" << voiceId << ")";
 }
 
 void SenderDebug::pitch(int chan, int voiceId, float v1, int midinote, int pitch)

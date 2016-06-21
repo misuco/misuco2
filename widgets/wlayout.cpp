@@ -1,25 +1,27 @@
 #include "wlayout.h"
-#include "widgets/wnote.h"
 #include <QPushButton>
-#include <widgets/mwplayarea.h>
+#include <QDebug>
 
-wlayout::wlayout(QWidget *parent) : QWidget(parent)
+wlayout::wlayout(QWidget *parent) : QWidget(parent),
+    PlayArea(this)
 {
     layout = new QGridLayout();
     int n=0;
     QString cap;
-    for(int i=0;i<14;i++) {
-        QPushButton * pb = new QPushButton(this);
-        cap.sprintf("%d",i);
-        pb->setText(cap);
-        pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        //pb->setSizeIncrement(1,1);
-        widgets[n]= pb;
-        //wNote(this);
-        //((wNote)(widgets[n])).color.setHsl(n*10,180,127);
-        layout->addWidget(widgets[n],0,i);
-        n++;
+
+    ISender * out=new SenderMobileSynth();
+
+    //qDebug() << "wlayout::wlayout new out " << out;
+
+    for(int i=0;i<12;i++) {
+        BaseNoteSetter[i] = new MWBaseNoteSetter(i);
+        BaseNoteSetter[i]->setOut(out);
+        connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),&PlayArea,SLOT(setBaseNote(int)));
+        layout->addWidget(BaseNoteSetter[i],0,i);
     }
+
+    PlayArea.setOut(out);
+
     for(int i=1;i<11;i++) {
         QPushButton * pb = new QPushButton(this);
         cap.sprintf("%d",i);
@@ -39,9 +41,8 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         n++;
     }
     //widgets[n]=new wNote(this);
-    widgets[n]=new MWPlayArea(this);
-    ((wNote)(widgets[n])).color.setHsl(n*10,180,127);
-    layout->addWidget(widgets[n],1,2,10,10);
+    //((wNote)(widgets[0])).color.setHsl(n*10,180,127);
+    layout->addWidget(&PlayArea,1,2,10,10);
 
     layout->setContentsMargins(0,0,0,0);
     layout->setMargin(0);

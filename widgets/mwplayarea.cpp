@@ -29,10 +29,9 @@ MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
         eventStack[i].f=0;
     }
 
-    QObject::connect(this,SIGNAL(touchEvent(misuTouchEvent)),this,SLOT(processTouchEvent(misuTouchEvent)));
+    //QObject::connect(this,SIGNAL(touchEvent(misuTouchEvent)),this,SLOT(processTouchEvent(misuTouchEvent)));
 
-    //out = new SenderDebug();
-    out = new SenderMobileSynth();
+    out = new SenderDebug();
 
     config();
 }
@@ -67,14 +66,15 @@ void MWPlayArea::config()
         }
     }
     int topnote=Scale.basenote+(Scale.topoct+1)*12;
-    qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
+    //qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
     setColumn(cols,topnote);
     cols++;
     calcGeo();
+    update();
 }
 
 void MWPlayArea::setColumn(int col, int midinote) {
-    qDebug() << "setColumn " << col << " " << midinote;
+    //qDebug() << "setColumn " << col << " " << midinote;
     rows=0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
@@ -288,12 +288,12 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     switch(e.state) {
     case Qt::TouchPointPressed:
         es->eventId=e.id;
-        es->voiceId=nextVoiceId++;
         es->midinote=midinote;
         es->row=row;
         es->col=col;
         pf->pressed++;
-        out->noteOn(chan,es->voiceId,freq,midinote,pitch,velocity);
+        es->voiceId=out->noteOn(chan,freq,midinote,pitch,velocity);
+        qDebug() << "MWPlayArea::processTouchEvent " << out << " vId " << es->voiceId;
         //paintField(row,col);
         update();
         break;
@@ -301,11 +301,10 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         if(row!=es->row || col!=es->col) {
             MWPlayfield * ppf = &fields[es->row][es->col];
             ppf->pressed--;
-            out->noteOff(chan,es->voiceId,es->midinote);
+            out->noteOff(es->voiceId);
 
-            es->voiceId=nextVoiceId++;
             es->midinote=midinote;
-            out->noteOn(chan,es->voiceId,freq,midinote,pitch,velocity);
+            es->voiceId=out->noteOn(chan,freq,midinote,pitch,velocity);
 
             es->row=row;
             es->col=col;
@@ -315,7 +314,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         }
         break;
     case Qt::TouchPointReleased:
-        out->noteOff(chan,es->voiceId,es->midinote);
+        out->noteOff(es->voiceId);
         es->eventId=-1;
         es->row=-1;
         es->col=-1;
@@ -324,4 +323,33 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         update();
         break;
     }
+}
+
+void MWPlayArea::setBaseNote(int b)
+{
+    if(b>=0 && b<128) {
+        Scale.basenote=b;
+    }
+    config();
+}
+
+void MWPlayArea::setBaseOct(int o)
+{
+
+}
+
+void MWPlayArea::setTopOct(int o)
+{
+
+}
+
+void MWPlayArea::setBscale(int n, bool v)
+{
+
+}
+
+void MWPlayArea::setOut(ISender *value)
+{
+    out = value;
+    qDebug() << "MWPlayArea::setOut:" << out;
 }

@@ -20,7 +20,6 @@ INCLUDEPATH += mobilesynth/lib
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    widgets/wnote.cpp \
     widgets/wlayout.cpp \
     widgets/misuwidget.cpp \
     widgets/mwplayarea.cpp \
@@ -45,10 +44,11 @@ SOURCES += main.cpp\
     mobilesynth/mobilesynth/Classes/synth/oscillator.cpp \
     mobilesynth/mobilesynth/Classes/synth/parameter.cpp \
     comm/sendermobilesynth.cpp \
-    mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp
+    mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp \
+    proc/noteproc.cpp \
+    widgets/mwbasenotesetter.cpp
 
 HEADERS  += mainwindow.h \
-    widgets/wnote.h \
     widgets/wlayout.h \
     widgets/misuwidget.h \
     widgets/mwplayarea.h \
@@ -81,7 +81,9 @@ HEADERS  += mainwindow.h \
     mobilesynth/mobilesynth/Classes/synth/test_util.h \
     comm/sendermobilesynth.h \
     mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp \
-    mobilesynth/mobilesynth/Classes/mobilesynthqt52.h
+    mobilesynth/mobilesynth/Classes/mobilesynthqt52.h \
+    proc/noteproc.h \
+    widgets/mwbasenotesetter.h
 
 CONFIG += mobility
 MOBILITY = 

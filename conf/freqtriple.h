@@ -19,6 +19,12 @@ public:
 
     int getHue() const;
 
+    int getBasenote() const;
+    void setBasenote(int value);
+
+    int getOct() const;
+    void setOct(int value);
+
 private:
     const float freq_a=440;
 
@@ -26,12 +32,16 @@ private:
     int midinote;
     int pitch;
     int hue;
+    int basenote;
+    int oct;
 
     float calcPitch(int midinote, float f);
     float calcFreq(int midinote, int pitch);
     float calcMidi2Fequal(int x);
     double Log2(double n);
     void calcHue();
+    int calcOctFromMidinote(int m);
+    int calcBasenoteFromMidinote(int m);
 };
 
 #endif // FREQTRIPLE_H

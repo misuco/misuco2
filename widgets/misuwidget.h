@@ -16,27 +16,15 @@ public:
         long t;
     };
 
-    struct eventStackElement {
-        int eventId;
-        int voiceId;
-        int midinote;
-        int row;
-        int col;
-        float f;
-    };
-
     explicit MisuWidget(QWidget *parent = 0);
     ~MisuWidget();
+
+    virtual void processTouchEvent(misuTouchEvent e)=0;
 
 protected:
     bool event(QEvent *event);
     int id;
 
-signals:
-    void touchEvent(misuTouchEvent e);
-
-public slots:
-    virtual void processTouchEvent(misuTouchEvent e)=0;
 };
 
 #endif // MISUWIDGET_H
