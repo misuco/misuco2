@@ -8,8 +8,7 @@ MWBaseNoteSetter::MWBaseNoteSetter(int note)
     out=new SenderDebug();
     f.setMidinote(note);
     f.setOct(4);
-    setMinimumHeight(50);
-    setMinimumWidth(50);
+    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 }
 
 MWBaseNoteSetter::~MWBaseNoteSetter()
