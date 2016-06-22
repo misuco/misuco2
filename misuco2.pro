@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     comm/sendermobilesynth.cpp \
     mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp \
     proc/noteproc.cpp \
-    widgets/mwbasenotesetter.cpp
+    widgets/mwbasenotesetter.cpp \
+    widgets/mwoctaveranger.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -83,7 +84,8 @@ HEADERS  += mainwindow.h \
     mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp \
     mobilesynth/mobilesynth/Classes/mobilesynthqt52.h \
     proc/noteproc.h \
-    widgets/mwbasenotesetter.h
+    widgets/mwbasenotesetter.h \
+    widgets/mwoctaveranger.h
 
 CONFIG += mobility
 MOBILITY = 

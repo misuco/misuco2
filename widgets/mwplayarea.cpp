@@ -47,7 +47,7 @@ void MWPlayArea::config()
      *  |.|.||.|.|.| |
      */
     cols=0;
-    for(int oct=Scale.baseoct;oct<=Scale.topoct;oct++) {
+    for(int oct=Scale.baseoct;oct<Scale.topoct;oct++) {
         setColumn(cols,Scale.basenote+oct*12);
         if(bendHoriz) {
             cols+=2;
@@ -333,13 +333,12 @@ void MWPlayArea::setBaseNote(int b)
     config();
 }
 
-void MWPlayArea::setBaseOct(int o)
-{
 
-}
-
-void MWPlayArea::setTopOct(int o)
+void MWPlayArea::setOctConf(int bottom, int mit, int top)
 {
+    Scale.baseoct=bottom;
+    Scale.topoct=top;
+    config();
 
 }
 

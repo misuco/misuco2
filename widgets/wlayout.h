@@ -6,6 +6,7 @@
 #include "widgets/mwplayarea.h"
 #include "widgets/mwbasenotesetter.h"
 #include "comm/sendermobilesynth.h"
+#include "widgets/mwoctaveranger.h"
 
 class wlayout : public QWidget
 {
@@ -23,6 +24,7 @@ private:
     QWidget * widgets[160];
     MWPlayArea PlayArea;
     MWBaseNoteSetter * BaseNoteSetter[];
+    MWOctaveRanger * OctaveRanger;
 };
 
 #endif // WLAYOUT_H

@@ -10,9 +10,12 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent),
     QString cap;
 
     ISender * out=new SenderMobileSynth();
+    PlayArea.setOut(out);
+
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
+    /*
     for(int i=0;i<12;i++) {
         BaseNoteSetter[i] = new MWBaseNoteSetter(i);
         BaseNoteSetter[i]->setOut(out);
@@ -20,9 +23,16 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent),
         layout->addWidget(BaseNoteSetter[i],0,i);
     }
 
-    PlayArea.setOut(out);
+    layout->addWidget(new QPushButton(this),0,12);
+    layout->addWidget(new QPushButton(this),0,13);
+    layout->addWidget(new QPushButton(this),0,14);
+    */
 
-    for(int i=1;i<11;i++) {
+    OctaveRanger = new MWOctaveRanger(this);
+    connect(OctaveRanger,SIGNAL(setOctConf(int,int,int)),&PlayArea,SLOT(setOctConf(int,int,int)));
+    layout->addWidget(OctaveRanger,0,0,1,14);
+
+    for(int i=1;i<12;i++) {
         QPushButton * pb = new QPushButton(this);
         cap.sprintf("%d",i);
         pb->setText(cap);
@@ -31,7 +41,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent),
         layout->addWidget(widgets[n],i,0,1,2);
         n++;
     }
-    for(int i=1;i<11;i++) {
+    for(int i=1;i<12;i++) {
         QPushButton * pb = new QPushButton(this);
         cap.sprintf("%d",i);
         pb->setText(cap);
