@@ -1,6 +1,7 @@
 #include "wlayout.h"
 #include <QPushButton>
 #include <QDebug>
+#include <QStackedWidget>
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent),
     PlayArea(this)
@@ -12,43 +13,57 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent),
     ISender * out=new SenderMobileSynth();
     PlayArea.setOut(out);
 
+    QStackedWidget* stackedWidget = new QStackedWidget;
+    QWidget* parentLayout1 = new QWidget;
+    QWidget* parentLayout2 = new QWidget;
+    parentLayout1->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    parentLayout2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-    //qDebug() << "wlayout::wlayout new out " << out;
+    QGridLayout* l1 = new QGridLayout(parentLayout1);
+    OctaveRanger = new MWOctaveRanger(this);
+    connect(OctaveRanger,SIGNAL(setOctConf(int,int,int)),&PlayArea,SLOT(setOctConf(int,int,int)));
+    l1->addWidget(OctaveRanger,0,0);
 
-    /*
+    QGridLayout* l2 = new QGridLayout(parentLayout2);
     for(int i=0;i<12;i++) {
         BaseNoteSetter[i] = new MWBaseNoteSetter(i);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),&PlayArea,SLOT(setBaseNote(int)));
-        layout->addWidget(BaseNoteSetter[i],0,i);
+        l2->addWidget(BaseNoteSetter[i],0,i);
     }
 
-    layout->addWidget(new QPushButton(this),0,12);
-    layout->addWidget(new QPushButton(this),0,13);
-    layout->addWidget(new QPushButton(this),0,14);
-    */
+    stackedWidget->addWidget(parentLayout1);
+    stackedWidget->addWidget(parentLayout2);
 
-    OctaveRanger = new MWOctaveRanger(this);
-    connect(OctaveRanger,SIGNAL(setOctConf(int,int,int)),&PlayArea,SLOT(setOctConf(int,int,int)));
-    layout->addWidget(OctaveRanger,0,0,1,14);
+    layout->addWidget(stackedWidget,0,0,1,-1);
+    stackedWidget->widget(0)->show();
+    stackedWidget->widget(1)->hide();
+
+
+    //qDebug() << "wlayout::wlayout new out " << out;
 
     for(int i=1;i<12;i++) {
         QPushButton * pb = new QPushButton(this);
         cap.sprintf("%d",i);
         pb->setText(cap);
         pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        widgets[n]= pb;
-        layout->addWidget(widgets[n],i,0,1,2);
-        n++;
+        layout->addWidget(pb,i,0,1,2);
     }
+
     for(int i=1;i<12;i++) {
         QPushButton * pb = new QPushButton(this);
         cap.sprintf("%d",i);
         pb->setText(cap);
         pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        widgets[n]= pb;
-        layout->addWidget(widgets[n],i,12,1,2);
-        n++;
+        layout->addWidget(pb,i,12,1,2);
+        if(1==i) {
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(show()));
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(hide()));
+        }
+        if(2==i) {
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(hide()));
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(show()));
+        }
     }
     //widgets[n]=new wNote(this);
     //((wNote)(widgets[0])).color.setHsl(n*10,180,127);

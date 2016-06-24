@@ -15,13 +15,8 @@ public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
 
-signals:
-
-public slots:
-
 private:
     QGridLayout *layout;
-    QWidget * widgets[160];
     MWPlayArea PlayArea;
     MWBaseNoteSetter * BaseNoteSetter[];
     MWOctaveRanger * OctaveRanger;
