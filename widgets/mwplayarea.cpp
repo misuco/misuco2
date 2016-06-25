@@ -5,9 +5,11 @@
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
 
-MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
+MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1))
 {
+    misuco=parent;
+
     Scale.basenote=1;
     Scale.baseoct=3;
     Scale.topoct=4;
@@ -79,54 +81,54 @@ void MWPlayArea::setColumn(int col, int midinote) {
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
         if(bendVertTop>0) {
-            fields[rows][col].f1.setMidinote(midinote);
-            fields[rows][col].f2.setMidinote(midinote+bendVertTop);
+            fields[rows][col].f1=misuco->getNote(midinote);
+            fields[rows][col].f2=misuco->getNote(midinote+bendVertTop);
         } else {
-            fields[rows][col].f2.setMidinote(midinote);
-            fields[rows][col].f1.setMidinote(midinote+bendVertTop);
+            fields[rows][col].f2=misuco->getNote(midinote);
+            fields[rows][col].f1=misuco->getNote(midinote+bendVertTop);
         }
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1.setMidinote(fields[rows][col-2].f2.getMidinote());
-            fields[rows][col-1].f2.setMidinote(fields[rows][col-2].f2.getMidinote()+bendVertTop);
-            fields[rows][col-1].f3.setMidinote(midinote);
-            fields[rows][col-1].f4.setMidinote(midinote+bendVertTop);
+            fields[rows][col-1].f1=misuco->getNote(fields[rows][col-2].f2->getMidinote());
+            fields[rows][col-1].f2=misuco->getNote(fields[rows][col-2].f2->getMidinote()+bendVertTop);
+            fields[rows][col-1].f3=misuco->getNote(midinote);
+            fields[rows][col-1].f4=misuco->getNote(midinote+bendVertTop);
             fields[rows][col-1].pressed=0;
         }
         fields[rows][col].pressed=0;
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1.setMidinote(midinote);
+    fields[rows][col].f1=misuco->getNote(midinote);
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1.setMidinote(fields[rows][col-2].f1.getMidinote());
-        fields[rows][col-1].f2.setMidinote(midinote);
+        fields[rows][col-1].f1=misuco->getNote(fields[rows][col-2].f1->getMidinote());
+        fields[rows][col-1].f2=misuco->getNote(midinote);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
         if(bendVertTop>0) {
-            fields[rows][col].f2.setMidinote(midinote);
-            fields[rows][col].f1.setMidinote(midinote+bendVertBot);
+            fields[rows][col].f2=misuco->getNote(midinote);
+            fields[rows][col].f1=misuco->getNote(midinote+bendVertBot);
         } else {
-            fields[rows][col].f1.setMidinote(midinote);
-            fields[rows][col].f2.setMidinote(midinote+bendVertBot);
+            fields[rows][col].f1=misuco->getNote(midinote);
+            fields[rows][col].f2=misuco->getNote(midinote+bendVertBot);
         }
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
             if(bendVertTop>0) {
-                fields[rows][col-1].f2.setMidinote(fields[rows][col-2].f1.getMidinote());
-                fields[rows][col-1].f1.setMidinote(fields[rows][col-2].f1.getMidinote()+bendVertBot);
-                fields[rows][col-1].f3.setMidinote(midinote);
-                fields[rows][col-1].f4.setMidinote(midinote+bendVertBot);
+                fields[rows][col-1].f2=misuco->getNote(fields[rows][col-2].f1->getMidinote());
+                fields[rows][col-1].f1=misuco->getNote(fields[rows][col-2].f1->getMidinote()+bendVertBot);
+                fields[rows][col-1].f3=misuco->getNote(midinote);
+                fields[rows][col-1].f4=misuco->getNote(midinote+bendVertBot);
             } else {
-                fields[rows][col-1].f1.setMidinote(fields[rows][col-2].f1.getMidinote());
-                fields[rows][col-1].f2.setMidinote(fields[rows][col-2].f1.getMidinote()+bendVertBot);
-                fields[rows][col-1].f3.setMidinote(midinote);
-                fields[rows][col-1].f4.setMidinote(midinote+bendVertBot);
+                fields[rows][col-1].f1=misuco->getNote(fields[rows][col-2].f1->getMidinote());
+                fields[rows][col-1].f2=misuco->getNote(fields[rows][col-2].f1->getMidinote()+bendVertBot);
+                fields[rows][col-1].f3=misuco->getNote(midinote);
+                fields[rows][col-1].f4=misuco->getNote(midinote+bendVertBot);
             }
             fields[rows][col-1].pressed=0;
         }
@@ -154,38 +156,38 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
     switch(fields[r][c].type) {
     case NORMAL:
         painter.setPen(Qt::black);
-        painter.setBrush(QColor::fromHsl(fields[r][c].f1.getHue(),180,l));
+        painter.setBrush(QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        cap.sprintf("%d\n%5.2f",fields[r][c].f1.getMidinote(),fields[r][c].f1.getFreq());
+        cap.sprintf("%d\n%5.2f",fields[r][c].f1->getMidinote(),fields[r][c].f1->getFreq());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
         break;
 
     case BEND_VERT:
         linearGrad.setStart(QPointF(x,y));
         linearGrad.setFinalStop(QPointF(x, y+rowheight[r]));
-        linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1.getHue(),180,l));
-        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2.getHue(),180,l));
+        linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
+        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue(),180,l));
         painter.setPen(Qt::black);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        cap.sprintf("%d",fields[r][c].f1.getMidinote());
+        cap.sprintf("%d",fields[r][c].f1->getMidinote());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
-        cap.sprintf("%d",fields[r][c].f2.getMidinote());
+        cap.sprintf("%d",fields[r][c].f2->getMidinote());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
         break;
 
     case BEND_HORIZ:
         linearGrad.setStart(QPointF(x,y));
         linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
-        linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1.getHue(),180,l));
-        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2.getHue(),180,l));
+        linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
+        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue(),180,l));
         painter.setPen(Qt::black);
         painter.setBrush(linearGrad);
 
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        cap.sprintf("%d",fields[r][c].f1.getMidinote());
+        cap.sprintf("%d",fields[r][c].f1->getMidinote());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft,cap);
-        cap.sprintf("%d",fields[r][c].f2.getMidinote());
+        cap.sprintf("%d",fields[r][c].f2->getMidinote());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
 
         break;
@@ -193,14 +195,14 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         int y2=y+rowheight[r];
         linearGrad.setStart(QPointF(x,y));
         linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
-        float hue1=fields[r][c].f1.getHue();
-        float hue2=fields[r][c].f3.getHue();
-        float inchue1=(fields[r][c].f2.getHue()-hue1)/(float)rowheight[r];
-        float inchue2=(fields[r][c].f4.getHue()-hue2)/(float)rowheight[r];
+        float hue1=fields[r][c].f1->getHue();
+        float hue2=fields[r][c].f3->getHue();
+        float inchue1=(fields[r][c].f2->getHue()-hue1)/(float)rowheight[r];
+        float inchue2=(fields[r][c].f4->getHue()-hue2)/(float)rowheight[r];
 
         if(r==0) {
-            hue1=fields[r][c].f2.getHue();
-            hue2=fields[r][c].f4.getHue();
+            hue1=fields[r][c].f2->getHue();
+            hue2=fields[r][c].f4->getHue();
         }
         painter.setPen(Qt::NoPen);
         for(int y1=y;y1<=y2;y1++) {
@@ -222,22 +224,22 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
 
         if(r==0) {
-            cap.sprintf("%d",fields[r][c].f1.getMidinote());
+            cap.sprintf("%d",fields[r][c].f1->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignBottom,cap);
-            cap.sprintf("%d",fields[r][c].f2.getMidinote());
+            cap.sprintf("%d",fields[r][c].f2->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignTop,cap);
-            cap.sprintf("%d",fields[r][c].f3.getMidinote());
+            cap.sprintf("%d",fields[r][c].f3->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
-            cap.sprintf("%d",fields[r][c].f4.getMidinote());
+            cap.sprintf("%d",fields[r][c].f4->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignTop,cap);
         } else {
-            cap.sprintf("%d",fields[r][c].f1.getMidinote());
+            cap.sprintf("%d",fields[r][c].f1->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignTop,cap);
-            cap.sprintf("%d",fields[r][c].f2.getMidinote());
+            cap.sprintf("%d",fields[r][c].f2->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignBottom,cap);
-            cap.sprintf("%d",fields[r][c].f3.getMidinote());
+            cap.sprintf("%d",fields[r][c].f3->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignTop,cap);
-            cap.sprintf("%d",fields[r][c].f4.getMidinote());
+            cap.sprintf("%d",fields[r][c].f4->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
         }
         break;
@@ -280,9 +282,9 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     MWPlayfield * pf = &fields[row][col];
     //qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
 
-    float freq=pf->f1.getFreq();
-    int midinote=pf->f1.getMidinote();
-    int pitch=pf->f1.getPitch();
+    float freq=pf->f1->getFreq();
+    int midinote=pf->f1->getMidinote();
+    int pitch=pf->f1->getPitch();
     int velocity=127;
 
     switch(e.state) {

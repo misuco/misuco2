@@ -3,12 +3,15 @@
 
 #include <QPainter>
 #include "misuwidget.h"
+#include "wlayout.h"
 #include "conf/types.h"
 #include "comm/isender.h"
 
 #define MAX_COLS 255
 #define MAX_ROWS 3
 #define EVENT_STACK_SIZE 64
+
+class wlayout;
 
 class MWPlayArea : public MisuWidget
 {
@@ -24,7 +27,7 @@ public:
         float f;
     };
 
-    MWPlayArea(QWidget *parent);
+    MWPlayArea(wlayout *parent);
     ~MWPlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
 
@@ -41,6 +44,8 @@ public slots:
 
 private:
     // INFRASTRUCTURE
+    // - parental control
+    wlayout * misuco;
     // - painting
     QLinearGradient linearGrad;
     QString cap;

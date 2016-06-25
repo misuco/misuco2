@@ -15,15 +15,10 @@ enum MWPlayfieldType {
 
 struct MWPlayfield {
     MWPlayfieldType type = NORMAL;
-    FreqTriple f1;      // for type normal
-    FreqTriple f2;      // for type vert/hoiz
-    FreqTriple f3;      // for type vert+horiz
-    FreqTriple f4;      // for type vert+horiz
-    unsigned int color1 = 0;      // hue (0-360);
-    unsigned int color2 = 0;      // hue (0-360);
-    unsigned int color3 = 0;      // hue (0-360);
-    unsigned int color4 = 0;      // hue (0-360);
-    QString * text;
+    FreqTriple * f1;      // for type normal
+    FreqTriple * f2;      // for type vert/hoiz
+    FreqTriple * f3;      // for type vert+horiz
+    FreqTriple * f4;      // for type vert+horiz
     unsigned int pressed = 0;
 };
 
