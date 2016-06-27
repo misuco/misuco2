@@ -31,8 +31,6 @@ MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
         eventStack[i].f=0;
     }
 
-    //QObject::connect(this,SIGNAL(touchEvent(misuTouchEvent)),this,SLOT(processTouchEvent(misuTouchEvent)));
-
     out = new SenderDebug();
 
     config();
@@ -101,6 +99,7 @@ void MWPlayArea::setColumn(int col, int midinote) {
     }
     fields[rows][col].type=NORMAL;
     fields[rows][col].f1=misuco->getNote(midinote);
+    qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
@@ -146,12 +145,14 @@ void MWPlayArea::calcGeo()
 
 void MWPlayArea::paintField(int r, int c, int x, int y) {
     QPainter painter(this);
+    //qDebug() << "MWPlayArea::paintField r " << r << " c " << c;
     int l=127;
     if(fields[r][c].pressed>0) l=180;
     switch(fields[r][c].type) {
     case NORMAL:
         painter.setPen(Qt::black);
         painter.setBrush(QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
+        //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
         cap.sprintf("%d\n%5.2f",fields[r][c].f1->getMidinote(),fields[r][c].f1->getFreq());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);

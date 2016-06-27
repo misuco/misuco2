@@ -6,10 +6,12 @@
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
     layout = new QGridLayout();
-    QString cap;
+    QString cap;    
+    //note=new FreqTriple *[128];
     for(int i=0;i<128;i++) {
         note[i]=new FreqTriple();
         note[i]->setMidinote(i);
+        //qDebug() << "new FreqTriple " << i << " " << note[i];
     }
 
     ISender * out=new SenderMobileSynth();

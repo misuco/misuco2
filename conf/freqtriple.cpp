@@ -1,5 +1,6 @@
 #include "freqtriple.h"
 #include <math.h>
+#include <QDebug>
 
 FreqTriple::FreqTriple()
 {
@@ -39,6 +40,7 @@ void FreqTriple::setMidinote(int value)
     oct = calcOctFromMidinote(midinote);
     basenote = calcBasenoteFromMidinote(midinote);
     calcHue();
+    //qDebug() << "FreqTriple::setMidinote " << midinote << " freq " << freq << " hue " << hue;
 }
 
 void FreqTriple::setMidinote(int midinote, int pitch)

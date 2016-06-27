@@ -21,7 +21,7 @@ public:
 private:
     QGridLayout *layout;
     MWPlayArea *PlayArea;
-    MWBaseNoteSetter * BaseNoteSetter[];
+    MWBaseNoteSetter * BaseNoteSetter[12];
     MWOctaveRanger * OctaveRanger;
     FreqTriple * note[128];
 };
