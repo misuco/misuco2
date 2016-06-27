@@ -3,11 +3,10 @@
 #include <QPainter>
 #include <QDebug>
 
-MWBaseNoteSetter::MWBaseNoteSetter(int note)
+MWBaseNoteSetter::MWBaseNoteSetter(FreqTriple *note)
 {
     out=new SenderDebug();
-    f.setMidinote(note);
-    f.setOct(4);
+    f=note;
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 }
 
@@ -20,9 +19,9 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        vId=out->noteOn(chan,f.getFreq(),f.getMidinote(),f.getPitch(),127);
+        vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
-        emit setBaseNote(f.getBasenote());
+        emit setBaseNote(f->getBasenote());
         pressed++;
         update();
         break;
@@ -42,9 +41,9 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     QString cap;
     int l=127;
     if(pressed>0) l=200;
-    painter.setBrush(QColor::fromHsl(f.getHue(),127,l));
+    painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
     painter.drawRect(0,0,width(),height());
-    cap.sprintf("%d",f.getBasenote());
+    cap.sprintf("%d",f->getBasenote());
     painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
 }
 

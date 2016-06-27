@@ -13,6 +13,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     }
 
     ISender * out=new SenderMobileSynth();
+    out->cc(0,0,105,1,1);
     PlayArea = new MWPlayArea(this);
     PlayArea->setOut(out);
 
@@ -29,7 +30,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     QGridLayout* l2 = new QGridLayout(parentLayout2);
     for(int i=0;i<12;i++) {
-        BaseNoteSetter[i] = new MWBaseNoteSetter(i);
+        BaseNoteSetter[i] = new MWBaseNoteSetter(note[i+48]);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),PlayArea,SLOT(setBaseNote(int)));
         l2->addWidget(BaseNoteSetter[i],0,i);

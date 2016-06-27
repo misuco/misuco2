@@ -1,7 +1,6 @@
 #ifndef FREQTRIPLE_H
 #define FREQTRIPLE_H
 
-
 class FreqTriple
 {
 public:
@@ -13,6 +12,7 @@ public:
 
     int getMidinote() const;
     void setMidinote(int value);
+    void setMidinote(int midinote, int pitch);
 
     int getPitch() const;
     void setPitch(int value);

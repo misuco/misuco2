@@ -5,6 +5,7 @@
 #include "freqtriple.h"
 
 #define BSCALE_SIZE 11
+#define HUE_NOTES 30
 
 enum MWPlayfieldType {
     NORMAL,
@@ -17,8 +18,8 @@ struct MWPlayfield {
     MWPlayfieldType type = NORMAL;
     FreqTriple * f1;      // for type normal
     FreqTriple * f2;      // for type vert/hoiz
-    FreqTriple * f3;      // for type vert+horiz
-    FreqTriple * f4;      // for type vert+horiz
+    int hue1bent;         // cache for vertical bent hue values
+    int hue2bent;
     unsigned int pressed = 0;
 };
 
