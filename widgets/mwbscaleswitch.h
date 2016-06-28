@@ -17,14 +17,18 @@ public:
 signals:
     void setBscale(int,bool);
 
+public slots:
+    void setBasenote(int b);
+
 protected:
-    void paintEvent(QPaintEvent *E);
+    void paintEvent(QPaintEvent *);
     void processTouchEvent(misuTouchEvent e);
 
 private:
     ISender * out;
     FreqTriple * f;
     int bscaleId;
+    int basenote;
     int vId;
     int pressed;
     bool value;

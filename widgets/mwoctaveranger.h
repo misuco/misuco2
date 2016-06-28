@@ -21,12 +21,12 @@ protected:
 
 private:
     enum border {none,topPad,bottomPad};
-    int top=4;
-    int mid=3;
-    int bottom=2;
+    int top;
+    int mid;
+    int bottom;
     int segwidth;
-    int noct=10;
-    border grabed=none;
+    int noct;
+    border grabed;
 };
 
 #endif // MWOCTAVERANGER_H

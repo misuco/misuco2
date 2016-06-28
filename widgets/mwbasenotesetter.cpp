@@ -20,13 +20,13 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
     switch(e.state) {
     case Qt::TouchPointPressed:
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
-        qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
+        //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
         emit setBaseNote(f->getBasenote());
         pressed++;
         update();
         break;
     case Qt::TouchPointReleased:
-        qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointReleased vId:" << vId;
+        //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointReleased vId:" << vId;
         out->noteOff(vId);
         pressed--;
         update();
@@ -49,6 +49,6 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
 void MWBaseNoteSetter::setOut(ISender *value)
 {
     out = value;
-    qDebug() << "MWBaseNoteSetter::setOut:" << out;
+    //qDebug() << "MWBaseNoteSetter::setOut:" << out;
 }
 

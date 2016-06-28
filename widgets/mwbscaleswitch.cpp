@@ -9,7 +9,7 @@ MWBScaleSwitch::MWBScaleSwitch(int Id)
     pressed=0;
     chan=0;
     f=new FreqTriple();
-    f->setBasenote(Id+1);
+    setBasenote(0);
     out=new SenderDebug();
 }
 
@@ -24,7 +24,7 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         value=!value;
-        emit setBscale(f->getBasenote(),value);
+        emit setBscale(bscaleId,value);
         pressed++;
         update();
         break;
@@ -36,7 +36,7 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
     }
 }
 
-void MWBScaleSwitch::paintEvent(QPaintEvent *E)
+void MWBScaleSwitch::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
@@ -51,4 +51,10 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *E)
 void MWBScaleSwitch::setOut(ISender *value)
 {
     out = value;
+}
+
+void MWBScaleSwitch::setBasenote(int b)
+{
+    basenote=b;
+    f->setBasenote(basenote+bscaleId+1);
 }

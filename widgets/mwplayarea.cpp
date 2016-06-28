@@ -10,7 +10,7 @@ MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
 {
     misuco=parent;
 
-    Scale.basenote=1;
+    Scale.basenote=0;
     Scale.baseoct=3;
     Scale.topoct=4;
     for(int i=0;i<BSCALE_SIZE;i++) {
@@ -96,7 +96,7 @@ void MWPlayArea::setColumn(int col, int midinote) {
     }
     fields[rows][col].type=NORMAL;
     fields[rows][col].f1=misuco->getNote(midinote);
-    qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
+    //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
@@ -333,16 +333,13 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         } else {
             pitchdiff=bendVertBot*8192;
         }
-
         pitchdiff*=yrel;
         pitchdiff+=pf->f1->getMidinote()*8192;
         midinote=round(pitchdiff/8192);
         pitch=pitchdiff-midinote*8192;
         fcalc.setMidinote(midinote,pitch);
         freq=fcalc.getFreq();
-
-        qDebug() << "midinote " << midinote << " pitch " << pitch << " freq " << freq ;
-
+        //qDebug() << "midinote " << midinote << " pitch " << pitch << " freq " << freq ;
         break;
 
     default:
@@ -416,6 +413,7 @@ void MWPlayArea::setOctConf(int bottom, int mit, int top)
 
 void MWPlayArea::setBscale(int n, bool v)
 {
+    qDebug() << "MWPlayArea::setBscale " << n << " " << v;
     Scale.bscale[n]=v;
     config();
 }
@@ -423,5 +421,5 @@ void MWPlayArea::setBscale(int n, bool v)
 void MWPlayArea::setOut(ISender *value)
 {
     out = value;
-    qDebug() << "MWPlayArea::setOut:" << out;
+    //qDebug() << "MWPlayArea::setOut:" << out;
 }
