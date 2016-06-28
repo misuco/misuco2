@@ -32,7 +32,6 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
         update();
         break;
     }
-
 }
 
 void MWBaseNoteSetter::paintEvent(QPaintEvent *E)

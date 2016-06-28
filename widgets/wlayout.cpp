@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QStackedWidget>
+#include "mwbscaleswitch.h"
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
@@ -22,8 +23,10 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     QStackedWidget* stackedWidget = new QStackedWidget;
     QWidget* parentLayout1 = new QWidget;
     QWidget* parentLayout2 = new QWidget;
+    QWidget* parentLayout3 = new QWidget;
     parentLayout1->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     parentLayout2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    parentLayout3->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     QGridLayout* l1 = new QGridLayout(parentLayout1);
     OctaveRanger = new MWOctaveRanger(this);
@@ -38,13 +41,21 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         l2->addWidget(BaseNoteSetter[i],0,i);
     }
 
+    QBoxLayout* l3 = new QBoxLayout(QBoxLayout::LeftToRight,parentLayout3);
+    for(int i=0;i<11;i++) {
+        MWBScaleSwitch * bsw = new MWBScaleSwitch(i);
+        bsw->setOut(out);
+        connect(bsw,SIGNAL(setBscale(int,bool)),PlayArea,SLOT(setBscale(int,bool)));
+        l3->addWidget(bsw);
+    }
+
     stackedWidget->addWidget(parentLayout1);
     stackedWidget->addWidget(parentLayout2);
+    stackedWidget->addWidget(parentLayout3);
 
     layout->addWidget(stackedWidget,0,0,1,-1);
     stackedWidget->widget(0)->show();
     stackedWidget->widget(1)->hide();
-
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
@@ -65,10 +76,17 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         if(1==i) {
             connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(show()));
             connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(hide()));
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(2),SLOT(hide()));
         }
         if(2==i) {
             connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(hide()));
             connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(show()));
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(2),SLOT(hide()));
+        }
+        if(3==i) {
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(hide()));
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(hide()));
+            connect(pb,SIGNAL(clicked()),stackedWidget->widget(2),SLOT(show()));
         }
     }
     //widgets[n]=new wNote(this);

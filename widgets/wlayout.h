@@ -7,6 +7,7 @@
 #include "widgets/mwbasenotesetter.h"
 #include "comm/sendermobilesynth.h"
 #include "widgets/mwoctaveranger.h"
+#include "conf/types.h"
 
 class MWPlayArea;
 
@@ -21,7 +22,7 @@ public:
 private:
     QGridLayout *layout;
     MWPlayArea *PlayArea;
-    MWBaseNoteSetter * BaseNoteSetter[12];
+    MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
     FreqTriple * note[128];
 };

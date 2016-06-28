@@ -16,9 +16,6 @@ MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
     for(int i=0;i<BSCALE_SIZE;i++) {
         Scale.bscale[i]=false;
     }
-    Scale.bscale[3]=true;
-    Scale.bscale[6]=true;
-    Scale.bscale[9]=true;
 
     bendHoriz=true;
     bendVertTop=2;
@@ -419,7 +416,8 @@ void MWPlayArea::setOctConf(int bottom, int mit, int top)
 
 void MWPlayArea::setBscale(int n, bool v)
 {
-
+    Scale.bscale[n]=v;
+    config();
 }
 
 void MWPlayArea::setOut(ISender *value)
