@@ -17,14 +17,12 @@ class wlayout : public QWidget
 public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
-    FreqTriple * getNote(int i);
 
 private:
     QGridLayout *layout;
     MWPlayArea *PlayArea;
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
-    FreqTriple * note[128];
 };
 
 #endif // WLAYOUT_H

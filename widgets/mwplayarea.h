@@ -44,8 +44,6 @@ public slots:
 
 private:
     // INFRASTRUCTURE
-    // - parental control
-    wlayout * misuco;
     // - painting
     QLinearGradient linearGrad;
     QString cap;

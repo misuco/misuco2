@@ -131,5 +131,5 @@ int FreqTriple::calcOctFromMidinote(int m) {
 }
 
 int FreqTriple::calcBasenoteFromMidinote(int m) {
-    return m-calcOctFromMidinote(m)*12;
+    return m%12;
 }

@@ -8,8 +8,6 @@
 MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1))
 {
-    misuco=parent;
-
     Scale.basenote=0;
     Scale.baseoct=3;
     Scale.topoct=4;
@@ -28,14 +26,25 @@ MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
         eventStack[i].f=0;
     }
 
-    out = new SenderDebug();
+    for(int r=0;r<MAX_ROWS;r++) {
+        for(int c=0;c<MAX_COLS;c++) {
+            fields[r][c].f1=new FreqTriple();
+            fields[r][c].f2=new FreqTriple();
+        }
+    }
 
+    out = new SenderDebug();
     config();
 }
 
 MWPlayArea::~MWPlayArea()
 {
-
+    for(int r=0;r<MAX_ROWS;r++) {
+        for(int c=0;c<MAX_COLS;c++) {
+            delete(fields[r][c].f1);
+            delete(fields[r][c].f2);
+        }
+    }
 }
 
 void MWPlayArea::config()
@@ -71,22 +80,22 @@ void MWPlayArea::config()
 }
 
 void MWPlayArea::setColumn(int col, int midinote) {
-    //qDebug() << "setColumn " << col << " " << midinote;
+    qDebug() << "setColumn " << col << " " << midinote;
     rows=0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1=misuco->getNote(midinote);
+        fields[rows][col].f1->setMidinote(midinote);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+HUE_NOTES*bendVertTop;
         if(fields[rows][col].hue1bent>359) fields[rows][col].hue1bent-=359;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=359;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1=fields[rows][col-2].f1;
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote());
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+HUE_NOTES*bendVertTop;
             if(fields[rows][col-1].hue1bent>359) fields[rows][col-1].hue1bent-=359;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=359;
-            fields[rows][col-1].f2=misuco->getNote(midinote);
+            fields[rows][col-1].f2->setMidinote(midinote);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+HUE_NOTES*bendVertTop;
             if(fields[rows][col-1].hue2bent>359) fields[rows][col-1].hue2bent-=359;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=359;
@@ -95,30 +104,30 @@ void MWPlayArea::setColumn(int col, int midinote) {
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1=misuco->getNote(midinote);
+    fields[rows][col].f1->setMidinote(midinote);
     //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1=fields[rows][col-2].f1;
-        fields[rows][col-1].f2=misuco->getNote(midinote);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote());
+        fields[rows][col-1].f2->setMidinote(midinote);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1=misuco->getNote(midinote);
+        fields[rows][col].f1->setMidinote(midinote);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+HUE_NOTES*bendVertBot;
         if(fields[rows][col].hue1bent>359) fields[rows][col].hue1bent-=359;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=359;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1=fields[rows][col-2].f1;
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote());
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+HUE_NOTES*bendVertBot;
             if(fields[rows][col-1].hue1bent>359) fields[rows][col-1].hue1bent-=359;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=359;
-            fields[rows][col-1].f2=misuco->getNote(midinote);
+            fields[rows][col-1].f2->setMidinote(midinote);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+HUE_NOTES*bendVertBot;
             if(fields[rows][col-1].hue2bent>359) fields[rows][col-1].hue2bent-=359;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=359;
