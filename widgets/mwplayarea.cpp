@@ -5,7 +5,7 @@
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
 
-MWPlayArea::MWPlayArea(wlayout *parent) : MisuWidget(parent),
+MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1))
 {
     Scale.basenote=0;

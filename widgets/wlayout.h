@@ -9,8 +9,6 @@
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
 
-class MWPlayArea;
-
 class wlayout : public QWidget
 {
     Q_OBJECT

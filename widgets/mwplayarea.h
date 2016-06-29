@@ -3,7 +3,6 @@
 
 #include <QPainter>
 #include "misuwidget.h"
-#include "wlayout.h"
 #include "conf/types.h"
 #include "comm/isender.h"
 
@@ -11,7 +10,6 @@
 #define MAX_ROWS 3
 #define EVENT_STACK_SIZE 64
 
-class wlayout;
 
 class MWPlayArea : public MisuWidget
 {
@@ -27,7 +25,7 @@ public:
         float f;
     };
 
-    MWPlayArea(wlayout *parent);
+    MWPlayArea(QWidget *parent);
     ~MWPlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
 
