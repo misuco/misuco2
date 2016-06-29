@@ -50,8 +50,12 @@ void MWOctaveRanger::processTouchEvent(MisuWidget::misuTouchEvent e)
                     }
                 }
             }
-            mid=bottom+(top-bottom)/2;
-            emit setOctConf(bottom,mid,top);
+            emit setOctConf(bottom,top);
+            int midnew=bottom+(top-bottom)/2;
+            if(midnew!=mid) {
+                mid=midnew;
+                emit setOctMid(mid);
+            }
             update();
         }
         break;

@@ -18,7 +18,8 @@ signals:
     void setBscale(int,bool);
 
 public slots:
-    void setBasenote(int b);
+    void setBaseNote(int b);
+    void setOctMid(int o);
 
 protected:
     void paintEvent(QPaintEvent *);

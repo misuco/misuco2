@@ -3,16 +3,21 @@
 #include <QPainter>
 #include <QDebug>
 
-MWBaseNoteSetter::MWBaseNoteSetter(FreqTriple *note)
+MWBaseNoteSetter::MWBaseNoteSetter(int note)
 {
     out=new SenderDebug();
-    f=note;
+    f=new FreqTriple();
+    f->setBasenote(note);
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    vId=0;
+    pressed=0;
+    chan=1;
+    oct=4;
 }
 
 MWBaseNoteSetter::~MWBaseNoteSetter()
 {
-
+    delete(f);
 }
 
 void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
@@ -44,6 +49,16 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     painter.drawRect(0,0,width(),height());
     cap.sprintf("%d",f->getBasenote());
     painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
+}
+
+void MWBaseNoteSetter::setOctMid(int o)
+{
+    f->setOct(o);
+}
+
+void MWBaseNoteSetter::setChan(int c)
+{
+    chan=c;
 }
 
 void MWBaseNoteSetter::setOut(ISender *value)

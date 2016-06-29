@@ -9,13 +9,13 @@ MWBScaleSwitch::MWBScaleSwitch(int Id)
     pressed=0;
     chan=0;
     f=new FreqTriple();
-    setBasenote(0);
+    setBaseNote(0);
     out=new SenderDebug();
 }
 
 MWBScaleSwitch::~MWBScaleSwitch()
 {
-
+    delete(f);
 }
 
 void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
@@ -53,8 +53,15 @@ void MWBScaleSwitch::setOut(ISender *value)
     out = value;
 }
 
-void MWBScaleSwitch::setBasenote(int b)
+void MWBScaleSwitch::setBaseNote(int b)
 {
     basenote=b;
-    f->setBasenote(basenote+bscaleId+1);
+    int newBaseNote=basenote+bscaleId+1%12;
+    f->setBasenote(newBaseNote);
+    update();
+}
+
+void MWBScaleSwitch::setOctMid(int o)
+{
+    f->setOct(o);
 }

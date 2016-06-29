@@ -403,7 +403,7 @@ void MWPlayArea::setBaseNote(int b)
 }
 
 
-void MWPlayArea::setOctConf(int bottom, int mit, int top)
+void MWPlayArea::setOctConf(int bottom, int top)
 {
     Scale.baseoct=bottom;
     Scale.topoct=top;

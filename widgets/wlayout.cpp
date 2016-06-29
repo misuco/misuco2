@@ -30,14 +30,15 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     QGridLayout* l1 = new QGridLayout(parentLayout1);
     OctaveRanger = new MWOctaveRanger(this);
-    connect(OctaveRanger,SIGNAL(setOctConf(int,int,int)),PlayArea,SLOT(setOctConf(int,int,int)));
+    connect(OctaveRanger,SIGNAL(setOctConf(int,int)),PlayArea,SLOT(setOctConf(int,int)));
     l1->addWidget(OctaveRanger,0,0);
 
     QGridLayout* l2 = new QGridLayout(parentLayout2);
     for(int i=0;i<12;i++) {
-        BaseNoteSetter[i] = new MWBaseNoteSetter(note[i+48]);
+        BaseNoteSetter[i] = new MWBaseNoteSetter(i+48);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),PlayArea,SLOT(setBaseNote(int)));
+        connect(OctaveRanger,SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         l2->addWidget(BaseNoteSetter[i],0,i);
     }
 
@@ -46,6 +47,10 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         MWBScaleSwitch * bsw = new MWBScaleSwitch(i);
         bsw->setOut(out);
         connect(bsw,SIGNAL(setBscale(int,bool)),PlayArea,SLOT(setBscale(int,bool)));
+        connect(OctaveRanger,SIGNAL(setOctMid(int)),bsw,SLOT(setOctMid(int)));
+        for(int j=0;j<12;j++) {
+            connect(BaseNoteSetter[j],SIGNAL(setBaseNote(int)),bsw,SLOT(setBaseNote(int)));
+        }
         l3->addWidget(bsw);
     }
 

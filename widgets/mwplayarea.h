@@ -39,7 +39,7 @@ protected:
 
 public slots:
     void setBaseNote(int b);
-    void setOctConf(int bottom,int mit,int top);
+    void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
 
 private:

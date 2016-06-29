@@ -10,7 +10,7 @@ class MWBaseNoteSetter : public MisuWidget
     Q_OBJECT
 
 public:
-    MWBaseNoteSetter(FreqTriple * note);
+    MWBaseNoteSetter(int note);
     ~MWBaseNoteSetter();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
@@ -18,16 +18,20 @@ public:
 protected:
     void paintEvent(QPaintEvent *E);
 
+public slots:
+    void setOctMid(int o);
+    void setChan(int c);
+
 signals:
     void setBaseNote(int b);
 
 private:
     ISender * out;
     FreqTriple * f;
-    int vId=0;
-    int pressed=0;
-    int chan=1;
-    int oct=4;
+    int vId;
+    int pressed;
+    int chan;
+    int oct;
 };
 
 #endif // MWBASENOTESETTER_H

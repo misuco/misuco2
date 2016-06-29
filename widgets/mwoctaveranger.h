@@ -13,7 +13,8 @@ public:
     virtual void processTouchEvent(misuTouchEvent e);
 
 signals:
-    void setOctConf(int bottom,int mid,int top);
+    void setOctConf(int bottom,int top);
+    void setOctMid(int mid);
 
 protected:
     void paintEvent(QPaintEvent *E);
