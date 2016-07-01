@@ -87,7 +87,8 @@ HEADERS  += mainwindow.h \
     proc/noteproc.h \
     widgets/mwbasenotesetter.h \
     widgets/mwoctaveranger.h \
-    widgets/mwbscaleswitch.h
+    widgets/mwbscaleswitch.h \
+    conf/platform.h
 
 CONFIG += mobility
 MOBILITY = 
