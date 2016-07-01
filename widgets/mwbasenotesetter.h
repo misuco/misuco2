@@ -17,6 +17,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *E);
+    void resizeEvent(QResizeEvent *E);
 
 public slots:
     void setOctMid(int o);

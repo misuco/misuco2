@@ -5,7 +5,7 @@
 MWOctaveRanger::MWOctaveRanger(QWidget *parent) : MisuWidget(parent)
 {
     //qDebug() << "MWOctaveRanger::MWOctaveRanger()";
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    //setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     top=4;
     mid=3;
     bottom=3;

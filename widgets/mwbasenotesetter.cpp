@@ -8,7 +8,6 @@ MWBaseNoteSetter::MWBaseNoteSetter(int note)
     out=new SenderDebug();
     f=new FreqTriple();
     f->setBasenote(note);
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     vId=0;
     pressed=0;
     chan=1;
@@ -27,6 +26,7 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
         emit setBaseNote(f->getBasenote());
+        qDebug() << "MWBaseNoteSetter::processTouchEvent emit setBaseNote " << f->getBasenote();
         pressed++;
         update();
         break;
@@ -48,7 +48,14 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
     painter.drawRect(0,0,width(),height());
     cap.sprintf("%d",f->getBasenote());
-    painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
+    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
+    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignRight,"*");
+    painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignRight,"*");
+}
+
+void MWBaseNoteSetter::resizeEvent(QResizeEvent *E)
+{
+    qDebug() << "MWBaseNoteSetter::resizeEvent" << width();
 }
 
 void MWBaseNoteSetter::setOctMid(int o)

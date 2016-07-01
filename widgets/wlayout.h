@@ -16,6 +16,9 @@ public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
 
+protected:
+    void resizeEvent(QResizeEvent *E);
+
 private:
     QGridLayout *layout;
     MWPlayArea *PlayArea;

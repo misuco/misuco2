@@ -6,7 +6,8 @@
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
-    layout = new QGridLayout();
+    qDebug() << "wlaxout width: " << width() ;
+    layout = new QGridLayout(this);
     QString cap;    
 
     ISender * out=new SenderMobileSynth();
@@ -14,27 +15,37 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     PlayArea = new MWPlayArea(this);
     PlayArea->setOut(out);
 
-    QStackedWidget* stackedWidget = new QStackedWidget;
-    QWidget* parentLayout1 = new QWidget;
-    QWidget* parentLayout2 = new QWidget;
-    QWidget* parentLayout3 = new QWidget;
-    parentLayout1->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    QStackedWidget* stackedWidget = new QStackedWidget();
+    stackedWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    QWidget* parentLayout1 = new QWidget();
+    QWidget* parentLayout2 = new QWidget();
+    QWidget* parentLayout3 = new QWidget();
+
     parentLayout2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    parentLayout3->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     QGridLayout* l1 = new QGridLayout(parentLayout1);
     OctaveRanger = new MWOctaveRanger(this);
     connect(OctaveRanger,SIGNAL(setOctConf(int,int)),PlayArea,SLOT(setOctConf(int,int)));
     l1->addWidget(OctaveRanger,0,0);
 
-    QGridLayout* l2 = new QGridLayout(parentLayout2);
+    QGridLayout* l2 = new QGridLayout();
+    l2->setSizeConstraint(QLayout::SetMinimumSize);
+    l2->setContentsMargins(0,0,0,0);
+    l2->setMargin(0);
+    l2->setHorizontalSpacing(0);
+    l2->setVerticalSpacing(0);
+
     for(int i=0;i<12;i++) {
         BaseNoteSetter[i] = new MWBaseNoteSetter(i+48);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),PlayArea,SLOT(setBaseNote(int)));
         connect(OctaveRanger,SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         l2->addWidget(BaseNoteSetter[i],0,i);
+        l2->setColumnStretch(i,10);
+        BaseNoteSetter[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        BaseNoteSetter[i]->setMinimumWidth(100);
     }
+    parentLayout2->setLayout(l2);
 
     QBoxLayout* l3 = new QBoxLayout(QBoxLayout::LeftToRight,parentLayout3);
     for(int i=0;i<11;i++) {
@@ -104,5 +115,14 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 wlayout::~wlayout()
 {
 
+}
+
+void wlayout::resizeEvent(QResizeEvent *E)
+{
+    qDebug() << "wlayout::resizeEvent " << width() << " " << height();
+    int w=width()/12;
+    for(int i=0;i<12;i++) {
+        BaseNoteSetter[i]->setMinimumWidth(w-4);
+    }
 }
 
