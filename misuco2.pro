@@ -48,7 +48,8 @@ SOURCES += main.cpp\
     proc/noteproc.cpp \
     widgets/mwbasenotesetter.cpp \
     widgets/mwoctaveranger.cpp \
-    widgets/mwbscaleswitch.cpp
+    widgets/mwbscaleswitch.cpp \
+    widgets/mwheadersetter.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -88,7 +89,8 @@ HEADERS  += mainwindow.h \
     widgets/mwbasenotesetter.h \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
-    conf/platform.h
+    conf/platform.h \
+    widgets/mwheadersetter.h
 
 CONFIG += mobility
 MOBILITY = 

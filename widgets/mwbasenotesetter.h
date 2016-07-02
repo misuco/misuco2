@@ -10,7 +10,7 @@ class MWBaseNoteSetter : public MisuWidget
     Q_OBJECT
 
 public:
-    MWBaseNoteSetter(int note);
+    MWBaseNoteSetter(int note, QWidget *parent);
     ~MWBaseNoteSetter();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);

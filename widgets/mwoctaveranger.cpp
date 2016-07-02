@@ -81,7 +81,7 @@ void MWOctaveRanger::paintEvent(QPaintEvent *E)
 
 void MWOctaveRanger::resizeEvent(QResizeEvent *E)
 {
-    //qDebug() << "MWOctaveRanger::resizeEvent";
+    qDebug() << "MWOctaveRanger::resizeEvent";
     segwidth=width()/noct;
 }
 

@@ -19,11 +19,20 @@ public:
 protected:
     void resizeEvent(QResizeEvent *E);
 
+private slots:    
+    currentHeader(int i);
+
 private:
     QGridLayout *layout;
     MWPlayArea *PlayArea;
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
+
+    // current header widget
+    QWidget * header;
+
+    // header widgets
+    QWidget * H[3];
 };
 
 #endif // WLAYOUT_H

@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWBaseNoteSetter::MWBaseNoteSetter(int note)
+MWBaseNoteSetter::MWBaseNoteSetter(int note, QWidget *parent) : MisuWidget(parent)
 {
     out=new SenderDebug();
     f=new FreqTriple();

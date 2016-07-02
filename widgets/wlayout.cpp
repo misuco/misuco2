@@ -3,10 +3,11 @@
 #include <QDebug>
 #include <QStackedWidget>
 #include "mwbscaleswitch.h"
+#include "mwheadersetter.h"
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
-    qDebug() << "wlaxout width: " << width() ;
+    qDebug() << "wlayout width: " << width() ;
     layout = new QGridLayout(this);
     QString cap;    
 
@@ -15,39 +16,45 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     PlayArea = new MWPlayArea(this);
     PlayArea->setOut(out);
 
-    QStackedWidget* stackedWidget = new QStackedWidget();
+    /*
+    QStackedWidget* stackedWidget = new QStackedWidget(this);
     stackedWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    QWidget* parentLayout1 = new QWidget();
-    QWidget* parentLayout2 = new QWidget();
-    QWidget* parentLayout3 = new QWidget();
+    */
 
-    parentLayout2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    for(int i=0;i<3;i++) {
+        H[i]=new QWidget(this);
+        H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-    QGridLayout* l1 = new QGridLayout(parentLayout1);
+        //H[i]->setSizeConstraint(QLayout::SetMinimumSize);
+        H[i]->setContentsMargins(0,0,0,0);
+        /*
+        H[i]->setMargin(0);
+        H[i]->setHorizontalSpacing(0);
+        H[i]->setVerticalSpacing(0);
+         */
+    }
+
+    QGridLayout* l1 = new QGridLayout(H[0]);
     OctaveRanger = new MWOctaveRanger(this);
+    //OctaveRanger->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     connect(OctaveRanger,SIGNAL(setOctConf(int,int)),PlayArea,SLOT(setOctConf(int,int)));
     l1->addWidget(OctaveRanger,0,0);
 
-    QGridLayout* l2 = new QGridLayout();
-    l2->setSizeConstraint(QLayout::SetMinimumSize);
-    l2->setContentsMargins(0,0,0,0);
-    l2->setMargin(0);
-    l2->setHorizontalSpacing(0);
-    l2->setVerticalSpacing(0);
+    QGridLayout* l2 = new QGridLayout(H[1]);
 
     for(int i=0;i<12;i++) {
-        BaseNoteSetter[i] = new MWBaseNoteSetter(i+48);
+        BaseNoteSetter[i] = new MWBaseNoteSetter(i,this);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),PlayArea,SLOT(setBaseNote(int)));
         connect(OctaveRanger,SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         l2->addWidget(BaseNoteSetter[i],0,i);
-        l2->setColumnStretch(i,10);
-        BaseNoteSetter[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        BaseNoteSetter[i]->setMinimumWidth(100);
+        //l2->setColumnStretch(i,10);
+        //BaseNoteSetter[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        //BaseNoteSetter[i]->setMinimumWidth(100);
     }
-    parentLayout2->setLayout(l2);
+    //parentLayout2->setLayout(l2);
 
-    QBoxLayout* l3 = new QBoxLayout(QBoxLayout::LeftToRight,parentLayout3);
+    QBoxLayout* l3 = new QBoxLayout(QBoxLayout::LeftToRight,H[2]);
     for(int i=0;i<11;i++) {
         MWBScaleSwitch * bsw = new MWBScaleSwitch(i);
         bsw->setOut(out);
@@ -59,13 +66,19 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         l3->addWidget(bsw);
     }
 
-    stackedWidget->addWidget(parentLayout1);
+    /*
     stackedWidget->addWidget(parentLayout2);
+    stackedWidget->addWidget(parentLayout1);
     stackedWidget->addWidget(parentLayout3);
+    */
 
-    layout->addWidget(stackedWidget,0,0,1,-1);
-    stackedWidget->widget(0)->show();
-    stackedWidget->widget(1)->hide();
+    H[0]->hide();
+    H[2]->hide();
+    layout->addWidget(H[1],0,0,1,14);
+    header=H[1];
+
+    //stackedWidget->widget(0)->show();
+    //stackedWidget->widget(1)->hide();
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
@@ -78,27 +91,20 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     }
 
     for(int i=1;i<12;i++) {
+        MWHeaderSetter * hs = new MWHeaderSetter(i,this);
+        hs->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        layout->addWidget(hs,i,12,1,2);
+        connect(hs,SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
+        /*
         QPushButton * pb = new QPushButton(this);
         cap.sprintf("%d",i);
         pb->setText(cap);
         pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         layout->addWidget(pb,i,12,1,2);
-        if(1==i) {
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(show()));
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(hide()));
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(2),SLOT(hide()));
-        }
-        if(2==i) {
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(hide()));
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(show()));
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(2),SLOT(hide()));
-        }
-        if(3==i) {
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(0),SLOT(hide()));
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(1),SLOT(hide()));
-            connect(pb,SIGNAL(clicked()),stackedWidget->widget(2),SLOT(show()));
-        }
+        connect(pb,SIGNAL(clicked()),this,SLOT(currentHeader(i)));
+        */
     }
+
     //widgets[n]=new wNote(this);
     //((wNote)(widgets[0])).color.setHsl(n*10,180,127);
     layout->addWidget(PlayArea,1,2,10,10);
@@ -120,9 +126,23 @@ wlayout::~wlayout()
 void wlayout::resizeEvent(QResizeEvent *E)
 {
     qDebug() << "wlayout::resizeEvent " << width() << " " << height();
+    /*
     int w=width()/12;
     for(int i=0;i<12;i++) {
         BaseNoteSetter[i]->setMinimumWidth(w-4);
+    }
+    */
+}
+
+wlayout::currentHeader(int i)
+{
+    if(i>0 && i<4) {
+        for(int j=0;j<3;j++) {
+            H[j]->hide();
+        }
+        layout->replaceWidget(header,H[i-1]);
+        header=H[i-1];
+        H[i-1]->show();
     }
 }
 
