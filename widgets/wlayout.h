@@ -8,6 +8,7 @@
 #include "comm/sendermobilesynth.h"
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
+#include <QStackedWidget>
 
 class wlayout : public QWidget
 {
@@ -27,12 +28,14 @@ private:
     MWPlayArea *PlayArea;
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
+    QStackedWidget * header;
 
     // current header widget
-    QWidget * header;
+    // QWidget * header;
 
     // header widgets
     QWidget * H[3];
+
 };
 
 #endif // WLAYOUT_H
