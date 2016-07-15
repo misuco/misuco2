@@ -49,7 +49,8 @@ SOURCES += main.cpp\
     widgets/mwbasenotesetter.cpp \
     widgets/mwoctaveranger.cpp \
     widgets/mwbscaleswitch.cpp \
-    widgets/mwheadersetter.cpp
+    widgets/mwheadersetter.cpp \
+    widgets/mwfadder.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -90,7 +91,8 @@ HEADERS  += mainwindow.h \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
     conf/platform.h \
-    widgets/mwheadersetter.h
+    widgets/mwheadersetter.h \
+    widgets/mwfadder.h
 
 CONFIG += mobility
 MOBILITY = 

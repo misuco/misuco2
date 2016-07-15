@@ -22,19 +22,24 @@ protected:
 
 private slots:    
     currentHeader(int i);
+    changePitch(int v);
 
 private:
     QGridLayout *layout;
-    MWPlayArea *PlayArea;
+    //MWPlayArea * M[0];
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
     QStackedWidget * header;
+    QStackedWidget * mainArea;
 
     // current header widget
     // QWidget * header;
 
     // header widgets
     QWidget * H[3];
+
+    // main area widgets
+    QWidget * M[2];
 
 };
 
