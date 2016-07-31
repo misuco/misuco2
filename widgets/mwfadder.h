@@ -22,6 +22,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *);
     void processTouchEvent(misuTouchEvent e);
+    void resizeEvent(QResizeEvent *);
 
 private:
     // Fadder state

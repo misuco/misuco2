@@ -6,7 +6,7 @@ MWFadder::MWFadder(QWidget *parent) : MisuWidget(parent)
 {
     orient=vertical;
     value=0;
-    knobSize=10;
+    knobSize=50;
     setMinValue(-1000);
     setMaxValue(1000);
     fineness=5;
@@ -50,6 +50,11 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
         break;
     }
     qDebug() << "value " << value << " touch begin v: " << valTouchBegin << " y: " << yTouchBegin;
+}
+
+void MWFadder::resizeEvent(QResizeEvent *)
+{
+    calcGeo();
 }
 
 void MWFadder::calcGeo()
