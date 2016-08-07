@@ -4,8 +4,10 @@
 
 MWFadder::MWFadder(QWidget *parent) : MisuWidget(parent)
 {
+    qDebug() << "MWFadder::MWFadder";
     orient=vertical;
     value=0;
+    pressed=0;
     knobSize=50;
     setMinValue(-1000);
     setMaxValue(1000);

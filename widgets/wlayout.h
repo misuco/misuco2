@@ -17,12 +17,14 @@ public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
 
+    Pitch * MWPitch[BSCALE_SIZE+1];
+
 protected:
     void resizeEvent(QResizeEvent *E);
 
 private slots:    
-    currentHeader(int i);
-    changePitch(int v);
+    void currentHeader(int i);
+    void changePitch(int v);
 
 private:
     QGridLayout *layout;

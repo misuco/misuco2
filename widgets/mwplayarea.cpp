@@ -5,9 +5,13 @@
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
 
-MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
-    linearGrad(QPointF(0,1),QPointF(0,1))
+MWPlayArea::MWPlayArea(Pitch *p[], QWidget *parent) : MisuWidget(parent),
+    linearGrad(QPointF(0,1),QPointF(0,1)),
+    pcalc(this),
+    fcalc(&pcalc,this)
 {
+    MWPitch=p;
+
     Scale.basenote=0;
     Scale.baseoct=3;
     Scale.topoct=4;
@@ -28,8 +32,8 @@ MWPlayArea::MWPlayArea(QWidget *parent) : MisuWidget(parent),
 
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
-            fields[r][c].f1=new FreqTriple();
-            fields[r][c].f2=new FreqTriple();
+            fields[r][c].f1=new FreqTriple(MWPitch[c%(BSCALE_SIZE+1)],this);
+            fields[r][c].f2=new FreqTriple(MWPitch[c%(BSCALE_SIZE+1)],this);
         }
     }
 
@@ -54,7 +58,7 @@ void MWPlayArea::config()
      */
     cols=0;
     for(int oct=Scale.baseoct;oct<Scale.topoct;oct++) {
-        setColumn(cols,Scale.basenote+oct*12);
+        setColumn(cols,Scale.basenote+oct*12,Scale.basenote);
         if(bendHoriz) {
             cols+=2;
         } else {
@@ -62,7 +66,7 @@ void MWPlayArea::config()
         }
         for(int note=0;note<BSCALE_SIZE;note++) {
             if(Scale.bscale[note]) {
-                setColumn(cols,Scale.basenote+oct*12+note+1);
+                setColumn(cols,Scale.basenote+oct*12+note+1,Scale.basenote+note+1);
                 if(bendHoriz) {
                     cols+=2;
                 } else {
@@ -73,29 +77,29 @@ void MWPlayArea::config()
     }
     int topnote=Scale.basenote+(Scale.topoct)*12;
     //qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
-    setColumn(cols,topnote);
+    setColumn(cols,topnote,Scale.basenote);
     cols++;
     calcGeo();
     update();
 }
 
-void MWPlayArea::setColumn(int col, int midinote) {
+void MWPlayArea::setColumn(int col, int midinote, int basenote) {
     qDebug() << "setColumn " << col << " " << midinote;
     rows=0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote);
+        fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+HUE_NOTES*bendVertTop;
         if(fields[rows][col].hue1bent>359) fields[rows][col].hue1bent-=359;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=359;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote());
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+HUE_NOTES*bendVertTop;
             if(fields[rows][col-1].hue1bent>359) fields[rows][col-1].hue1bent-=359;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=359;
-            fields[rows][col-1].f2->setMidinote(midinote);
+            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+HUE_NOTES*bendVertTop;
             if(fields[rows][col-1].hue2bent>359) fields[rows][col-1].hue2bent-=359;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=359;
@@ -104,30 +108,30 @@ void MWPlayArea::setColumn(int col, int midinote) {
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1->setMidinote(midinote);
+    fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
     //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote());
-        fields[rows][col-1].f2->setMidinote(midinote);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
+        fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote);
+        fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+HUE_NOTES*bendVertBot;
         if(fields[rows][col].hue1bent>359) fields[rows][col].hue1bent-=359;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=359;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote());
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+HUE_NOTES*bendVertBot;
             if(fields[rows][col-1].hue1bent>359) fields[rows][col-1].hue1bent-=359;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=359;
-            fields[rows][col-1].f2->setMidinote(midinote);
+            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+HUE_NOTES*bendVertBot;
             if(fields[rows][col-1].hue2bent>359) fields[rows][col-1].hue2bent-=359;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=359;
@@ -282,7 +286,6 @@ void MWPlayArea::resizeEvent(QResizeEvent *E)
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
     //qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
-    FreqTriple fcalc;
 
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
@@ -330,8 +333,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             pitchdiff+=bendVertBot*8192*yrel;
         }
         midinote=round(pitchdiff/8192);
-        pitch=pitchdiff-midinote*8192;
-        fcalc.setMidinote(midinote,pitch);
+        pcalc.setPitch(pitchdiff-midinote*8192);
+        fcalc.setMidinote(midinote,&pcalc);
         freq=fcalc.getFreq();
         break;
 
@@ -345,8 +348,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         pitchdiff*=yrel;
         pitchdiff+=pf->f1->getMidinote()*8192;
         midinote=round(pitchdiff/8192);
-        pitch=pitchdiff-midinote*8192;
-        fcalc.setMidinote(midinote,pitch);
+        pcalc.setPitch(pitchdiff-midinote*8192);
+        fcalc.setMidinote(midinote,&pcalc);
         freq=fcalc.getFreq();
         //qDebug() << "midinote " << midinote << " pitch " << pitch << " freq " << freq ;
         break;

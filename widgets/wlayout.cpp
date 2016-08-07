@@ -9,12 +9,20 @@
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
+    setAttribute(Qt::WA_AcceptTouchEvents,true);
+
     qDebug() << "wlayout width: " << width() ;
     QString cap;    
 
     ISender * out=new SenderMobileSynth();
     out->cc(0,0,105,1,1);
-    M[0] = new MWPlayArea(this);
+
+    for(int i=0;i<BSCALE_SIZE+1;i++) {
+        MWPitch[i]=new Pitch(this);
+        MWPitch[i]->setPitch(i);
+    }
+
+    M[0] = new MWPlayArea(MWPitch,this);
     ((MWPlayArea *)M[0])->setOut(out);
 
     M[1] = new QWidget(this);
@@ -52,7 +60,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     H[1] = new QWidget(this);
     QGridLayout * lBaseNoteSetter=new QGridLayout(H[1]);
     for(int i=0;i<12;i++) {
-        BaseNoteSetter[i] = new MWBaseNoteSetter(i,this);
+        BaseNoteSetter[i] = new MWBaseNoteSetter(MWPitch[i],this);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),M[0],SLOT(setBaseNote(int)));
         connect(H[0],SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
@@ -139,7 +147,7 @@ void wlayout::resizeEvent(QResizeEvent *E)
     */
 }
 
-wlayout::currentHeader(int i)
+void wlayout::currentHeader(int i)
 {
     header->setCurrentIndex(i);
 
@@ -159,7 +167,7 @@ wlayout::currentHeader(int i)
      */
 }
 
-wlayout::changePitch(int v)
+void wlayout::changePitch(int v)
 {
     qDebug() << "changePitch " << v;
 }

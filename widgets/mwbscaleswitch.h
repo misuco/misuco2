@@ -10,7 +10,7 @@ class MWBScaleSwitch : public MisuWidget
     Q_OBJECT
 
 public:
-    MWBScaleSwitch(int Id);
+    MWBScaleSwitch(Pitch * pitch);
     ~MWBScaleSwitch();
     void setOut(ISender *value);
 
@@ -18,7 +18,7 @@ signals:
     void setBscale(int,bool);
 
 public slots:
-    void setBaseNote(int b);
+    void setBaseNote(Pitch * p);
     void setOctMid(int o);
 
 protected:

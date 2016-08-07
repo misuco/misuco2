@@ -2,13 +2,12 @@
 #include <QPainter>
 #include "comm/senderdebug.h"
 
-MWBScaleSwitch::MWBScaleSwitch(int Id)
+MWBScaleSwitch::MWBScaleSwitch(Pitch * pitch)
 {
-    bscaleId=Id;
     value=false;
     pressed=0;
     chan=0;
-    f=new FreqTriple();
+    f=new FreqTriple(pitch, this);
     setBaseNote(0);
     out=new SenderDebug();
 }
@@ -24,7 +23,7 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         value=!value;
-        emit setBscale(bscaleId,value);
+        emit setBscale(f->getBasenote(),value);
         pressed++;
         update();
         break;
@@ -53,9 +52,9 @@ void MWBScaleSwitch::setOut(ISender *value)
     out = value;
 }
 
-void MWBScaleSwitch::setBaseNote(int b)
+void MWBScaleSwitch::setBaseNote(Pitch *p)
 {
-    basenote=b;
+    basenote=p;
     int newBaseNote=basenote+bscaleId+1%12;
     f->setBasenote(newBaseNote);
     update();

@@ -2,9 +2,11 @@
 #include <math.h>
 #include <QDebug>
 
-FreqTriple::FreqTriple()
+FreqTriple::FreqTriple(Pitch *p, QObject *parent)
 {
-    setFreq(freq_a);
+    pitch=p;
+    initFreq();
+    //setFreq(freq_a);
 }
 
 FreqTriple::~FreqTriple()
@@ -16,70 +18,61 @@ float FreqTriple::getFreq() const
 {
     return freq;
 }
-
+/*
 void FreqTriple::setFreq(float f)
 {
     freq = f;
     midinote = round(Log2(f/(freq_a/64.0))*12.0-3);
-    pitch = calcPitch(midinote,freq);
+    pitch->setPitch(calcPitch(midinote,freq));
     oct = calcOctFromMidinote(midinote);
     basenote = calcBasenoteFromMidinote(midinote);
     calcHue();
 }
+*/
 
 int FreqTriple::getMidinote() const
 {
     return midinote;
 }
 
-void FreqTriple::setMidinote(int value)
+void FreqTriple::setMidinote(int m, Pitch * p)
 {
-    midinote = value;
-    pitch=0;
-    freq=calcFreq(midinote,pitch);
-    oct = calcOctFromMidinote(midinote);
-    basenote = calcBasenoteFromMidinote(midinote);
-    calcHue();
+    midinote = m;
+    pitch = p;
+    initFreq();
     //qDebug() << "FreqTriple::setMidinote " << midinote << " freq " << freq << " hue " << hue;
 }
 
-void FreqTriple::setMidinote(int midinote, int pitch)
-{
-    this->midinote = midinote;
-    this->pitch=pitch;
-    freq=calcFreq(midinote,pitch);
+void FreqTriple::initFreq() {
+    freq = calcFreq(midinote,pitch->pitch);
     oct = calcOctFromMidinote(midinote);
-    basenote = calcBasenoteFromMidinote(midinote);
-    calcHue();
 }
 
 int FreqTriple::getPitch() const
 {
-    return pitch;
+    return pitch->pitch;
 }
 
 void FreqTriple::setPitch(int value)
 {
-    pitch = value;
-    freq=calcFreq(midinote,pitch);
+    pitch->setPitch(value);
 }
 
 int FreqTriple::getHue() const
 {
-    return hue;
+    return pitch->color;
 }
 
 int FreqTriple::getBasenote() const
 {
-    return basenote;
+    return pitch->basenote;
 }
 
-void FreqTriple::setBasenote(int value)
+void FreqTriple::setBasenote(Pitch * p)
 {
-    basenote = value;
-    midinote = basenote+oct*12;
-    freq = calcFreq(midinote,pitch);
-    calcHue();
+    pitch = p;
+    midinote = pitch->pitch+oct*12;
+    freq = calcFreq(midinote,pitch->pitch);
 }
 
 int FreqTriple::getOct() const
@@ -90,12 +83,14 @@ int FreqTriple::getOct() const
 void FreqTriple::setOct(int value)
 {
     oct = value;
-    midinote = basenote+oct*12;
-    freq = calcFreq(midinote,pitch);
-    calcHue();
+    midinote = pitch->basenote+oct*12;
+    freq = calcFreq(midinote,pitch->pitch);
 }
 
-
+void FreqTriple::pitchChange()
+{
+    freq=calcFreq(midinote,pitch->pitch);
+}
 
 float FreqTriple::calcPitch(int midinote, float f) {
     return round(Log2(f/calcMidi2Fequal(midinote))*12*8192/2);
@@ -120,10 +115,6 @@ float FreqTriple::calcMidi2Fequal(int x)
     return (freq_a / 64.0f) * (pow(2.0 , (double)((float)oct*1200.0f+100.0f*p) / 1200.0f));
     */
     return pow(2.0,(float)(x-69)/12)*440.0;
-}
-
-void FreqTriple::calcHue() {
-    hue=midinote%12*30;
 }
 
 int FreqTriple::calcOctFromMidinote(int m) {

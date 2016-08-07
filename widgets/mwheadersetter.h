@@ -16,7 +16,7 @@ protected:
     void resizeEvent(QResizeEvent *E);
 
 signals:
-    currentHeader(int i);
+    void currentHeader(int i);
 
 private:
     int headerId;

@@ -25,7 +25,7 @@ public:
         float f;
     };
 
-    MWPlayArea(QWidget *parent);
+    MWPlayArea(Pitch * p[], QWidget *parent);
     ~MWPlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
 
@@ -47,9 +47,13 @@ private:
     QString cap;
     // - networking
     ISender * out;
+    // - processing
+    FreqTriple fcalc;
+    Pitch pcalc;
 
     // WORKING MEMORY
     // - touch field configuration
+    Pitch ** MWPitch;
     MWPlayfield fields[MAX_ROWS][MAX_COLS];
     int rows;
     int cols;
@@ -70,7 +74,7 @@ private:
 
     // helper functions
     void config();
-    void setColumn(int col, int midinote);
+    void setColumn(int col, int midinote, int basenote);
     void calcGeo();
     void paintField(int r, int c, int x, int y);
     void paintField(int r, int c);

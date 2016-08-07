@@ -6,8 +6,10 @@
 
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {
+    qDebug() << "MisuWidget::MisuWidget";
     static int nextId=0;
     id=nextId++;
+    setAttribute(Qt::WA_AcceptTouchEvents,true);
 }
 
 MisuWidget::~MisuWidget()

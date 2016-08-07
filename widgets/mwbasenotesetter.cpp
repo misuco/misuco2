@@ -3,11 +3,11 @@
 #include <QPainter>
 #include <QDebug>
 
-MWBaseNoteSetter::MWBaseNoteSetter(int note, QWidget *parent) : MisuWidget(parent)
+MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QWidget *parent) : MisuWidget(parent)
 {
     out=new SenderDebug();
-    f=new FreqTriple();
-    f->setBasenote(note);
+    p=pitch;
+    f=new FreqTriple(p);
     vId=0;
     pressed=0;
     chan=1;
@@ -16,7 +16,7 @@ MWBaseNoteSetter::MWBaseNoteSetter(int note, QWidget *parent) : MisuWidget(paren
 
 MWBaseNoteSetter::~MWBaseNoteSetter()
 {
-    delete(f);
+    f->deleteLater();
 }
 
 void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
