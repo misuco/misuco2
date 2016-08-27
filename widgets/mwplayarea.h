@@ -36,7 +36,7 @@ protected:
     void resizeEvent(QResizeEvent *E);
 
 public slots:
-    void setBaseNote(int b);
+    void setBaseNote(Pitch * p);
     void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
 

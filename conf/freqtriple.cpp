@@ -44,6 +44,7 @@ void FreqTriple::setMidinote(int m, Pitch * p)
 }
 
 void FreqTriple::initFreq() {
+    midinote = pitch->basenote;
     freq = calcFreq(midinote,pitch->pitch);
     oct = calcOctFromMidinote(midinote);
 }

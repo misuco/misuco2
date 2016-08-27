@@ -25,7 +25,7 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
-        emit setBaseNote(f->getBasenote());
+        emit setBaseNote(p);
         qDebug() << "MWBaseNoteSetter::processTouchEvent emit setBaseNote " << f->getBasenote();
         pressed++;
         update();

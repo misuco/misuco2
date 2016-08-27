@@ -406,11 +406,9 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     }
 }
 
-void MWPlayArea::setBaseNote(int b)
+void MWPlayArea::setBaseNote(Pitch *p)
 {
-    if(b>=0 && b<128) {
-        Scale.basenote=b;
-    }
+    Scale.basenote=p->basenote;
     config();
 }
 

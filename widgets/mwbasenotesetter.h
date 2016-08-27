@@ -24,7 +24,7 @@ public slots:
     void setChan(int c);
 
 signals:
-    void setBaseNote(int b);
+    void setBaseNote(Pitch *);
 
 private:
     ISender * out;

@@ -8,7 +8,7 @@ MWBScaleSwitch::MWBScaleSwitch(Pitch * pitch)
     pressed=0;
     chan=0;
     f=new FreqTriple(pitch, this);
-    setBaseNote(0);
+    setBaseNote(pitch);
     out=new SenderDebug();
 }
 
@@ -54,9 +54,12 @@ void MWBScaleSwitch::setOut(ISender *value)
 
 void MWBScaleSwitch::setBaseNote(Pitch *p)
 {
-    basenote=p;
+    /*
+    basenote=p->basenote;
     int newBaseNote=basenote+bscaleId+1%12;
-    f->setBasenote(newBaseNote);
+    f->setBasenote(MWPitch[newBaseNote]);
+     */
+    f->setBasenote(p);
     update();
 }
 

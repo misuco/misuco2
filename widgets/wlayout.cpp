@@ -50,7 +50,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     mainArea->addWidget(M[0]);
     mainArea->addWidget(M[1]);
 
-    mainArea->setCurrentIndex(1);
+    mainArea->setCurrentIndex(0);
 
 
     H[0] = new MWOctaveRanger(this);
@@ -62,7 +62,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     for(int i=0;i<12;i++) {
         BaseNoteSetter[i] = new MWBaseNoteSetter(MWPitch[i],this);
         BaseNoteSetter[i]->setOut(out);
-        connect(BaseNoteSetter[i],SIGNAL(setBaseNote(int)),M[0],SLOT(setBaseNote(int)));
+        connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),M[0],SLOT(setBaseNote(Pitch *)));
         connect(H[0],SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         lBaseNoteSetter->addWidget(BaseNoteSetter[i],0,i);
         //l2->setColumnStretch(i,10);
@@ -74,12 +74,12 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     H[2] = new QWidget(this);
     QGridLayout * lBScaleSwitch=new QGridLayout(H[2]);
     for(int i=0;i<11;i++) {
-        MWBScaleSwitch * bsw = new MWBScaleSwitch(i);
+        MWBScaleSwitch * bsw = new MWBScaleSwitch(MWPitch[i]);
         bsw->setOut(out);
         connect(bsw,SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
         connect(H[0],SIGNAL(setOctMid(int)),bsw,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
-            connect(BaseNoteSetter[j],SIGNAL(setBaseNote(int)),bsw,SLOT(setBaseNote(int)));
+            connect(BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bsw,SLOT(setBaseNote(Pitch *)));
         }
         lBScaleSwitch->addWidget(bsw,0,i);
     }
