@@ -66,7 +66,7 @@ void MWPlayArea::config()
         }
         for(int note=0;note<BSCALE_SIZE;note++) {
             if(Scale.bscale[note]) {
-                setColumn(cols,Scale.basenote+oct*12+note+1,Scale.basenote+note+1);
+                setColumn(cols,Scale.basenote+oct*12+note,Scale.basenote+note);
                 if(bendHoriz) {
                     cols+=2;
                 } else {

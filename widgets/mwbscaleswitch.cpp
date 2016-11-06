@@ -66,7 +66,7 @@ void MWBScaleSwitch::setBaseNote(Pitch *p)
     basenote=p->basenote;
     int newBaseNote=(basenote+bscaleId)%11;
     f->setBasenote(MWPitch[newBaseNote]);
-
+    qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
     //f->setBasenote((p+bscaleId)%11);
     update();
 }

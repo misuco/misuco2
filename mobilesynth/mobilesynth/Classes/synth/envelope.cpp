@@ -52,6 +52,7 @@ void Envelope::set_sustain(float sustain) {
 }
 
 void Envelope::set_release(long release) {
+    qDebug() << "Envelope::set_release " << release;
   assert(release >= 0);
   release_ = release;
 }
@@ -76,7 +77,7 @@ void Envelope::NoteOn() {
     decay_slope_ = (max_ - sustain_) / decay_;
   }
   state_ = ATTACK;
-    //qDebug() << " NoteOn at current " <<  current_ << " a: " << attack_ << " d: " << decay_end_ << " s: " << sustain_ << " r: " << release_end_ ;
+  qDebug() << " NoteOn at current " <<  current_ << " a: " << attack_ << " d: " << decay_end_ << " s: " << sustain_ << " r: " << release_end_ ;
 }
 
 void Envelope::NoteOff() {
@@ -89,6 +90,7 @@ void Envelope::NoteOff() {
   }
   release_start_ = current_; 
   release_end_ = current_ + release_;
+  qDebug() << "env state to release at " << current_ << " release end at " << release_end_ << " release " << release_;
 }
 
 bool Envelope::released() const {
@@ -102,16 +104,16 @@ float Envelope::GetValue() {
   // Check that we haven't transitioned longo the next state
     if (state_ == DECAY && current_ > decay_end_) {
         state_ = SUSTAIN;
-        //qDebug() << "env state to sustain at " << current_ << " decay_end: " << decay_end_;
+        qDebug() << "env state to sustain at " << current_ << " decay_end: " << decay_end_;
     } else if (state_ == ATTACK && current_ > attack_) {
         state_ = DECAY;
-        //qDebug() << "env state to decay at " << current_ << " attack: " << attack_;
+        qDebug() << "env state to decay at " << current_ << " attack: " << attack_;
     } else if (state_ == SUSTAIN && sustain_ <= 0.0) {
         state_ = DONE;
-        //qDebug() << "env state to done in sustain at " << current_;
+        qDebug() << "env state to done in sustain at " << current_;
     } else if (state_ == RELEASE && current_ > release_end_) {
         state_ = DONE;
-        //qDebug() << "env state to done in release at " << current_;
+        qDebug() << "env state to done in release at " << current_;
     }
 
   switch (state_) {

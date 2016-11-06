@@ -29,6 +29,13 @@ namespace synth {
             filters[i]->set_resonance(0);
 
         }
+        for(int j=0;j<kNumEnv;j++) {
+            env_a[j]=1000;
+            env_d[j]=1000;
+            env_s[j]=0.3;
+            env_r[j]=100000;
+        }
+
         mod_amt_init_=0;
         osc_pw=0.5;
         filter_res_=0;
@@ -85,15 +92,16 @@ namespace synth {
         mod_amt_[size_]=mod_amt_init_;
         initModulation(size_,0);
 
+        qDebug() << "  KeyStack new note " << note << " size " << size_ << " wave " << osc_wave;
         for(int i=0;i<kNumEnv;i++) {
             envelopes[i][size_]->set_attack(env_a[i]);
             envelopes[i][size_]->set_decay(env_d[i]);
             envelopes[i][size_]->set_sustain(env_s[i]);
             envelopes[i][size_]->set_release(env_r[i]);
             envelopes[i][size_]->NoteOn();
+            qDebug() << "set_release " << env_r[i];
         }
         size_++;
-        //qDebug() << "  KeyStack new note " << note << " size " << size_ << " wave " << osc_wave;
         return true;
     }
     
@@ -104,7 +112,7 @@ namespace synth {
                 for(int k=0;k<kNumEnv;k++) {
                     envelopes[k][i]->NoteOff();
                 }
-                //qDebug() << " KeyStack note off " << note << " size: " << size_;
+                qDebug() << " KeyStack note off " << note << " size: " << size_;
                 return true;
             }
         }

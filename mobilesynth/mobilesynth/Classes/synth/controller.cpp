@@ -17,10 +17,10 @@ namespace synth {
     
     Controller::Controller()
     {
-        key_stack_.setADSR(0, 1000, 1000, 0.8, 80000);
-        key_stack_.setADSR(1, 0,   0,   1, 1000);
+        key_stack_.setADSR(0, 1000, 1000, 0.8, 20000);
+        //key_stack_.setADSR(1, 0,   0,   1, 1000);
         format=0;
-        volume_=0.5;
+        volume_=0.1;
         sampleMemory=new float[2048];
         sampleMemorySize=2048;
         sampleMemoryPnt=0;
@@ -36,12 +36,12 @@ namespace synth {
     }
     
     void Controller::NoteOn(int note, float freq) {
-        //qDebug() << "controller::noteon " << note << " freq " << freq;
+        qDebug() << "controller::noteon " << note << " freq " << freq;
         key_stack_.NoteOn(note, freq);
     }
     
     void Controller::NoteOff(int note) {
-        //qDebug() << "controller::noteoff " << note;
+        qDebug() << "controller::noteoff " << note;
         key_stack_.NoteOff(note);
     }
     
