@@ -1,14 +1,23 @@
 #include "mwbscaleswitch.h"
 #include <QPainter>
 #include "comm/senderdebug.h"
+#include <QDebug>
 
-MWBScaleSwitch::MWBScaleSwitch(Pitch * pitch)
+MWBScaleSwitch::MWBScaleSwitch(int i, Pitch **MWP)
 {
+    qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
+
+    for(int i=0;i<12;i++) {
+        MWPitch[i]=*(MWP+i);
+    }
+    // TODO: how to type cast this?
+    //MWPitch=MWP;
+    f=new FreqTriple(MWP[i],this);
     value=false;
     pressed=0;
     chan=0;
-    f=new FreqTriple(pitch, this);
-    setBaseNote(pitch);
+    bscaleId=i;
+    setBaseNote(MWP[i]);
     out=new SenderDebug();
 }
 
@@ -43,7 +52,7 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *)
     if(value) l=200;
     painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
     painter.drawRect(0,0,width(),height());
-    cap.sprintf("%d",f->getBasenote());
+    cap.sprintf("%d",bscaleId);
     painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
 }
 
@@ -54,12 +63,11 @@ void MWBScaleSwitch::setOut(ISender *value)
 
 void MWBScaleSwitch::setBaseNote(Pitch *p)
 {
-    /*
     basenote=p->basenote;
-    int newBaseNote=basenote+bscaleId+1%12;
+    int newBaseNote=(basenote+bscaleId)%11;
     f->setBasenote(MWPitch[newBaseNote]);
-     */
-    f->setBasenote(p);
+
+    //f->setBasenote((p+bscaleId)%11);
     update();
 }
 

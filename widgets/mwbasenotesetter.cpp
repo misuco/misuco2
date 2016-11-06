@@ -5,13 +5,16 @@
 
 MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QWidget *parent) : MisuWidget(parent)
 {
+    qDebug() << "MWBaseNoteSetter::MWBaseNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
     out=new SenderDebug();
+    oct=4;
     p=pitch;
     f=new FreqTriple(p);
+    f->setOct(oct);
+    qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
     vId=0;
     pressed=0;
     chan=1;
-    oct=4;
 }
 
 MWBaseNoteSetter::~MWBaseNoteSetter()
@@ -24,14 +27,14 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
     switch(e.state) {
     case Qt::TouchPointPressed:
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
-        //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
+        qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
         emit setBaseNote(p);
         qDebug() << "MWBaseNoteSetter::processTouchEvent emit setBaseNote " << f->getBasenote();
         pressed++;
         update();
         break;
     case Qt::TouchPointReleased:
-        //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointReleased vId:" << vId;
+        qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointReleased vId:" << vId;
         out->noteOff(vId);
         pressed--;
         update();
@@ -47,7 +50,7 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     if(pressed>0) l=200;
     painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
     painter.drawRect(0,0,width(),height());
-    cap.sprintf("%d",f->getBasenote());
+    cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignRight,"*");
     painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignRight,"*");
@@ -55,7 +58,7 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
 
 void MWBaseNoteSetter::resizeEvent(QResizeEvent *E)
 {
-    qDebug() << "MWBaseNoteSetter::resizeEvent" << width();
+    //qDebug() << "MWBaseNoteSetter::resizeEvent" << width();
 }
 
 void MWBaseNoteSetter::setOctMid(int o)

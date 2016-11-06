@@ -129,12 +129,14 @@ void SenderMobileSynth::pc(int chan, int v1) {}
 int SenderMobileSynth::noteOn(int, float f, int, int, int)
 {
     int voiceId=nextVid++;
+    qDebug() << "SenderMobileSynth::noteOn " << voiceId << " f: " << f;
     sy->noteOn(voiceId, (float)f);
     return voiceId;
 }
 
 void SenderMobileSynth::noteOff(int voiceId)
 {
+    qDebug() << "SenderMobileSynth::noteOff " << voiceId;
     sy->noteOff(voiceId);
 }
 

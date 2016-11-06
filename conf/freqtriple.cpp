@@ -39,7 +39,8 @@ void FreqTriple::setMidinote(int m, Pitch * p)
 {
     midinote = m;
     pitch = p;
-    initFreq();
+    freq = calcFreq(midinote,pitch->pitch);
+    oct = calcOctFromMidinote(midinote);
     //qDebug() << "FreqTriple::setMidinote " << midinote << " freq " << freq << " hue " << hue;
 }
 
@@ -57,6 +58,7 @@ int FreqTriple::getPitch() const
 void FreqTriple::setPitch(int value)
 {
     pitch->setPitch(value);
+    initFreq();
 }
 
 int FreqTriple::getHue() const

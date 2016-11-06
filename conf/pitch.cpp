@@ -21,6 +21,7 @@ void Pitch::calcColor()
 void Pitch::setPitch(int value)
 {
     pitch = value;
+    basenote = value;
     calcColor();
     emit change();
 }

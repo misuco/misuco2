@@ -10,7 +10,7 @@ class MWBScaleSwitch : public MisuWidget
     Q_OBJECT
 
 public:
-    MWBScaleSwitch(Pitch * pitch);
+    MWBScaleSwitch(int i, Pitch ** MWP);
     ~MWBScaleSwitch();
     void setOut(ISender *value);
 
@@ -27,7 +27,8 @@ protected:
 
 private:
     ISender * out;
-    FreqTriple * f;
+    FreqTriple * f;    
+    Pitch * MWPitch[12];
     int bscaleId;
     int basenote;
     int vId;

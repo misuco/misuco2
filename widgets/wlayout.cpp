@@ -73,8 +73,8 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     H[2] = new QWidget(this);
     QGridLayout * lBScaleSwitch=new QGridLayout(H[2]);
-    for(int i=0;i<11;i++) {
-        MWBScaleSwitch * bsw = new MWBScaleSwitch(MWPitch[i]);
+    for(int i=1;i<12;i++) {
+        MWBScaleSwitch * bsw = new MWBScaleSwitch(i,MWPitch);
         bsw->setOut(out);
         connect(bsw,SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
         connect(H[0],SIGNAL(setOctMid(int)),bsw,SLOT(setOctMid(int)));
