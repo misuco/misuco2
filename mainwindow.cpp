@@ -7,6 +7,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    setAttribute(Qt::WA_AcceptTouchEvents,true);
     w=new wlayout(this);
     setCentralWidget(w);
     //startTimer(1000);
