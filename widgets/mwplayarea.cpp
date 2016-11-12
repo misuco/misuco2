@@ -280,6 +280,18 @@ void MWPlayArea::paintEvent(QPaintEvent *E)
         }
         y+=rowheight[r];
     }
+
+    QPainter painter(this);
+    painter.setBrush(Qt::white);
+    painter.setFont(QFont("Sans",20));
+
+    for(int i=0;i<EVENT_STACK_SIZE;i++) {
+        eventStackElement * es = &eventStack[i];
+        if(es && es->eventId>0) {
+            painter.drawRect(es->x-50,es->y-50,100,100);
+            painter.drawText(es->x-50,es->y-80,200,250,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
+        }
+    }
 }
 
 void MWPlayArea::resizeEvent(QResizeEvent *E)
@@ -293,6 +305,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
+    es->x=e.x;
+    es->y=e.y;
 
     int row=e.y*rows/height();
     int col=e.x*cols/width();
@@ -375,7 +389,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         pf->pressed++;
         es->voiceId=out->noteOn(chan,freq,midinote,pitch,velocity);
         //paintField(row,col);
-        update();
+        //update();
         break;
     case Qt::TouchPointMoved:
         if(row!=es->row || col!=es->col) {
@@ -405,9 +419,10 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->col=-1;
         pf->pressed--;
         //paintField(row,col);
-        update();
+        //update();
         break;
     }
+    update();
 }
 
 void MWPlayArea::setBaseNote(Pitch *p)

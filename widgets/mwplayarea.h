@@ -22,6 +22,8 @@ public:
         int midinote;
         int row;
         int col;
+        int x;
+        int y;
         float f;
     };
 

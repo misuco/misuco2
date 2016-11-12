@@ -15,7 +15,8 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     qDebug() << "wlayout width: " << width() ;
     QString cap;    
 
-    ISender * out=new SenderMobileSynth();
+    //ISender * out=new SenderMobileSynth();
+    ISender * out=new SenderDebug();
     out->cc(0,0,105,1,1);
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
