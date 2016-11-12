@@ -29,7 +29,7 @@ bool MisuWidget::event(QEvent *event)
         e.t=QDateTime::currentMSecsSinceEpoch();
         QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
         foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
-            //qDebug() << "-- touch wnote:" << id <<  " state " <<  touchPoint.state() << " tid:" << touchPoint.id() <<  " x:" << touchPoint.pos().x() << " y:" << touchPoint.pos().y() ;
+            qDebug() << "-- touch wnote:" << id <<  " state " <<  touchPoint.state() << " tid:" << touchPoint.id() <<  " x:" << touchPoint.pos().x() << " y:" << touchPoint.pos().y() ;
             e.id=touchPoint.id();
             e.state=touchPoint.state();
             e.x=touchPoint.pos().x();
@@ -53,7 +53,7 @@ bool MisuWidget::event(QEvent *event)
         } else if(event->type()==QEvent::MouseButtonRelease) {
             e.state=Qt::TouchPointReleased;
         }
-        //qDebug() << "mouse wnote " << id  << " x:" << meve->pos().x() << " y:" << meve->pos().y() ;
+        qDebug() << "mouse wnote " << id  << " x:" << meve->pos().x() << " y:" << meve->pos().y() ;
         e.id=9999;
         e.x=meve->pos().x();
         e.y=meve->pos().y();

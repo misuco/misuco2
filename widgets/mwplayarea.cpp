@@ -271,6 +271,7 @@ void MWPlayArea::paintField(int r, int c)
 
 void MWPlayArea::paintEvent(QPaintEvent *E)
 {
+    qDebug() << "MWPlayArea::paintEvent start ";
     int x,y=0;
     for(int r=0;r<rows;r++) {
         x=0;
@@ -292,6 +293,7 @@ void MWPlayArea::paintEvent(QPaintEvent *E)
             painter.drawText(es->x-50,es->y-80,200,250,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
         }
     }
+    qDebug() << "MWPlayArea::paintEvent end ";
 }
 
 void MWPlayArea::resizeEvent(QResizeEvent *E)
@@ -301,7 +303,7 @@ void MWPlayArea::resizeEvent(QResizeEvent *E)
 
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
-    //qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
+    qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
 
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
@@ -442,7 +444,7 @@ void MWPlayArea::setOctConf(int bottom, int top)
 
 void MWPlayArea::setBscale(int n, bool v)
 {
-    qDebug() << "MWPlayArea::setBscale " << n << " " << v;
+    //qDebug() << "MWPlayArea::setBscale " << n << " " << v;
     Scale.bscale[n-1]=v;
     config();
 }
