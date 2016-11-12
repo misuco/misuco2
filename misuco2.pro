@@ -51,7 +51,8 @@ SOURCES += main.cpp\
     widgets/mwbscaleswitch.cpp \
     widgets/mwheadersetter.cpp \
     widgets/mwfadder.cpp \
-    conf/pitch.cpp
+    conf/pitch.cpp \
+    widgets/mwpreset.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -94,7 +95,8 @@ HEADERS  += mainwindow.h \
     conf/platform.h \
     widgets/mwheadersetter.h \
     widgets/mwfadder.h \
-    conf/pitch.h
+    conf/pitch.h \
+    widgets/mwpreset.h
 
 CONFIG += mobility
 MOBILITY = 

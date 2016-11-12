@@ -10,6 +10,8 @@ MWPlayArea::MWPlayArea(Pitch *p[], QWidget *parent) : MisuWidget(parent),
     pcalc(this),
     fcalc(&pcalc,this)
 {
+    setAttribute(Qt::WA_AcceptTouchEvents,true);
+
     MWPitch=p;
 
     Scale.basenote=0;

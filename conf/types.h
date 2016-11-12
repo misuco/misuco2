@@ -28,6 +28,7 @@ struct MWScale {
     int baseoct;
     int topoct;
     bool bscale[BSCALE_SIZE];
+    int size;
 };
 
 #endif // TYPES_H

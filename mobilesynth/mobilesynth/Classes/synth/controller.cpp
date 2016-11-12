@@ -36,12 +36,12 @@ namespace synth {
     }
     
     void Controller::NoteOn(int note, float freq) {
-        qDebug() << "controller::noteon " << note << " freq " << freq;
+        //qDebug() << "controller::noteon " << note << " freq " << freq;
         key_stack_.NoteOn(note, freq);
     }
     
     void Controller::NoteOff(int note) {
-        qDebug() << "controller::noteoff " << note;
+        //qDebug() << "controller::noteoff " << note;
         key_stack_.NoteOff(note);
     }
     
@@ -77,7 +77,7 @@ namespace synth {
     }
     
     void Controller::GetFloatSamples(float* buffer, int size) {
-        //qDebug() << "GetFloatSamples " <<  size << " from " <<  buffer;
+        ////qDebug() << "GetFloatSamples " <<  size << " from " <<  buffer;
         for (int i = 0; i < size; ++i) {
             sampleMemory[sampleMemoryPnt]=GetSample();
             buffer[i] = sampleMemory[sampleMemoryPnt];
@@ -89,7 +89,7 @@ namespace synth {
     }
     
     void Controller::GetInt32Sapmles(int* buffer, int size) {
-        //qDebug() << "GetInt32Sapmles " <<  size << " from " <<  buffer;
+        ////qDebug() << "GetInt32Sapmles " <<  size << " from " <<  buffer;
         for (int i = 0; i < size; ++i) {
             sampleMemory[sampleMemoryPnt]=GetSample();
             buffer[i] = sampleMemory[sampleMemoryPnt]* 2147483648L;
@@ -139,7 +139,7 @@ namespace synth {
         if(format!=0) {
             //delete(sampleMemory);
             //sampleMemory=new float[size];
-            //qDebug() << "GetCharSamples size " << size << " sampleBytes " << sampleBytes;
+            ////qDebug() << "GetCharSamples size " << size << " sampleBytes " << sampleBytes;
             //Q_ASSERT(size % sampleBytes == 0);
             Q_UNUSED(sampleBytes) // suppress warning in release builds
             unsigned char *ptr = reinterpret_cast<unsigned char *>(buffer);
@@ -197,7 +197,7 @@ namespace synth {
         // Adjust volume
         for(int i=0;i<key_stack_.GetSize();i++) {
             if(key_stack_.getEnvelope(0, i)->released()) {
-                //qDebug() << "controller: clear note " << key_stack_.GetNote(i);
+                ////qDebug() << "controller: clear note " << key_stack_.GetNote(i);
                 key_stack_.NoteClear(key_stack_.GetNote(i));
             }
         }
