@@ -32,7 +32,7 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         value=!value;
-        emit setBscale(f->getBasenote(),value);
+        emit setBscale(bscaleId,value);
         pressed++;
         update();
         break;
@@ -64,7 +64,7 @@ void MWBScaleSwitch::setOut(ISender *value)
 void MWBScaleSwitch::setBaseNote(Pitch *p)
 {
     basenote=p->basenote;
-    int newBaseNote=(basenote+bscaleId)%11;
+    int newBaseNote=(basenote+bscaleId)%12;
     f->setBasenote(MWPitch[newBaseNote]);
     qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
     //f->setBasenote((p+bscaleId)%11);

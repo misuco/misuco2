@@ -65,8 +65,10 @@ void MWPlayArea::config()
             cols++;
         }
         for(int note=0;note<BSCALE_SIZE;note++) {
+            qDebug() << "MWPlayArea::config " << note;
             if(Scale.bscale[note]) {
-                setColumn(cols,Scale.basenote+oct*12+note,Scale.basenote+note);
+                setColumn(cols,Scale.basenote+oct*12+note+1,Scale.basenote+note+1);
+                qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
                 } else {
@@ -200,7 +202,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         linearGrad.setStart(QPointF(x,y));
         linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
         linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
-        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue(),180,l));
+        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue()+1,180,l));
         painter.setPen(Qt::black);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
@@ -390,7 +392,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             update();
         } else if(freq!=es->f) {
             out->pitch(chan,es->voiceId,freq,midinote,pitch);
-            qDebug() << "pitch " << freq;
+            //qDebug() << "pitch " << freq;
             es->f=freq;
         }
         break;
@@ -424,7 +426,19 @@ void MWPlayArea::setOctConf(int bottom, int top)
 void MWPlayArea::setBscale(int n, bool v)
 {
     qDebug() << "MWPlayArea::setBscale " << n << " " << v;
-    Scale.bscale[n]=v;
+    Scale.bscale[n-1]=v;
+    config();
+}
+
+void MWPlayArea::setScale(MWScale * s)
+{
+    Scale.basenote=s->basenote;
+    Scale.baseoct=s->baseoct;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        Scale.bscale[i]=s->bscale[i];
+    }
+    Scale.size=s->size;
+    Scale.topoct=s->topoct;
     config();
 }
 

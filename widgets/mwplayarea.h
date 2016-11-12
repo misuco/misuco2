@@ -39,6 +39,7 @@ public slots:
     void setBaseNote(Pitch * p);
     void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
+    void setScale(MWScale *s);
 
 private:
     // INFRASTRUCTURE

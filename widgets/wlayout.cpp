@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 #include "mwbscaleswitch.h"
 #include "mwheadersetter.h"
+#include "mwpreset.h"
 //#include <QSlider>
 #include "mwfadder.h"
 
@@ -108,9 +109,11 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     //qDebug() << "wlayout::wlayout new out " << out;
 
     for(int i=1;i<12;i++) {
-        QPushButton * pb = new QPushButton(this);
-        cap.sprintf("%d",i);
-        pb->setText(cap);
+        //QPushButton * pb = new QPushButton(this);
+        MWPreset * pb = new MWPreset(MWPitch,this);
+        connect(pb,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
+        //cap.sprintf("%d",i);
+        //pb->setText(cap);
         pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
         MWHeaderSetter * hs = new MWHeaderSetter(i-1,this);
