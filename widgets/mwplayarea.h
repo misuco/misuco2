@@ -40,6 +40,9 @@ public slots:
     void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
     void setScale(MWScale *s);
+    void setBendHori(bool b);
+    void setBendVertTop(int b);
+    void setBendVertBot(int b);
 
 private:
     // INFRASTRUCTURE

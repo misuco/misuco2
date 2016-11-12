@@ -17,10 +17,15 @@ protected:
 
 signals:
     void currentHeader(int i);
+    void currentMainView(int i);
+    void setBendHori(bool b);
+    void setBendVertTop(int b);
+    void setBendVertBot(int b);
 
 private:
     int headerId;
     int pressed;
+    int state;
 };
 
 #endif // MWHEADERSETTER_H

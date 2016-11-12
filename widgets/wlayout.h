@@ -24,6 +24,7 @@ protected:
 
 private slots:    
     void currentHeader(int i);
+    void currentMainView(int i);
     void changePitch(int v);
 
 private:

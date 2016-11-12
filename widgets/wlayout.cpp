@@ -108,7 +108,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
-    for(int i=1;i<12;i++) {
+    for(int i=1;i<11;i++) {
         //QPushButton * pb = new QPushButton(this);
         MWPreset * pb = new MWPreset(MWPitch,this);
         connect(pb,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
@@ -116,9 +116,22 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         //pb->setText(cap);
         pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-        MWHeaderSetter * hs = new MWHeaderSetter(i-1,this);
+        int fctId=i-1;
+        MWHeaderSetter * hs = new MWHeaderSetter(fctId,this);
         hs->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        connect(hs,SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
+        if(fctId<3) {
+            connect(hs,SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
+        } else if(fctId==3) {
+            connect(hs,SIGNAL(setBendHori(bool)),(MWPlayArea *)M[0],SLOT(setBendHori(bool)));
+        } else if(fctId==4) {
+            connect(hs,SIGNAL(setBendVertTop(int)),(MWPlayArea *)M[0],SLOT(setBendVertTop(int)));
+        } else if(fctId==5) {
+            connect(hs,SIGNAL(setBendVertBot(int)),(MWPlayArea *)M[0],SLOT(setBendVertBot(int)));
+        } else if(fctId==6) {
+            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+        } else if(fctId==7) {
+            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+        }
 
         layout->addWidget(pb,i,0,1,2);
         layout->addWidget(hs,i,12,1,2);
@@ -168,6 +181,11 @@ void wlayout::currentHeader(int i)
     }
      *
      */
+}
+
+void wlayout::currentMainView(int i)
+{
+    mainArea->setCurrentIndex(i);
 }
 
 void wlayout::changePitch(int v)

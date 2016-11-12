@@ -21,9 +21,9 @@ MWPlayArea::MWPlayArea(Pitch *p[], QWidget *parent) : MisuWidget(parent),
         Scale.bscale[i]=false;
     }
 
-    bendHoriz=true;
-    bendVertTop=2;
-    bendVertBot=-2;
+    bendHoriz=false;
+    bendVertTop=0;
+    bendVertBot=0;
 
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
         eventStack[i].eventId=-1;
@@ -69,7 +69,7 @@ void MWPlayArea::config()
         for(int note=0;note<BSCALE_SIZE;note++) {
             qDebug() << "MWPlayArea::config " << note;
             if(Scale.bscale[note]) {
-                setColumn(cols,Scale.basenote+oct*12+note+1,Scale.basenote+note+1);
+                setColumn(cols,Scale.basenote+oct*12+note+1,(Scale.basenote+note+1)%(BSCALE_SIZE+1));
                 qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
@@ -80,7 +80,7 @@ void MWPlayArea::config()
         }
     }
     int topnote=Scale.basenote+(Scale.topoct)*12;
-    //qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
+    qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
     setColumn(cols,topnote,Scale.basenote);
     cols++;
     calcGeo();
@@ -88,7 +88,7 @@ void MWPlayArea::config()
 }
 
 void MWPlayArea::setColumn(int col, int midinote, int basenote) {
-    qDebug() << "setColumn " << col << " " << midinote;
+    qDebug() << "setColumn " << col << " midinote " << midinote << " basenote " << basenote;
     rows=0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
@@ -164,7 +164,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
     if(fields[r][c].pressed>0) l=180;
     switch(fields[r][c].type) {
     case NORMAL:
-        painter.setPen(Qt::black);
+        painter.setPen(Qt::white);
         painter.setBrush(QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
@@ -182,7 +182,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
             linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].hue1bent,180,l));
         }
-        painter.setPen(Qt::black);
+        painter.setPen(Qt::white);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
 
@@ -205,7 +205,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
         linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
         linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue()+1,180,l));
-        painter.setPen(Qt::black);
+        painter.setPen(Qt::white);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
         cap.sprintf("%d",fields[r][c].f1->getMidinote());
@@ -255,7 +255,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             }
         }
 
-        painter.setPen(Qt::black);
+        painter.setPen(Qt::white);
         painter.setBrush(Qt::NoBrush);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
         break;
@@ -441,6 +441,24 @@ void MWPlayArea::setScale(MWScale * s)
     }
     Scale.size=s->size;
     Scale.topoct=s->topoct;
+    config();
+}
+
+void MWPlayArea::setBendHori(bool b)
+{
+    bendHoriz=b;
+    config();
+}
+
+void MWPlayArea::setBendVertTop(int b)
+{
+    bendVertTop=b;
+    config();
+}
+
+void MWPlayArea::setBendVertBot(int b)
+{
+    bendVertBot=b;
     config();
 }
 

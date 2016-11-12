@@ -5,13 +5,51 @@ MWHeaderSetter::MWHeaderSetter(int headerId, QWidget *parent) : MisuWidget(paren
 {
     this->headerId=headerId;
     pressed=0;
+    state=0;
 }
 
 void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        emit currentHeader(headerId);
+        switch(headerId) {
+        case 0:
+        case 1:
+        case 2:
+            emit currentHeader(headerId);
+            break;
+        case 3:
+            if(state==0) {
+                state=1;
+            } else {
+                state=0;
+            }
+            emit setBendHori(state);
+            break;
+        case 4:
+            if(state==0) {
+                state=2;
+            } else {
+                state=0;
+            }
+            emit setBendVertTop(state);
+            break;
+        case 5:
+            if(state==0) {
+                state=-2;
+            } else {
+                state=0;
+            }
+            emit setBendVertBot(state);
+            break;
+        case 6:
+            emit currentMainView(0);
+            break;
+        case 7:
+            emit currentMainView(1);
+            break;
+        }
+
         pressed++;
         update();
         break;
