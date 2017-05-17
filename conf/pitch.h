@@ -2,8 +2,9 @@
 #define PITCH_H
 
 #include <QObject>
+#include "color.h"
 
-class Pitch : public QObject
+class Pitch : public QObject, public Color
 {
     Q_OBJECT
 
@@ -11,7 +12,8 @@ public:
     explicit Pitch(QObject *parent = 0);
 
     void setBasenote(int value);
-    void setPitch(int value);
+
+    int getHue() const override;
 
 //protected:
     int pitch;
@@ -20,6 +22,9 @@ public:
 
 signals:
     void change();
+
+public slots:
+    void setPitch(int value);
 
 private:
     void calcColor();

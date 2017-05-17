@@ -44,6 +44,7 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
 
 void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
 {
+    qDebug() << "MWBaseNoteSetter::paintEvent";
     QPainter painter(this);
     QString cap;
     int l=127;
@@ -69,6 +70,13 @@ void MWBaseNoteSetter::setOctMid(int o)
 void MWBaseNoteSetter::setChan(int c)
 {
     chan=c;
+}
+
+void MWBaseNoteSetter::pitchChange()
+{
+    qDebug() << "MWBaseNoteSetter::pitchChange "  << f->getPitch();
+    f->pitchChange();
+    update();
 }
 
 void MWBaseNoteSetter::setOut(ISender *value)

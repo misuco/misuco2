@@ -95,13 +95,13 @@ void FreqTriple::pitchChange()
     freq=calcFreq(midinote,pitch->pitch);
 }
 
-float FreqTriple::calcPitch(int midinote, float f) {
-    return round(Log2(f/calcMidi2Fequal(midinote))*12*8192/2);
-}
+//float FreqTriple::calcPitch(int midinote, float f) {
+//    return round(Log2(f/calcMidi2Fequal(midinote))*12*8192/2);
+//}
 
 float FreqTriple::calcFreq(int midinote, int pitch) {
 //    return pow(2.0,(float)pitch*2.0/12.0/8192.0)*calcMidi2Fequal(midinote);
-    return pow(2.0,(float)pitch/12.0/8192.0)*calcMidi2Fequal(midinote);
+    return pow(2.0,(float)pitch/1200.0)*calcMidi2Fequal(midinote);
 }
 
 double FreqTriple::Log2( double n )

@@ -22,6 +22,7 @@ protected:
 public slots:
     void setOctMid(int o);
     void setChan(int c);
+    void pitchChange();
 
 signals:
     void setBaseNote(Pitch *);

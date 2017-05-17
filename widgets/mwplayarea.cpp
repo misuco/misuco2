@@ -479,6 +479,11 @@ void MWPlayArea::setBendVertBot(int b)
     config();
 }
 
+void MWPlayArea::pitchChange()
+{
+    config();
+}
+
 void MWPlayArea::setOut(ISender *value)
 {
     out = value;

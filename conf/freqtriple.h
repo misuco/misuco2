@@ -2,6 +2,7 @@
 #define FREQTRIPLE_H
 
 #include "pitch.h"
+#include "color.h"
 
 class FreqTriple: public QObject
 {
@@ -40,7 +41,7 @@ private:
     Pitch * pitch;
     int oct;
 
-    float calcPitch(int midinote, float f);
+//    float calcPitch(int midinote, float f);
     float calcFreq(int midinote, int pitch);
     float calcMidi2Fequal(int x);
     double Log2(double n);

@@ -33,7 +33,7 @@ private:
     //MWPlayArea * M[0];
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
-    QStackedWidget * header;
+    //QStackedWidget * header;
     QStackedWidget * mainArea;
 
     // current header widget

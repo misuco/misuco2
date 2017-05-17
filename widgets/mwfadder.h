@@ -2,11 +2,14 @@
 #define MWFADDER_H
 
 #include "misuwidget.h"
+#include "conf/color.h"
 
 class MWFadder : public MisuWidget
 {
+    Q_OBJECT
+
 public:
-    MWFadder(QWidget *parent);
+    MWFadder(QWidget *parent, Color * c);
     enum orientation {
         horizontal,
         vertical
@@ -24,6 +27,9 @@ protected:
     void processTouchEvent(misuTouchEvent e);
     void resizeEvent(QResizeEvent *);
 
+signals:
+    void valueChange(int v);
+
 private:
     // Fadder state
     int value;
@@ -37,6 +43,7 @@ private:
     int fadderY;
     int knobSize;
     int fineness;
+    Color * color;
 
     // Touch event state
     int xTouchBegin;
