@@ -34,7 +34,7 @@ private:
     int vId;
     int pressed;
     int chan;
-    int oct;
+//    int oct;
 };
 
 #endif // MWBASENOTESETTER_H

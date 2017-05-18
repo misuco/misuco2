@@ -17,6 +17,7 @@ MWBScaleSwitch::MWBScaleSwitch(int i, Pitch **MWP)
     pressed=0;
     chan=0;
     bscaleId=i;
+    f->setOct(4);
     setBaseNote(MWP[0]);
     out=new SenderDebug();
 }

@@ -7,10 +7,10 @@ MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QWidget *parent) : MisuWidget(
 {
     qDebug() << "MWBaseNoteSetter::MWBaseNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
     out=new SenderDebug();
-    oct=4;
+    //oct=4;
     p=pitch;
     f=new FreqTriple(p);
-    f->setOct(oct);
+    f->setOct(4);
     qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
     vId=0;
     pressed=0;

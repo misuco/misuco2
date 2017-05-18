@@ -4,7 +4,7 @@
 MWFaderPitch::MWFaderPitch(QWidget *parent, Pitch *p, int c) : MWFadder(parent, p), chan(c)
 {
     f = new FreqTriple(p);
-
+    f->setOct(4);
 }
 
 MWFaderPitch::~MWFaderPitch()

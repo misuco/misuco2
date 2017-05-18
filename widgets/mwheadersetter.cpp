@@ -64,10 +64,37 @@ void MWHeaderSetter::paintEvent(QPaintEvent *E)
 {
     QPainter painter(this);
     QString cap;
-    if(pressed>0) painter.setBrush(Qt::white);
+    if(state!=0) painter.setBrush(Qt::white);
     else painter.setBrush(Qt::gray);
     painter.drawRect(0,0,width(),height());
-    cap.sprintf("%d",headerId);
+    switch(headerId) {
+    case 0:
+        cap.sprintf("%d Octaves",headerId);
+        break;
+    case 1:
+        cap.sprintf("%d Basenote",headerId);
+        break;
+    case 2:
+        cap.sprintf("%d Scale",headerId);
+        break;
+    case 3:
+        cap.sprintf("%d Bend horizontal",headerId);
+        break;
+    case 4:
+        cap.sprintf("%d Bend top",headerId);
+        break;
+    case 5:
+        cap.sprintf("%d Bend bottom",headerId);
+        break;
+    case 6:
+        cap.sprintf("%d play area",headerId);
+        break;
+    case 7:
+        cap.sprintf("%d pitch",headerId);
+        break;
+
+    }
+
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
 }
 

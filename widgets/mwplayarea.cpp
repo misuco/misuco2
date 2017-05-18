@@ -204,7 +204,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         linearGrad.setStart(QPointF(x,y));
         linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
         linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
-        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue()+1,180,l));
+        linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue(),180,l));
         painter.setPen(Qt::white);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);

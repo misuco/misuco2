@@ -31,7 +31,7 @@ private:
     int vId;
     int pressed;
     int chan;
-    int oct;
+//    int oct;
 };
 
 #endif // MWFADERPITCH_H
