@@ -55,6 +55,8 @@ private:
     // - painting
     QLinearGradient linearGrad;
     QString cap;
+    QFont font3;
+    QFont font8;
     // - networking
     ISender * out;
     // - processing

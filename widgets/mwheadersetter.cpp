@@ -73,8 +73,10 @@ void MWHeaderSetter::paintEvent(QPaintEvent *E)
 {
     QPainter painter(this);
     QString cap;
-    if(state!=0) painter.setBrush(Qt::white);
-    else painter.setBrush(Qt::gray);
+    painter.setFont(font1);
+    painter.setPen(fgcolor);
+    if(state!=0) painter.setBrush(highlightcolor);
+    else painter.setBrush(bgcolor);
     painter.drawRect(0,0,width(),height());
     switch(headerId) {
     case 0:

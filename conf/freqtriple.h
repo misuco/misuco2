@@ -30,6 +30,8 @@ public:
     int getOct() const;
     void setOct(int value);
 
+    QString getBasenoteString() const;
+
 public slots:
     void pitchChange();
 

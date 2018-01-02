@@ -40,6 +40,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     M[1] = new QWidget(this);
     QGridLayout * lPitch = new QGridLayout(M[1]);
+    lPitch->setContentsMargins(0,0,0,0);
+    lPitch->setHorizontalSpacing(0);
+    lPitch->setVerticalSpacing(0);
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWFaderPitch * mwf = new MWFaderPitch(M[1],MWPitch[i],1);
         mwf->setOut(out);
@@ -53,6 +56,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     M[2] = new QWidget(this);
     QGridLayout * lSynthCtl = new QGridLayout(M[2]);
+    lSynthCtl->setContentsMargins(0,0,0,0);
+    lSynthCtl->setHorizontalSpacing(0);
+    lSynthCtl->setVerticalSpacing(0);
     for(int i=102;i<=111;i++) {
         MWFaderParamCtl * mwf = new MWFaderParamCtl(M[2],synthCtlColor,i,1);
         mwf->setOut(out);
@@ -70,6 +76,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     H[1] = new QWidget(this);
     QGridLayout * lBaseNoteSetter=new QGridLayout(H[1]);
+    lBaseNoteSetter->setContentsMargins(0,0,0,0);
+    lBaseNoteSetter->setHorizontalSpacing(0);
+    lBaseNoteSetter->setVerticalSpacing(0);
     for(int i=0;i<12;i++) {
         BaseNoteSetter[i] = new MWBaseNoteSetter(MWPitch[i],this);
         BaseNoteSetter[i]->setOut(out);
@@ -85,6 +94,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     H[2] = new QWidget(this);
     QGridLayout * lBScaleSwitch=new QGridLayout(H[2]);
+    lBScaleSwitch->setContentsMargins(0,0,0,0);
+    lBScaleSwitch->setHorizontalSpacing(0);
+    lBScaleSwitch->setVerticalSpacing(0);
     for(int i=1;i<12;i++) {
         MWBScaleSwitch * bsw = new MWBScaleSwitch(i,MWPitch);
         bsw->setOut(out);
@@ -168,6 +180,11 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     layout->setHorizontalSpacing(0);
     layout->setVerticalSpacing(0);
 
+
+    H[0]->hide();
+    M[1]->hide();
+    M[2]->hide();
+
     recalcMainView();
 
     this->setLayout(layout);
@@ -233,6 +250,7 @@ void wlayout::recalcMainView()
     }
 
     int height=(15-headerCnt)/mainCnt;
+    int roundDiff=15-headerCnt-mainCnt*height;
     int top=0;
 
     int xpos = 0;
@@ -257,8 +275,9 @@ void wlayout::recalcMainView()
     for(int i=0;i<3;i++) {
         if(!M[i]->isHidden()) {
             qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-            layout->addWidget(M[i],top,xpos,height,width);
-            top+=height;
+            layout->addWidget(M[i],top,xpos,height+roundDiff,width);
+            top+=height+roundDiff;
+            roundDiff=0;
         }
     }
 

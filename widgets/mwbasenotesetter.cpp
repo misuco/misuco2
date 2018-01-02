@@ -47,14 +47,15 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     qDebug() << "MWBaseNoteSetter::paintEvent";
     QPainter painter(this);
     QString cap;
+    painter.setFont(font1);
     int l=127;
     if(pressed>0) l=200;
     painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
+    painter.setPen(fgcolor);
     painter.drawRect(0,0,width(),height());
-    cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
-    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
-    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignRight,"*");
-    painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignRight,"*");
+    //cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
+    cap.sprintf("%s",f->getBasenoteString().toStdString().c_str());
+    painter.drawText(0,0,width(),height(),Qt::AlignVCenter|Qt::AlignCenter,cap);
 }
 
 void MWBaseNoteSetter::resizeEvent(QResizeEvent *E)

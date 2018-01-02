@@ -104,8 +104,10 @@ void MWFadder::paintEvent(QPaintEvent *E)
     QPainter painter(this);
     QString cap;
 
-    if(pressed>0) painter.setBrush(Qt::white);
-    else painter.setBrush(Qt::gray);
+    if(pressed>0) painter.setBrush(highlightcolor);
+    else painter.setBrush(bgcolor);
+    painter.setPen(fgcolor);
+
     painter.drawRect(0,0,width(),height());
 
     painter.setBrush(QColor::fromHsl(color->getHue(),150,150));
@@ -113,6 +115,7 @@ void MWFadder::paintEvent(QPaintEvent *E)
     painter.drawRect(0,fadderY,width(),knobSize*2);
 
     painter.setBrush(Qt::black);
+    painter.setFont(font1);
     cap.sprintf("%d",valueDisplay);
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
     qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;

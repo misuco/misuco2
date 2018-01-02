@@ -21,6 +21,12 @@ public:
 
     virtual void processTouchEvent(misuTouchEvent e)=0;
 
+    static QFont font1;
+    static QColor fgcolor;
+    static QColor bgcolor;
+    static QColor highlightcolor;
+
+
 protected:
     bool event(QEvent *event);
     int id;

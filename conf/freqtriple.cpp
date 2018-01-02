@@ -71,6 +71,39 @@ int FreqTriple::getBasenote() const
     return pitch->basenote;
 }
 
+
+QString FreqTriple::getBasenoteString() const
+{
+    switch(pitch->basenote) {
+    case 0: return "C";
+    break;
+    case 1: return "C#";
+    break;
+    case 2: return "D";
+    break;
+    case 3: return "D#";
+    break;
+    case 4: return "E";
+    break;
+    case 5: return "F";
+    break;
+    case 6: return "F#";
+    break;
+    case 7: return "G";
+    break;
+    case 8: return "G#";
+    break;
+    case 9: return "A";
+    break;
+    case 10: return "A#";
+    break;
+    case 11: return "B";
+    break;
+
+    }
+}
+
+
 void FreqTriple::setBasenote(Pitch * p)
 {
     pitch = p;

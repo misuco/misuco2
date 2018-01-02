@@ -49,9 +49,11 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
+    painter.setFont(font1);
     int l=127;
     if(value) l=200;
     painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
+    painter.setPen(fgcolor);
     painter.drawRect(0,0,width(),height());
     cap.sprintf("%d",bscaleId);
     painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);

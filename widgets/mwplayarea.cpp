@@ -161,21 +161,30 @@ void MWPlayArea::calcGeo()
     menux2 = width();
     menuy1 = 0;
     menuy2 = menubottonsize;
+
+    font3.setPixelSize(cw/3);
+    font8.setPixelSize(cw/8);
 }
 
 void MWPlayArea::paintField(int r, int c, int x, int y) {
     QPainter painter(this);
+
+    painter.setFont(font3);
+
     //qDebug() << "MWPlayArea::paintField r " << r << " c " << c;
     int l=127;
     if(fields[r][c].pressed>0) l=180;
     switch(fields[r][c].type) {
     case NORMAL:
-        painter.setPen(Qt::white);
+        painter.setPen(fgcolor /*Qt::white*/);
         painter.setBrush(QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        cap.sprintf("%d\n%5.2f",fields[r][c].f1->getMidinote(),fields[r][c].f1->getFreq());
+        cap.sprintf("%s %d",fields[r][c].f1->getBasenoteString().toStdString().c_str(), fields[r][c].f1->getOct());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
+        painter.setFont(font8);
+        cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
+        painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
         break;
 
     case BEND_VERT:
@@ -188,7 +197,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
             linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].hue1bent,180,l));
         }
-        painter.setPen(Qt::white);
+        painter.setPen(fgcolor /*Qt::white*/);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
 
@@ -211,7 +220,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
         linearGrad.setColorAt(0, QColor::fromHsl(fields[r][c].f1->getHue(),180,l));
         linearGrad.setColorAt(1, QColor::fromHsl(fields[r][c].f2->getHue(),180,l));
-        painter.setPen(Qt::white);
+        painter.setPen(fgcolor /*Qt::white*/);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
         cap.sprintf("%d",fields[r][c].f1->getMidinote());
@@ -261,7 +270,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             }
         }
 
-        painter.setPen(Qt::white);
+        painter.setPen(fgcolor /*Qt::white*/);
         painter.setBrush(Qt::NoBrush);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
         break;
@@ -277,7 +286,6 @@ void MWPlayArea::paintField(int r, int c)
 
 void MWPlayArea::paintEvent(QPaintEvent *E)
 {
-    qDebug() << "MWPlayArea::paintEvent start ";
     int x,y=0;
     for(int r=0;r<rows;r++) {
         x=0;
@@ -289,25 +297,24 @@ void MWPlayArea::paintEvent(QPaintEvent *E)
     }
 
     QPainter painter(this);
-    painter.setBrush(Qt::white);
-    painter.setFont(QFont("Sans",20));
+    painter.setPen(fgcolor);
+    painter.setBrush(fgcolor);
 
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
         eventStackElement * es = &eventStack[i];
         if(es && es->eventId>0) {
-            painter.drawRect(es->x-50,es->y-50,100,100);
+            //painter.drawRect(es->x-50,es->y-50,100,100);
+            painter.drawEllipse(es->x-50,es->y-50,100,100);
             painter.drawText(es->x-50,es->y-80,200,250,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
         }
     }
 
-    painter.setBrush(Qt::black);
     int barHeight = (menuy2-menuy1)/7;
     painter.drawRect(menux1,menuy1,menux2-menux1,barHeight);
     painter.drawRect(menux1,menuy1+2*barHeight,menux2-menux1,barHeight);
     painter.drawRect(menux1,menuy1+4*barHeight,menux2-menux1,barHeight);
     painter.drawRect(menux1,menuy1+6*barHeight,menux2-menux1,barHeight);
 
-    qDebug() << "MWPlayArea::paintEvent end ";
 }
 
 void MWPlayArea::resizeEvent(QResizeEvent *E)

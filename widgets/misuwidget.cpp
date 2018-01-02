@@ -4,6 +4,11 @@
 #include <QDateTime>
 #include <QDebug>
 
+QFont MisuWidget::font1;
+QColor MisuWidget::fgcolor("White");
+QColor MisuWidget::bgcolor("Black");
+QColor MisuWidget::highlightcolor("Red");
+
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {
     qDebug() << "MisuWidget::MisuWidget";
@@ -59,6 +64,10 @@ bool MisuWidget::event(QEvent *event)
         e.y=meve->pos().y();
         processTouchEvent(e);
         return true;
+    } else if(event->type()==QEvent::Resize) {
+        if(width()>250) {
+            font1.setPixelSize(width()/50);
+        }
     }
     return QWidget::event(event);
 }
