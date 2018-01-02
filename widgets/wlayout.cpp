@@ -5,8 +5,8 @@
 #include "mwbscaleswitch.h"
 #include "mwheadersetter.h"
 #include "mwpreset.h"
-//#include <QSlider>
 #include "mwfaderpitch.h"
+#include "mwfaderparamctl.h".h"
 #include <conf/color.h>
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
@@ -29,55 +29,44 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     M[0] = new MWPlayArea(MWPitch,this);
     ((MWPlayArea *)M[0])->setOut(out);
+    connect(M[0],SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         connect( MWPitch[i], SIGNAL(change()), (MWPlayArea *)M[0], SLOT(pitchChange()));
     }
 
-
     H[0] = new MWOctaveRanger(this);
-    //OctaveRanger->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     connect(H[0],SIGNAL(setOctConf(int,int)),M[0],SLOT(setOctConf(int,int)));
-
 
     M[1] = new QWidget(this);
     QGridLayout * lPitch = new QGridLayout(M[1]);
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        /*
-        //QHSlider
-        QSlider * qs = new QSlider(M[1]);
-        qs->setRange(-1200,1200);
-        qs->setValue(0);
-        //qs->set
-        connect(qs,SIGNAL(valueChanged(int)),this,SLOT(changePitch(int)));
-        lPitch->addWidget(qs,0,i);
-        */
-
-        /*
-        MWFadder * mwf = new MWFadder(M[1],static_cast<Color *>(MWPitch[i]));
-        connect (mwf,SIGNAL(valueChange(int)),MWPitch[i],SLOT(setPitch(int)));
-        */
-
         MWFaderPitch * mwf = new MWFaderPitch(M[1],MWPitch[i],1);
         mwf->setOut(out);
         connect (mwf,SIGNAL(valueChange(int)),MWPitch[i],SLOT(setPitch(int)));
         connect( MWPitch[i], SIGNAL(change()), mwf, SLOT(pitchChange()));
         connect(H[0],SIGNAL(setOctMid(int)),mwf,SLOT(setOctMid(int)));
-
         lPitch->addWidget(mwf,0,i);
     }
 
-    /*
-    QStackedWidget* stackedWidget = new QStackedWidget(this);
-    stackedWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    */
+    Color * synthCtlColor=new Pitch();
+
+    M[2] = new QWidget(this);
+    QGridLayout * lSynthCtl = new QGridLayout(M[2]);
+    for(int i=102;i<=111;i++) {
+        MWFaderParamCtl * mwf = new MWFaderParamCtl(M[2],synthCtlColor,i,1);
+        mwf->setOut(out);
+        mwf->setMinValue(0);
+        if(i==102) {
+            mwf->setMaxValue(4);
+        } else {
+            mwf->setMaxValue(127);
+        }
+        mwf->setInverted(true);
+        lSynthCtl->addWidget(mwf,0,i-102);
+    }
 
     mainArea = new QStackedWidget(this);
-    //mainArea->addWidget(M[0]);
-    //mainArea->addWidget(M[1]);
-
-    //mainArea->setCurrentIndex(0);
-
 
     H[1] = new QWidget(this);
     QGridLayout * lBaseNoteSetter=new QGridLayout(H[1]);
@@ -107,20 +96,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         lBScaleSwitch->addWidget(bsw,0,i);
     }
 
-    /*
-    header = new QStackedWidget(this);
-
-    for(int i=0;i<3;i++) {
-        H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        //H[i]->setSizeConstraint(QLayout::SetMinimumSize);
-        H[i]->setContentsMargins(0,0,0,0);
-        //H[i]->setMargin(0);
-        //H[i]->setHorizontalSpacing(0);
-        //H[i]->setVerticalSpacing(0);
-        header->addWidget(H[i]);
-    }
-    */
-
     layout = new QGridLayout(this);
     //layout->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
@@ -129,7 +104,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     layout->setHorizontalSpacing(0);
     layout->setVerticalSpacing(0);
 
-    //layout->addWidget(header,0,0,1,14);
     for(int i=0;i<3;i++) {
         H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         //H[i]->setSizeConstraint(QLayout::SetMinimumSize);
@@ -137,52 +111,64 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         //H[i]->setMargin(0);
         //H[i]->setHorizontalSpacing(0);
         //H[i]->setVerticalSpacing(0);
-        layout->addWidget(H[i],i,0,1,14);
+        //layout->addWidget(H[i],i,2,1,10);
     }
 
     M[0]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     M[0]->setContentsMargins(0,0,0,0);
-    layout->addWidget(M[0],3,2,5,10);
+    //layout->addWidget(M[0],3,2,4,10);
     M[1]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     M[1]->setContentsMargins(0,0,0,0);
-    layout->addWidget(M[1],8,2,5,10);
+    //layout->addWidget(M[1],7,2,4,10);
+    M[2]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    M[2]->setContentsMargins(0,0,0,0);
+    //layout->addWidget(M[2],11,2,4,10);
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
-    for(int i=1;i<11;i++) {
+    for(int i=0;i<15;i++) {
         //QPushButton * pb = new QPushButton(this);
-        MWPreset * pb = new MWPreset(MWPitch,this);
-        connect(pb,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
+        PB[i] = new MWPreset(MWPitch,this);
+        connect(PB[i],SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
         //cap.sprintf("%d",i);
         //pb->setText(cap);
-        pb->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-        int fctId=i-1;
-        MWHeaderSetter * hs = new MWHeaderSetter(fctId,this);
-        hs->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        int fctId=i;
+        HS[i] = new MWHeaderSetter(fctId,this);
+        HS[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         if(fctId<3) {
-            connect(hs,SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
+            connect(HS[i],SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
         } else if(fctId==3) {
-            connect(hs,SIGNAL(setBendHori(bool)),(MWPlayArea *)M[0],SLOT(setBendHori(bool)));
+            connect(HS[i],SIGNAL(setBendHori(bool)),(MWPlayArea *)M[0],SLOT(setBendHori(bool)));
         } else if(fctId==4) {
-            connect(hs,SIGNAL(setBendVertTop(int)),(MWPlayArea *)M[0],SLOT(setBendVertTop(int)));
+            connect(HS[i],SIGNAL(setBendVertTop(int)),(MWPlayArea *)M[0],SLOT(setBendVertTop(int)));
         } else if(fctId==5) {
-            connect(hs,SIGNAL(setBendVertBot(int)),(MWPlayArea *)M[0],SLOT(setBendVertBot(int)));
+            connect(HS[i],SIGNAL(setBendVertBot(int)),(MWPlayArea *)M[0],SLOT(setBendVertBot(int)));
         } else if(fctId==6) {
-            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
         } else if(fctId==7) {
-            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+        } else if(fctId==8) {
+            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+        } else if(fctId==9) {
+            connect(HS[i],SIGNAL(togglePresets()),this,SLOT(togglePresets()));
+        } else if(fctId==10) {
+            connect(HS[i],SIGNAL(toggleMenu()),this,SLOT(toggleMenu()));
         }
 
-        layout->addWidget(pb,i+2,0,1,2);
-        layout->addWidget(hs,i+2,12,1,2);
+        //layout->addWidget(PB[i],i,0,1,2);
+        //layout->addWidget(HS[i],i,12,1,2);
     }
+
 
     //layout->addWidget(mainArea,3,2,10,10);
     layout->setContentsMargins(0,0,0,0);
     layout->setMargin(0);
     layout->setHorizontalSpacing(0);
     layout->setVerticalSpacing(0);
+
+    recalcMainView();
 
     this->setLayout(layout);
 
@@ -206,30 +192,12 @@ void wlayout::resizeEvent(QResizeEvent *E)
 
 void wlayout::currentHeader(int i)
 {
-
-    //header->setCurrentIndex(i);
-
     if(H[i]->isHidden()) {
         H[i]->show();
     } else {
         H[i]->hide();
     }
-
-
-    /*
-     *
-    if(i>0 && i<4) {
-        layout->replaceWidget(header,H[i-1]);
-        header=H[i-1];
-        H[i-1]->show();
-        for(int j=0;j<3;j++) {
-            if(j!=i-1) {
-                H[j]->hide();
-            }
-        }
-    }
-     *
-     */
+    recalcMainView();
 }
 
 void wlayout::currentMainView(int i)
@@ -240,16 +208,73 @@ void wlayout::currentMainView(int i)
     } else {
         M[i]->hide();
     }
-    layout->removeWidget(M[0]);
-    layout->removeWidget(M[1]);
-    if(!M[0]->isHidden() && !M[1]->isHidden() ) {
-        layout->addWidget(M[0],3,2,5,10);
-        layout->addWidget(M[1],8,2,5,10);
-    } else if(!M[0]->isHidden() ) {
-        layout->addWidget(M[0],3,2,10,10);
-    } else if(!M[1]->isHidden() ) {
-        layout->addWidget(M[1],3,2,10,10);
+    recalcMainView();
+}
+
+void wlayout::recalcMainView()
+{
+    int mainCnt=0;
+    int headerCnt=0;
+    for(int i=0;i<3;i++) {
+        layout->removeWidget(M[i]);
+        if(!M[i]->isHidden()) {mainCnt++;}
+
+        layout->removeWidget(H[i]);
+        if(!H[i]->isHidden()) {headerCnt++;}
     }
+    for(int i=0;i<15;i++) {
+        layout->removeWidget(HS[i]);
+        layout->removeWidget(PB[i]);
+    }
+
+    if(mainCnt==0) {
+        M[0]->show();
+        mainCnt=1;
+    }
+
+    int height=(15-headerCnt)/mainCnt;
+    int top=0;
+
+    int xpos = 0;
+    int width = 14;
+
+    if(!PB[0]->isHidden()) {
+        width-=2;
+        xpos+=2;
+    }
+    if(!HS[0]->isHidden()) {
+        width-=2;
+    }
+
+    for(int i=0;i<3;i++) {
+        if(!H[i]->isHidden()) {
+            qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+            layout->addWidget(H[i],top,xpos,1,width);
+            top++;
+        }
+    }
+
+    for(int i=0;i<3;i++) {
+        if(!M[i]->isHidden()) {
+            qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+            layout->addWidget(M[i],top,xpos,height,width);
+            top+=height;
+        }
+    }
+
+    for(int i=0;i<15;i++) {
+        if(!PB[i]->isHidden()) {
+            layout->addWidget(PB[i],i,0,1,2);
+            qDebug() << "layout->addWidget Preset Button "  << i;
+        }
+    }
+
+    for(int i=0;i<15;i++) {
+        if(!HS[i]->isHidden()) {
+            layout->addWidget(HS[i],i,xpos+width,1,2);
+        }
+    }
+
 }
 
 void wlayout::changePitch(int v)
@@ -257,3 +282,26 @@ void wlayout::changePitch(int v)
     qDebug() << "changePitch " << v;
 }
 
+void wlayout::togglePresets()
+{
+    for(int i=0;i<15;i++) {
+        if(PB[i]->isHidden()) {
+            PB[i]->show();
+        } else {
+            PB[i]->hide();
+        }
+    }
+    recalcMainView();
+}
+
+void wlayout::toggleMenu()
+{
+    for(int i=0;i<15;i++) {
+        if(HS[i]->isHidden()) {
+            HS[i]->show();
+        } else {
+            HS[i]->hide();
+        }
+    }
+    recalcMainView();
+}

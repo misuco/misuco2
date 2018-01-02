@@ -1,57 +1,42 @@
-#include "mwfaderpitch.h"
+#include "mwfaderparamctl.h"
 #include <QDebug>
 
-MWFaderPitch::MWFaderPitch(QWidget *parent, Pitch *p, int c) : MWFadder(parent, p), chan(c)
+MWFaderParamCtl::MWFaderParamCtl(QWidget *parent, Color * col,int cc, int c) : MWFadder(parent, col), cc(cc), chan(c)
 {
-    f = new FreqTriple(p);
-    f->setOct(4);
 }
 
-MWFaderPitch::~MWFaderPitch()
+MWFaderParamCtl::~MWFaderParamCtl()
 {
-    f->deleteLater();
 }
 
-void MWFaderPitch::setOut(ISender *value)
+void MWFaderParamCtl::setOut(ISender *value)
 {
     out = value;
 }
 
-void MWFaderPitch::setOctMid(int o)
-{
-    f->setOct(o);
-}
-
-void MWFaderPitch::setChan(int c)
+void MWFaderParamCtl::setChan(int c)
 {
     chan=c;
 }
 
-void MWFaderPitch::pitchChange()
+void MWFaderParamCtl::processTouchEvent(misuTouchEvent e)
 {
-    f->pitchChange();
-    update();
-}
-
-void MWFaderPitch::processTouchEvent(misuTouchEvent e)
-{
+    MWFadder::processTouchEvent(e);
     switch(e.state) {
     case Qt::TouchPointPressed:
-        vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
-        qDebug() << "MWFaderPitch::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
+        out->cc(chan,0,cc,getValue(),getValue());
+        qDebug() << "MWFaderParamCtl::processTouchEvent TouchPointPressed " << out << " cc:" << cc << " value: " << getValue();
         pressed++;
         update();
         break;
     case Qt::TouchPointMoved:
-        out->pitch(chan,vId,f->getFreq(),f->getMidinote(),f->getPitch());
+        out->cc(chan,0,cc,getValue(),getValue());
         update();
         break;
     case Qt::TouchPointReleased:
-        qDebug() << "MWFaderPitch::processTouchEvent TouchPointReleased vId:" << vId;
-        out->noteOff(vId);
+        qDebug() << "MWFaderParamCtl::processTouchEvent TouchPointReleased cc:" << cc;
         pressed--;
         update();
         break;
     }
-    MWFadder::processTouchEvent(e);
 }

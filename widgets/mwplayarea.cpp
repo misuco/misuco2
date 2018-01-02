@@ -155,6 +155,12 @@ void MWPlayArea::calcGeo()
     for(int i=0;i<rows;i++) {
         rowheight[i]=rh;
     }
+
+    int menubottonsize = width()/20;
+    menux1 = width()-menubottonsize;
+    menux2 = width();
+    menuy1 = 0;
+    menuy2 = menubottonsize;
 }
 
 void MWPlayArea::paintField(int r, int c, int x, int y) {
@@ -293,6 +299,14 @@ void MWPlayArea::paintEvent(QPaintEvent *E)
             painter.drawText(es->x-50,es->y-80,200,250,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
         }
     }
+
+    painter.setBrush(Qt::black);
+    int barHeight = (menuy2-menuy1)/7;
+    painter.drawRect(menux1,menuy1,menux2-menux1,barHeight);
+    painter.drawRect(menux1,menuy1+2*barHeight,menux2-menux1,barHeight);
+    painter.drawRect(menux1,menuy1+4*barHeight,menux2-menux1,barHeight);
+    painter.drawRect(menux1,menuy1+6*barHeight,menux2-menux1,barHeight);
+
     qDebug() << "MWPlayArea::paintEvent end ";
 }
 
@@ -304,6 +318,10 @@ void MWPlayArea::resizeEvent(QResizeEvent *E)
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
     qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
+
+    if (e.state==Qt::TouchPointReleased &&  e.x>=menux1 && e.x<=menux2 && e.y>=menuy1 && e.y<=menuy2) {
+        emit menuTouch();
+    }
 
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
@@ -425,6 +443,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         break;
     }
     update();
+
 }
 
 void MWPlayArea::setBaseNote(Pitch *p)

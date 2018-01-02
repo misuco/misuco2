@@ -21,11 +21,13 @@ public:
 
     void setMinValue(int value);
     void setMaxValue(int value);
+    void setInverted(bool v);
 
 protected:
     void paintEvent(QPaintEvent *);
     void processTouchEvent(misuTouchEvent e);
     void resizeEvent(QResizeEvent *);
+    int getValue();
 
 signals:
     void valueChange(int v);
@@ -33,6 +35,8 @@ signals:
 private:
     // Fadder state
     int value;
+    bool inverted;
+    int valueDisplay;
     int minValue;
     int maxValue;
     int valRange;

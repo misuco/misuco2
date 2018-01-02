@@ -34,7 +34,8 @@ mobileSynthQT52::mobileSynthQT52()
 
 {
     DataSampleRateHz  = 44100;
-    const int BufferSize        = 8192;
+    //const int BufferSize        = 8192;
+    const int BufferSize        = 16384;
     //const int BufferSize        = 32768;
     //BufferSize        = 8192;
 

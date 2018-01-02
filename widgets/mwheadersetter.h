@@ -21,6 +21,8 @@ signals:
     void setBendHori(bool b);
     void setBendVertTop(int b);
     void setBendVertBot(int b);
+    void togglePresets();
+    void toggleMenu();
 
 private:
     int headerId;

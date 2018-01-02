@@ -48,6 +48,15 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         case 7:
             emit currentMainView(1);
             break;
+        case 8:
+            emit currentMainView(2);
+            break;
+        case 9:
+            emit togglePresets();
+            break;
+        case 10:
+            emit toggleMenu();
+            break;
         }
 
         pressed++;
@@ -91,6 +100,15 @@ void MWHeaderSetter::paintEvent(QPaintEvent *E)
         break;
     case 7:
         cap.sprintf("%d pitch",headerId);
+        break;
+    case 8:
+        cap.sprintf("%d synth ctl",headerId);
+        break;
+    case 9:
+        cap.sprintf("%d presets",headerId);
+        break;
+    case 10:
+        cap.sprintf("%d menu",headerId);
         break;
 
     }

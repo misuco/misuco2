@@ -27,6 +27,8 @@ private slots:
     void currentHeader(int i);
     void currentMainView(int i);
     void changePitch(int v);
+    void togglePresets();
+    void toggleMenu();
 
 private:
     QGridLayout *layout;
@@ -43,8 +45,15 @@ private:
     QWidget * H[3];
 
     // main area widgets
-    QWidget * M[2];
+    QWidget * M[3];
 
+    // right menu
+    QWidget * HS[15];
+
+    // preset buttons
+    QWidget * PB[15];
+
+    void recalcMainView();
 };
 
 #endif // WLAYOUT_H

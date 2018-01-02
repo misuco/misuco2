@@ -1,5 +1,5 @@
-#ifndef MWFADERPITCH_H
-#define MWFADERPITCH_H
+#ifndef MWFaderParamCtl_H
+#define MWFaderParamCtl_H
 
 #include <QObject>
 #include <QWidget>
@@ -7,31 +7,25 @@
 #include <conf/freqtriple.h>
 #include "comm/isender.h"
 
-class MWFaderPitch : public MWFadder
+class MWFaderParamCtl : public MWFadder
 {
     Q_OBJECT
 
 public:
-    MWFaderPitch(QWidget *parent, Pitch * p, int c);
-    ~MWFaderPitch();
+    MWFaderParamCtl(QWidget *parent, Color *col, int cc, int c);
+    ~MWFaderParamCtl();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
 
 public slots:
-    void setOctMid(int o);
     void setChan(int c);
-    void pitchChange();
 
 private:
     ISender * out;
 
-    Pitch * p;
-    FreqTriple * f;
-
-    int vId;
+    int cc;
     int pressed;
     int chan;
-//    int oct;
 };
 
-#endif // MWFADERPITCH_H
+#endif // MWFaderParamCtl_H

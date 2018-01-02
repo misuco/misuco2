@@ -7,6 +7,8 @@ MWFadder::MWFadder(QWidget *parent, Color *c) : MisuWidget(parent)
     qDebug() << "MWFadder::MWFadder";
     orient=vertical;
     value=0;
+    inverted=false;
+    valueDisplay=value;
     pressed=0;
     knobSize=50;
     setMinValue(-100);
@@ -30,7 +32,7 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
             } else {
                 fadeMode=fine;
             }
-            emit valueChange(value);
+            emit valueChange(valueDisplay);
         }
         pressed++;
         update();
@@ -44,7 +46,12 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
             }
             if(value>maxValue) value=maxValue;
             if(value<minValue) value=minValue;
-            emit valueChange(value);
+            if(inverted) {
+                valueDisplay = maxValue - value;
+            } else {
+                valueDisplay = value;
+            }
+            emit valueChange(valueDisplay);
             calcGeo();
         }
         update();
@@ -62,6 +69,11 @@ void MWFadder::resizeEvent(QResizeEvent *)
     calcGeo();
 }
 
+int MWFadder::getValue()
+{
+    return valueDisplay;
+}
+
 void MWFadder::calcGeo()
 {
     fadderY=(value-minValue)*(height()-2*knobSize)/valRange;
@@ -71,6 +83,14 @@ void MWFadder::setMaxValue(int value)
 {
     maxValue = value;
     valRange=maxValue-minValue;
+}
+
+void MWFadder::setInverted(bool v)
+{
+    inverted = v;
+    if(inverted) {
+        value=maxValue;
+    }
 }
 
 void MWFadder::setMinValue(int value)
@@ -93,7 +113,7 @@ void MWFadder::paintEvent(QPaintEvent *E)
     painter.drawRect(0,fadderY,width(),knobSize*2);
 
     painter.setBrush(Qt::black);
-    cap.sprintf("%d",value);
+    cap.sprintf("%d",valueDisplay);
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
     qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
 }

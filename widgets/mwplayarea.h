@@ -47,6 +47,9 @@ public slots:
     void setBendVertBot(int b);
     void pitchChange();
 
+signals:
+    void menuTouch();
+
 private:
     // INFRASTRUCTURE
     // - painting
@@ -78,6 +81,12 @@ private:
     // - visual
     int colwidth[MAX_COLS];
     int rowheight[MAX_ROWS];
+
+    // - menu button area
+    int menux1;
+    int menux2;
+    int menuy1;
+    int menuy2;
 
     // helper functions
     void config();
