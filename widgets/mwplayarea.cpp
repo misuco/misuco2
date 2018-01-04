@@ -256,45 +256,102 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         break;
 
     case BEND_VERT_HORIZ:
-        linearGrad.setStart(QPointF(x,y));
-        linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
-        float hue1=fields[r][c].f1->getHue();
-        float hue2=fields[r][c].f2->getHue();
-        float inchue;
-        painter.setPen(Qt::NoPen);
-        if(0==r) {
-            inchue=(float)(bendVertTop*HUE_NOTES)/(float)rowheight[r];
-            //qDebug() << "bendVertTop inchue " << inchue;
-            for(int y1=y+rowheight[r];y1>=y;y1--) {
-                //qDebug() << "hue 1 " << hue1 << " hue2 " << hue2;
-                linearGrad.setColorAt(0, QColor::fromHsl(hue1,s,l));
-                linearGrad.setColorAt(1, QColor::fromHsl(hue2,s,l));
-                painter.setBrush(linearGrad);
-                painter.drawRect(x,y1,colwidth[c],1);
-                hue1+=inchue;
-                if(hue1>359) hue1-=359;
-                if(hue1<0) hue1+=359;
-                hue2+=inchue;
-                if(hue2>359) hue2-=359;
-                if(hue2<0) hue2+=359;
+        if(bwmode) {
+            int hue1;
+            int sat1;
+            int lum1;
+            float lum1f;
+            int alp1;
+            colorF1.getHsl(&hue1,&sat1,&lum1,&alp1);
+
+            int hue2;
+            int sat2;
+            int lum2;
+            float lum2f;
+            int alp2;
+            colorF2.getHsl(&hue2,&sat2,&lum2,&alp2);
+
+            linearGrad.setStart(QPointF(x,y));
+            linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
+
+            float inclum1;
+            if(lum1>127) inclum1 = -lum1;
+            else inclum1 = 255-lum1;
+            inclum1=inclum1/(float)rowheight[r];
+
+            float inclum2;
+            if(lum2>127) inclum2 = -lum2;
+            else inclum2 = 255-lum2;
+            inclum2=inclum2/(float)rowheight[r];
+
+            lum1f=lum1;
+            lum2f=lum2;
+
+            painter.setPen(Qt::NoPen);
+            if(0==r) {
+                for(int y1=y+rowheight[r];y1>=y;y1--) {
+                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,sat1,lum1f,alp1));
+                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,sat2,lum2f,alp2));
+                    painter.setBrush(linearGrad);
+                    painter.drawRect(x,y1,colwidth[c],1);
+                    lum1f+=inclum1;
+                    lum2f+=inclum2;
+                }
+            } else {
+                for(int y1=y;y1<=y+rowheight[r];y1++) {
+                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,sat1,lum1f,alp1));
+                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,sat2,lum2f,alp2));
+                    painter.setBrush(linearGrad);
+                    painter.drawRect(x,y1,colwidth[c],1);
+                    lum1f+=inclum1;
+                    lum2f+=inclum2;
+                }
             }
+
         } else {
-            inchue=(float)(bendVertBot*HUE_NOTES)/(float)rowheight[r];
-            //qDebug() << "bendVertBot inchue " << inchue;
-            for(int y1=y;y1<=y+rowheight[r];y1++) {
-                //qDebug() << "hue 1 " << hue1 << " hue2 " << hue2;
-                linearGrad.setColorAt(0, QColor::fromHsl(hue1,s,l));
-                linearGrad.setColorAt(1, QColor::fromHsl(hue2,s,l));
-                painter.setBrush(linearGrad);
-                painter.drawRect(x,y1,colwidth[c],1);
-                hue1+=inchue;
-                if(hue1>359) hue1-=359;
-                if(hue1<0) hue1+=359;
-                hue2+=inchue;
-                if(hue2>359) hue2-=359;
-                if(hue2<0) hue2+=359;
+            linearGrad.setStart(QPointF(x,y));
+            linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
+            float hue1=fields[r][c].f1->getHue();
+            float hue2=fields[r][c].f2->getHue();
+            float inchue;
+
+            painter.setPen(Qt::NoPen);
+            if(0==r) {
+                inchue=(float)(bendVertTop*HUE_NOTES)/(float)rowheight[r];
+                //qDebug() << "bendVertTop inchue " << inchue;
+                for(int y1=y+rowheight[r];y1>=y;y1--) {
+                    //qDebug() << "hue 1 " << hue1 << " hue2 " << hue2;
+                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,s,l));
+                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,s,l));
+                    painter.setBrush(linearGrad);
+                    painter.drawRect(x,y1,colwidth[c],1);
+                    hue1+=inchue;
+                    if(hue1>359) hue1-=359;
+                    if(hue1<0) hue1+=359;
+                    hue2+=inchue;
+                    if(hue2>359) hue2-=359;
+                    if(hue2<0) hue2+=359;
+                }
+            } else {
+                inchue=(float)(bendVertBot*HUE_NOTES)/(float)rowheight[r];
+                //qDebug() << "bendVertBot inchue " << inchue;
+                for(int y1=y;y1<=y+rowheight[r];y1++) {
+                    //qDebug() << "hue 1 " << hue1 << " hue2 " << hue2;
+                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,s,l));
+                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,s,l));
+                    painter.setBrush(linearGrad);
+                    painter.drawRect(x,y1,colwidth[c],1);
+                    hue1+=inchue;
+                    if(hue1>359) hue1-=359;
+                    if(hue1<0) hue1+=359;
+                    hue2+=inchue;
+                    if(hue2>359) hue2-=359;
+                    if(hue2<0) hue2+=359;
+                }
             }
+
         }
+
 
         painter.setPen(fgcolor /*Qt::white*/);
         painter.setBrush(Qt::NoBrush);
