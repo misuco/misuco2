@@ -23,6 +23,7 @@ public slots:
     void setOctMid(int o);
     void setChan(int c);
     void pitchChange();
+    void onSetBaseNote(Pitch *pitch);
 
 signals:
     void setBaseNote(Pitch *);
@@ -34,7 +35,7 @@ private:
     int vId;
     int pressed;
     int chan;
-//    int oct;
+    bool selected;
 };
 
 #endif // MWBASENOTESETTER_H

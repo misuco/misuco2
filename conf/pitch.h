@@ -14,6 +14,7 @@ public:
     void setBasenote(int value);
 
     int getHue() const override;
+    int getBW() const;
 
 //protected:
     int pitch;

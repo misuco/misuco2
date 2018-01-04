@@ -23,6 +23,7 @@ signals:
     void setBendVertBot(int b);
     void togglePresets();
     void toggleMenu();
+    void toggleBW();
 
 private:
     int headerId;

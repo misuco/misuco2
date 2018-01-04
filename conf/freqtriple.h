@@ -23,6 +23,7 @@ public:
     void setPitch(int value);
 
     int getHue() const;
+    bool getBW() const;
 
     int getBasenote() const;
     void setBasenote(Pitch *p);

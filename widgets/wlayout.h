@@ -23,12 +23,17 @@ public:
 protected:
     void resizeEvent(QResizeEvent *E);
 
+signals:
+    void setBaseNote(Pitch * p);
+
 private slots:    
     void currentHeader(int i);
     void currentMainView(int i);
     void changePitch(int v);
     void togglePresets();
     void toggleMenu();
+    void toggleBW();
+    void onSetBaseNote(Pitch * p);
 
 private:
     QGridLayout *layout;

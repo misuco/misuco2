@@ -57,11 +57,14 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         case 10:
             emit toggleMenu();
             break;
+        case 11:
+            emit toggleBW();
+            break;
         }
-
         pressed++;
         update();
         break;
+
     case Qt::TouchPointReleased:
         pressed--;
         update();
@@ -111,6 +114,9 @@ void MWHeaderSetter::paintEvent(QPaintEvent *E)
         break;
     case 10:
         cap.sprintf("%d menu",headerId);
+        break;
+    case 11:
+        cap.sprintf("%d bwmode",headerId);
         break;
 
     }

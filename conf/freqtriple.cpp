@@ -18,17 +18,6 @@ float FreqTriple::getFreq() const
 {
     return freq;
 }
-/*
-void FreqTriple::setFreq(float f)
-{
-    freq = f;
-    midinote = round(Log2(f/(freq_a/64.0))*12.0-3);
-    pitch->setPitch(calcPitch(midinote,freq));
-    oct = calcOctFromMidinote(midinote);
-    basenote = calcBasenoteFromMidinote(midinote);
-    calcHue();
-}
-*/
 
 int FreqTriple::getMidinote() const
 {
@@ -66,6 +55,11 @@ int FreqTriple::getHue() const
     return pitch->color;
 }
 
+bool FreqTriple::getBW() const
+{
+    return pitch->getBW();
+}
+
 int FreqTriple::getBasenote() const
 {
     return pitch->basenote;
@@ -75,6 +69,33 @@ int FreqTriple::getBasenote() const
 QString FreqTriple::getBasenoteString() const
 {
     switch(pitch->basenote) {
+    /*
+    case 0: return "A";
+    break;
+    case 1: return "N";
+    break;
+    case 2: return "D";
+    break;
+    case 3: return "R";
+    break;
+    case 4: return "E";
+    break;
+    case 5: return "I";
+    break;
+    case 6: return "T";
+    break;
+    case 7: return "A";
+    break;
+    case 8: return "M";
+    break;
+    case 9: return "O";
+    break;
+    case 10: return "R";
+    break;
+    case 11: return "E";
+    break;
+    */
+
     case 0: return "C";
     break;
     case 1: return "C#";
@@ -128,28 +149,17 @@ void FreqTriple::pitchChange()
     freq=calcFreq(midinote,pitch->pitch);
 }
 
-//float FreqTriple::calcPitch(int midinote, float f) {
-//    return round(Log2(f/calcMidi2Fequal(midinote))*12*8192/2);
-//}
-
 float FreqTriple::calcFreq(int midinote, int pitch) {
-//    return pow(2.0,(float)pitch*2.0/12.0/8192.0)*calcMidi2Fequal(midinote);
     return pow(2.0,(float)pitch/1200.0)*calcMidi2Fequal(midinote);
 }
 
 double FreqTriple::Log2( double n )
 {
-    // log(n)/log(2) is log2.
     return log( n ) / log( 2 );
 }
 
 float FreqTriple::calcMidi2Fequal(int x)
 {
-    /*
-    int oct=(x+3)/12;
-    float p=(x+3)%12;
-    return (freq_a / 64.0f) * (pow(2.0 , (double)((float)oct*1200.0f+100.0f*p) / 1200.0f));
-    */
     return pow(2.0,(float)(x-69)/12)*440.0;
 }
 

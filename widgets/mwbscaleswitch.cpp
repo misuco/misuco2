@@ -50,9 +50,24 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *)
     QPainter painter(this);
     QString cap;
     painter.setFont(font1);
-    int l=127;
-    if(value) l=200;
-    painter.setBrush(QColor::fromHsl(f->getHue(),127,l));
+
+    if(bwmode) {
+        if(value) {
+            painter.setBrush(highlightcolor);
+        } else if(f->getBW()) {
+            painter.setBrush(wkeycolor);
+        } else {
+            painter.setBrush(bkeycolor);
+        }
+    } else {
+        int l=lOff;
+        int s=sOff;
+        if(value) {
+            l=lOn;
+            s=sOn;
+        }
+        painter.setBrush(QColor::fromHsl(f->getHue(),s,l));
+    }
     painter.setPen(fgcolor);
     painter.drawRect(0,0,width(),height());
     cap.sprintf("%d",bscaleId);
@@ -69,7 +84,7 @@ void MWBScaleSwitch::setBaseNote(Pitch *p)
     basenote=p->basenote;
     int newBaseNote=(basenote+bscaleId)%12;
     f->setBasenote(MWPitch[newBaseNote]);
-    qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
+    //qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
     //f->setBasenote((p+bscaleId)%11);
     update();
 }

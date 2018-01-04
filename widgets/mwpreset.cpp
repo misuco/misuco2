@@ -41,20 +41,34 @@ void MWPreset::paintEvent(QPaintEvent *E)
     if(pressed>0) l=230;
     painter.setPen(Qt::NoPen);
     for(int i=Scale.baseoct;i<Scale.topoct;i++) {
-        painter.setBrush(QColor::fromHsl(MWPitch[Scale.basenote]->color,180,l));
+        setBrush(MWPitch[Scale.basenote],l,painter);
         painter.drawRect(x,0,colwidth,height());
         x+=colwidth;
         for(int j=0;j<BSCALE_SIZE;j++) {
             if(Scale.bscale[j]) {
-                painter.setBrush(QColor::fromHsl(MWPitch[(Scale.basenote+1+j)%(BSCALE_SIZE+1)]->color,180,l));
+                setBrush(MWPitch[(Scale.basenote+1+j)%(BSCALE_SIZE+1)],l,painter);
                 painter.drawRect(x,0,colwidth,height());
                 x+=colwidth;
             }
         }
     }
     painter.setBrush(QColor::fromHsl(MWPitch[Scale.basenote]->color,180,l));
+    setBrush(MWPitch[Scale.basenote],l,painter);
     painter.drawRect(x,0,colwidth,height());
 }
+
+void MWPreset::setBrush(Pitch * p, int l, QPainter &painter) {
+    if(bwmode) {
+        if(p->getBW()) {
+            painter.setBrush(wkeycolor);
+        } else {
+            painter.setBrush(bkeycolor);
+        }
+    } else {
+        painter.setBrush(QColor::fromHsl(p->color,180,l));
+    }
+}
+
 
 void MWPreset::resizeEvent(QResizeEvent *E)
 {

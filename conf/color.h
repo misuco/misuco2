@@ -7,7 +7,6 @@ class Color
 public:
     Color();
     virtual int getHue() const = 0;
-
 };
 
 #endif // COLOR_H

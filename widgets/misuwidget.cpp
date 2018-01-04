@@ -5,13 +5,23 @@
 #include <QDebug>
 
 QFont MisuWidget::font1;
-QColor MisuWidget::fgcolor("White");
-QColor MisuWidget::bgcolor("Black");
+QColor MisuWidget::fgcolor("Lightgray");
+QColor MisuWidget::bgcolor("Darkgray");
 QColor MisuWidget::highlightcolor("Red");
+
+bool MisuWidget::bwmode = true;
+QColor MisuWidget::bkeycolor("Black");
+QColor MisuWidget::wkeycolor("White");
+QColor MisuWidget::hlkeycolor("Violet");
+
+int MisuWidget::lOff = 50;
+int MisuWidget::lOn = 150;
+int MisuWidget::sOff = 50;
+int MisuWidget::sOn = 150;
 
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {
-    qDebug() << "MisuWidget::MisuWidget";
+    //qDebug() << "MisuWidget::MisuWidget";
     static int nextId=0;
     id=nextId++;
     setAttribute(Qt::WA_AcceptTouchEvents,true);
@@ -34,7 +44,7 @@ bool MisuWidget::event(QEvent *event)
         e.t=QDateTime::currentMSecsSinceEpoch();
         QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
         foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
-            qDebug() << "-- touch wnote:" << id <<  " state " <<  touchPoint.state() << " tid:" << touchPoint.id() <<  " x:" << touchPoint.pos().x() << " y:" << touchPoint.pos().y() ;
+            //qDebug() << "-- touch wnote:" << id <<  " state " <<  touchPoint.state() << " tid:" << touchPoint.id() <<  " x:" << touchPoint.pos().x() << " y:" << touchPoint.pos().y() ;
             e.id=touchPoint.id();
             e.state=touchPoint.state();
             e.x=touchPoint.pos().x();
@@ -58,7 +68,7 @@ bool MisuWidget::event(QEvent *event)
         } else if(event->type()==QEvent::MouseButtonRelease) {
             e.state=Qt::TouchPointReleased;
         }
-        qDebug() << "mouse wnote " << id  << " x:" << meve->pos().x() << " y:" << meve->pos().y() ;
+        //qDebug() << "mouse wnote " << id  << " x:" << meve->pos().x() << " y:" << meve->pos().y() ;
         e.id=9999;
         e.x=meve->pos().x();
         e.y=meve->pos().y();

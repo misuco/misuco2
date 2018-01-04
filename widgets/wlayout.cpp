@@ -83,6 +83,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         BaseNoteSetter[i] = new MWBaseNoteSetter(MWPitch[i],this);
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),M[0],SLOT(setBaseNote(Pitch *)));
+        connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),this,SLOT(onSetBaseNote(Pitch *)));
+        connect(this,SIGNAL(setBaseNote(Pitch*)),BaseNoteSetter[i],SLOT(onSetBaseNote(Pitch*)));
+
         connect(H[0],SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         connect(MWPitch[i], SIGNAL(change()) ,BaseNoteSetter[i], SLOT(pitchChange()));
         lBaseNoteSetter->addWidget(BaseNoteSetter[i],0,i);
@@ -167,6 +170,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
             connect(HS[i],SIGNAL(togglePresets()),this,SLOT(togglePresets()));
         } else if(fctId==10) {
             connect(HS[i],SIGNAL(toggleMenu()),this,SLOT(toggleMenu()));
+        } else if(fctId==11) {
+            connect(HS[i],SIGNAL(toggleBW()),M[0],SLOT(toggleBW()));
+            connect(HS[i],SIGNAL(toggleBW()),this,SLOT(toggleBW()));
         }
 
         //layout->addWidget(PB[i],i,0,1,2);
@@ -324,3 +330,20 @@ void wlayout::toggleMenu()
     }
     recalcMainView();
 }
+
+void wlayout::toggleBW()
+{
+    for(int i=0;i<15;i++) {
+        PB[i]->update();
+    }
+    for(int i=0;i<3;i++) {
+        H[i]->update();
+        M[i]->update();
+    }
+}
+
+void wlayout::onSetBaseNote(Pitch *p)
+{
+    emit setBaseNote(p);
+}
+

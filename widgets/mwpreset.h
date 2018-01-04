@@ -23,6 +23,7 @@ signals:
 private:
     Pitch ** MWPitch;
     int pressed=0;
+    void setBrush(Pitch *p, int l, QPainter &painter);
 };
 
 #endif // MWPRESET_H

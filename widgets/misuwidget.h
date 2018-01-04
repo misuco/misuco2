@@ -26,6 +26,15 @@ public:
     static QColor bgcolor;
     static QColor highlightcolor;
 
+    static bool bwmode;
+    static QColor bkeycolor;
+    static QColor wkeycolor;
+    static QColor hlkeycolor;
+
+    static int lOff;
+    static int lOn;
+    static int sOff;
+    static int sOn;
 
 protected:
     bool event(QEvent *event);
