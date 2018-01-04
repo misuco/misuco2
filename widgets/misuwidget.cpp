@@ -14,10 +14,10 @@ QColor MisuWidget::bkeycolor("Black");
 QColor MisuWidget::wkeycolor("White");
 QColor MisuWidget::hlkeycolor("Violet");
 
-int MisuWidget::lOff = 50;
-int MisuWidget::lOn = 150;
-int MisuWidget::sOff = 50;
-int MisuWidget::sOn = 150;
+int MisuWidget::lOff = 80;
+int MisuWidget::lOn = 180;
+int MisuWidget::sOff = 180;
+int MisuWidget::sOn = 180;
 
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {

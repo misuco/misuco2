@@ -51,7 +51,7 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     int s=sOff;
     if(pressed>0 || selected) {
         l=lOn;
-        s=sOff;
+        s=sOn;
     }
     if(bwmode) {
         if(selected) {
