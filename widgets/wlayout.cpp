@@ -63,7 +63,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         if(i==0) {
             faderParamCtl[i]->setMaxValue(4);
         } else {
-            faderParamCtl[i]->setMaxValue(127);
+            faderParamCtl[i]->setMaxValue(1000);
         }
         faderParamCtl[i]->setInverted(true);
         lSynthCtl->addWidget(faderParamCtl[i],0,i);
@@ -189,7 +189,7 @@ wlayout::~wlayout()
 
 }
 
-void wlayout::resizeEvent(QResizeEvent *E)
+void wlayout::resizeEvent(QResizeEvent *)
 {
     qDebug() << "wlayout::resizeEvent " << width() << " " << height();
 }

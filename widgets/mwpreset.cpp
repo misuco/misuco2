@@ -7,8 +7,8 @@ MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
     MWPitch=p;
 
     PresetScale.basenote=qrand() % (BSCALE_SIZE+1);
-    PresetScale.baseoct=3;
-    PresetScale.topoct=4;
+    PresetScale.baseoct=4;
+    PresetScale.topoct=5;
     PresetScale.size=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
         if(qrand() % 2) {

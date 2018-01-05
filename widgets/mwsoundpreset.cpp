@@ -4,14 +4,14 @@
 
 MWSoundPreset::MWSoundPreset(QWidget *parent): MisuWidget(parent)
 {
-    PresetSound.volume=80;
-    PresetSound.wave_type=1;
-    PresetSound.attack=1;
-    PresetSound.decay=20;
-    PresetSound.sustain=60;
-    PresetSound.release=40;
-    PresetSound.filter_cutoff=50;
-    PresetSound.filter_resonance=10;
+    PresetSound.volume=800;
+    PresetSound.wave_type=qrand() % 4;
+    PresetSound.attack=qrand() % 100;
+    PresetSound.decay=qrand() % 700;
+    PresetSound.sustain=qrand() % 1000;
+    PresetSound.release=qrand() % 1000;
+    PresetSound.filter_cutoff=qrand() % 1000;
+    PresetSound.filter_resonance=qrand() % 100;
     PresetSound.mod_filter_cutoff=50;
     PresetSound.mod_filter_resonance=0;
 
@@ -78,6 +78,26 @@ void MWSoundPreset::paintEvent(QPaintEvent *E)
         painter.drawLine(xr*2,h,xr*3,0);
         break;
     }
+
+    int xenv = xr*4;
+    int xdiff=xr*PresetSound.attack/1000;
+    painter.drawLine(xenv,h,xenv+xdiff,0);
+
+    xenv+=xdiff;
+    xdiff=xr*PresetSound.decay/1000;
+    int ydiff=PresetSound.sustain*h/1000;
+    painter.drawLine(xenv,0,xenv+xdiff,ydiff);
+
+    xenv+=xdiff;
+    painter.drawLine(xenv,ydiff,xenv+xr,ydiff);
+
+    xenv+=xr;
+    xdiff=xr*PresetSound.release/1000;
+    painter.drawLine(xenv,ydiff,xenv+xdiff,h);
+
+
+
+
 }
 
 void MWSoundPreset::resizeEvent(QResizeEvent *E)

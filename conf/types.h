@@ -35,7 +35,7 @@ struct MWSound {
     int wave_type;
     int attack;
     int decay;
-    int sustain;
+    float sustain;
     int release;
     float filter_cutoff;
     float filter_resonance;

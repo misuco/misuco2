@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::timerEvent(QTimerEvent *e)
+void MainWindow::timerEvent(QTimerEvent *)
 {
 //    w->update();
     qDebug() << "MeinWindow::timerEvent";

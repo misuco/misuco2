@@ -27,7 +27,7 @@ void MWFaderParamCtl::setChan(int c)
 }
 
 void MWFaderParamCtl::propagateValueChange() {
-    out->cc(chan,0,cc,getValue(),getValue());
+
     switch(cc) {
     case 102:
         Sound.wave_type=getValue();
@@ -60,6 +60,8 @@ void MWFaderParamCtl::propagateValueChange() {
         Sound.volume=getValue();
         break;
     }
+
+    out->cc(chan,0,cc,getValue(),getValue());
 }
 
 void MWFaderParamCtl::processTouchEvent(misuTouchEvent e)

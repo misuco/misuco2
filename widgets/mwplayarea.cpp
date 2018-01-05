@@ -367,7 +367,7 @@ void MWPlayArea::paintField(int r, int c)
     paintField(r,c,x,y);
 }
 
-void MWPlayArea::paintEvent(QPaintEvent *E)
+void MWPlayArea::paintEvent(QPaintEvent *)
 {
     int x,y=0;
     for(int r=0;r<rows;r++) {
@@ -403,7 +403,7 @@ void MWPlayArea::paintEvent(QPaintEvent *E)
 
 }
 
-void MWPlayArea::resizeEvent(QResizeEvent *E)
+void MWPlayArea::resizeEvent(QResizeEvent *)
 {
     calcGeo();
 }

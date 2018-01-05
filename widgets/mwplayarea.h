@@ -34,8 +34,8 @@ public:
     void setOut(ISender *value);
 
 protected:
-    void paintEvent(QPaintEvent *E);
-    void resizeEvent(QResizeEvent *E);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 
 public slots:
     void setBaseNote(Pitch * p);
@@ -61,8 +61,8 @@ private:
     // - networking
     ISender * out;
     // - processing
-    FreqTriple fcalc;
     Pitch pcalc;
+    FreqTriple fcalc;
 
     // WORKING MEMORY
     // - touch field configuration

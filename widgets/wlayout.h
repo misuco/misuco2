@@ -22,7 +22,7 @@ public:
     Pitch * MWPitch[BSCALE_SIZE+1];
 
 protected:
-    void resizeEvent(QResizeEvent *E);
+    void resizeEvent(QResizeEvent *);
 
 signals:
     void setBaseNote(Pitch * p);
