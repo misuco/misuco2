@@ -13,13 +13,10 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_AcceptTouchEvents,true);
 
-    qDebug() << "wlayout width: " << width() ;
-    //QString cap;
+    //qDebug() << "wlayout width: " << width() ;
 
     ISender * out=new SenderMobileSynth();
-    //ISender * out=new SenderDebug();
     out->cc(0,0,105,1,1);
-
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWPitch[i]=new Pitch(this);
@@ -89,11 +86,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         connect(H[0],SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         connect(MWPitch[i], SIGNAL(change()) ,BaseNoteSetter[i], SLOT(pitchChange()));
         lBaseNoteSetter->addWidget(BaseNoteSetter[i],0,i);
-        //l2->setColumnStretch(i,10);
-        //BaseNoteSetter[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        //BaseNoteSetter[i]->setMinimumWidth(100);
     }
-    //parentLayout2->setLayout(l2);
 
     H[2] = new QWidget(this);
     QGridLayout * lBScaleSwitch=new QGridLayout(H[2]);
@@ -112,7 +105,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     }
 
     layout = new QGridLayout(this);
-    //layout->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
     layout->setContentsMargins(0,0,0,0);
     layout->setMargin(0);
@@ -121,17 +113,11 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     for(int i=0;i<3;i++) {
         H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        //H[i]->setSizeConstraint(QLayout::SetMinimumSize);
         H[i]->setContentsMargins(0,0,0,0);
-        //H[i]->setMargin(0);
-        //H[i]->setHorizontalSpacing(0);
-        //H[i]->setVerticalSpacing(0);
-        //layout->addWidget(H[i],i,2,1,10);
     }
 
     M[0]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     M[0]->setContentsMargins(0,0,0,0);
-    //layout->addWidget(M[0],3,2,4,10);
     M[1]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     M[1]->setContentsMargins(0,0,0,0);
     M[2]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -206,12 +192,6 @@ wlayout::~wlayout()
 void wlayout::resizeEvent(QResizeEvent *E)
 {
     qDebug() << "wlayout::resizeEvent " << width() << " " << height();
-    /*
-    int w=width()/12;
-    for(int i=0;i<12;i++) {
-        BaseNoteSetter[i]->setMinimumWidth(w-4);
-    }
-    */
 }
 
 void wlayout::currentHeader(int i)
@@ -226,7 +206,6 @@ void wlayout::currentHeader(int i)
 
 void wlayout::currentMainView(int i)
 {
-    //mainArea->setCurrentIndex(i);
     if(M[i]->isHidden()) {
         M[i]->show();
     } else {

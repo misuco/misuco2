@@ -39,15 +39,13 @@ private slots:
 
 private:
     QGridLayout *layout;
-    //MWPlayArea * M[0];
+
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
-    //QStackedWidget * header;
     QStackedWidget * mainArea;
 
+    // synth ctl faders
     MWFaderParamCtl * faderParamCtl[10];
-    // current header widget
-    // QWidget * header;
 
     // header widgets
     QWidget * H[3];

@@ -5,7 +5,7 @@
 
 MWBScaleSwitch::MWBScaleSwitch(int i, Pitch **MWP)
 {
-    qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
+    //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
 
     for(int i=0;i<12;i++) {
         MWPitch[i]=*(MWP+i);

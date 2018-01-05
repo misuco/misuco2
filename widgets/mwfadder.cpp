@@ -4,7 +4,7 @@
 
 MWFadder::MWFadder(QWidget *parent, Color *c) : MisuWidget(parent)
 {
-    qDebug() << "MWFadder::MWFadder";
+    //qDebug() << "MWFadder::MWFadder";
     orient=vertical;
     value=0;
     inverted=false;
@@ -61,7 +61,7 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
         update();
         break;
     }
-    qDebug() << "value " << value << " touch begin v: " << valTouchBegin << " y: " << yTouchBegin;
+    //qDebug() << "value " << value << " touch begin v: " << valTouchBegin << " y: " << yTouchBegin;
 }
 
 void MWFadder::resizeEvent(QResizeEvent *)
@@ -131,6 +131,6 @@ void MWFadder::paintEvent(QPaintEvent *E)
     painter.setFont(font1);
     cap.sprintf("%d",valueDisplay);
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
-    qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
+    //qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
 }
 
