@@ -5,8 +5,8 @@
 #include "mwbscaleswitch.h"
 #include "mwheadersetter.h"
 #include "mwpreset.h"
+#include "mwsoundpreset.h"
 #include "mwfaderpitch.h"
-#include "mwfaderparamctl.h".h"
 #include <conf/color.h>
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
@@ -59,17 +59,17 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lSynthCtl->setContentsMargins(0,0,0,0);
     lSynthCtl->setHorizontalSpacing(0);
     lSynthCtl->setVerticalSpacing(0);
-    for(int i=102;i<=111;i++) {
-        MWFaderParamCtl * mwf = new MWFaderParamCtl(M[2],synthCtlColor,i,1);
-        mwf->setOut(out);
-        mwf->setMinValue(0);
-        if(i==102) {
-            mwf->setMaxValue(4);
+    for(int i=0;i<10;i++) {
+        faderParamCtl[i] = new MWFaderParamCtl(M[2],synthCtlColor,i+102,1);
+        faderParamCtl[i]->setOut(out);
+        faderParamCtl[i]->setMinValue(0);
+        if(i==0) {
+            faderParamCtl[i]->setMaxValue(4);
         } else {
-            mwf->setMaxValue(127);
+            faderParamCtl[i]->setMaxValue(127);
         }
-        mwf->setInverted(true);
-        lSynthCtl->addWidget(mwf,0,i-102);
+        faderParamCtl[i]->setInverted(true);
+        lSynthCtl->addWidget(faderParamCtl[i],0,i);
     }
 
     mainArea = new QStackedWidget(this);
@@ -134,21 +134,26 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     //layout->addWidget(M[0],3,2,4,10);
     M[1]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     M[1]->setContentsMargins(0,0,0,0);
-    //layout->addWidget(M[1],7,2,4,10);
     M[2]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     M[2]->setContentsMargins(0,0,0,0);
-    //layout->addWidget(M[2],11,2,4,10);
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
-    for(int i=0;i<15;i++) {
-        //QPushButton * pb = new QPushButton(this);
+    for(int i=0;i<10;i++) {
         PB[i] = new MWPreset(MWPitch,this);
         connect(PB[i],SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
-        //cap.sprintf("%d",i);
-        //pb->setText(cap);
         PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
+    }
+
+    for(int i=10;i<15;i++) {
+        PB[i] = new MWSoundPreset(this);
+        connect(PB[i],SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
+        PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+    }
+
+    for(int i=0;i<15;i++) {
         int fctId=i;
         HS[i] = new MWHeaderSetter(fctId,this);
         HS[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -174,13 +179,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
             connect(HS[i],SIGNAL(toggleBW()),M[0],SLOT(toggleBW()));
             connect(HS[i],SIGNAL(toggleBW()),this,SLOT(toggleBW()));
         }
-
-        //layout->addWidget(PB[i],i,0,1,2);
-        //layout->addWidget(HS[i],i,12,1,2);
     }
 
 
-    //layout->addWidget(mainArea,3,2,10,10);
     layout->setContentsMargins(0,0,0,0);
     layout->setMargin(0);
     layout->setHorizontalSpacing(0);
@@ -345,5 +346,19 @@ void wlayout::toggleBW()
 void wlayout::onSetBaseNote(Pitch *p)
 {
     emit setBaseNote(p);
+}
+
+void wlayout::setSound(MWSound *s)
+{
+    faderParamCtl[0]->setValue(s->wave_type);
+    faderParamCtl[1]->setValue(s->attack);
+    faderParamCtl[2]->setValue(s->decay);
+    faderParamCtl[3]->setValue(s->sustain);
+    faderParamCtl[4]->setValue(s->release);
+    faderParamCtl[5]->setValue(s->filter_cutoff);
+    faderParamCtl[6]->setValue(s->filter_resonance);
+    faderParamCtl[7]->setValue(s->mod_filter_cutoff);
+    faderParamCtl[8]->setValue(s->mod_filter_resonance);
+    faderParamCtl[9]->setValue(s->volume);
 }
 

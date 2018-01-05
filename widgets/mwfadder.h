@@ -20,8 +20,9 @@ public:
     };
 
     void setMinValue(int value);
-    void setMaxValue(int value);
+    void setMaxValue(int value);    
     void setInverted(bool v);
+    void setValue(int v);
 
 protected:
     void paintEvent(QPaintEvent *);

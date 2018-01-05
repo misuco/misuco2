@@ -31,5 +31,18 @@ struct MWScale {
     int size;
 };
 
+struct MWSound {
+    int wave_type;
+    int attack;
+    int decay;
+    int sustain;
+    int release;
+    float filter_cutoff;
+    float filter_resonance;
+    float mod_filter_cutoff;
+    float mod_filter_resonance;
+    float volume;
+};
+
 #endif // TYPES_H
 

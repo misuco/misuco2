@@ -10,6 +10,7 @@
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
 #include <QStackedWidget>
+#include "mwfaderparamctl.h"
 
 class wlayout : public QWidget
 {
@@ -34,6 +35,7 @@ private slots:
     void toggleMenu();
     void toggleBW();
     void onSetBaseNote(Pitch * p);
+    void setSound(MWSound * s);
 
 private:
     QGridLayout *layout;
@@ -43,6 +45,7 @@ private:
     //QStackedWidget * header;
     QStackedWidget * mainArea;
 
+    MWFaderParamCtl * faderParamCtl[10];
     // current header widget
     // QWidget * header;
 

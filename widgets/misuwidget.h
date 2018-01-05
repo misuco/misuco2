@@ -37,6 +37,7 @@ public:
     static int sOff;
     static int sOn;
     static MWScale Scale;
+    static MWSound Sound;
     static bool overwrite;
 
 protected:

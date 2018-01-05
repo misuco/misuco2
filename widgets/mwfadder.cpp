@@ -93,6 +93,19 @@ void MWFadder::setInverted(bool v)
     }
 }
 
+void MWFadder::setValue(int v)
+{
+    if(inverted) {
+        value = maxValue - v;
+        valueDisplay = v;
+    } else {
+        valueDisplay = v;
+        value = v;
+    }
+    calcGeo();
+    update();
+}
+
 void MWFadder::setMinValue(int value)
 {
     minValue = value;

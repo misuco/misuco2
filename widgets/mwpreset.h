@@ -11,7 +11,7 @@ class MWPreset : public MisuWidget
 public:
     MWPreset(Pitch * p[], QWidget *parent);
     virtual void processTouchEvent(misuTouchEvent e);
-    MWScale Scale;
+    MWScale PresetScale;
 
 protected:
     void paintEvent(QPaintEvent *E);

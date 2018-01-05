@@ -55,7 +55,8 @@ SOURCES += main.cpp\
     widgets/mwpreset.cpp \
     conf/color.cpp \
     widgets/mwfaderpitch.cpp \
-    widgets/mwfaderparamctl.cpp
+    widgets/mwfaderparamctl.cpp \
+    widgets/mwsoundpreset.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -102,7 +103,8 @@ HEADERS  += mainwindow.h \
     widgets/mwpreset.h \
     conf/color.h \
     widgets/mwfaderpitch.h \
-    widgets/mwfaderparamctl.h
+    widgets/mwfaderparamctl.h \
+    widgets/mwsoundpreset.h
 
 CONFIG += mobility
 MOBILITY = 

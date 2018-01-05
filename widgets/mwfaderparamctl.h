@@ -16,6 +16,7 @@ public:
     ~MWFaderParamCtl();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
+    void setValue(int v);
 
 public slots:
     void setChan(int c);
@@ -26,6 +27,7 @@ private:
     int cc;
     int pressed;
     int chan;
+    void propagateValueChange();
 };
 
 #endif // MWFaderParamCtl_H
