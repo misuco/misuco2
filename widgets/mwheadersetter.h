@@ -12,8 +12,8 @@ public:
     virtual void processTouchEvent(misuTouchEvent e);
 
 protected:
-    void paintEvent(QPaintEvent *E);
-    void resizeEvent(QResizeEvent *E);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 
 signals:
     void currentHeader(int i);
@@ -29,6 +29,8 @@ private:
     int headerId;
     int pressed;
     int state;
+    QString midi2TextUrl(int midinote);
+
 };
 
 #endif // MWHEADERSETTER_H

@@ -1,5 +1,7 @@
 #include "mwheadersetter.h"
 #include <QPainter>
+#include <QDesktopServices>
+#include <QUrl>
 
 MWHeaderSetter::MWHeaderSetter(int headerId, QWidget *parent) : MisuWidget(parent)
 {
@@ -64,6 +66,20 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             overwrite=!overwrite;
             state = overwrite;
             break;
+        case 13:
+            QString link ="http://scales.misuco.org/";
+            link.append(midi2TextUrl(Scale.basenote));
+            link.append("-");
+            for(int i=0;i<11;i++) {
+                if(Scale.bscale[i]) {
+                    int currnote=Scale.basenote+i+1;
+                    link.append(midi2TextUrl(currnote%12));
+                    link.append("-");
+                }
+            }
+            link.chop(1);
+            QDesktopServices::openUrl(QUrl(link));
+            break;
         }
         pressed++;
         update();
@@ -76,7 +92,7 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
     }
 }
 
-void MWHeaderSetter::paintEvent(QPaintEvent *E)
+void MWHeaderSetter::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
@@ -123,15 +139,63 @@ void MWHeaderSetter::paintEvent(QPaintEvent *E)
         cap.sprintf("%d bwmode",headerId);
         break;
     case 12:
-        cap.sprintf("overwrite",headerId);
+        cap.sprintf("overwrite");
         break;
-
+    case 13:
+        cap.sprintf("archive");
+        break;
     }
 
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
 }
 
-void MWHeaderSetter::resizeEvent(QResizeEvent *E)
+void MWHeaderSetter::resizeEvent(QResizeEvent *)
 {
 
+}
+
+QString MWHeaderSetter::midi2TextUrl(int midinote) {
+    QString t;
+    switch(midinote) {
+    case 0:
+        t="c";
+        break;
+    case 1:
+        t="cs";
+        break;
+    case 2:
+        t="d";
+        break;
+    case 3:
+        t="ds";
+        break;
+    case 4:
+        t="e";
+        break;
+    case 5:
+        t="f";
+        break;
+    case 6:
+        t="fs";
+        break;
+    case 7:
+        t="g";
+        break;
+    case 8:
+        t="gs";
+        break;
+    case 9:
+        t="a";
+        break;
+    case 10:
+        t="as";
+        break;
+    case 11:
+        t="b";
+        break;
+    default:
+        t="";
+        break;
+    }
+    return t;
 }

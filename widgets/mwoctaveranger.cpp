@@ -66,7 +66,7 @@ void MWOctaveRanger::processTouchEvent(MisuWidget::misuTouchEvent e)
 
 }
 
-void MWOctaveRanger::paintEvent(QPaintEvent *E)
+void MWOctaveRanger::paintEvent(QPaintEvent *)
 {
     //qDebug() << "MWOctaveRanger::paintEvent";
     QPainter painter(this);
@@ -83,9 +83,9 @@ void MWOctaveRanger::paintEvent(QPaintEvent *E)
     }
 }
 
-void MWOctaveRanger::resizeEvent(QResizeEvent *E)
+void MWOctaveRanger::resizeEvent(QResizeEvent *)
 {
-    qDebug() << "MWOctaveRanger::resizeEvent";
+    //qDebug() << "MWOctaveRanger::resizeEvent";
     segwidth=width()/noct;
 }
 

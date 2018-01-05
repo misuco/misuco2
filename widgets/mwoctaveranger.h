@@ -17,8 +17,8 @@ signals:
     void setOctMid(int mid);
 
 protected:
-    void paintEvent(QPaintEvent *E);
-    void resizeEvent(QResizeEvent *E);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 
 private:
     enum border {none,topPad,bottomPad};
