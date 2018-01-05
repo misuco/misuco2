@@ -272,7 +272,7 @@ void wlayout::recalcMainView()
 
     for(int i=0;i<3;i++) {
         if(!H[i]->isHidden()) {
-            qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+            //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
             layout->addWidget(H[i],top,xpos,1,width);
             top++;
         }
@@ -280,7 +280,7 @@ void wlayout::recalcMainView()
 
     for(int i=0;i<3;i++) {
         if(!M[i]->isHidden()) {
-            qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+            //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
             layout->addWidget(M[i],top,xpos,height+roundDiff,width);
             top+=height+roundDiff;
             roundDiff=0;
@@ -290,7 +290,7 @@ void wlayout::recalcMainView()
     for(int i=0;i<15;i++) {
         if(!PB[i]->isHidden()) {
             layout->addWidget(PB[i],i,0,1,2);
-            qDebug() << "layout->addWidget Preset Button "  << i;
+            //qDebug() << "layout->addWidget Preset Button "  << i;
         }
     }
 

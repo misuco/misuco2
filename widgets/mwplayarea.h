@@ -75,8 +75,6 @@ private:
     int chan = 0;
 
     // CONFIGURATION
-    // - scale
-    MWScale Scale;
     // - bending
     bool bendHoriz;
     int bendVertTop;

@@ -19,6 +19,9 @@ int MisuWidget::lOn = 180;
 int MisuWidget::sOff = 180;
 int MisuWidget::sOn = 180;
 
+MWScale MisuWidget::Scale;
+bool MisuWidget::overwrite = false;
+
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {
     //qDebug() << "MisuWidget::MisuWidget";

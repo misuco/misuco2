@@ -60,6 +60,10 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         case 11:
             emit toggleBW();
             break;
+        case 12:
+            overwrite=!overwrite;
+            state = overwrite;
+            break;
         }
         pressed++;
         update();
@@ -117,6 +121,9 @@ void MWHeaderSetter::paintEvent(QPaintEvent *E)
         break;
     case 11:
         cap.sprintf("%d bwmode",headerId);
+        break;
+    case 12:
+        cap.sprintf("overwrite",headerId);
         break;
 
     }

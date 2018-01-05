@@ -2,6 +2,7 @@
 #define MISUWIDGET_H
 
 #include <QWidget>
+#include "conf/types.h"
 
 class MisuWidget : public QWidget
 {    
@@ -35,6 +36,8 @@ public:
     static int lOn;
     static int sOff;
     static int sOn;
+    static MWScale Scale;
+    static bool overwrite;
 
 protected:
     bool event(QEvent *event);
