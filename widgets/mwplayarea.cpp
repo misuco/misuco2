@@ -453,36 +453,37 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         break;
 
     case BEND_VERT_HORIZ:
-        pitchdiff=pf->f2->getMidinote()*8192-pf->f1->getMidinote()*8192;
+        pitchdiff=pf->f2->getMidinote()*100-pf->f1->getMidinote()*8192;
         pitchdiff+=pf->f2->getPitch();
         pitchdiff-=pf->f1->getMidinote();
         pitchdiff*=xrel;
-        pitchdiff+=pf->f1->getMidinote()*8192;
+        pitchdiff+=pf->f1->getMidinote()*100;
         if(0==row) {
-            pitchdiff+=bendVertTop*8192*(1-yrel);
+            pitchdiff+=bendVertTop*100*(1-yrel);
         } else {
-            pitchdiff+=bendVertBot*8192*yrel;
+            pitchdiff+=bendVertBot*100*yrel;
         }
-        midinote=round(pitchdiff/8192);
-        pcalc.setPitch(pitchdiff-midinote*8192);
+        midinote=round(pitchdiff/100);
+        pcalc.setPitch(pitchdiff-midinote*100);
         fcalc.setMidinote(midinote,&pcalc);
         freq=fcalc.getFreq();
         break;
 
     case BEND_VERT:
         if(0==row) {
-            pitchdiff=bendVertTop*8192;
+            pitchdiff=bendVertTop*100;
             yrel=1-yrel;
         } else {
-            pitchdiff=bendVertBot*8192;
+            pitchdiff=bendVertBot*100;
         }
         pitchdiff*=yrel;
-        pitchdiff+=pf->f1->getMidinote()*8192;
-        midinote=round(pitchdiff/8192);
-        pcalc.setPitch(pitchdiff-midinote*8192);
+        pitchdiff+=pf->f1->getMidinote()*100;
+        midinote=round(pitchdiff/100);
+        pitch = pitchdiff-midinote*100;
+        pcalc.setPitch(pitch);
         fcalc.setMidinote(midinote,&pcalc);
         freq=fcalc.getFreq();
-        //qDebug() << "midinote " << midinote << " pitch " << pitch << " freq " << freq ;
+        //qDebug() << "midinote " << midinote << " pitch " << pitch << " freq " << freq  << " bendVert " << bendVertTop << " " << bendVertBot << " pitchdiff " << pitchdiff;
         break;
 
     default:
