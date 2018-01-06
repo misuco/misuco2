@@ -54,7 +54,7 @@ public:
     
 private:
 #ifdef RC1_IOS
-    mobilesynthview::Widget * syco;
+    //mobilesynthview::Widget * syco;
     synth::Controller * sy;
 #else
     mobileSynthQT52 * sy;

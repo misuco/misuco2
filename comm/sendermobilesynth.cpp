@@ -25,41 +25,41 @@
 SenderMobileSynth::SenderMobileSynth()
 {
     
-    syco=new mobilesynthview::Widget();
+    //syco=new mobilesynthview::Widget();
     sy=new synth::Controller();
-    syco->setController(sy);
+    //syco->setController(sy);
 }
 
 SenderMobileSynth::~SenderMobileSynth()
 {
-    delete(syco);
+    //delete(syco);
     delete(sy);
 }
 
 void SenderMobileSynth::cc(int, int voiceId, int cc, float v1, float)
 {
     if(cc==1) {
-        sy->getSyctl()->set_modulation(voiceId,v1);
+        sy->set_modulation(voiceId,v1);
     } else if(cc==102) {
-        sy->getSyctl()->set_osc1_wave_type_int(v1);
+        sy->set_osc1_wave_type_int(v1);
     } else if(cc==103) {
-        sy->getSyctl()->setAttack(0, 100*pow(10,v1/250.0f));
+        sy->setAttack(0, 100*pow(10,v1/250.0f));
     } else if(cc==104) {
-        sy->getSyctl()->setDecay(0, 100*pow(10,v1/250.0f));
+        sy->setDecay(0, 100*pow(10,v1/250.0f));
     } else if(cc==105) {
-        sy->getSyctl()->setSustain(0, v1/1000.0f);
+        sy->setSustain(0, v1/1000.0f);
     } else if(cc==106) {
-        sy->getSyctl()->setRelease(0, 100*pow(10,v1/250.0f));
+        sy->setRelease(0, 100*pow(10,v1/250.0f));
     } else if(cc==107) {
-        sy->getSyctl()->set_filter_cutoff(v1/1000.0f);
+        sy->set_filter_cutoff(v1/1000.0f);
     } else if(cc==108) {
-        sy->getSyctl()->set_filter_resonance(v1/500.0f);
+        sy->set_filter_resonance(v1/500.0f);
     } else if(cc==109) {
-        sy->getSyctl()->set_mod_filter_cutoff(v1/1000.0f);
+        sy->set_mod_filter_cutoff(v1/1000.0f);
     } else if(cc==110) {
-        sy->getSyctl()->set_mod_filter_resonance(v1/1000.0f);
+        sy->set_mod_filter_resonance(v1/1000.0f);
     } else if(cc==111) {
-        sy->getSyctl()->set_volume(v1/1000.0f);
+        sy->set_volume(v1/1000.0f);
     }
 }
 
@@ -68,16 +68,16 @@ void SenderMobileSynth::pc(int, int) {}
 int SenderMobileSynth::noteOn(int, float f, int, int, int)
 {
     int voiceId=nextVid++;
-    sy->noteOn(voiceId, (float)f);
+    sy->NoteOn(voiceId, (float)f);
     return voiceId;
 }
 
-void SenderMobileSynth::noteOff(int,int voiceId, int)
+void SenderMobileSynth::noteOff(int voiceId)
 {
     sy->NoteOff(voiceId);
 }
 
-void SenderMobileSynth::pitch(int, int voiceId, float f, int, int, int) {
+void SenderMobileSynth::pitch(int, int voiceId, float f, int, int) {
     sy->NoteOn(voiceId, (float)f);
 }
 
