@@ -16,10 +16,12 @@ public:
 
 signals:
     void setBscale(int,bool);
+    void scaleUpdate();
 
 public slots:
     void setBaseNote(Pitch * p);
     void setOctMid(int o);
+    void onScaleSet(MWScale*);
 
 protected:
     void paintEvent(QPaintEvent *);

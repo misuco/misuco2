@@ -13,8 +13,8 @@ public:
     virtual void processTouchEvent(misuTouchEvent e);
 
 protected:
-    void paintEvent(QPaintEvent *E);
-    void resizeEvent(QResizeEvent *E);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 
 signals:
     void setSound(MWSound * s);

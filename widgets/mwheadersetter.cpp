@@ -96,7 +96,9 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
-    painter.setFont(font1);
+    QFont font(font1);
+    font.setPixelSize(font1size);
+    painter.setFont(font);
     painter.setPen(fgcolor);
     if(state!=0) painter.setBrush(highlightcolor);
     else painter.setBrush(bgcolor);

@@ -11,6 +11,7 @@
 #include "conf/types.h"
 #include <QStackedWidget>
 #include "mwfaderparamctl.h"
+#include "mwbscaleswitch.h"
 
 class wlayout : public QWidget
 {
@@ -26,6 +27,7 @@ protected:
 
 signals:
     void setBaseNote(Pitch * p);
+    void initialSet();
 
 private slots:    
     void currentHeader(int i);
@@ -36,11 +38,13 @@ private slots:
     void toggleBW();
     void onSetBaseNote(Pitch * p);
     void setSound(MWSound * s);
+    void onScaleUpdate();
 
 private:
     QGridLayout *layout;
 
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
+    MWBScaleSwitch * bScaleSwitch[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
     QStackedWidget * mainArea;
 

@@ -31,7 +31,8 @@ public:
     static bool bwmode;
     static QColor bkeycolor;
     static QColor wkeycolor;
-    static QColor hlkeycolor;
+    static QColor hlbkeycolor;
+    static QColor hlwkeycolor;
 
     static int lOff;
     static int lOn;

@@ -112,7 +112,7 @@ void MWFadder::setMinValue(int value)
     valRange=maxValue-minValue;
 }
 
-void MWFadder::paintEvent(QPaintEvent *E)
+void MWFadder::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
@@ -128,7 +128,9 @@ void MWFadder::paintEvent(QPaintEvent *E)
     painter.drawRect(0,fadderY,width(),knobSize*2);
 
     painter.setBrush(Qt::black);
-    painter.setFont(font1);
+    QFont font("font1");
+    font.setPixelSize(font1size);
+    painter.setFont(font);
     cap.sprintf("%d",valueDisplay);
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
     //qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;

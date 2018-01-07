@@ -14,16 +14,21 @@ public:
     MWScale PresetScale;
 
 protected:
-    void paintEvent(QPaintEvent *E);
-    void resizeEvent(QResizeEvent *E);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
+
+public slots:
+    void initialSet();
 
 signals:
     void setScale(MWScale *);
+    void scaleUpdate();
 
 private:
     Pitch ** MWPitch;
     int pressed=0;
     void setBrush(Pitch *p, int s, int l, QPainter &painter);
+    bool isSelected();
 };
 
 #endif // MWPRESET_H

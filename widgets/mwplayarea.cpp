@@ -7,6 +7,8 @@
 
 MWPlayArea::MWPlayArea(Pitch *p[], QWidget *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1)),
+    font3(font1),
+    font8(font1),
     pcalc(this),
     fcalc(&pcalc,this)
 {
@@ -185,18 +187,38 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
     QColor colorF2b = QColor::fromHsl(fields[r][c].hue2bent,s,l);
     if(bwmode) {
         if(fields[r][c].f1->getBW()) {
-            colorF1 = wkeycolor;
-            colorF1b = bkeycolor;
+            if(fields[r][c].pressed>0) {
+                colorF1 = hlwkeycolor;
+                colorF1b = hlbkeycolor;
+            } else {
+                colorF1 = wkeycolor;
+                colorF1b = bkeycolor;
+            }
         } else {
-            colorF1 = bkeycolor;
-            colorF1b = wkeycolor;
+            if(fields[r][c].pressed>0) {
+                colorF1 = hlbkeycolor;
+                colorF1b = hlwkeycolor;
+            } else {
+                colorF1 = bkeycolor;
+                colorF1b = wkeycolor;
+            }
         }
         if(fields[r][c].f2->getBW()) {
-            colorF2 = wkeycolor;
-            colorF2b = bkeycolor;
+            if(fields[r][c].pressed>0) {
+                colorF2 = hlwkeycolor;
+                colorF2b = hlbkeycolor;
+            } else {
+                colorF2 = wkeycolor;
+                colorF2b = bkeycolor;
+            }
         } else {
-            colorF2 = bkeycolor;
-            colorF2b = wkeycolor;
+            if(fields[r][c].pressed>0) {
+                colorF2 = hlbkeycolor;
+                colorF2b = hlwkeycolor;
+            } else {
+                colorF2 = bkeycolor;
+                colorF2b = wkeycolor;
+            }
         }
     }
 

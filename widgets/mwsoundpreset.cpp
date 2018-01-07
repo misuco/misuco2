@@ -45,7 +45,7 @@ void MWSoundPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
     update();
 }
 
-void MWSoundPreset::paintEvent(QPaintEvent *E)
+void MWSoundPreset::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
@@ -100,7 +100,7 @@ void MWSoundPreset::paintEvent(QPaintEvent *E)
 
 }
 
-void MWSoundPreset::resizeEvent(QResizeEvent *E)
+void MWSoundPreset::resizeEvent(QResizeEvent *)
 {
 
 }

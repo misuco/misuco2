@@ -29,6 +29,7 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
         emit setBaseNote(p);
+        emit scaleUpdate();
         //qDebug() << "MWBaseNoteSetter::processTouchEvent emit setBaseNote " << f->getBasenote();
         pressed++;
         update();
@@ -42,11 +43,13 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
     }
 }
 
-void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
+void MWBaseNoteSetter::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
-    painter.setFont(font1);
+    QFont font(font1);
+    font.setPixelSize(font1size);
+    painter.setFont(font);
     int l=lOff;
     int s=sOff;
     if(pressed>0 || selected) {
@@ -55,7 +58,11 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     }
     if(bwmode) {
         if(selected) {
-            painter.setBrush(highlightcolor);
+            if(f->getBW()) {
+                painter.setBrush(hlwkeycolor);
+            } else {
+                painter.setBrush(hlbkeycolor);
+            }
         } else if(f->getBW()) {
             painter.setBrush(wkeycolor);
         } else {
@@ -71,7 +78,7 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *E)
     painter.drawText(0,0,width(),height(),Qt::AlignVCenter|Qt::AlignCenter,cap);
 }
 
-void MWBaseNoteSetter::resizeEvent(QResizeEvent *E)
+void MWBaseNoteSetter::resizeEvent(QResizeEvent *)
 {
     //qDebug() << "MWBaseNoteSetter::resizeEvent" << width();
 }
@@ -88,7 +95,7 @@ void MWBaseNoteSetter::setChan(int c)
 
 void MWBaseNoteSetter::pitchChange()
 {
-    qDebug() << "MWBaseNoteSetter::pitchChange "  << f->getPitch();
+    //qDebug() << "MWBaseNoteSetter::pitchChange "  << f->getPitch();
     f->pitchChange();
     update();
 }
@@ -96,6 +103,17 @@ void MWBaseNoteSetter::pitchChange()
 void MWBaseNoteSetter::onSetBaseNote(Pitch * pitch)
 {
     if(pitch == p) {
+        selected = true;
+    } else {
+        selected = false;
+    }
+    update();
+}
+
+void MWBaseNoteSetter::onScaleSet(MWScale * scale)
+{
+    //qDebug() << "MWBaseNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
+    if(scale->basenote==p->basenote) {
         selected = true;
     } else {
         selected = false;

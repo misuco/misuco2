@@ -71,7 +71,9 @@ void MWOctaveRanger::paintEvent(QPaintEvent *)
     //qDebug() << "MWOctaveRanger::paintEvent";
     QPainter painter(this);
     QString cap;
-    painter.setFont(font1);
+    QFont font(font1);
+    font.setPixelSize(font1size);
+    painter.setFont(font);
     painter.setPen(fgcolor);
     painter.setBrush(bgcolor);
     painter.drawRect(0,0,width(),height());

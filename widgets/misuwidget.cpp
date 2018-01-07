@@ -14,7 +14,8 @@ int MisuWidget::font1size(10);
 bool MisuWidget::bwmode = true;
 QColor MisuWidget::bkeycolor("Black");
 QColor MisuWidget::wkeycolor("White");
-QColor MisuWidget::hlkeycolor("Violet");
+QColor MisuWidget::hlbkeycolor("Blue");
+QColor MisuWidget::hlwkeycolor("Cyan");
 
 int MisuWidget::lOff = 80;
 int MisuWidget::lOn = 180;

@@ -16,17 +16,19 @@ public:
     void setOut(ISender *value);
 
 protected:
-    void paintEvent(QPaintEvent *E);
-    void resizeEvent(QResizeEvent *E);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 
 public slots:
     void setOctMid(int o);
     void setChan(int c);
     void pitchChange();
     void onSetBaseNote(Pitch *pitch);
+    void onScaleSet(MWScale*scale);
 
 signals:
     void setBaseNote(Pitch *);
+    void scaleUpdate();
 
 private:
     ISender * out;

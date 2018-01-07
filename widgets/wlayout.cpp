@@ -2,7 +2,6 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QStackedWidget>
-#include "mwbscaleswitch.h"
 #include "mwheadersetter.h"
 #include "mwpreset.h"
 #include "mwsoundpreset.h"
@@ -17,6 +16,10 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     ISender * out=new SenderMobileSynth();
     out->cc(0,0,105,1,1);
+
+    for(int i=0;i<10;i++) {
+        PB[i] = new MWPreset(MWPitch,this);
+    }
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWPitch[i]=new Pitch(this);
@@ -81,8 +84,8 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         BaseNoteSetter[i]->setOut(out);
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),M[0],SLOT(setBaseNote(Pitch *)));
         connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),this,SLOT(onSetBaseNote(Pitch *)));
+        connect(BaseNoteSetter[i],SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
         connect(this,SIGNAL(setBaseNote(Pitch*)),BaseNoteSetter[i],SLOT(onSetBaseNote(Pitch*)));
-
         connect(H[0],SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
         connect(MWPitch[i], SIGNAL(change()) ,BaseNoteSetter[i], SLOT(pitchChange()));
         lBaseNoteSetter->addWidget(BaseNoteSetter[i],0,i);
@@ -94,14 +97,15 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lBScaleSwitch->setHorizontalSpacing(0);
     lBScaleSwitch->setVerticalSpacing(0);
     for(int i=1;i<12;i++) {
-        MWBScaleSwitch * bsw = new MWBScaleSwitch(i,MWPitch);
-        bsw->setOut(out);
-        connect(bsw,SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
-        connect(H[0],SIGNAL(setOctMid(int)),bsw,SLOT(setOctMid(int)));
+        bScaleSwitch[i-1] = new MWBScaleSwitch(i,MWPitch);
+        bScaleSwitch[i-1]->setOut(out);
+        connect(bScaleSwitch[i-1],SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
+        connect(bScaleSwitch[i-1],SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
+        connect(H[0],SIGNAL(setOctMid(int)),bScaleSwitch[i-1],SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
-            connect(BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bsw,SLOT(setBaseNote(Pitch *)));
+            connect(BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bScaleSwitch[i-1],SLOT(setBaseNote(Pitch *)));
         }
-        lBScaleSwitch->addWidget(bsw,0,i);
+        lBScaleSwitch->addWidget(bScaleSwitch[i-1],0,i);
     }
 
     layout = new QGridLayout(this);
@@ -126,10 +130,14 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     //qDebug() << "wlayout::wlayout new out " << out;
 
     for(int i=0;i<10;i++) {
-        PB[i] = new MWPreset(MWPitch,this);
         connect(PB[i],SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
+        connect(PB[i],SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
+        connect(PB[i],SIGNAL(setScale(MWScale*)),BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
+        for(int j=1;j<12;j++) {
+            connect(PB[i],SIGNAL(setScale(MWScale*)),BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
+            connect(PB[i],SIGNAL(setScale(MWScale*)),bScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
+        }
         PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
     }
 
     for(int i=10;i<15;i++) {
@@ -177,6 +185,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     H[0]->hide();
     M[1]->hide();
     M[2]->hide();
+
+    connect(this,SIGNAL(initialSet()),PB[0],SLOT(initialSet()));
+    emit initialSet();
 
     recalcMainView();
 
@@ -340,5 +351,12 @@ void wlayout::setSound(MWSound *s)
     faderParamCtl[7]->setValue(s->mod_filter_cutoff);
     faderParamCtl[8]->setValue(s->mod_filter_resonance);
     faderParamCtl[9]->setValue(s->volume);
+}
+
+void wlayout::onScaleUpdate()
+{
+    for(int i=0;i<10;i++) {
+        PB[i]->update();
+    }
 }
 

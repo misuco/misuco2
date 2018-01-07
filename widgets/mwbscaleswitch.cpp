@@ -34,6 +34,7 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
         vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         value=!value;
         emit setBscale(bscaleId,value);
+        emit scaleUpdate();
         pressed++;
         update();
         break;
@@ -49,11 +50,17 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
-    painter.setFont(font1);
+    QFont font(font1);
+    font.setPixelSize(font1size);
+    painter.setFont(font);
 
     if(bwmode) {
         if(value) {
-            painter.setBrush(highlightcolor);
+            if(f->getBW()) {
+                painter.setBrush(hlwkeycolor);
+            } else {
+                painter.setBrush(hlbkeycolor);
+            }
         } else if(f->getBW()) {
             painter.setBrush(wkeycolor);
         } else {
@@ -92,4 +99,14 @@ void MWBScaleSwitch::setBaseNote(Pitch *p)
 void MWBScaleSwitch::setOctMid(int o)
 {
     f->setOct(o);
+}
+
+void MWBScaleSwitch::onScaleSet(MWScale * scale)
+{
+    if(scale->bscale[bscaleId-1]) {
+        value=true;
+    } else {
+        value=false;
+    }
+    update();
 }

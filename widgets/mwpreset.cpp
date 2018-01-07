@@ -41,6 +41,7 @@ void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
         }
         else {
             emit setScale(&PresetScale);
+            emit scaleUpdate();
         }
         pressed++;
         break;
@@ -51,14 +52,20 @@ void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
     update();
 }
 
-void MWPreset::paintEvent(QPaintEvent *E)
+void MWPreset::initialSet()
+{
+    emit setScale(&PresetScale);
+    emit scaleUpdate();
+}
+
+void MWPreset::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     float colwidth=(float)width()/(float)PresetScale.size;
     float x=0;
     int l=lOff;
     int s=sOff;
-    if(pressed>0) {
+    if(pressed>0 || isSelected()) {
         l=lOn;
         s=sOn;
     }
@@ -82,7 +89,13 @@ void MWPreset::paintEvent(QPaintEvent *E)
 
 void MWPreset::setBrush(Pitch * p, int s, int l, QPainter &painter) {
     if(bwmode) {
-        if(p->getBW()) {
+        if(isSelected()) {
+            if(p->getBW()) {
+                painter.setBrush(hlwkeycolor);
+            } else {
+                painter.setBrush(hlbkeycolor);
+            }
+        } else if(p->getBW()) {
             painter.setBrush(wkeycolor);
         } else {
             painter.setBrush(bkeycolor);
@@ -92,8 +105,19 @@ void MWPreset::setBrush(Pitch * p, int s, int l, QPainter &painter) {
     }
 }
 
-
-void MWPreset::resizeEvent(QResizeEvent *E)
+void MWPreset::resizeEvent(QResizeEvent *)
 {
 
+}
+
+bool MWPreset::isSelected()
+{
+    bool ret=true;
+    if( PresetScale.basenote!=Scale.basenote ||
+        PresetScale.baseoct!=Scale.baseoct ||
+        PresetScale.topoct!=Scale.topoct ) ret=false;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        if( PresetScale.bscale[i]!=Scale.bscale[i] ) ret=false;
+    }
+    return ret;
 }
