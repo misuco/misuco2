@@ -192,6 +192,7 @@ wlayout::~wlayout()
 void wlayout::resizeEvent(QResizeEvent *)
 {
     qDebug() << "wlayout::resizeEvent " << width() << " " << height();
+    MisuWidget::font1size=width()/40;
 }
 
 void wlayout::currentHeader(int i)

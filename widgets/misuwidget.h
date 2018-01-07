@@ -22,7 +22,8 @@ public:
 
     virtual void processTouchEvent(misuTouchEvent e)=0;
 
-    static QFont font1;
+    static QString font1;
+    static int font1size;
     static QColor fgcolor;
     static QColor bgcolor;
     static QColor highlightcolor;
