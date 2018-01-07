@@ -47,9 +47,6 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString cap;
-    QFont font(font1);
-    font.setPixelSize(font1size);
-    painter.setFont(font);
     int l=lOff;
     int s=sOff;
     if(pressed>0 || selected) {
@@ -71,10 +68,23 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
     } else {
         painter.setBrush(QColor::fromHsl(f->getHue(),s,l));
     }
-    painter.setPen(fgcolor);
+    if(pressed>0 || selected) {
+        painter.setPen(highlightcolor);
+    } else {
+        painter.setPen(fgcolor);
+    }
     painter.drawRect(0,0,width(),height());
     //cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
-    cap.sprintf("%s",f->getBasenoteString().toStdString().c_str());
+
+    QFont font(font1);
+    QString basenote = f->getBasenoteString(lang);
+    if(basenote.startsWith("_")) {
+        font.setUnderline(true);
+        basenote.remove(0,1);
+    }
+    font.setPixelSize(font1size);
+    painter.setFont(font);
+    cap.sprintf("%s",basenote.toStdString().c_str());
     painter.drawText(0,0,width(),height(),Qt::AlignVCenter|Qt::AlignCenter,cap);
 }
 
@@ -118,6 +128,11 @@ void MWBaseNoteSetter::onScaleSet(MWScale * scale)
     } else {
         selected = false;
     }
+    update();
+}
+
+void MWBaseNoteSetter::onScaleUpdate()
+{
     update();
 }
 

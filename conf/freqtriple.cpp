@@ -2,11 +2,10 @@
 #include <math.h>
 #include <QDebug>
 
-FreqTriple::FreqTriple(Pitch *p, QObject *parent)
+FreqTriple::FreqTriple(Pitch *p, QObject *parent) :QObject(parent)
 {
     pitch=p;
     initFreq();
-    //setFreq(freq_a);
 }
 
 FreqTriple::~FreqTriple()
@@ -66,34 +65,119 @@ int FreqTriple::getBasenote() const
 }
 
 
-QString FreqTriple::getBasenoteString() const
+QString FreqTriple::getBasenoteString(int lang) const
 {
-    switch(pitch->basenote) {
+    if(lang==1) {
+        switch(pitch->basenote) {
+                case 0: return "सा";
+                break;
+                case 1: return "_रे";
+                break;
+                case 2: return "रे";
+                break;
+                case 3: return "_ग";
+                break;
+                case 4: return "ग";
+                break;
+                case 5: return "म";
+                break;
+                case 6: return "म'";
+                break;
+                case 7: return "प";
+                break;
+                case 8: return "_ध";
+                break;
+                case 9: return "ध";
+                break;
+                case 10: return "_नि";
+                break;
+                case 11: return "नि";
+                break;
+        }
+    } else if(lang==2) {
+        switch(pitch->basenote) {
+                case 0: return "DO";
+                break;
+                case 1: return "_RE";
+                break;
+                case 2: return "RE";
+                break;
+                case 3: return "_MI";
+                break;
+                case 4: return "MI";
+                break;
+                case 5: return "FA";
+                break;
+                case 6: return "FA#";
+                break;
+                case 7: return "SO";
+                break;
+                case 8: return "_LA";
+                break;
+                case 9: return "LA";
+                break;
+                case 10: return "_TI";
+                break;
+                case 11: return "TI";
+                break;
+        }
+    } else if(lang==3) {
+        switch(pitch->basenote) {
+                case 0: return "SA";
+                break;
+                case 1: return "_RE";
+                break;
+                case 2: return "RE";
+                break;
+                case 3: return "_GA";
+                break;
+                case 4: return "GA";
+                break;
+                case 5: return "MA";
+                break;
+                case 6: return "MA#";
+                break;
+                case 7: return "PA";
+                break;
+                case 8: return "_DA";
+                break;
+                case 9: return "DA";
+                break;
+                case 10: return "_NI";
+                break;
+                case 11: return "NI";
+                break;
+        }
+    } else {
+        switch(pitch->basenote) {
+        case 0: return "C";
+        break;
+        case 1: return "_D";
+        break;
+        case 2: return "D";
+        break;
+        case 3: return "_E";
+        break;
+        case 4: return "E";
+        break;
+        case 5: return "F";
+        break;
+        case 6: return "F#";
+        break;
+        case 7: return "G";
+        break;
+        case 8: return "_A";
+        break;
+        case 9: return "A";
+        break;
+        case 10: return "_B";
+        break;
+        case 11: return "B";
+        break;
+        }
+    }
 
-            case 0: return "सा";
-            break;
-            case 1: return "_रे";
-            break;
-            case 2: return "रे";
-            break;
-            case 3: return "_ग";
-            break;
-            case 4: return "ग";
-            break;
-            case 5: return "म";
-            break;
-            case 6: return "म'";
-            break;
-            case 7: return "प";
-            break;
-            case 8: return "_ध";
-            break;
-            case 9: return "ध";
-            break;
-            case 10: return "_नि";
-            break;
-            case 11: return "नि";
-            break;
+    return "";
 
     /*
     case 0: return "A";
@@ -120,34 +204,7 @@ QString FreqTriple::getBasenoteString() const
     break;
     case 11: return "E";
     break;
-
-    case 0: return "C";
-    break;
-    case 1: return "C#";
-    break;
-    case 2: return "D";
-    break;
-    case 3: return "D#";
-    break;
-    case 4: return "E";
-    break;
-    case 5: return "F";
-    break;
-    case 6: return "F#";
-    break;
-    case 7: return "G";
-    break;
-    case 8: return "G#";
-    break;
-    case 9: return "A";
-    break;
-    case 10: return "A#";
-    break;
-    case 11: return "B";
-    break;
     */
-
-    }
 }
 
 

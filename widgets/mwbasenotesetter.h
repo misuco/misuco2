@@ -25,6 +25,8 @@ public slots:
     void pitchChange();
     void onSetBaseNote(Pitch *pitch);
     void onScaleSet(MWScale*scale);
+    void onScaleUpdate();
+
 
 signals:
     void setBaseNote(Pitch *);

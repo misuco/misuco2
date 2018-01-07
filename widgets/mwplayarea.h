@@ -47,6 +47,7 @@ public slots:
     void setBendVertBot(int b);
     void pitchChange();    
     void toggleBW();
+    void onScaleUpdate();
 
 signals:
     void menuTouch();

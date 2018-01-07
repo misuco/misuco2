@@ -41,6 +41,7 @@ public:
     static MWScale Scale;
     static MWSound Sound;
     static bool overwrite;
+    static int lang;
 
 protected:
     bool event(QEvent *event);

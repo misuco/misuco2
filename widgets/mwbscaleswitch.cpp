@@ -75,7 +75,11 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *)
         }
         painter.setBrush(QColor::fromHsl(f->getHue(),s,l));
     }
-    painter.setPen(fgcolor);
+    if(pressed>0 || value) {
+        painter.setPen(highlightcolor);
+    } else {
+        painter.setPen(fgcolor);
+    }
     painter.drawRect(0,0,width(),height());
     cap.sprintf("%d",bscaleId);
     painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
@@ -108,5 +112,10 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
     } else {
         value=false;
     }
+    update();
+}
+
+void MWBScaleSwitch::onScaleUpdate()
+{
     update();
 }

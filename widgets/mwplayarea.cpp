@@ -222,16 +222,25 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         }
     }
 
+    QString basenote;
     switch(fields[r][c].type) {
     case NORMAL:
         painter.setPen(fgcolor);
         painter.setBrush(colorF1);
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        cap.sprintf("%s %d",fields[r][c].f1->getBasenoteString().toStdString().c_str(), fields[r][c].f1->getOct());
-        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
+        basenote = fields[r][c].f1->getBasenoteString(lang);
+        if(basenote.startsWith("_")) {
+            font3.setUnderline(true);
+            painter.setFont(font3);
+            basenote.remove(0,1);
+        }
+        cap.sprintf("%s",basenote.toStdString().c_str());
+        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);        
+        font3.setUnderline(false);
+
         painter.setFont(font8);
-        cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
+        cap.sprintf("%5.2f\n%d",fields[r][c].f1->getFreq(), fields[r][c].f1->getOct());
         painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
         break;
 
@@ -629,4 +638,9 @@ void MWPlayArea::setOut(ISender *value)
 void MWPlayArea::toggleBW()
 {
     bwmode=!bwmode;
+}
+
+void MWPlayArea::onScaleUpdate()
+{
+    update();
 }

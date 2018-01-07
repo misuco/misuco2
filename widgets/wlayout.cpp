@@ -172,9 +172,15 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         } else if(fctId==11) {
             connect(HS[i],SIGNAL(toggleBW()),M[0],SLOT(toggleBW()));
             connect(HS[i],SIGNAL(toggleBW()),this,SLOT(toggleBW()));
+        } else if(fctId==14) {
+            connect(HS[i],SIGNAL(scaleUpdate()),M[0],SLOT(onScaleUpdate()));
+            connect(HS[i],SIGNAL(scaleUpdate()),BaseNoteSetter[0],SLOT(onScaleUpdate()));
+            for(int j=1;j<12;j++) {
+                connect(HS[i],SIGNAL(scaleUpdate()),BaseNoteSetter[j],SLOT(onScaleUpdate()));
+                connect(HS[i],SIGNAL(scaleUpdate()),bScaleSwitch[j-1],SLOT(onScaleUpdate()));
+            }
         }
     }
-
 
     layout->setContentsMargins(0,0,0,0);
     layout->setMargin(0);
@@ -202,7 +208,7 @@ wlayout::~wlayout()
 
 void wlayout::resizeEvent(QResizeEvent *)
 {
-    qDebug() << "wlayout::resizeEvent " << width() << " " << height();
+    //qDebug() << "wlayout::resizeEvent " << width() << " " << height();
     MisuWidget::font1size=width()/40;
 }
 

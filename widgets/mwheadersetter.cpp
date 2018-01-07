@@ -12,6 +12,7 @@ MWHeaderSetter::MWHeaderSetter(int headerId, QWidget *parent) : MisuWidget(paren
 
 void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
 {
+    QString link;
     switch(e.state) {
     case Qt::TouchPointPressed:
         switch(headerId) {
@@ -67,7 +68,7 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             state = overwrite;
             break;
         case 13:
-            QString link ="http://scales.misuco.org/";
+            link ="http://scales.misuco.org/";
             link.append(midi2TextUrl(Scale.basenote));
             link.append("-");
             for(int i=0;i<11;i++) {
@@ -79,6 +80,11 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             }
             link.chop(1);
             QDesktopServices::openUrl(QUrl(link));
+            break;
+        case 14:
+            lang++;
+            if(lang>3) lang=0;
+            emit scaleUpdate();
             break;
         }
         pressed++;
@@ -145,6 +151,9 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
         break;
     case 13:
         cap.sprintf("archive");
+        break;
+    case 14:
+        cap.sprintf("language");
         break;
     }
 

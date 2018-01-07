@@ -10,11 +10,9 @@ class FreqTriple: public QObject
 
 public:
     explicit FreqTriple(Pitch *p, QObject *parent = 0);
-    //FreqTriple(Pitch *p);
     ~FreqTriple();
 
     float getFreq() const;
-    //void setFreq(float value);
 
     int getMidinote() const;
     void setMidinote(int m, Pitch *p);
@@ -31,7 +29,7 @@ public:
     int getOct() const;
     void setOct(int value);
 
-    QString getBasenoteString() const;
+    QString getBasenoteString(int lang) const;
 
 public slots:
     void pitchChange();
@@ -44,7 +42,6 @@ private:
     Pitch * pitch;
     int oct;
 
-//    float calcPitch(int midinote, float f);
     float calcFreq(int midinote, int pitch);
     float calcMidi2Fequal(int x);
     double Log2(double n);

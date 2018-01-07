@@ -10,7 +10,6 @@ QColor MisuWidget::highlightcolor("Red");
 QString MisuWidget::font1("Sans");
 int MisuWidget::font1size(10);
 
-
 bool MisuWidget::bwmode = true;
 QColor MisuWidget::bkeycolor("Black");
 QColor MisuWidget::wkeycolor("White");
@@ -25,6 +24,7 @@ int MisuWidget::sOn = 180;
 MWScale MisuWidget::Scale;
 MWSound MisuWidget::Sound;
 bool MisuWidget::overwrite = false;
+int MisuWidget::lang = 0;
 
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {

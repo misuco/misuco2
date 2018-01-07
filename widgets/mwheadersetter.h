@@ -24,6 +24,7 @@ signals:
     void togglePresets();
     void toggleMenu();
     void toggleBW();
+    void scaleUpdate();
 
 private:
     int headerId;
