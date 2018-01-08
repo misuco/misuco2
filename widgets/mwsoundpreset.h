@@ -16,12 +16,16 @@ protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
 
+public slots:
+    void initialSet();
+
 signals:
     void setSound(MWSound * s);
 
 private:
     MWSound PresetSound;
     int pressed=0;
+    bool isSelected();
 };
 
 #endif // MWSound_H

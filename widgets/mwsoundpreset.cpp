@@ -51,8 +51,11 @@ void MWSoundPreset::paintEvent(QPaintEvent *)
 
     int xr=width()/12;
     int h=height();
-
-    painter.setPen(fgcolor);
+    if(isSelected()) {
+        painter.setPen(highlightcolor);
+    } else {
+        painter.setPen(fgcolor);
+    }
     painter.setBrush(bgcolor);
     painter.drawRect(0,0,width(),height());
 
@@ -85,7 +88,7 @@ void MWSoundPreset::paintEvent(QPaintEvent *)
 
     xenv+=xdiff;
     xdiff=xr*PresetSound.decay/1000;
-    int ydiff=PresetSound.sustain*h/1000;
+    int ydiff=h-PresetSound.sustain*h/1000;
     painter.drawLine(xenv,0,xenv+xdiff,ydiff);
 
     xenv+=xdiff;
@@ -95,12 +98,29 @@ void MWSoundPreset::paintEvent(QPaintEvent *)
     xdiff=xr*PresetSound.release/1000;
     painter.drawLine(xenv,ydiff,xenv+xdiff,h);
 
-
-
-
 }
 
 void MWSoundPreset::resizeEvent(QResizeEvent *)
 {
 
+}
+
+void MWSoundPreset::initialSet()
+{
+    emit setSound(&PresetSound);
+}
+
+bool MWSoundPreset::isSelected() {
+    if( PresetSound.volume==Sound.volume &&
+        PresetSound.wave_type==Sound.wave_type &&
+        PresetSound.attack==Sound.attack &&
+        PresetSound.decay==Sound.decay &&
+        PresetSound.sustain==Sound.sustain &&
+        PresetSound.release==Sound.release &&
+        PresetSound.filter_cutoff==Sound.filter_cutoff &&
+        PresetSound.filter_resonance==Sound.filter_resonance &&
+        PresetSound.mod_filter_cutoff==Sound.mod_filter_cutoff &&
+        PresetSound.mod_filter_resonance==Sound.mod_filter_resonance
+    ) return true;
+    else return false;
 }

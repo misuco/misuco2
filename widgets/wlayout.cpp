@@ -193,6 +193,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     M[2]->hide();
 
     connect(this,SIGNAL(initialSet()),PB[0],SLOT(initialSet()));
+    connect(this,SIGNAL(initialSet()),PB[10],SLOT(initialSet()));
     emit initialSet();
 
     recalcMainView();
@@ -357,6 +358,9 @@ void wlayout::setSound(MWSound *s)
     faderParamCtl[7]->setValue(s->mod_filter_cutoff);
     faderParamCtl[8]->setValue(s->mod_filter_resonance);
     faderParamCtl[9]->setValue(s->volume);
+    for(int i=10;i<15;i++) {
+        PB[i]->update();
+    }
 }
 
 void wlayout::onScaleUpdate()

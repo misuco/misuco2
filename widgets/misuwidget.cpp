@@ -6,7 +6,7 @@
 
 QColor MisuWidget::fgcolor("Lightgray");
 QColor MisuWidget::bgcolor("Darkgray");
-QColor MisuWidget::highlightcolor("Violet");
+QColor MisuWidget::highlightcolor("Darkviolet");
 QString MisuWidget::font1("Sans");
 int MisuWidget::font1size(10);
 
