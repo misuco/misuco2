@@ -211,8 +211,9 @@ QString FreqTriple::getBasenoteString(int lang) const
 void FreqTriple::setBasenote(Pitch * p)
 {
     pitch = p;
-    midinote = pitch->pitch+oct*12;
+    midinote = pitch->basenote+oct*12;
     freq = calcFreq(midinote,pitch->pitch);
+    //qDebug() << "FreqTriple::setBasenote midinote: " << midinote << " freq: " << freq;
 }
 
 int FreqTriple::getOct() const

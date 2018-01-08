@@ -9,16 +9,16 @@ MWBScaleSwitch::MWBScaleSwitch(int i, Pitch **MWP)
 
     for(int i=0;i<12;i++) {
         MWPitch[i]=*(MWP+i);
+        f=new FreqTriple(MWPitch[i],this);
+        f->setBasenote(MWPitch[i]);
     }
     // TODO: how to type cast this?
     //MWPitch=MWP;
-    f=new FreqTriple(MWP[i],this);
     value=false;
     pressed=0;
     chan=0;
     bscaleId=i;
     f->setOct(4);
-    setBaseNote(MWP[0]);
     out=new SenderDebug();
 }
 
@@ -94,9 +94,8 @@ void MWBScaleSwitch::setBaseNote(Pitch *p)
 {
     basenote=p->basenote;
     int newBaseNote=(basenote+bscaleId)%12;
-    f->setBasenote(MWPitch[newBaseNote]);
     //qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
-    //f->setBasenote((p+bscaleId)%11);
+    f->setBasenote(MWPitch[newBaseNote]);
     update();
 }
 
@@ -112,6 +111,10 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
     } else {
         value=false;
     }
+
+    basenote = (scale->basenote+bscaleId)%12;
+    f->setBasenote(MWPitch[basenote]);
+
     update();
 }
 
