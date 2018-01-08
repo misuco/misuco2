@@ -7,6 +7,7 @@
 #include "mwsoundpreset.h"
 #include "mwfaderpitch.h"
 #include <conf/color.h>
+#include "comm/sendermulti.h"
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
@@ -14,7 +15,8 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     //qDebug() << "wlayout width: " << width() ;
 
-    ISender * out=new SenderMobileSynth();
+    //ISender * out=new SenderMobileSynth();
+    ISender * out=new SenderMulti();
     out->cc(0,0,105,1,1);
 
     for(int i=0;i<10;i++) {

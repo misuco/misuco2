@@ -77,7 +77,7 @@ void MWPreset::paintEvent(QPaintEvent *)
         for(int j=0;j<BSCALE_SIZE;j++) {
             if(PresetScale.bscale[j]) {
                 setBrush(MWPitch[(PresetScale.basenote+1+j)%(BSCALE_SIZE+1)],s,l,painter);
-                painter.drawRect(x,0,colwidth,height());
+                painter.drawRect(x,0,colwidth+1,height());
                 x+=colwidth;
             }
         }

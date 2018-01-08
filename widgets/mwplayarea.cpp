@@ -240,7 +240,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         font3.setUnderline(false);
 
         painter.setFont(font8);
-        cap.sprintf("%5.2f\n%d",fields[r][c].f1->getFreq(), fields[r][c].f1->getOct());
+        cap.sprintf("%5.2f\n%d %d",fields[r][c].f1->getFreq(), (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getOct());
         painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
         break;
 
@@ -414,12 +414,17 @@ void MWPlayArea::paintEvent(QPaintEvent *)
     painter.setPen(fgcolor);
     painter.setBrush(fgcolor);
 
+    QFont font(font1);
+    font.setPixelSize(font1size);
+    painter.setFont(font);
+
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
         eventStackElement * es = &eventStack[i];
         if(es && es->eventId>0) {
+            int r = colwidth[0]/4;
             //painter.drawRect(es->x-50,es->y-50,100,100);
-            painter.drawEllipse(es->x-50,es->y-50,100,100);
-            painter.drawText(es->x-50,es->y-80,200,250,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
+            painter.drawEllipse(es->x-r,es->y-r,2*r,2*r);
+            painter.drawText(es->x-r,es->y-2*r,4*r,5*r,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
         }
     }
 

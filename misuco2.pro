@@ -56,7 +56,13 @@ SOURCES += main.cpp\
     conf/color.cpp \
     widgets/mwfaderpitch.cpp \
     widgets/mwfaderparamctl.cpp \
-    widgets/mwsoundpreset.cpp
+    widgets/mwsoundpreset.cpp \
+    comm/sendermulti.cpp \
+    comm/senderoscmidigeneric.cpp \
+    comm/senderoscpuredata.cpp \
+    comm/senderoscxy.cpp \
+    comm/senderreaktor.cpp \
+    comm/sendersupercollider.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -104,7 +110,13 @@ HEADERS  += mainwindow.h \
     conf/color.h \
     widgets/mwfaderpitch.h \
     widgets/mwfaderparamctl.h \
-    widgets/mwsoundpreset.h
+    widgets/mwsoundpreset.h \
+    comm/sendermulti.h \
+    comm/senderoscmidigeneric.h \
+    comm/senderoscpuredata.h \
+    comm/senderoscxy.h \
+    comm/sendersupercollider.h \
+    comm/senderreaktor.h
 
 CONFIG += mobility
 MOBILITY = 

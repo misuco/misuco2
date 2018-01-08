@@ -16,27 +16,36 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef SENDERDEBUG_H
-#define SENDERDEBUG_H
+#ifndef SENDEROSCXY_H
+#define SENDEROSCXY_H
 
 #include "isender.h"
+#include "../comm/libofqf/qoscclientinterface.h"
 
-class SenderDebug : public ISender
+class SenderOscXY : public ISender
 {
 public:
-    SenderDebug();
-    virtual void cc(int chan, int voiceId, int cc, float v1, float v1avg);
+    SenderOscXY();
+    ~SenderOscXY();
+    virtual void cc(int chan, int voiceId, int cc, float v1, float);
     virtual void pc(int chan, int v1);
-    virtual int noteOn(int chan, float f, int midinote, int pitch, int v);
-    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v);
-    virtual void noteOff(int voiceId);
-    virtual void pitch(int chan, int voiceId, float f, int midinote, int pitch);
-    virtual void setDestination(char *,int) {}
-    virtual void reconnect() {}
+    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int scalenote, int vel);
+    virtual void noteOff(int, int, int) {}
+    virtual void pitch(int, int, float, int, int, int) {}
+    virtual void setDestination(char * a,int p);
+    virtual void reconnect();
+    virtual int getPort() {return port;}
+    virtual char* getAddress() {return adr;}
+    
     virtual bool voiceBased() {return false;}
 
 private:
-    int nextVid=1;
+    QOscClientInterface* oscout;
+    char * adr;
+    int port;
+    float x;
+    float y;
+    void sendOsc(QString path, QVariant list);
 };
 
-#endif // SENDERDEBUG_H
+#endif // SENDEROSCXY_H

@@ -67,9 +67,12 @@ void SenderMobileSynth::pc(int, int) {}
 
 int SenderMobileSynth::noteOn(int, float f, int, int, int)
 {
-    int voiceId=nextVid++;
+    return 0;
+}
+
+void SenderMobileSynth::noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v)
+{
     sy->NoteOn(voiceId, (float)f);
-    return voiceId;
 }
 
 void SenderMobileSynth::noteOff(int voiceId)
@@ -130,10 +133,12 @@ void SenderMobileSynth::pc(int, int) {}
 
 int SenderMobileSynth::noteOn(int, float f, int, int, int)
 {
-    int voiceId=nextVid++;
+}
+
+void SenderMobileSynth::noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v)
+{
     //qDebug() << "SenderMobileSynth::noteOn " << voiceId << " f: " << f;
     sy->noteOn(voiceId, (float)f);
-    return voiceId;
 }
 
 void SenderMobileSynth::noteOff(int voiceId)

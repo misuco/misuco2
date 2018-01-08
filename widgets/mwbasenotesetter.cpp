@@ -69,13 +69,15 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
     } else {
         painter.setBrush(QColor::fromHsl(f->getHue(),s,l));
     }
+    painter.setPen(Qt::NoPen);
+    painter.drawRect(0,0,width(),height());
+    //cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
+
     if(pressed>0 || selected) {
         painter.setPen(highlightcolor);
     } else {
         painter.setPen(fgcolor);
     }
-    painter.drawRect(0,0,width(),height());
-    //cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
 
     QFont font(font1);
     QString basenote = f->getBasenoteString(lang);

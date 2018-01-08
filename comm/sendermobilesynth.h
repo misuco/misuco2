@@ -37,6 +37,7 @@ public:
     virtual void cc(int, int voiceId, int cc, float v1, float);
     virtual void pc(int, int);
     virtual int noteOn(int, float f, int, int, int);
+    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v);
     virtual void noteOff(int voiceId);
     virtual void pitch(int, int voiceId, float f, int, int);
     virtual void setDestination(char * a,int p);
@@ -59,7 +60,6 @@ private:
 #else
     mobileSynthQT52 * sy;
 #endif
-    int nextVid=1;
 };
 
 #endif // SENDERMOBILESYNTH_H
