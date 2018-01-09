@@ -29,6 +29,7 @@ protected:
     void processTouchEvent(misuTouchEvent e);
     void resizeEvent(QResizeEvent *);
     int getValue();
+    int valueDisplay;
 
 signals:
     void valueChange(int v);
@@ -37,7 +38,6 @@ private:
     // Fadder state
     int value;
     bool inverted;
-    int valueDisplay;
     int minValue;
     int maxValue;
     int valRange;

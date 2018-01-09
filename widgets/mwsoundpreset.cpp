@@ -51,13 +51,16 @@ void MWSoundPreset::paintEvent(QPaintEvent *)
 
     int xr=width()/12;
     int h=height();
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(bgcolor);
+
+    painter.drawRect(0,0,width(),height());
     if(isSelected()) {
         painter.setPen(highlightcolor);
     } else {
         painter.setPen(fgcolor);
     }
-    painter.setBrush(bgcolor);
-    painter.drawRect(0,0,width(),height());
 
     switch(PresetSound.wave_type) {
     case 0:

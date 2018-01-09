@@ -415,7 +415,7 @@ void MWPlayArea::paintEvent(QPaintEvent *)
     painter.setBrush(fgcolor);
 
     QFont font(font1);
-    font.setPixelSize(font1size);
+    font.setPixelSize(font1size/2);
     painter.setFont(font);
 
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
@@ -424,10 +424,12 @@ void MWPlayArea::paintEvent(QPaintEvent *)
             int r = colwidth[0]/4;
             //painter.drawRect(es->x-50,es->y-50,100,100);
             painter.drawEllipse(es->x-r,es->y-r,2*r,2*r);
-            painter.drawText(es->x-r,es->y-2*r,4*r,5*r,0,QString("%1 %2").arg(es->f).arg(es->voiceId));
+            painter.setPen(highlightcolor);
+            painter.drawText(es->x-r,es->y-2*r,4*r,5*r,0,QString("%1\n%2\n\n").arg(es->f).arg(es->voiceId));
         }
     }
 
+    painter.setPen(fgcolor);
     // fill round space with fgcolor
     painter.drawRect(x,0,width()-x,height());
 
@@ -561,6 +563,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             //qDebug() << "pitch " << freq;
             es->f=freq;
         }
+        out->cc(chan,es->voiceId,1,1.0f-yrel,1.0f-yrel);
         break;
     case Qt::TouchPointReleased:
         out->noteOff(es->voiceId);

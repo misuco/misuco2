@@ -72,6 +72,15 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         }
         faderParamCtl[i]->setInverted(true);
         lSynthCtl->addWidget(faderParamCtl[i],0,i);
+
+        // update fadders on sustain update
+        if(i==3) {
+            connect(faderParamCtl[i],SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
+        }
+        // update fadders on filter res update
+        if(i==6) {
+            connect(faderParamCtl[i],SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
+        }
     }
 
     mainArea = new QStackedWidget(this);
@@ -274,8 +283,8 @@ void wlayout::recalcMainView()
     for(int i=0;i<3;i++) {
         if(!H[i]->isHidden()) {
             //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-            layout->addWidget(H[i],top,xpos,1,width);
-            top++;
+            layout->addWidget(H[i],top,xpos,2,width);
+            top+=2;
         }
     }
 
@@ -370,5 +379,12 @@ void wlayout::onScaleUpdate()
     for(int i=0;i<10;i++) {
         PB[i]->update();
     }
+}
+
+void wlayout::onSoundSustainUpdate(int)
+{
+    faderParamCtl[2]->update();
+    faderParamCtl[4]->update();
+    faderParamCtl[5]->update();
 }
 

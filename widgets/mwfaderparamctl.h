@@ -21,6 +21,9 @@ public:
 public slots:
     void setChan(int c);
 
+protected:
+    void paintEvent(QPaintEvent * E);
+
 private:
     ISender * out;
 

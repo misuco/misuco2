@@ -74,11 +74,12 @@ void MWOctaveRanger::paintEvent(QPaintEvent *)
     QFont font(font1);
     font.setPixelSize(font1size);
     painter.setFont(font);
-    painter.setPen(fgcolor);
+    painter.setPen(Qt::NoPen);
     painter.setBrush(bgcolor);
     painter.drawRect(0,0,width(),height());
     painter.setBrush(highlightcolor);
     painter.drawRect(bottom*segwidth,0,(1+top-bottom)*segwidth,height());
+    painter.setPen(fgcolor);
     for(int i=0;i<noct;i++) {
         cap.sprintf("%d",i);
         painter.drawText(i*segwidth,0,segwidth,height(),Qt::AlignCenter|Qt::AlignHCenter,cap);

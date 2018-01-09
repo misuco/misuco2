@@ -88,7 +88,13 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
     font.setPixelSize(font1size);
     painter.setFont(font);
     cap.sprintf("%s",basenote.toStdString().c_str());
-    painter.drawText(0,0,width(),height(),Qt::AlignVCenter|Qt::AlignCenter,cap);
+    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignCenter,cap);
+
+    font.setUnderline(false);
+    font.setPixelSize(font1size/2);
+    painter.setFont(font);
+    cap.sprintf("%5.2f",f->getFreq());
+    painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignCenter,cap);
 }
 
 void MWBaseNoteSetter::resizeEvent(QResizeEvent *)
@@ -99,6 +105,7 @@ void MWBaseNoteSetter::resizeEvent(QResizeEvent *)
 void MWBaseNoteSetter::setOctMid(int o)
 {
     f->setOct(o);
+    update();
 }
 
 void MWBaseNoteSetter::setChan(int c)

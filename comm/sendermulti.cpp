@@ -75,7 +75,7 @@ int SenderMulti::noteOn(int chan, float f, int midinote, int pitch, int v)
     onCnt++;
     //midiOn[midinote]=true;
 
-    qDebug() << "SenderMulti::noteOn(" << chan << "," << vid << "," << f << "," << midinote << "," << pitch << "," << v << ")";
+    //qDebug() << "SenderMulti::noteOn(" << chan << "," << vid << "," << f << "," << midinote << "," << pitch << "," << v << ")";
     return vid;
 }
 
@@ -86,7 +86,7 @@ void SenderMulti::noteOn(int chan, int voiceId, float f, int midinote, int pitch
 
 void SenderMulti::noteOff(int voiceId)
 {
-    qDebug() << "SenderMulti::noteOff(" <<  voiceId  << ")";
+    //qDebug() << "SenderMulti::noteOff(" <<  voiceId  << ")";
     //int vid=voiceId%1024;
     //int midinote=notestate[vid];
     for(int i=0;i<senders.count();i++) {
@@ -99,7 +99,7 @@ void SenderMulti::noteOff(int voiceId)
 
 void SenderMulti::pitch(int chan, int voiceId, float f, int midinote, int pitch)
 {
-    qDebug() << "SenderMulti::pitch(" << chan << "," << voiceId << "," << f << "," << midinote << "," << pitch << ")";
+    //qDebug() << "SenderMulti::pitch(" << chan << "," << voiceId << "," << f << "," << midinote << "," << pitch << ")";
     for(int i=0;i<senders.count();i++) {
         senders.at(i)->pitch(chan,voiceId,f,midinote,pitch);
         /*

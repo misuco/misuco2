@@ -4,17 +4,17 @@
 #include <QDateTime>
 #include <QDebug>
 
-QColor MisuWidget::fgcolor("Lightgray");
-QColor MisuWidget::bgcolor("Darkgray");
-QColor MisuWidget::highlightcolor("Darkviolet");
+QColor MisuWidget::fgcolor(QColor::fromRgb(200,200,200));
+QColor MisuWidget::bgcolor(QColor::fromRgb(25,25,25));
+QColor MisuWidget::highlightcolor("Red");
 QString MisuWidget::font1("Sans");
 int MisuWidget::font1size(10);
 
 bool MisuWidget::bwmode = true;
 QColor MisuWidget::bkeycolor("Black");
 QColor MisuWidget::wkeycolor("White");
-QColor MisuWidget::hlbkeycolor("Blue");
-QColor MisuWidget::hlwkeycolor("Cyan");
+QColor MisuWidget::hlbkeycolor(QColor::fromHsl(1,200,20));
+QColor MisuWidget::hlwkeycolor(QColor::fromHsl(1,200,200));
 
 int MisuWidget::lOff = 80;
 int MisuWidget::lOn = 180;

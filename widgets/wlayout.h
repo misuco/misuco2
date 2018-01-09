@@ -39,6 +39,7 @@ private slots:
     void onSetBaseNote(Pitch * p);
     void setSound(MWSound * s);
     void onScaleUpdate();
+    void onSoundSustainUpdate(int);
 
 private:
     QGridLayout *layout;
