@@ -26,7 +26,8 @@
 
 SenderMulti::SenderMulti()
 {
-    senders.append(new SenderOscMidiGeneric());
+    //senders.append(new SenderOscMidiGeneric());
+    senders.append(new SenderReaktor());
     senders.append(new SenderMobileSynth());
     //senders.append(new SenderSuperCollider());
     //syncout=new QOscClient();

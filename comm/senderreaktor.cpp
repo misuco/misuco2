@@ -78,7 +78,7 @@ void SenderReaktor::pitch(int chan, int voiceId, float f, int midinote, int pitc
     QVariantList v;
     QString path;
 
-    v.append(pitch);
+    v.append(pitch*64);
     path.sprintf("/pitch/%d",chan);
     sendOsc(path,v);
 }
