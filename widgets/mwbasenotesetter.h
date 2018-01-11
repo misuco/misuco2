@@ -21,7 +21,6 @@ protected:
 
 public slots:
     void setOctMid(int o);
-    void setChan(int c);
     void pitchChange();
     void onSetBaseNote(Pitch *pitch);
     void onScaleSet(MWScale*scale);
@@ -38,7 +37,6 @@ private:
     FreqTriple * f;
     int vId;
     int pressed;
-    int chan;
     bool selected;
 };
 

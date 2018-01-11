@@ -12,14 +12,11 @@ class MWFaderParamCtl : public MWFadder
     Q_OBJECT
 
 public:
-    MWFaderParamCtl(QWidget *parent, Color *col, int cc, int c);
+    MWFaderParamCtl(QWidget *parent, Color *col, int cc);
     ~MWFaderParamCtl();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
     void setValue(int v);
-
-public slots:
-    void setChan(int c);
 
 protected:
     void paintEvent(QPaintEvent * E);
@@ -29,7 +26,6 @@ private:
 
     int cc;
     int pressed;
-    int chan;
     void propagateValueChange();
 };
 

@@ -12,14 +12,13 @@ class MWFaderPitch : public MWFadder
     Q_OBJECT
 
 public:
-    MWFaderPitch(QWidget *parent, Pitch * p, int c);
+    MWFaderPitch(QWidget *parent, Pitch * p);
     ~MWFaderPitch();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
 
 public slots:
     void setOctMid(int o);
-    void setChan(int c);
     void pitchChange();
 
 private:
@@ -30,8 +29,6 @@ private:
 
     int vId;
     int pressed;
-    int chan;
-//    int oct;
 };
 
 #endif // MWFADERPITCH_H

@@ -44,7 +44,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lPitch->setHorizontalSpacing(0);
     lPitch->setVerticalSpacing(0);
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWFaderPitch * mwf = new MWFaderPitch(M[1],MWPitch[i],1);
+        MWFaderPitch * mwf = new MWFaderPitch(M[1],MWPitch[i]);
         mwf->setOut(out);
         connect (mwf,SIGNAL(valueChange(int)),MWPitch[i],SLOT(setPitch(int)));
         connect( MWPitch[i], SIGNAL(change()), mwf, SLOT(pitchChange()));
@@ -60,7 +60,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lSynthCtl->setHorizontalSpacing(0);
     lSynthCtl->setVerticalSpacing(0);
     for(int i=0;i<10;i++) {
-        faderParamCtl[i] = new MWFaderParamCtl(M[2],synthCtlColor,i+102,1);
+        faderParamCtl[i] = new MWFaderParamCtl(M[2],synthCtlColor,i+102);
         faderParamCtl[i]->setOut(out);
         faderParamCtl[i]->setMinValue(0);
         if(i==0) {
@@ -87,14 +87,14 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lPlayAreaCtl->setHorizontalSpacing(0);
     lPlayAreaCtl->setVerticalSpacing(0);
 
-    faderPitchTopRange = new MWFaderParamCtl(M[2],synthCtlColor,1,0);
+    faderPitchTopRange = new MWFaderParamCtl(M[2],synthCtlColor,1);
     faderPitchTopRange->setOut(out);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
     lPlayAreaCtl->addWidget(faderPitchTopRange,0,0);
     connect(faderPitchTopRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertTop(int)));
 
-    faderPitchBottomRange = new MWFaderParamCtl(M[2],synthCtlColor,2,0);
+    faderPitchBottomRange = new MWFaderParamCtl(M[2],synthCtlColor,2);
     faderPitchBottomRange->setOut(out);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
@@ -105,10 +105,11 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lPlayAreaCtl->addWidget(pitchVert,0,2);
     connect(pitchVert,SIGNAL(setBendHori(bool)),M[0],SLOT(setBendHori(bool)));
 
-    faderChannel = new MWFaderParamCtl(M[2],synthCtlColor,3,0);
+    faderChannel = new MWFaderParamCtl(M[2],synthCtlColor,3);
     faderChannel->setOut(out);
     faderChannel->setMinValue(1);
     faderChannel->setMaxValue(16);
+    faderChannel->setInverted(true);
     lPlayAreaCtl->addWidget(faderChannel,0,3);
     connect(faderChannel,SIGNAL(valueChange(int)),this,SLOT(onChannelChange(int)));
 
@@ -176,10 +177,11 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     openScalesArchive = new MWHeaderSetter(13,1,this);
     lBScaleSwitch->addWidget(openScalesArchive,0,12);
 
-    faderSymbols = new MWFaderParamCtl(M[2],synthCtlColor,4,0);
+    faderSymbols = new MWFaderParamCtl(M[2],synthCtlColor,4);
     faderSymbols->setOut(out);
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(3);
+    faderSymbols->setInverted(true);
     lPlayAreaCtl->addWidget(faderSymbols,0,10);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
     connect(this,SIGNAL(scaleUpdate()),M[0],SLOT(onScaleUpdate()));

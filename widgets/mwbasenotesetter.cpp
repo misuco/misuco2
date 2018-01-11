@@ -14,7 +14,6 @@ MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QWidget *parent) : MisuWidget(
     //qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
     vId=0;
     pressed=0;
-    chan=1;
     selected=false;
 }
 
@@ -27,7 +26,7 @@ void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
+        vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
         emit setBaseNote(p);
         emit scaleUpdate();
@@ -106,11 +105,6 @@ void MWBaseNoteSetter::setOctMid(int o)
 {
     f->setOct(o);
     update();
-}
-
-void MWBaseNoteSetter::setChan(int c)
-{
-    chan=c;
 }
 
 void MWBaseNoteSetter::pitchChange()

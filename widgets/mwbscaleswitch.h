@@ -37,7 +37,6 @@ private:
     int vId;
     int pressed;
     bool value;
-    int chan;
 };
 
 #endif // MWBSCALESWITCH_H

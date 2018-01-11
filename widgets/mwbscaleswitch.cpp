@@ -16,7 +16,6 @@ MWBScaleSwitch::MWBScaleSwitch(int i, Pitch **MWP)
     //MWPitch=MWP;
     value=false;
     pressed=0;
-    chan=0;
     bscaleId=i;
     f->setOct(4);
     out=new SenderDebug();
@@ -31,7 +30,7 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        vId=out->noteOn(chan,f->getFreq(),f->getMidinote(),f->getPitch(),127);
+        vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         value=!value;
         emit setBscale(bscaleId,value);
         emit scaleUpdate();

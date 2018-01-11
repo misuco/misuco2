@@ -73,7 +73,6 @@ private:
     int cols;
     // - event stack/hashmap
     eventStackElement eventStack[EVENT_STACK_SIZE];
-    int chan = 0;
 
     // CONFIGURATION
     // - bending

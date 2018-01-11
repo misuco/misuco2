@@ -2,7 +2,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWFaderParamCtl::MWFaderParamCtl(QWidget *parent, Color * col,int cc, int c) : MWFadder(parent, col), cc(cc), chan(c)
+MWFaderParamCtl::MWFaderParamCtl(QWidget *parent, Color * col, int cc) : MWFadder(parent, col), cc(cc)
 {
 }
 
@@ -20,11 +20,6 @@ void MWFaderParamCtl::setValue(int v)
     MWFadder::setValue(v);
     propagateValueChange();
     update();
-}
-
-void MWFaderParamCtl::setChan(int c)
-{
-    chan=c;
 }
 
 void MWFaderParamCtl::paintEvent(QPaintEvent *E)
@@ -145,7 +140,7 @@ void MWFaderParamCtl::propagateValueChange() {
         break;
     }
 
-    out->cc(chan,0,cc,getValue(),getValue());
+    out->cc(channel,0,cc,getValue(),getValue());
 }
 
 void MWFaderParamCtl::processTouchEvent(misuTouchEvent e)
@@ -159,7 +154,7 @@ void MWFaderParamCtl::processTouchEvent(misuTouchEvent e)
         update();
         break;
     case Qt::TouchPointMoved:
-        out->cc(chan,0,cc,getValue(),getValue());
+        out->cc(channel,0,cc,getValue(),getValue());
         propagateValueChange();
         update();
         break;

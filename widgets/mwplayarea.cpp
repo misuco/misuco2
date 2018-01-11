@@ -542,7 +542,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->col=col;
         es->f=freq;
         pf->pressed++;
-        es->voiceId=out->noteOn(chan,freq,midinote,pitch,velocity);
+        es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
         //paintField(row,col);
         //update();
         break;
@@ -553,7 +553,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             out->noteOff(es->voiceId);
 
             es->midinote=midinote;
-            es->voiceId=out->noteOn(chan,freq,midinote,pitch,velocity);
+            es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
 
             es->row=row;
             es->col=col;
@@ -562,12 +562,12 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             //paintField(row,col);
             update();
         } else if(freq!=es->f) {
-            out->pitch(chan,es->voiceId,freq,midinote,pitch);
+            out->pitch(channel,es->voiceId,freq,midinote,pitch);
             //qDebug() << "pitch " << freq;
             es->f=freq;
         }
         if(sendCC1) {
-            out->cc(chan,es->voiceId,1,1.0f-yrel,1.0f-yrel);
+            out->cc(channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;
     case Qt::TouchPointReleased:
