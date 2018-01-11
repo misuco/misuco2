@@ -50,6 +50,7 @@ public:
     static bool pitchHorizontal;
 
     static bool sendCC1;
+    static bool holdMode;
 
 protected:
     bool event(QEvent *event);

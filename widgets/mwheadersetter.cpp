@@ -113,6 +113,10 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             if(state==0) state = 1;
             else state = 0;
             break;
+        case 21:
+            holdMode=!holdMode;
+            state = holdMode;
+            break;
         }
 
         pressed++;
@@ -202,6 +206,9 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
         break;
     case 20:
         cap.sprintf("super\ncollider");
+        break;
+    case 21:
+        cap.sprintf("hold");
         break;
     }
 

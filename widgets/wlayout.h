@@ -83,6 +83,7 @@ private:
     MWHeaderSetter * enableSupercollider;
     MWFaderParamCtl * faderSymbols;
     MWHeaderSetter * openScalesArchive;
+    MWHeaderSetter * holdMode;
 
     void recalcMainView();
 };

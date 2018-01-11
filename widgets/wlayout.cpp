@@ -138,6 +138,9 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lPlayAreaCtl->addWidget(enableSupercollider,0,9);
     connect(enableSupercollider,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
 
+    holdMode = new MWHeaderSetter(21,this);
+    lPlayAreaCtl->addWidget(holdMode,0,10);
+
     mainArea = new QStackedWidget(this);
 
     H[1] = new QWidget(this);
@@ -182,7 +185,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(3);
     faderSymbols->setInverted(true);
-    lPlayAreaCtl->addWidget(faderSymbols,0,10);
+    lPlayAreaCtl->addWidget(faderSymbols,0,11);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
     connect(this,SIGNAL(scaleUpdate()),M[0],SLOT(onScaleUpdate()));
     connect(this,SIGNAL(scaleUpdate()),BaseNoteSetter[0],SLOT(onScaleUpdate()));
@@ -310,7 +313,7 @@ void wlayout::recalcMainView()
 
     for(int i=0;i<3;i++) {
         layout->removeWidget(H[i]);
-        if(!H[i]->isHidden()) {headerCnt++;}
+        if(!H[i]->isHidden()) {headerCnt+=2;}
     }
 
     for(int i=0;i<7;i++) {

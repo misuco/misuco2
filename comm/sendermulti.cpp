@@ -78,7 +78,7 @@ int SenderMulti::noteOn(int chan, float f, int midinote, int pitch, int v)
     for(int i=0;i<senders.count();i++) {
         if(senderEnabled[i]) {
             senders.at(i)->noteOn(chan,vid,f,midinote,pitch,v);
-            //qDebug() << "SenderMulti::noteOn(sender:" << i << ",chan:" << chan << ",vid:" << vid << ",f:" << f << ",midinote:" << midinote << "," << pitch << "," << v << ")";
+            qDebug() << "SenderMulti::noteOn(sender:" << i << ",chan:" << chan << ",vid:" << vid << ",f:" << f << ",midinote:" << midinote << "," << pitch << "," << v << ")";
         }
     }
     onCnt++;
@@ -94,11 +94,13 @@ void SenderMulti::noteOn(int chan, int voiceId, float f, int midinote, int pitch
 
 void SenderMulti::noteOff(int voiceId)
 {
-    //qDebug() << "SenderMulti::noteOff(" <<  voiceId  << ")";
     //int vid=voiceId%1024;
     //int midinote=notestate[vid];
     for(int i=0;i<senders.count();i++) {
-        if(senderEnabled[i]) senders.at(i)->noteOff(voiceId);
+        if(senderEnabled[i]) {
+            senders.at(i)->noteOff(voiceId);
+            qDebug() << "SenderMulti::noteOff(" <<  voiceId  << ")";
+        }
     }
     //createOTR(chan, voiceId, midinote);
     //midiOn[midinote]=false;

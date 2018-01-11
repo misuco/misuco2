@@ -33,6 +33,7 @@ int MisuWidget::pitchBottomRange = 0;
 bool MisuWidget::pitchHorizontal = false;
 
 bool MisuWidget::sendCC1 = true;
+bool MisuWidget::holdMode = false;
 
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {

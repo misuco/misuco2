@@ -176,7 +176,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
     //qDebug() << "MWPlayArea::paintField r " << r << " c " << c;
     int l=lOff;
     int s=sOff;
-    if(fields[r][c].pressed>0) {
+    if(fields[r][c].pressed>0 || fields[r][c].hold) {
         l=lOn;
         s=sOn;
     }
@@ -187,7 +187,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
     QColor colorF2b = QColor::fromHsl(fields[r][c].hue2bent,s,l);
     if(bwmode) {
         if(fields[r][c].f1->getBW()) {
-            if(fields[r][c].pressed>0) {
+            if(fields[r][c].pressed>0 || fields[r][c].hold) {
                 colorF1 = hlwkeycolor;
                 colorF1b = hlbkeycolor;
             } else {
@@ -195,7 +195,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
                 colorF1b = bkeycolor;
             }
         } else {
-            if(fields[r][c].pressed>0) {
+            if(fields[r][c].pressed>0 || fields[r][c].hold) {
                 colorF1 = hlbkeycolor;
                 colorF1b = hlwkeycolor;
             } else {
@@ -204,7 +204,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             }
         }
         if(fields[r][c].f2->getBW()) {
-            if(fields[r][c].pressed>0) {
+            if(fields[r][c].pressed>0 || fields[r][c].hold) {
                 colorF2 = hlwkeycolor;
                 colorF2b = hlbkeycolor;
             } else {
@@ -212,7 +212,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
                 colorF2b = bkeycolor;
             }
         } else {
-            if(fields[r][c].pressed>0) {
+            if(fields[r][c].pressed>0 || fields[r][c].hold) {
                 colorF2 = hlbkeycolor;
                 colorF2b = hlwkeycolor;
             } else {
@@ -225,7 +225,11 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
     QString basenote;
     switch(fields[r][c].type) {
     case NORMAL:
-        painter.setPen(fgcolor);
+        if(fields[r][c].pressed>0 || fields[r][c].hold) {
+            painter.setPen(highlightcolor);
+        } else {
+            painter.setPen(fgcolor);
+        }
         painter.setBrush(colorF1);
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
@@ -541,43 +545,53 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->row=row;
         es->col=col;
         es->f=freq;
-        pf->pressed++;
-        es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
-        //paintField(row,col);
-        //update();
-        break;
-    case Qt::TouchPointMoved:
-        if(row!=es->row || col!=es->col) {
-            MWPlayfield * ppf = &fields[es->row][es->col];
-            ppf->pressed--;
-            out->noteOff(es->voiceId);
-
-            es->midinote=midinote;
+        if(holdMode && pf->pressed==0) {
+            if(pf->hold) {
+                out->noteOff(pf->voiceId);
+                pf->hold=false;
+            } else {
+                pf->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
+                pf->hold=true;
+            }
+        } else {
             es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
-
-            es->row=row;
-            es->col=col;
-            es->f=freq;
             pf->pressed++;
-            //paintField(row,col);
-            update();
-        } else if(freq!=es->f) {
-            out->pitch(channel,es->voiceId,freq,midinote,pitch);
-            //qDebug() << "pitch " << freq;
-            es->f=freq;
+        }
+        break;
+
+    case Qt::TouchPointMoved:
+        if(!holdMode) {
+            if(row!=es->row || col!=es->col) {
+                MWPlayfield * ppf = &fields[es->row][es->col];
+                ppf->pressed--;
+                out->noteOff(es->voiceId);
+
+                es->midinote=midinote;
+                es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
+
+                es->row=row;
+                es->col=col;
+                es->f=freq;
+                pf->pressed++;
+                update();
+            } else if(freq!=es->f) {
+                out->pitch(channel,es->voiceId,freq,midinote,pitch);
+                es->f=freq;
+            }
         }
         if(sendCC1) {
             out->cc(channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;
+
     case Qt::TouchPointReleased:
-        out->noteOff(es->voiceId);
+        if(!holdMode) {
+            out->noteOff(es->voiceId);
+            pf->pressed--;
+        }
         es->eventId=-1;
         es->row=-1;
         es->col=-1;
-        pf->pressed--;
-        //paintField(row,col);
-        //update();
         break;
     }
     update();
