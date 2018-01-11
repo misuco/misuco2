@@ -240,7 +240,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         font3.setUnderline(false);
 
         painter.setFont(font8);
-        cap.sprintf("%5.2f\n%d %d",fields[r][c].f1->getFreq(), (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getOct());
+        cap.sprintf("%5.2f\n%d\n%d\n%d",fields[r][c].f1->getFreq(), (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
         painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
         break;
 
@@ -258,6 +258,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
 
+        painter.setFont(font8);
         if(0==r) {
             cap.sprintf("%d",fields[r][c].f1->getMidinote());
             painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
@@ -280,8 +281,10 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setPen(fgcolor);
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
+
+        painter.setFont(font8);
         cap.sprintf("%d",fields[r][c].f1->getMidinote());
-        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft,cap);
+        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignBottom,cap);
         cap.sprintf("%d",fields[r][c].f2->getMidinote());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
         break;
@@ -563,7 +566,9 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             //qDebug() << "pitch " << freq;
             es->f=freq;
         }
-        out->cc(chan,es->voiceId,1,1.0f-yrel,1.0f-yrel);
+        if(sendCC1) {
+            out->cc(chan,es->voiceId,1,1.0f-yrel,1.0f-yrel);
+        }
         break;
     case Qt::TouchPointReleased:
         out->noteOff(es->voiceId);

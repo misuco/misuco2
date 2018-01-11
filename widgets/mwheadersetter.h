@@ -9,6 +9,7 @@ class MWHeaderSetter : public MisuWidget
 
 public:
     MWHeaderSetter(int headerId, QWidget *parent);
+    MWHeaderSetter(int headerId, int state, QWidget *parent);
     virtual void processTouchEvent(misuTouchEvent e);
 
 protected:
@@ -25,6 +26,7 @@ signals:
     void toggleMenu();
     void toggleBW();
     void scaleUpdate();
+    void toggleSender(int i);
 
 private:
     int headerId;

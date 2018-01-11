@@ -41,31 +41,16 @@ public:
 
     virtual void setDestination(char * a,int p);
     virtual void reconnect();
-    //virtual int getPort();
-    //virtual char* getAddress(); //{return 0;}
     virtual bool voiceBased() {return true;}
 
-    
+    bool senderEnabled[4];
+
     //void sync(int mode, int bar, float bpm);
 
     //void setSeq(Sequencer * s) {this->seq=s;}
 
-    /*
-    enum SenderType {
-        REAKTOR,
-        SUPERCOLLIDER,
-        MIDI,
-        GENERIC,
-        XY,
-        MOBILESYNTH
-    };
-    */
-
     void setDestination(int i, char * a,int p);
     /*
-    void del(int i);
-    void delAll();
-    //void create(SenderType i);
 
     void sendOff();
     
@@ -77,12 +62,6 @@ public:
         int chan;
         int offSent;
     };
-    
-     void reset1(int x, char *adr, int port);
-    synth::Controller * getSynthController() {
-        //return mobi->getSynthController();
-        return 0;
-    }
 
     QHostAddress getIP() {
         return syncout->getIP();

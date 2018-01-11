@@ -26,6 +26,14 @@ MWSound MisuWidget::Sound;
 bool MisuWidget::overwrite = false;
 int MisuWidget::lang = 0;
 
+int MisuWidget::channel = 1;
+
+int MisuWidget::pitchTopRange = 0;
+int MisuWidget::pitchBottomRange = 0;
+bool MisuWidget::pitchHorizontal = false;
+
+bool MisuWidget::sendCC1 = true;
+
 MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
 {
     //qDebug() << "MisuWidget::MisuWidget";

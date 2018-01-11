@@ -43,6 +43,14 @@ public:
     static bool overwrite;
     static int lang;
 
+    static int channel;
+
+    static int pitchTopRange;
+    static int pitchBottomRange;
+    static bool pitchHorizontal;
+
+    static bool sendCC1;
+
 protected:
     bool event(QEvent *event);
     int id;

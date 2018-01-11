@@ -12,6 +12,8 @@
 #include <QStackedWidget>
 #include "mwfaderparamctl.h"
 #include "mwbscaleswitch.h"
+#include "mwheadersetter.h"
+#include "comm/sendermulti.h"
 
 class wlayout : public QWidget
 {
@@ -28,6 +30,7 @@ protected:
 signals:
     void setBaseNote(Pitch * p);
     void initialSet();
+    void scaleUpdate();
 
 private slots:    
     void currentHeader(int i);
@@ -40,9 +43,13 @@ private slots:
     void setSound(MWSound * s);
     void onScaleUpdate();
     void onSoundSustainUpdate(int);
+    void onChannelChange(int v);
+    void onToggleSender(int v);
+    void onSymbolsChange(int v);
 
 private:
     QGridLayout *layout;
+    SenderMulti * out;
 
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWBScaleSwitch * bScaleSwitch[BSCALE_SIZE+1];
@@ -56,13 +63,26 @@ private:
     QWidget * H[3];
 
     // main area widgets
-    QWidget * M[3];
+    QWidget * M[4];
 
     // right menu
     QWidget * HS[15];
 
     // preset buttons
     QWidget * PB[15];
+
+    MWFaderParamCtl * faderPitchTopRange;
+    MWFaderParamCtl * faderPitchBottomRange;
+    MWFaderParamCtl * faderChannel;
+    MWHeaderSetter * pitchVert;
+    MWHeaderSetter * bwMode;
+    MWHeaderSetter * enableCc1;
+    MWHeaderSetter * enableMobilesynth;
+    MWHeaderSetter * enableReaktor;
+    MWHeaderSetter * enablePuredata;
+    MWHeaderSetter * enableSupercollider;
+    MWFaderParamCtl * faderSymbols;
+    MWHeaderSetter * openScalesArchive;
 
     void recalcMainView();
 };

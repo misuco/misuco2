@@ -51,6 +51,18 @@ void MWFaderParamCtl::paintEvent(QPaintEvent *E)
     int filterY2 =filterY1 + filterSpikeH;
 
     switch(cc) {
+    case 1:
+        cap.sprintf("bend\ntop");
+        break;
+    case 2:
+        cap.sprintf("bend\nbot");
+        break;
+    case 3:
+        cap.sprintf("channel");
+        break;
+    case 4:
+        cap.sprintf("symbols");
+        break;
     case 102:
         cap.sprintf("WAV");
         break;

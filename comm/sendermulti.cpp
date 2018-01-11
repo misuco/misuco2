@@ -26,11 +26,16 @@
 
 SenderMulti::SenderMulti()
 {
-    //senders.append(new SenderOscMidiGeneric());
-    senders.append(new SenderReaktor());
     senders.append(new SenderMobileSynth());
-    //senders.append(new SenderSuperCollider());
+    senders.append(new SenderOscMidiGeneric());
+    senders.append(new SenderReaktor());
+    senders.append(new SenderSuperCollider());
     //syncout=new QOscClient();
+
+    senderEnabled[0] = true;
+    senderEnabled[1] = false;
+    senderEnabled[2] = true;
+    senderEnabled[3] = false;
 
     nextVoiceId=1;
 
@@ -54,14 +59,14 @@ void SenderMulti::cc(int chan, int voiceId, int cc, float v1, float v1avg)
 {
     //qDebug() << "SenderMulti::cc(" << chan << "," << voiceId << "," << cc << "," << v1 << "," << v1avg << ")";
     for(int i=0;i<senders.count();i++) {
-        senders.at(i)->cc(chan,voiceId,cc,v1,v1avg);
+        if(senderEnabled[i]) senders.at(i)->cc(chan,voiceId,cc,v1,v1avg);
     }
 }
 
 void SenderMulti::pc(int chan, int v1)
 {
     for(int i=0;i<senders.count();i++) {
-        senders.at(i)->pc(chan,v1);
+        if(senderEnabled[i]) senders.at(i)->pc(chan,v1);
     }
 }
 
@@ -71,12 +76,14 @@ int SenderMulti::noteOn(int chan, float f, int midinote, int pitch, int v)
     if(nextVoiceId>1023)  nextVoiceId=1;
     //notestate[vid]=midinote;
     for(int i=0;i<senders.count();i++) {
-        senders.at(i)->noteOn(chan,vid,f,midinote,pitch,v);
+        if(senderEnabled[i]) {
+            senders.at(i)->noteOn(chan,vid,f,midinote,pitch,v);
+            //qDebug() << "SenderMulti::noteOn(sender:" << i << ",chan:" << chan << ",vid:" << vid << ",f:" << f << ",midinote:" << midinote << "," << pitch << "," << v << ")";
+        }
     }
     onCnt++;
     //midiOn[midinote]=true;
 
-    //qDebug() << "SenderMulti::noteOn(" << chan << "," << vid << "," << f << "," << midinote << "," << pitch << "," << v << ")";
     return vid;
 }
 
@@ -91,7 +98,7 @@ void SenderMulti::noteOff(int voiceId)
     //int vid=voiceId%1024;
     //int midinote=notestate[vid];
     for(int i=0;i<senders.count();i++) {
-        senders.at(i)->noteOff(voiceId);
+        if(senderEnabled[i]) senders.at(i)->noteOff(voiceId);
     }
     //createOTR(chan, voiceId, midinote);
     //midiOn[midinote]=false;
@@ -102,7 +109,7 @@ void SenderMulti::pitch(int chan, int voiceId, float f, int midinote, int pitch)
 {
     //qDebug() << "SenderMulti::pitch(" << chan << "," << voiceId << "," << f << "," << midinote << "," << pitch << ")";
     for(int i=0;i<senders.count();i++) {
-        senders.at(i)->pitch(chan,voiceId,f,midinote,pitch);
+        if(senderEnabled[i]) senders.at(i)->pitch(chan,voiceId,f,midinote,pitch);
         /*
         if(senders.at(i)->voiceBased()==true) {
             senders.at(i)->pitch(chan,voiceId,f,midinote,pitch);
@@ -158,29 +165,6 @@ void SenderMulti::createOTR(int chan, int voiceId, int midinote)
     offToRepeat.append(otr);
 }
 
-void SenderMulti::create(SenderType i) {
-    switch(i) {
-        case REAKTOR:
-            senders.append(new SenderReaktor());
-            break;
-        case SUPERCOLLIDER:
-            senders.append(new SenderSuperCollider());
-            break;
-        case GENERIC:
-            senders.append(new SenderOscMidiGeneric());
-            break;
-        case MIDI:
-            senders.append(new SenderOscPuredata());
-            break;
-        case XY:
-            senders.append(new SenderOscXY());
-            break;
-        case MOBILESYNTH:
-            senders.append(new SenderMobileSynth());
-            break;
-            
-    }
-}
 */
 
 void SenderMulti::setDestination(int i, char * a,int p) {
@@ -230,28 +214,4 @@ void SenderMulti::sendOff() {
     }
 }
 
-void SenderMulti::reset1(int x, char * adr, int port) {
-    //qDebug() << "SenderMulti::reset1 ";
-    delAll();
-    switch(x) {
-    case 0:
-        create(SenderMulti::GENERIC);
-        break;
-    case 1:
-        create(SenderMulti::MIDI);
-        break;
-    case 2:
-        create(SenderMulti::SUPERCOLLIDER);
-        break;
-    case 3:
-        create(SenderMulti::REAKTOR);
-        break;
-    case 4:
-        create(SenderMulti::XY);
-        break;
-    }
-    //mobi=new SenderMobileSynth();
-    //setDestination(0,adr,port);
-    setDestination(adr,port);
-}
 */

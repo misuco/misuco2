@@ -2,12 +2,10 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QStackedWidget>
-#include "mwheadersetter.h"
 #include "mwpreset.h"
 #include "mwsoundpreset.h"
 #include "mwfaderpitch.h"
 #include <conf/color.h>
-#include "comm/sendermulti.h"
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
@@ -16,7 +14,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     //qDebug() << "wlayout width: " << width() ;
 
     //ISender * out=new SenderMobileSynth();
-    ISender * out=new SenderMulti();
+    out=new SenderMulti();
     out->cc(0,0,105,1,1);
 
     for(int i=0;i<10;i++) {
@@ -83,6 +81,62 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         }
     }
 
+    M[3] = new QWidget(this);
+    QGridLayout * lPlayAreaCtl = new QGridLayout(M[3]);
+    lPlayAreaCtl->setContentsMargins(0,0,0,0);
+    lPlayAreaCtl->setHorizontalSpacing(0);
+    lPlayAreaCtl->setVerticalSpacing(0);
+
+    faderPitchTopRange = new MWFaderParamCtl(M[2],synthCtlColor,1,0);
+    faderPitchTopRange->setOut(out);
+    faderPitchTopRange->setMinValue(-5);
+    faderPitchTopRange->setMaxValue(5);
+    lPlayAreaCtl->addWidget(faderPitchTopRange,0,0);
+    connect(faderPitchTopRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertTop(int)));
+
+    faderPitchBottomRange = new MWFaderParamCtl(M[2],synthCtlColor,2,0);
+    faderPitchBottomRange->setOut(out);
+    faderPitchBottomRange->setMinValue(-5);
+    faderPitchBottomRange->setMaxValue(5);
+    lPlayAreaCtl->addWidget(faderPitchBottomRange,0,1);
+    connect(faderPitchBottomRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertBot(int)));
+
+    pitchVert = new MWHeaderSetter(15,this);
+    lPlayAreaCtl->addWidget(pitchVert,0,2);
+    connect(pitchVert,SIGNAL(setBendHori(bool)),M[0],SLOT(setBendHori(bool)));
+
+    faderChannel = new MWFaderParamCtl(M[2],synthCtlColor,3,0);
+    faderChannel->setOut(out);
+    faderChannel->setMinValue(1);
+    faderChannel->setMaxValue(16);
+    lPlayAreaCtl->addWidget(faderChannel,0,3);
+    connect(faderChannel,SIGNAL(valueChange(int)),this,SLOT(onChannelChange(int)));
+
+    enableCc1 = new MWHeaderSetter(16,1,this);
+    MisuWidget::sendCC1 = true;
+    lPlayAreaCtl->addWidget(enableCc1,0,4);
+
+    bwMode = new MWHeaderSetter(11,this);
+    lPlayAreaCtl->addWidget(bwMode,0,5);
+    connect(bwMode,SIGNAL(toggleBW()),M[0],SLOT(toggleBW()));
+    connect(bwMode,SIGNAL(toggleBW()),this,SLOT(toggleBW()));
+
+    enableMobilesynth = new MWHeaderSetter(17,1,this);
+    lPlayAreaCtl->addWidget(enableMobilesynth,0,6);
+    connect(enableMobilesynth,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+
+    enablePuredata = new MWHeaderSetter(18,this);
+    lPlayAreaCtl->addWidget(enablePuredata,0,7);
+    connect(enablePuredata,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+
+    enableReaktor = new MWHeaderSetter(19,1,this);
+    lPlayAreaCtl->addWidget(enableReaktor,0,8);
+    connect(enableReaktor,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+
+    enableSupercollider = new MWHeaderSetter(20,this);
+    lPlayAreaCtl->addWidget(enableSupercollider,0,9);
+    connect(enableSupercollider,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+
     mainArea = new QStackedWidget(this);
 
     H[1] = new QWidget(this);
@@ -119,6 +173,22 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         lBScaleSwitch->addWidget(bScaleSwitch[i-1],0,i);
     }
 
+    openScalesArchive = new MWHeaderSetter(13,1,this);
+    lBScaleSwitch->addWidget(openScalesArchive,0,12);
+
+    faderSymbols = new MWFaderParamCtl(M[2],synthCtlColor,4,0);
+    faderSymbols->setOut(out);
+    faderSymbols->setMinValue(0);
+    faderSymbols->setMaxValue(3);
+    lPlayAreaCtl->addWidget(faderSymbols,0,10);
+    connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
+    connect(this,SIGNAL(scaleUpdate()),M[0],SLOT(onScaleUpdate()));
+    connect(this,SIGNAL(scaleUpdate()),BaseNoteSetter[0],SLOT(onScaleUpdate()));
+    for(int j=1;j<12;j++) {
+        connect(this,SIGNAL(scaleUpdate()),BaseNoteSetter[j],SLOT(onScaleUpdate()));
+        connect(this,SIGNAL(scaleUpdate()),bScaleSwitch[j-1],SLOT(onScaleUpdate()));
+    }
+
     layout = new QGridLayout(this);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
     layout->setContentsMargins(0,0,0,0);
@@ -151,45 +221,28 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     }
 
-    for(int i=10;i<15;i++) {
+    for(int i=10;i<14;i++) {
         PB[i] = new MWSoundPreset(this);
         connect(PB[i],SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
         PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     }
 
-    for(int i=0;i<15;i++) {
+    for(int i=0;i<7;i++) {
         int fctId=i;
+        if(i>=3) fctId+=3;
         HS[i] = new MWHeaderSetter(fctId,this);
         HS[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        if(fctId<3) {
+        if(i<3) {
             connect(HS[i],SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
-        } else if(fctId==3) {
-            connect(HS[i],SIGNAL(setBendHori(bool)),(MWPlayArea *)M[0],SLOT(setBendHori(bool)));
-        } else if(fctId==4) {
-            connect(HS[i],SIGNAL(setBendVertTop(int)),(MWPlayArea *)M[0],SLOT(setBendVertTop(int)));
-        } else if(fctId==5) {
-            connect(HS[i],SIGNAL(setBendVertBot(int)),(MWPlayArea *)M[0],SLOT(setBendVertBot(int)));
-        } else if(fctId==6) {
+        } else if(i==3) {
             connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        } else if(fctId==7) {
+        } else if(i==4) {
             connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        } else if(fctId==8) {
+        } else if(i==5) {
             connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        } else if(fctId==9) {
-            connect(HS[i],SIGNAL(togglePresets()),this,SLOT(togglePresets()));
-        } else if(fctId==10) {
-            connect(HS[i],SIGNAL(toggleMenu()),this,SLOT(toggleMenu()));
-        } else if(fctId==11) {
-            connect(HS[i],SIGNAL(toggleBW()),M[0],SLOT(toggleBW()));
-            connect(HS[i],SIGNAL(toggleBW()),this,SLOT(toggleBW()));
-        } else if(fctId==14) {
-            connect(HS[i],SIGNAL(scaleUpdate()),M[0],SLOT(onScaleUpdate()));
-            connect(HS[i],SIGNAL(scaleUpdate()),BaseNoteSetter[0],SLOT(onScaleUpdate()));
-            for(int j=1;j<12;j++) {
-                connect(HS[i],SIGNAL(scaleUpdate()),BaseNoteSetter[j],SLOT(onScaleUpdate()));
-                connect(HS[i],SIGNAL(scaleUpdate()),bScaleSwitch[j-1],SLOT(onScaleUpdate()));
-            }
+        } else if(i==6) {
+            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
         }
     }
 
@@ -197,7 +250,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     layout->setMargin(0);
     layout->setHorizontalSpacing(0);
     layout->setVerticalSpacing(0);
-
 
     H[0]->hide();
     M[1]->hide();
@@ -248,15 +300,22 @@ void wlayout::recalcMainView()
 {
     int mainCnt=0;
     int headerCnt=0;
-    for(int i=0;i<3;i++) {
+
+    for(int i=0;i<4;i++) {
         layout->removeWidget(M[i]);
         if(!M[i]->isHidden()) {mainCnt++;}
+    }
 
+    for(int i=0;i<3;i++) {
         layout->removeWidget(H[i]);
         if(!H[i]->isHidden()) {headerCnt++;}
     }
-    for(int i=0;i<15;i++) {
+
+    for(int i=0;i<7;i++) {
         layout->removeWidget(HS[i]);
+    }
+
+    for(int i=0;i<14;i++) {
         layout->removeWidget(PB[i]);
     }
 
@@ -276,6 +335,7 @@ void wlayout::recalcMainView()
         width-=2;
         xpos+=2;
     }
+
     if(!HS[0]->isHidden()) {
         width-=2;
     }
@@ -288,7 +348,7 @@ void wlayout::recalcMainView()
         }
     }
 
-    for(int i=0;i<3;i++) {
+    for(int i=0;i<4;i++) {
         if(!M[i]->isHidden()) {
             //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
             layout->addWidget(M[i],top,xpos,height+roundDiff,width);
@@ -297,16 +357,16 @@ void wlayout::recalcMainView()
         }
     }
 
-    for(int i=0;i<15;i++) {
+    for(int i=0;i<14;i++) {
         if(!PB[i]->isHidden()) {
             layout->addWidget(PB[i],i,0,1,2);
             //qDebug() << "layout->addWidget Preset Button "  << i;
         }
     }
 
-    for(int i=0;i<15;i++) {
+    for(int i=0;i<7;i++) {
         if(!HS[i]->isHidden()) {
-            layout->addWidget(HS[i],i,xpos+width,1,2);
+            layout->addWidget(HS[i],i*2,xpos+width,2,2);
         }
     }
 
@@ -331,7 +391,7 @@ void wlayout::togglePresets()
 
 void wlayout::toggleMenu()
 {
-    for(int i=0;i<15;i++) {
+    for(int i=0;i<7;i++) {
         if(HS[i]->isHidden()) {
             HS[i]->show();
         } else {
@@ -343,7 +403,7 @@ void wlayout::toggleMenu()
 
 void wlayout::toggleBW()
 {
-    for(int i=0;i<15;i++) {
+    for(int i=0;i<14;i++) {
         PB[i]->update();
     }
     for(int i=0;i<3;i++) {
@@ -369,7 +429,7 @@ void wlayout::setSound(MWSound *s)
     faderParamCtl[7]->setValue(s->mod_filter_cutoff);
     faderParamCtl[8]->setValue(s->mod_filter_resonance);
     faderParamCtl[9]->setValue(s->volume);
-    for(int i=10;i<15;i++) {
+    for(int i=10;i<14;i++) {
         PB[i]->update();
     }
 }
@@ -386,5 +446,22 @@ void wlayout::onSoundSustainUpdate(int)
     faderParamCtl[2]->update();
     faderParamCtl[4]->update();
     faderParamCtl[5]->update();
+}
+
+void wlayout::onChannelChange(int v)
+{
+    MisuWidget::channel = v;
+}
+
+void wlayout::onToggleSender(int v)
+{
+    if(out->senderEnabled[v]) out->senderEnabled[v]=false;
+    else out->senderEnabled[v]=true;
+}
+
+void wlayout::onSymbolsChange(int v)
+{
+    MisuWidget::lang = v;
+    emit scaleUpdate();
 }
 

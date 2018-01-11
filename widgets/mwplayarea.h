@@ -80,6 +80,7 @@ private:
     bool bendHoriz;
     int bendVertTop;
     int bendVertBot;
+
     // - visual
     int colwidth[MAX_COLS];
     int rowheight[MAX_ROWS];

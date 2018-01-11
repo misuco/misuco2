@@ -7,7 +7,14 @@ MWHeaderSetter::MWHeaderSetter(int headerId, QWidget *parent) : MisuWidget(paren
 {
     this->headerId=headerId;
     pressed=0;
-    state=0;
+    this->state=0;
+}
+
+MWHeaderSetter::MWHeaderSetter(int headerId, int state, QWidget *parent): MisuWidget(parent)
+{
+    this->headerId=headerId;
+    pressed=0;
+    this->state=state;
 }
 
 void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
@@ -22,6 +29,7 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             emit currentHeader(headerId);
             break;
         case 3:
+        case 15:
             if(state==0) {
                 state=1;
             } else {
@@ -55,12 +63,19 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             emit currentMainView(2);
             break;
         case 9:
-            emit togglePresets();
+            emit currentMainView(3);
             break;
+            //emit togglePresets();
+            //break;
         case 10:
             emit toggleMenu();
             break;
         case 11:
+            if(state==0) {
+                state=1;
+            } else {
+                state=0;
+            }
             emit toggleBW();
             break;
         case 12:
@@ -86,7 +101,20 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             if(lang>3) lang=0;
             emit scaleUpdate();
             break;
+        case 16:
+            MisuWidget::sendCC1 = ! MisuWidget::sendCC1;
+            state = MisuWidget::sendCC1;
+            break;
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+            emit(toggleSender(headerId-17));
+            if(state==0) state = 1;
+            else state = 0;
+            break;
         }
+
         pressed++;
         update();
         break;
@@ -111,40 +139,42 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
     painter.drawRect(0,0,width(),height());
     switch(headerId) {
     case 0:
-        cap.sprintf("%d Octaves",headerId);
+        cap.sprintf("octaves");
         break;
     case 1:
-        cap.sprintf("%d Basenote",headerId);
+        cap.sprintf("basenote");
         break;
     case 2:
-        cap.sprintf("%d Scale",headerId);
+        cap.sprintf("scale");
         break;
     case 3:
-        cap.sprintf("%d Bend horizontal",headerId);
+        cap.sprintf("bend horizontal");
         break;
     case 4:
-        cap.sprintf("%d Bend top",headerId);
+        cap.sprintf("bend top");
         break;
     case 5:
-        cap.sprintf("%d Bend bottom",headerId);
+        cap.sprintf("bend bottom");
         break;
     case 6:
-        cap.sprintf("%d play area",headerId);
+        cap.sprintf("play area");
         break;
     case 7:
-        cap.sprintf("%d pitch",headerId);
+        cap.sprintf("microtuning");
         break;
     case 8:
-        cap.sprintf("%d synth ctl",headerId);
+        cap.sprintf("synth");
         break;
     case 9:
-        cap.sprintf("%d presets",headerId);
+        cap.sprintf("setup");
         break;
+        //cap.sprintf("%d presets",headerId);
+        //break;
     case 10:
-        cap.sprintf("%d menu",headerId);
+        cap.sprintf("menu");
         break;
     case 11:
-        cap.sprintf("%d bwmode",headerId);
+        cap.sprintf("bwmode");
         break;
     case 12:
         cap.sprintf("overwrite");
@@ -153,11 +183,35 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
         cap.sprintf("archive");
         break;
     case 14:
-        cap.sprintf("language");
+        cap.sprintf("symbols");
+        break;
+    case 15:
+        cap.sprintf("bend\nhorizontal");
+        break;
+    case 16:
+        cap.sprintf("send cc1");
+        break;
+    case 17:
+        cap.sprintf("mobile\nsynth");
+        break;
+    case 18:
+        cap.sprintf("puredata");
+        break;
+    case 19:
+        cap.sprintf("reaktor");
+        break;
+    case 20:
+        cap.sprintf("super\ncollider");
         break;
     }
 
-    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
+    if(width()>height()) {
+        painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
+    } else {
+        painter.rotate(90);
+        painter.drawText(0,-width(),height(),width(),Qt::AlignTop|Qt::AlignLeft,cap);
+        painter.rotate(-90);
+    }
 }
 
 void MWHeaderSetter::resizeEvent(QResizeEvent *)
