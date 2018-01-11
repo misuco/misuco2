@@ -148,7 +148,7 @@ QString FreqTriple::getBasenoteString(int lang) const
                 case 11: return "NI";
                 break;
         }
-    } else {
+    } else if(lang==0) {
         switch(pitch->basenote) {
         case 0: return "C";
         break;
@@ -176,7 +176,6 @@ QString FreqTriple::getBasenoteString(int lang) const
         break;
         }
     }
-
     return "";
 
     /*

@@ -27,6 +27,7 @@ signals:
     void toggleBW();
     void scaleUpdate();
     void toggleSender(int i);
+    void toggleShowFreqs();
 
 private:
     int headerId;

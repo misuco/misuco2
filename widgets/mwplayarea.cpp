@@ -233,7 +233,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setBrush(colorF1);
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        basenote = fields[r][c].f1->getBasenoteString(lang);
+        basenote = fields[r][c].f1->getBasenoteString(noteSymbols);
         if(basenote.startsWith("_")) {
             font3.setUnderline(true);
             painter.setFont(font3);
@@ -243,9 +243,14 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);        
         font3.setUnderline(false);
 
-        painter.setFont(font8);
-        cap.sprintf("%5.2f\n%d\n%d\n%d",fields[r][c].f1->getFreq(), (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
-        painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
+        if(showFreqs) {
+            painter.setFont(font8);
+            cap.sprintf("%d %d %d", (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
+            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignTop,cap);
+            cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
+            painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
+        }
+
         break;
 
     case BEND_VERT:
@@ -262,18 +267,20 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
 
-        painter.setFont(font8);
-        if(0==r) {
-            cap.sprintf("%d",fields[r][c].f1->getMidinote());
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
-            cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertTop);
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
-        } else {
-            cap.sprintf("%d",fields[r][c].f1->getMidinote());
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
-            cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertBot);
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
+        if(showFreqs) {
+            painter.setFont(font8);
+            if(0==r) {
+                cap.sprintf("%d",fields[r][c].f1->getMidinote());
+                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
+                cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertTop);
+                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
+            } else {
+                cap.sprintf("%d",fields[r][c].f1->getMidinote());
+                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
+                cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertBot);
+                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
 
+            }
         }
         break;
 
@@ -286,11 +293,14 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setBrush(linearGrad);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
 
-        painter.setFont(font8);
-        cap.sprintf("%d",fields[r][c].f1->getMidinote());
-        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignBottom,cap);
-        cap.sprintf("%d",fields[r][c].f2->getMidinote());
-        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
+        if(showFreqs) {
+            painter.setFont(font8);
+            cap.sprintf("%d",fields[r][c].f1->getMidinote());
+            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignBottom,cap);
+            cap.sprintf("%d",fields[r][c].f2->getMidinote());
+            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
+        }
+
         break;
 
     case BEND_VERT_HORIZ:
@@ -431,7 +441,6 @@ void MWPlayArea::paintEvent(QPaintEvent *)
             int r = colwidth[0]/4;
             //painter.drawRect(es->x-50,es->y-50,100,100);
             painter.drawEllipse(es->x-r,es->y-r,2*r,2*r);
-            painter.setPen(highlightcolor);
             painter.drawText(es->x-r,es->y-2*r,4*r,5*r,0,QString("%1\n%2\n\n").arg(es->f).arg(es->voiceId));
         }
     }

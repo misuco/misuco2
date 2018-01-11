@@ -24,7 +24,8 @@ int MisuWidget::sOn = 180;
 MWScale MisuWidget::Scale;
 MWSound MisuWidget::Sound;
 bool MisuWidget::overwrite = false;
-int MisuWidget::lang = 0;
+int MisuWidget::noteSymbols = 0;
+bool MisuWidget::showFreqs = false;
 
 int MisuWidget::channel = 1;
 

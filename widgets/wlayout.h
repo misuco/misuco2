@@ -46,6 +46,7 @@ private slots:
     void onChannelChange(int v);
     void onToggleSender(int v);
     void onSymbolsChange(int v);
+    void onShowFreqsChange();
 
 private:
     QGridLayout *layout;
@@ -69,7 +70,9 @@ private:
     QWidget * HS[15];
 
     // preset buttons
-    QWidget * PB[15];
+    static const int nPresetBtn = 5;
+    static const int nSoundPresetBtn = 2;
+    QWidget * PB[nPresetBtn + nSoundPresetBtn];
 
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;
@@ -84,6 +87,8 @@ private:
     MWFaderParamCtl * faderSymbols;
     MWHeaderSetter * openScalesArchive;
     MWHeaderSetter * holdMode;
+    MWHeaderSetter * showFreqs;
+    MWHeaderSetter * overwritePreset;
 
     void recalcMainView();
 };

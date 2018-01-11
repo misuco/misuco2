@@ -79,7 +79,7 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
     }
 
     QFont font(font1);
-    QString basenote = f->getBasenoteString(lang);
+    QString basenote = f->getBasenoteString(noteSymbols);
     if(basenote.startsWith("_")) {
         font.setUnderline(true);
         basenote.remove(0,1);
@@ -88,12 +88,14 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
     painter.setFont(font);
     cap.sprintf("%s",basenote.toStdString().c_str());
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignCenter,cap);
-
     font.setUnderline(false);
-    font.setPixelSize(font1size/2);
-    painter.setFont(font);
-    cap.sprintf("%5.2f",f->getFreq());
-    painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignCenter,cap);
+
+    if(showFreqs) {
+        font.setPixelSize(font1size/2);
+        painter.setFont(font);
+        cap.sprintf("%5.2f",f->getFreq());
+        painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignCenter,cap);
+    }
 }
 
 void MWBaseNoteSetter::resizeEvent(QResizeEvent *)

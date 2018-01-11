@@ -41,7 +41,8 @@ public:
     static MWScale Scale;
     static MWSound Sound;
     static bool overwrite;
-    static int lang;
+    static int noteSymbols;
+    static bool showFreqs;
 
     static int channel;
 

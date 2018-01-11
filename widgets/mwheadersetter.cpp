@@ -97,8 +97,8 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             QDesktopServices::openUrl(QUrl(link));
             break;
         case 14:
-            lang++;
-            if(lang>3) lang=0;
+            noteSymbols++;
+            if(noteSymbols>3) noteSymbols=0;
             emit scaleUpdate();
             break;
         case 16:
@@ -116,6 +116,10 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         case 21:
             holdMode=!holdMode;
             state = holdMode;
+            break;
+        case 22:
+            showFreqs=!showFreqs;
+            state = showFreqs;
             break;
         }
 
@@ -164,7 +168,7 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
         cap.sprintf("play area");
         break;
     case 7:
-        cap.sprintf("microtuning");
+        cap.sprintf("microtune");
         break;
     case 8:
         cap.sprintf("synth");
@@ -209,6 +213,10 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
         break;
     case 21:
         cap.sprintf("hold");
+        break;
+    case 22:
+        cap.sprintf("freqs");
+        emit toggleShowFreqs();
         break;
     }
 
