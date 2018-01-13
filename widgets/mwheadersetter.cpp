@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDebug>
 
 MWHeaderSetter::MWHeaderSetter(int headerId, QWidget *parent) : MisuWidget(parent)
 {
@@ -26,6 +27,11 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         case 0:
         case 1:
         case 2:
+            if(state==0) {
+                state=1;
+            } else {
+                state=0;
+            }
             emit currentHeader(headerId);
             break;
         case 3:
@@ -54,19 +60,16 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             emit setBendVertBot(state);
             break;
         case 6:
-            emit currentMainView(0);
-            break;
         case 7:
-            emit currentMainView(1);
-            break;
         case 8:
-            emit currentMainView(2);
-            break;
         case 9:
-            emit currentMainView(3);
+            if(state==0) {
+                state=1;
+            } else {
+                state=0;
+            }
+            emit currentMainView(headerId-6);
             break;
-            //emit togglePresets();
-            //break;
         case 10:
             emit toggleMenu();
             break;
@@ -131,6 +134,15 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         pressed--;
         update();
         break;
+    }
+}
+
+void MWHeaderSetter::setState(int id, int s)
+{
+    if(headerId == id) {
+        qDebug() << "MWHeaderSetter::setState id:" << id << " state: " << s;
+        state = s;
+        update();
     }
 }
 

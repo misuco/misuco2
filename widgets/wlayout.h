@@ -31,6 +31,7 @@ signals:
     void setBaseNote(Pitch * p);
     void initialSet();
     void scaleUpdate();
+    void setMenuItemState(int id, int s);
 
 private slots:    
     void currentHeader(int i);

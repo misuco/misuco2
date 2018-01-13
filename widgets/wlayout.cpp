@@ -212,6 +212,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     for(int i=0;i<3;i++) {
         H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         H[i]->setContentsMargins(0,0,0,0);
+        H[i]->hide();
     }
 
     M[0]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -246,6 +247,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         if(i>=3) fctId+=3;
         HS[i] = new MWHeaderSetter(fctId,this);
         HS[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        connect(this,SIGNAL(setMenuItemState(int,int)),HS[i],SLOT(setState(int,int)));
         if(i<3) {
             connect(HS[i],SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
         } else if(i==3) {
@@ -264,9 +266,10 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     layout->setHorizontalSpacing(0);
     layout->setVerticalSpacing(0);
 
-    H[0]->hide();
     M[1]->hide();
     M[2]->hide();
+    M[3]->hide();
+    emit setMenuItemState(6,1);
 
     connect(this,SIGNAL(initialSet()),PB[0],SLOT(initialSet()));
     connect(this,SIGNAL(initialSet()),PB[nPresetBtn],SLOT(initialSet()));
@@ -275,7 +278,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     recalcMainView();
 
     this->setLayout(layout);
-
 }
 
 wlayout::~wlayout()
@@ -291,6 +293,14 @@ void wlayout::resizeEvent(QResizeEvent *)
 
 void wlayout::currentHeader(int i)
 {
+
+    for(int j=0;j<3;j++) {
+        if(i!=j) {
+            H[j]->hide();
+            emit setMenuItemState(j,0);
+        }
+    }
+
     if(H[i]->isHidden()) {
         H[i]->show();
     } else {
@@ -301,10 +311,22 @@ void wlayout::currentHeader(int i)
 
 void wlayout::currentMainView(int i)
 {
+    if(i>0) {
+        for(int j=1;j<4;j++) {
+            if(i!=j) {
+                M[j]->hide();
+                emit setMenuItemState(j+6,0);
+            }
+        }
+    }
+
+
     if(M[i]->isHidden()) {
         M[i]->show();
+        emit setMenuItemState(i+6,1);
     } else {
         M[i]->hide();
+        emit setMenuItemState(i+6,0);
     }
     recalcMainView();
 }
@@ -336,6 +358,7 @@ void wlayout::recalcMainView()
     if(mainCnt==0) {
         M[0]->show();
         mainCnt=1;
+        emit setMenuItemState(6,1);
     }
 
     int height=(15-headerCnt)/mainCnt;

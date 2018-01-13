@@ -29,6 +29,9 @@ signals:
     void toggleSender(int i);
     void toggleShowFreqs();
 
+public slots:
+    void setState(int id, int s);
+
 private:
     int headerId;
     int pressed;
