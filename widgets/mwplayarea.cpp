@@ -60,6 +60,15 @@ void MWPlayArea::config()
     /*
      *  |.|.||.|.|.| |
      */
+
+    for(int r=0;r<MAX_ROWS;r++) {
+        for(int c=0;c<MAX_COLS;c++) {
+            if(fields[r][c].hold) {
+                out->noteOff(fields[r][c].voiceId);
+            }
+        }
+    }
+
     cols=0;
     for(int oct=Scale.baseoct;oct<Scale.topoct;oct++) {
         setColumn(cols,Scale.basenote+oct*12,Scale.basenote);
@@ -85,6 +94,15 @@ void MWPlayArea::config()
     //qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
     setColumn(cols,topnote,Scale.basenote);
     cols++;
+
+    for(int r=0;r<rows;r++) {
+        for(int c=0;c<cols;c++) {
+            if(fields[r][c].hold) {
+                fields[r][c].voiceId=out->noteOn(channel,fields[r][c].f1->getFreq(),fields[r][c].f1->getMidinote(),fields[r][c].f1->getPitch(),127);
+            }
+        }
+    }
+
     calcGeo();
     update();
 }
@@ -488,7 +506,6 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     eventStackElement * es = &eventStack[eventHash];
     es->x=e.x;
     es->y=e.y;
-    qDebug() << "height: " << height() << " width; " << width();
     int row=0;
     if(height()>0) row = e.y*rows/height();
     int col=e.x*cols/width();
