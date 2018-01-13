@@ -164,6 +164,11 @@ void MWPlayArea::calcGeo()
     menuy1 = 0;
     menuy2 = menubottonsize;
 
+    presetsx1 = 0;
+    presetsx2 = menubottonsize;
+    presetsy1 = 0;
+    presetsy2 = menubottonsize;
+
     font3.setPixelSize(cw/2);
     font8.setPixelSize(cw/4);
 }
@@ -455,6 +460,11 @@ void MWPlayArea::paintEvent(QPaintEvent *)
     painter.drawRect(menux1,menuy1+4*barHeight,menux2-menux1,barHeight);
     painter.drawRect(menux1,menuy1+6*barHeight,menux2-menux1,barHeight);
 
+    painter.drawRect(presetsx1,presetsy1,presetsx2-presetsx1,barHeight);
+    painter.drawRect(presetsx1,presetsy1+2*barHeight,presetsx2-presetsx1,barHeight);
+    painter.drawRect(presetsx1,presetsy1+4*barHeight,presetsx2-presetsx1,barHeight);
+    painter.drawRect(presetsx1,presetsy1+6*barHeight,presetsx2-presetsx1,barHeight);
+
 }
 
 void MWPlayArea::resizeEvent(QResizeEvent *)
@@ -470,12 +480,17 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         emit menuTouch();
     }
 
+    if (e.state==Qt::TouchPointReleased &&  e.x>=presetsx1 && e.x<=presetsx2 && e.y>=presetsy1 && e.y<=presetsy2) {
+        emit presetsTouch();
+    }
+
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
     es->x=e.x;
     es->y=e.y;
-
-    int row=e.y*rows/height();
+    qDebug() << "height: " << height() << " width; " << width();
+    int row=0;
+    if(height()>0) row = e.y*rows/height();
     int col=e.x*cols/width();
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];

@@ -51,6 +51,7 @@ public slots:
 
 signals:
     void menuTouch();
+    void presetsTouch();
 
 private:
     // INFRASTRUCTURE
@@ -89,6 +90,11 @@ private:
     int menux2;
     int menuy1;
     int menuy2;
+
+    int presetsx1;
+    int presetsx2;
+    int presetsy1;
+    int presetsy2;
 
     // helper functions
     void config();

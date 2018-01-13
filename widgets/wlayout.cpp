@@ -30,6 +30,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     M[0] = new MWPlayArea(MWPitch,this);
     ((MWPlayArea *)M[0])->setOut(out);
     connect(M[0],SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
+    connect(M[0],SIGNAL(presetsTouch()), this, SLOT(togglePresets()));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         connect( MWPitch[i], SIGNAL(change()), (MWPlayArea *)M[0], SLOT(pitchChange()));
