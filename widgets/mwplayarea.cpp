@@ -268,8 +268,11 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
 
         if(showFreqs) {
             painter.setFont(font8);
-            cap.sprintf("%d %d %d", (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignTop,cap);
+            // no text on padw with menu buttons (first and last col in first row)
+            if( (c!=0 && c!=cols-1) || r!=0) {
+                cap.sprintf("%d %d %d", (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
+                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignTop,cap);
+            }
             cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
             painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
         }
@@ -293,16 +296,21 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         if(showFreqs) {
             painter.setFont(font8);
             if(0==r) {
+                // no text on padw with menu buttons (first and last col in first row)
+                if( (c!=0 && c!=cols-1) || r!=0) {
+                    cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertTop);
+                    painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
+                }
                 cap.sprintf("%d",fields[r][c].f1->getMidinote());
                 painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
-                cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertTop);
-                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
             } else {
+                // no text on padw with menu buttons (first and last col in first row)
+                if( (c!=0 && c!=cols-1) || r!=0) {
+                    cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertBot);
+                    painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
+                }
                 cap.sprintf("%d",fields[r][c].f1->getMidinote());
                 painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
-                cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertBot);
-                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
-
             }
         }
         break;
