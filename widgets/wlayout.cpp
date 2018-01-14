@@ -24,7 +24,7 @@
 #include <QStackedWidget>
 #include "mwpreset.h"
 #include "mwsoundpreset.h"
-#include "mwfaderpitch.h"
+#include "mwmicrotunepreset.h"
 #include <conf/color.h>
 
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
@@ -52,6 +52,11 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
         soundPreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         soundPresets.append(soundPreset);
+
+        MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(this);
+        connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
+        microtunePreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        microtunePresets.append(microtunePreset);
     }
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
@@ -78,12 +83,12 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lPitch->setHorizontalSpacing(0);
     lPitch->setVerticalSpacing(0);
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWFaderPitch * mwf = new MWFaderPitch(M[1],MWPitch[i]);
-        mwf->setOut(out);
-        connect (mwf,SIGNAL(valueChange(int)),MWPitch[i],SLOT(setPitch(int)));
-        connect( MWPitch[i], SIGNAL(change()), mwf, SLOT(pitchChange()));
-        connect(H[0],SIGNAL(setOctMid(int)),mwf,SLOT(setOctMid(int)));
-        lPitch->addWidget(mwf,0,i);
+        faderMicrotune[i] = new MWFaderPitch(M[1],MWPitch[i]);
+        faderMicrotune[i]->setOut(out);
+        connect (faderMicrotune[i],SIGNAL(valueChange(int)),MWPitch[i],SLOT(setPitch(int)));
+        connect( MWPitch[i], SIGNAL(change()), faderMicrotune[i], SLOT(pitchChange()));
+        connect(H[0],SIGNAL(setOctMid(int)),faderMicrotune[i],SLOT(setOctMid(int)));
+        lPitch->addWidget(faderMicrotune[i],0,i);
     }
 
     Color * synthCtlColor=new Pitch();
@@ -366,6 +371,7 @@ void wlayout::recalcMainView()
     }
 
     layout->removeWidget(overwritePreset);
+    overwritePreset->hide();
 
     for(auto widget:scalePresets) {
         layout->removeWidget(widget);
@@ -393,28 +399,43 @@ void wlayout::recalcMainView()
     int xpos = 0;
     int width = 14;
 
-    layout->addWidget(overwritePreset,0,0,1,2);
 
     if(presetsVisible) {
+        layout->addWidget(overwritePreset,0,0,1,2);
+        overwritePreset->show();
+
         int presetCount1 = 6;
         int presetCount2 = 0;
         if(mainCnt>1) {
-            presetCount1 = 4;
-            presetCount2 = 2;
+            presetCount1 = 3;
+            presetCount2 = 3;
             for(int i=0;i<presetCount1;i++) {
                 layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
                 scalePresets[i]->show();
             }
 
-            for(int i=0;i<presetCount2;i++) {
-                layout->addWidget(soundPresets[i],(i+1)*2+presetCount1*2,0,1,2);
-                soundPresets[i]->show();
+            if(M[1]->isHidden()) {
+                for(int i=0;i<presetCount2;i++) {
+                    layout->addWidget(soundPresets[i],(i+1)*2+presetCount1*2,0,1,2);
+                    soundPresets[i]->show();
+                }
+            } else {
+                for(int i=0;i<presetCount2;i++) {
+                    layout->addWidget(microtunePresets[i],(i+1)*2+presetCount1*2,0,1,2);
+                    microtunePresets[i]->show();
+                }
             }
+
         } else {
             for(int i=0;i<presetCount1;i++) {
                 if(M[0]->isHidden()) {
-                    layout->addWidget(soundPresets[i],(i+1)*2,0,1,2);
-                    soundPresets[i]->show();
+                    if(M[1]->isHidden()) {
+                        layout->addWidget(soundPresets[i],(i+1)*2,0,1,2);
+                        soundPresets[i]->show();
+                    } else {
+                        layout->addWidget(microtunePresets[i],(i+1)*2,0,1,2);
+                        microtunePresets[i]->show();
+                    }
                 } else {
                     layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
                     scalePresets[i]->show();
@@ -510,6 +531,19 @@ void wlayout::setSound(MWSound *s)
     faderParamCtl[8]->setValue(s->mod_filter_resonance);
     faderParamCtl[9]->setValue(s->volume);
     for(auto widget:soundPresets) {
+        widget->update();
+    }
+}
+
+void wlayout::setMicrotune(MWMicrotune * m)
+{
+    for(int i=0;i<12;i++) {
+        MisuWidget::Microtune.tuning[i] = m->tuning[i];
+        MWPitch[i]->setPitch(m->tuning[i]);
+        faderMicrotune[i]->setValue(m->tuning[i]);
+    }
+    M[0]->update();
+    for(auto widget:microtunePresets) {
         widget->update();
     }
 }

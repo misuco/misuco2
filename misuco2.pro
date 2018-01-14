@@ -61,7 +61,8 @@ SOURCES += main.cpp\
     comm/senderoscpuredata.cpp \
     comm/senderoscxy.cpp \
     comm/senderreaktor.cpp \
-    comm/sendersupercollider.cpp
+    comm/sendersupercollider.cpp \
+    widgets/mwmicrotunepreset.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -114,7 +115,8 @@ HEADERS  += mainwindow.h \
     comm/senderoscpuredata.h \
     comm/senderoscxy.h \
     comm/sendersupercollider.h \
-    comm/senderreaktor.h
+    comm/senderreaktor.h \
+    widgets/mwmicrotunepreset.h
 
 CONFIG += mobility
 MOBILITY = 

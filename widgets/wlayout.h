@@ -34,6 +34,7 @@
 #include "mwbscaleswitch.h"
 #include "mwheadersetter.h"
 #include "comm/sendermulti.h"
+#include "mwfaderpitch.h"
 
 class wlayout : public QWidget
 {
@@ -62,6 +63,7 @@ private slots:
     void toggleBW();
     void onSetBaseNote(Pitch * p);
     void setSound(MWSound * s);
+    void setMicrotune(MWMicrotune*m);
     void onScaleUpdate();
     void onSoundSustainUpdate(int);
     void onChannelChange(int v);
@@ -80,6 +82,7 @@ private:
 
     // synth ctl faders
     MWFaderParamCtl * faderParamCtl[10];
+    MWFaderPitch * faderMicrotune[12];
 
     // header widgets
     QWidget * H[3];
