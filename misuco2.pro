@@ -45,7 +45,6 @@ SOURCES += main.cpp\
     mobilesynth/mobilesynth/Classes/synth/parameter.cpp \
     comm/sendermobilesynth.cpp \
     mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp \
-    proc/noteproc.cpp \
     widgets/mwbasenotesetter.cpp \
     widgets/mwoctaveranger.cpp \
     widgets/mwbscaleswitch.cpp \
@@ -98,7 +97,6 @@ HEADERS  += mainwindow.h \
     comm/sendermobilesynth.h \
     mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp \
     mobilesynth/mobilesynth/Classes/mobilesynthqt52.h \
-    proc/noteproc.h \
     widgets/mwbasenotesetter.h \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
@@ -120,4 +118,7 @@ HEADERS  += mainwindow.h \
 
 CONFIG += mobility
 MOBILITY = 
+
+DISTFILES += \
+    COPYING
 
