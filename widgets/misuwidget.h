@@ -40,6 +40,7 @@ public:
     static int sOn;
     static MWScale Scale;
     static MWSound Sound;
+    static MWMicrotune Microtune;
     static bool overwrite;
     static int noteSymbols;
     static bool showFreqs;

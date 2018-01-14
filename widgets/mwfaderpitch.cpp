@@ -39,6 +39,7 @@ void MWFaderPitch::processTouchEvent(misuTouchEvent e)
         break;
     case Qt::TouchPointMoved:
         out->pitch(channel,vId,f->getFreq(),f->getMidinote(),f->getPitch());
+        Microtune.tuning[f->getBasenote()] = getValue();
         update();
         break;
     case Qt::TouchPointReleased:

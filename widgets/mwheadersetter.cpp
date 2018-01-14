@@ -140,7 +140,7 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
 void MWHeaderSetter::setState(int id, int s)
 {
     if(headerId == id) {
-        qDebug() << "MWHeaderSetter::setState id:" << id << " state: " << s;
+        //qDebug() << "MWHeaderSetter::setState id:" << id << " state: " << s;
         state = s;
         update();
     }

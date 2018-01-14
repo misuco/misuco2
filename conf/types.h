@@ -33,6 +33,10 @@ struct MWScale {
     int size;
 };
 
+struct MWMicrotune {
+    int tuning[BSCALE_SIZE+1];
+};
+
 struct MWSound {
     int wave_type;
     int attack;

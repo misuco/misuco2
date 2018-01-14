@@ -23,6 +23,8 @@ int MisuWidget::sOn = 180;
 
 MWScale MisuWidget::Scale;
 MWSound MisuWidget::Sound;
+MWMicrotune MisuWidget::Microtune;
+
 bool MisuWidget::overwrite = false;
 int MisuWidget::noteSymbols = 0;
 bool MisuWidget::showFreqs = false;

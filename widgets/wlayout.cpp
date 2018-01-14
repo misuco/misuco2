@@ -10,6 +10,14 @@
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_AcceptTouchEvents,true);
+    presetsVisible=true;
+
+    layout = new QGridLayout(this);
+    layout->setSizeConstraint(QLayout::SetMinimumSize);
+    layout->setContentsMargins(0,0,0,0);
+    layout->setMargin(0);
+    layout->setHorizontalSpacing(0);
+    layout->setVerticalSpacing(0);
 
     //qDebug() << "wlayout width: " << width() ;
 
@@ -17,8 +25,13 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     out=new SenderMulti();
     out->cc(0,0,105,1,1);
 
-    for(int i=0;i<nPresetBtn+nSoundPresetBtn;i++) {
-        PB[i] = new MWPreset(MWPitch,this);
+    for(int i=0;i<6;i++) {
+        scalePresets.append(new MWPreset(MWPitch,this));
+
+        MWSoundPreset * soundPreset = new MWSoundPreset(this);
+        connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
+        soundPreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        soundPresets.append(soundPreset);
     }
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
@@ -202,13 +215,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     lPlayAreaCtl->addWidget(showFreqs,0,12);
     connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
 
-    layout = new QGridLayout(this);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
-    layout->setContentsMargins(0,0,0,0);
-    layout->setMargin(0);
-    layout->setHorizontalSpacing(0);
-    layout->setVerticalSpacing(0);
-
     for(int i=0;i<3;i++) {
         H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         H[i]->setContentsMargins(0,0,0,0);
@@ -224,22 +230,15 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     //qDebug() << "wlayout::wlayout new out " << out;
 
-    for(int i=0;i<nPresetBtn;i++) {
-        connect(PB[i],SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
-        connect(PB[i],SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
-        connect(PB[i],SIGNAL(setScale(MWScale*)),BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
+    for(auto presetButton:scalePresets) {
+        connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
+        connect(presetButton,SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
+        connect(presetButton,SIGNAL(setScale(MWScale*)),BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
-            connect(PB[i],SIGNAL(setScale(MWScale*)),BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
-            connect(PB[i],SIGNAL(setScale(MWScale*)),bScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
+            connect(presetButton,SIGNAL(setScale(MWScale*)),BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
+            connect(presetButton,SIGNAL(setScale(MWScale*)),bScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
         }
-        PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    }
-
-    for(int i=nPresetBtn;i<nPresetBtn+nSoundPresetBtn;i++) {
-        PB[i] = new MWSoundPreset(this);
-        connect(PB[i],SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
-        PB[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
+        presetButton->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     }
 
     for(int i=0;i<7;i++) {
@@ -261,23 +260,19 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         }
     }
 
-    layout->setContentsMargins(0,0,0,0);
-    layout->setMargin(0);
-    layout->setHorizontalSpacing(0);
-    layout->setVerticalSpacing(0);
-
     M[1]->hide();
     M[2]->hide();
     M[3]->hide();
     emit setMenuItemState(6,1);
 
-    connect(this,SIGNAL(initialSet()),PB[0],SLOT(initialSet()));
-    connect(this,SIGNAL(initialSet()),PB[nPresetBtn],SLOT(initialSet()));
+    connect(this,SIGNAL(initialSet()),scalePresets[0],SLOT(initialSet()));
+    connect(this,SIGNAL(initialSet()),soundPresets[0],SLOT(initialSet()));
     emit initialSet();
 
     recalcMainView();
 
     this->setLayout(layout);
+
 }
 
 wlayout::~wlayout()
@@ -351,8 +346,18 @@ void wlayout::recalcMainView()
     }
 
     layout->removeWidget(overwritePreset);
-    for(int i=1;i<nPresetBtn+nSoundPresetBtn;i++) {
-        layout->removeWidget(PB[i]);
+
+    for(auto widget:scalePresets) {
+        layout->removeWidget(widget);
+        widget->hide();
+    }
+    for(auto widget:soundPresets) {
+        layout->removeWidget(widget);
+        widget->hide();
+    }
+    for(auto widget:microtunePresets) {
+        layout->removeWidget(widget);
+        widget->hide();
     }
 
     if(mainCnt==0) {
@@ -368,7 +373,37 @@ void wlayout::recalcMainView()
     int xpos = 0;
     int width = 14;
 
-    if(!PB[0]->isHidden()) {
+    layout->addWidget(overwritePreset,0,0,1,2);
+
+    if(presetsVisible) {
+        int presetCount1 = 6;
+        int presetCount2 = 0;
+        if(mainCnt>1) {
+            presetCount1 = 4;
+            presetCount2 = 2;
+            for(int i=0;i<presetCount1;i++) {
+                layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
+                scalePresets[i]->show();
+            }
+
+            for(int i=0;i<presetCount2;i++) {
+                layout->addWidget(soundPresets[i],(i+1)*2+presetCount1*2,0,1,2);
+                soundPresets[i]->show();
+            }
+        } else {
+            for(int i=0;i<presetCount1;i++) {
+                if(M[0]->isHidden()) {
+                    layout->addWidget(soundPresets[i],(i+1)*2,0,1,2);
+                    soundPresets[i]->show();
+                } else {
+                    layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
+                    scalePresets[i]->show();
+                }
+            }
+        }
+    }
+
+    if(presetsVisible) {
         width-=2;
         xpos+=2;
     }
@@ -394,14 +429,6 @@ void wlayout::recalcMainView()
         }
     }
 
-    layout->addWidget(overwritePreset,0,0,1,2);
-    for(int i=1;i<nPresetBtn+nSoundPresetBtn;i++) {
-        if(!PB[i]->isHidden()) {
-            layout->addWidget(PB[i],i*2,0,1,2);
-            //qDebug() << "layout->addWidget Preset Button "  << i;
-        }
-    }
-
     for(int i=0;i<7;i++) {
         if(!HS[i]->isHidden()) {
             layout->addWidget(HS[i],i*2,xpos+width,2,2);
@@ -417,18 +444,7 @@ void wlayout::changePitch(int v)
 
 void wlayout::togglePresets()
 {
-    if(overwritePreset->isHidden()) {
-        overwritePreset->show();
-    } else {
-        overwritePreset->hide();
-    }
-    for(int i=0;i<nPresetBtn+nSoundPresetBtn;i++) {
-        if(PB[i]->isHidden()) {
-            PB[i]->show();
-        } else {
-            PB[i]->hide();
-        }
-    }
+    presetsVisible=!presetsVisible;
     recalcMainView();
 }
 
@@ -446,9 +462,10 @@ void wlayout::toggleMenu()
 
 void wlayout::toggleBW()
 {
-    for(int i=0;i<nPresetBtn+nSoundPresetBtn;i++) {
-        PB[i]->update();
+    for(auto widget:scalePresets) {
+        widget->update();
     }
+
     for(int i=0;i<3;i++) {
         H[i]->update();
         M[i]->update();
@@ -472,15 +489,15 @@ void wlayout::setSound(MWSound *s)
     faderParamCtl[7]->setValue(s->mod_filter_cutoff);
     faderParamCtl[8]->setValue(s->mod_filter_resonance);
     faderParamCtl[9]->setValue(s->volume);
-    for(int i=nPresetBtn;i<nPresetBtn+nSoundPresetBtn;i++) {
-        PB[i]->update();
+    for(auto widget:soundPresets) {
+        widget->update();
     }
 }
 
 void wlayout::onScaleUpdate()
 {
-    for(int i=0;i<nPresetBtn+nSoundPresetBtn;i++) {
-        PB[i]->update();
+    for(auto widget:scalePresets) {
+        widget->update();
     }
 }
 

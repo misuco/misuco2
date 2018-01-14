@@ -71,9 +71,15 @@ private:
     QWidget * HS[15];
 
     // preset buttons
-    static const int nPresetBtn = 5;
-    static const int nSoundPresetBtn = 2;
-    QWidget * PB[nPresetBtn + nSoundPresetBtn];
+    // static const int nPresetBtn = 5;
+    // static const int nSoundPresetBtn = 2;
+    // QWidget * PB[nPresetBtn + nSoundPresetBtn];
+
+    QList<QWidget * > scalePresets;
+    QList<QWidget * > soundPresets;
+    QList<QWidget * > microtunePresets;
+
+    bool presetsVisible;
 
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;

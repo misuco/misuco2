@@ -10,7 +10,7 @@ MWFadder::MWFadder(QWidget *parent, Color *c) : MisuWidget(parent)
     inverted=false;
     valueDisplay=value;
     pressed=0;
-    knobSize=50;
+    knobSize=height()/8;
     setMinValue(-100);
     setMaxValue(100);
     fineness=5;
@@ -76,6 +76,7 @@ int MWFadder::getValue()
 
 void MWFadder::calcGeo()
 {
+    knobSize=height()/8;
     fadderY=(value-minValue)*(height()-2*knobSize)/valRange;
 }
 
