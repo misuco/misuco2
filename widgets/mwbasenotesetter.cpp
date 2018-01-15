@@ -111,9 +111,8 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
     font.setUnderline(false);
 
     if(showFreqs) {
-        font.setPixelSize(font1size/2);
         painter.setFont(font);
-        cap.sprintf("%5.2f",f->getFreq());
+        cap.sprintf("%5.1f",f->getFreq());
         painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignCenter,cap);
     }
 }

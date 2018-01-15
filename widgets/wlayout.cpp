@@ -495,15 +495,6 @@ void wlayout::recalcMainView()
         int xpos = 0;
         int width = 7;
 
-        for(int i=0;i<3;i++) {
-            if(!H[i]->isHidden()) {
-                //qDebug() << "layout->addWidget H "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                layout->addWidget(H[i],top,xpos,10,width);
-                top+=10;
-            }
-        }
-
-
         if(headerVisible) {
             for(int i=0;i<7;i++) {
                 //qDebug() << "layout->addWidget HS "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
@@ -573,6 +564,14 @@ void wlayout::recalcMainView()
                 }
             }
             top+=10;
+        }
+
+        for(int i=0;i<3;i++) {
+            if(!H[i]->isHidden()) {
+                //qDebug() << "layout->addWidget H "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                layout->addWidget(H[i],top,xpos,10,width);
+                top+=10;
+            }
         }
 
         for(int i=0;i<4;i++) {
