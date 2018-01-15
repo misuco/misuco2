@@ -150,7 +150,7 @@ void MWFadder::paintEvent(QPaintEvent *)
     painter.drawRect(0,fadderY,width(),knobSize*2);
 
     painter.setBrush(Qt::black);
-    QFont font("font1");
+    QFont font(font1);
     font.setPixelSize(font1size);
     painter.setFont(font);
     cap.sprintf("%d",valueDisplay);

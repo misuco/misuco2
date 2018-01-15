@@ -46,6 +46,7 @@ signals:
 
 private:
     int pressed=0;
+    int fontheight=8;
     bool isSelected();
 };
 

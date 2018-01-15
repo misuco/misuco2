@@ -83,63 +83,67 @@ void MWSoundPreset::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
-    int xr=width()/12;
-    int h=height();
+    int xr=width()/8;
+    int h=height()-2*xr;
+
+    QFont font(font1);
+    font.setPixelSize(fontheight);
+    painter.setFont(font);
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(bgcolor);
 
+    QPen pen1 = QPen(fgcolor);
+    QPen pen2 = QPen(highlightcolor);
+    pen1.setWidth(2);
+    pen2.setWidth(2);
+
     painter.drawRect(0,0,width(),height());
     if(isSelected()) {
-        painter.setPen(highlightcolor);
+        painter.setPen(pen2);
     } else {
-        painter.setPen(fgcolor);
+        painter.setPen(pen1);
     }
 
     switch(PresetSound.wave_type) {
     case 0:
-        painter.drawLine(0,h,xr,0);
-        painter.drawLine(xr,0,xr*2,h);
+        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"SQR");
         break;
     case 1:
-        painter.drawLine(xr,h,xr*2,0);
-        painter.drawLine(xr*3,0,xr*4,h);
+        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"SAW");
         break;
     case 2:
-        painter.drawLine(0,0,xr*2,h);
+        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"SIN");
         break;
     case 3:
-        painter.drawLine(0,h,xr*2,0);
-        painter.drawLine(xr*2,0,xr*2,h);
+        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"TRI");
         break;
     default:
-        painter.drawLine(0,h,xr,0);
-        painter.drawLine(xr,0,xr*2,h);
-        painter.drawLine(xr*2,h,xr*3,0);
+        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"RND");
         break;
     }
 
     int xenv = xr*4;
     int xdiff=xr*PresetSound.attack/1000;
-    painter.drawLine(xenv,h,xenv+xdiff,0);
+    painter.drawLine(xenv,xr+h,xenv+xdiff,xr);
 
     xenv+=xdiff;
     xdiff=xr*PresetSound.decay/1000;
     int ydiff=h-PresetSound.sustain*h/1000;
-    painter.drawLine(xenv,0,xenv+xdiff,ydiff);
+    painter.drawLine(xenv,xr,xenv+xdiff,xr+ydiff);
 
     xenv+=xdiff;
-    painter.drawLine(xenv,ydiff,xenv+xr,ydiff);
+    painter.drawLine(xenv,xr+ydiff,xenv+xr,xr+ydiff);
 
     xenv+=xr;
     xdiff=xr*PresetSound.release/1000;
-    painter.drawLine(xenv,ydiff,xenv+xdiff,h);
+    painter.drawLine(xenv,xr+ydiff,xenv+xdiff,xr+h);
 
 }
 
 void MWSoundPreset::resizeEvent(QResizeEvent *)
 {
-
+    fontheight=height()/8;
 }
 
 void MWSoundPreset::initialSet()

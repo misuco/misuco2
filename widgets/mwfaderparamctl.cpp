@@ -56,7 +56,7 @@ void MWFaderParamCtl::paintEvent(QPaintEvent *E)
     QPen pen2 = QPen(highlightcolor);
     pen2.setWidth(3);
     painter.setPen(pen2);
-    QFont font("font1");
+    QFont font(font1);
     font.setPixelSize(font1size);
     painter.setFont(font);
 
@@ -80,6 +80,26 @@ void MWFaderParamCtl::paintEvent(QPaintEvent *E)
         break;
     case 102:
         cap.sprintf("WAV");
+        for(int i=0;i<5;i++) {
+            switch(i) {
+            case 0:
+                cap.sprintf("SQR");
+                break;
+            case 1:
+                cap.sprintf("SAW");
+                break;
+            case 2:
+                cap.sprintf("SIN");
+                break;
+            case 3:
+                cap.sprintf("TRI");
+                break;
+            case 4:
+                cap.sprintf("RND");
+                break;
+            }
+            painter.drawText(0,height()*(4-i)/5,width(),height()/5,Qt::AlignCenter|Qt::AlignVCenter,cap);
+        }
         break;
     case 103:
         cap.sprintf("ATT");
