@@ -43,12 +43,12 @@ public:
     void setMaxValue(int value);    
     void setInverted(bool v);
     void setValue(int v);
+    int getValue();
 
 protected:
     void paintEvent(QPaintEvent *);
     void processTouchEvent(misuTouchEvent e);
     void resizeEvent(QResizeEvent *);
-    int getValue();
     int valueDisplay;
 
 signals:

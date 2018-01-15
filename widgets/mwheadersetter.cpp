@@ -94,11 +94,8 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             emit toggleMenu();
             break;
         case 11:
-            if(state==0) {
-                state=1;
-            } else {
-                state=0;
-            }
+            bwmode=!bwmode;
+            state=bwmode;
             emit toggleBW();
             break;
         case 12:
@@ -155,6 +152,11 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         update();
         break;
     }
+}
+
+int MWHeaderSetter::getState()
+{
+    return state;
 }
 
 void MWHeaderSetter::setState(int id, int s)

@@ -37,6 +37,20 @@ MWSoundPreset::MWSoundPreset(QWidget *parent): MisuWidget(parent)
 
 }
 
+MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QWidget *parent): MisuWidget(parent)
+{
+    PresetSound.volume=vol;
+    PresetSound.wave_type=wav;
+    PresetSound.attack=att;
+    PresetSound.decay=dec;
+    PresetSound.sustain=sus;
+    PresetSound.release=rel;
+    PresetSound.filter_cutoff=cut;
+    PresetSound.filter_resonance=res;
+    PresetSound.mod_filter_cutoff=modcut;
+    PresetSound.mod_filter_resonance=modres;
+}
+
 void MWSoundPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
 {
     switch(e.state) {

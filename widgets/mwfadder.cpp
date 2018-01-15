@@ -124,7 +124,8 @@ void MWFadder::setValue(int v)
         value = v;
     }
     calcGeo();
-    update();
+    update();    
+    emit valueChange(valueDisplay);
 }
 
 void MWFadder::setMinValue(int value)

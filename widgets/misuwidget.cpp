@@ -49,11 +49,11 @@ bool MisuWidget::overwrite = false;
 int MisuWidget::noteSymbols = 0;
 bool MisuWidget::showFreqs = false;
 
-int MisuWidget::channel = 1;
+int MisuWidget::channel = 0;
 
-int MisuWidget::pitchTopRange = 0;
-int MisuWidget::pitchBottomRange = 0;
-bool MisuWidget::pitchHorizontal = false;
+//int MisuWidget::pitchTopRange = 0;
+//int MisuWidget::pitchBottomRange = 0;
+//bool MisuWidget::pitchHorizontal = false;
 
 bool MisuWidget::sendCC1 = true;
 bool MisuWidget::holdMode = false;

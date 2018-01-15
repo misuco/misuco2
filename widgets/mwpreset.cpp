@@ -40,6 +40,23 @@ MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
     }
 }
 
+MWPreset::MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[], QWidget *parent): MisuWidget(parent)
+{
+    MWPitch=p;
+    PresetScale.basenote=basenote;
+    PresetScale.baseoct=baseoct;
+    PresetScale.topoct=topoct;
+    PresetScale.size=2;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        if(bscale[i]) {
+            PresetScale.bscale[i]=true;
+            PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
+        } else {
+            PresetScale.bscale[i]=false;
+        }
+    }
+}
+
 void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
 {
     switch(e.state) {

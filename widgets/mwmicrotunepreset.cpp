@@ -29,6 +29,13 @@ MWMicrotunePreset::MWMicrotunePreset(QWidget *parent): MisuWidget(parent)
     }
 }
 
+MWMicrotunePreset::MWMicrotunePreset(int tuning[], QWidget *parent): MisuWidget(parent)
+{
+    for(int i=0;i<12;i++) {
+        PresetMicrotune.tuning[i]=tuning[i];
+    }
+}
+
 void MWMicrotunePreset::processTouchEvent(MisuWidget::misuTouchEvent e)
 {
     switch(e.state) {

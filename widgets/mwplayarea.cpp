@@ -730,12 +730,6 @@ void MWPlayArea::setOut(ISender *value)
     //qDebug() << "MWPlayArea::setOut:" << out;
 }
 
-
-void MWPlayArea::toggleBW()
-{
-    bwmode=!bwmode;
-}
-
 void MWPlayArea::onScaleUpdate()
 {
     update();

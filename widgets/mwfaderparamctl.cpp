@@ -128,6 +128,9 @@ void MWFaderParamCtl::paintEvent(QPaintEvent *E)
 void MWFaderParamCtl::propagateValueChange() {
 
     switch(cc) {
+    case 3:
+        channel=getValue();
+        break;
     case 102:
         Sound.wave_type=getValue();
         break;

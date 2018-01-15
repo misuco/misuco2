@@ -67,9 +67,9 @@ public:
 
     static int channel;
 
-    static int pitchTopRange;
-    static int pitchBottomRange;
-    static bool pitchHorizontal;
+    //static int pitchTopRange;
+    //static int pitchBottomRange;
+    //static bool pitchHorizontal;
 
     static bool sendCC1;
     static bool holdMode;

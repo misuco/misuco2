@@ -31,6 +31,7 @@ public:
     MWHeaderSetter(int headerId, QWidget *parent);
     MWHeaderSetter(int headerId, int state, QWidget *parent);
     virtual void processTouchEvent(misuTouchEvent e);
+    int getState();
 
 protected:
     void paintEvent(QPaintEvent *);

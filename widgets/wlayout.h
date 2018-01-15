@@ -23,6 +23,9 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <QFile>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 #include "widgets/mwplayarea.h"
 #include "widgets/mwbasenotesetter.h"
 #include "comm/sendermobilesynth.h"
@@ -35,6 +38,9 @@
 #include "mwheadersetter.h"
 #include "comm/sendermulti.h"
 #include "mwfaderpitch.h"
+#include "mwpreset.h"
+#include "mwsoundpreset.h"
+#include "mwmicrotunepreset.h"
 
 class wlayout : public QWidget
 {
@@ -53,11 +59,11 @@ signals:
     void initialSet();
     void scaleUpdate();
     void setMenuItemState(int id, int s);
+    void setBendHori(bool);
 
 private slots:    
     void currentHeader(int i);
     void currentMainView(int i);
-    void changePitch(int v);
     void togglePresets();
     void toggleMenu();
     void toggleBW();
@@ -72,8 +78,11 @@ private slots:
     void onShowFreqsChange();
 
 private:
-    QGridLayout *layout;
+    QGridLayout * layout;
     SenderMulti * out;
+
+    QXmlStreamWriter xml;
+    QXmlStreamReader xmlr;
 
     MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
     MWBScaleSwitch * bScaleSwitch[BSCALE_SIZE+1];
@@ -94,20 +103,16 @@ private:
     QWidget * HS[15];
 
     // preset buttons
-    // static const int nPresetBtn = 5;
-    // static const int nSoundPresetBtn = 2;
-    // QWidget * PB[nPresetBtn + nSoundPresetBtn];
-
-    QList<QWidget * > scalePresets;
-    QList<QWidget * > soundPresets;
-    QList<QWidget * > microtunePresets;
+    QList<MWPreset * > scalePresets;
+    QList<MWSoundPreset * > soundPresets;
+    QList<MWMicrotunePreset * > microtunePresets;
 
     bool presetsVisible;
 
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;
     MWFaderParamCtl * faderChannel;
-    MWHeaderSetter * pitchVert;
+    MWHeaderSetter * pitchHorizontal;
     MWHeaderSetter * bwMode;
     MWHeaderSetter * enableCc1;
     MWHeaderSetter * enableMobilesynth;
@@ -121,6 +126,9 @@ private:
     MWHeaderSetter * overwritePreset;
 
     void recalcMainView();
+    void readXml(QString filename);
+    void writeXml(QString filename);
+    void readLayout();
 };
 
 #endif // WLAYOUT_H

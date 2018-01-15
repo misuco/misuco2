@@ -30,7 +30,9 @@ class MWMicrotunePreset : public MisuWidget
 
 public:
     MWMicrotunePreset(QWidget *parent);
+    MWMicrotunePreset(int tuning[], QWidget *parent);
     virtual void processTouchEvent(misuTouchEvent e);
+    MWMicrotune PresetMicrotune;
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -43,7 +45,6 @@ signals:
     void setMicrotune(MWMicrotune * m);
 
 private:
-    MWMicrotune PresetMicrotune;
     int pressed=0;
     bool isSelected();
 };

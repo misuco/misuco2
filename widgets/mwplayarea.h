@@ -66,7 +66,6 @@ public slots:
     void setBendVertTop(int b);
     void setBendVertBot(int b);
     void pitchChange();    
-    void toggleBW();
     void onScaleUpdate();
 
 signals:
