@@ -116,7 +116,8 @@ HEADERS  += mainwindow.h \
     comm/senderoscxy.h \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
-    widgets/mwmicrotunepreset.h
+    widgets/mwmicrotunepreset.h \
+    conf/initxml.h
 
 CONFIG += mobility
 MOBILITY = 

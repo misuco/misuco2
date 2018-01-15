@@ -18,6 +18,7 @@
  *
  */
 
+#include "conf/initxml.h"
 #include "wlayout.h"
 #include <QPushButton>
 #include <QDebug>
@@ -584,8 +585,16 @@ void wlayout::readXml(QString filename)
 {
     QFile file(filename);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        //qDebug("cannot read file");
-        return;
+        if (file.open(QFile::ReadWrite | QFile::Text)) {
+            file.write(initXml);
+            file.flush();
+            file.close();
+            if (!file.open(QFile::ReadOnly | QFile::Text)) {
+                return;
+            }
+        } else {
+            return;
+        }
     }
     //qDebug() << " opened " << filename;
     xmlr.setDevice(&file);
