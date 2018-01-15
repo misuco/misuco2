@@ -41,22 +41,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     out=new SenderMulti();
     out->cc(0,0,105,1,1);
 
-    /*
-    for(int i=0;i<6;i++) {
-        scalePresets.append(new MWPreset(MWPitch,this));
-
-        MWSoundPreset * soundPreset = new MWSoundPreset(this);
-        connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
-        soundPreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        soundPresets.append(soundPreset);
-
-        MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(this);
-        connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
-        microtunePreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        microtunePresets.append(microtunePreset);
-    }
-    */
-
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWPitch[i]=new Pitch(this);
         MWPitch[i]->setBasenote(i);
@@ -287,11 +271,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         presetButton->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     }
 
-    M[1]->hide();
-    M[2]->hide();
-    M[3]->hide();
-    emit setMenuItemState(6,1);
-
     if(scalePresets.size()>0) {
         connect(this,SIGNAL(initialSet()),scalePresets[0],SLOT(initialSet()));
     }
@@ -498,13 +477,6 @@ void wlayout::recalcMainView()
     }
 
 }
-
-/*
-void wlayout::changePitch(int v)
-{
-    //qDebug() << "changePitch " << v;
-}
-*/
 
 void wlayout::togglePresets()
 {
@@ -795,6 +767,30 @@ void wlayout::readLayout() {
             microtunePreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
             microtunePresets.append(microtunePreset);
         } else if (xmlr.name() == "setup") {
+            for(int i=0;i<3;i++) {
+                QString attId;
+                attId.sprintf("showH%d",i);
+                if(xmlr.attributes().value(attId).toString()=="1"){
+                    H[i]->show();
+                    emit setMenuItemState(i,1);
+                } else {
+                    H[i]->hide();
+                    emit setMenuItemState(i,0);
+                }
+            }
+
+            for(int i=0;i<4;i++) {
+                QString attId;
+                attId.sprintf("showM%d",i);
+                if(xmlr.attributes().value(attId).toString()=="1"){
+                    M[i]->show();
+                    emit setMenuItemState(i+6,1);
+                } else {
+                    M[i]->hide();
+                    emit setMenuItemState(i+6,0);
+                }
+            }
+
             faderPitchTopRange->setValue(xmlr.attributes().value("pitchTopRange").toString().toInt());
             faderPitchBottomRange->setValue(xmlr.attributes().value("pitchBottomRange").toString().toInt());
 
