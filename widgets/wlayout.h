@@ -108,6 +108,7 @@ private:
     QList<MWMicrotunePreset * > microtunePresets;
 
     bool presetsVisible;
+    bool headerVisible;
 
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;

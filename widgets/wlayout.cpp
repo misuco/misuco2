@@ -30,7 +30,8 @@
 wlayout::wlayout(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_AcceptTouchEvents,true);
-    presetsVisible=true;
+    presetsVisible=false;
+    headerVisible=false;
 
     layout = new QGridLayout(this);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
@@ -226,7 +227,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     for(int i=0;i<3;i++) {
         H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         H[i]->setContentsMargins(0,0,0,0);
-        H[i]->hide();
     }
 
     M[0]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -298,6 +298,7 @@ void wlayout::resizeEvent(QResizeEvent *)
 {
     //qDebug() << "wlayout::resizeEvent " << width() << " " << height();
     MisuWidget::font1size=width()/40;
+    recalcMainView();
 }
 
 void wlayout::currentHeader(int i)
@@ -357,6 +358,7 @@ void wlayout::recalcMainView()
 
     for(int i=0;i<7;i++) {
         layout->removeWidget(HS[i]);
+        HS[i]->hide();
     }
 
     layout->removeWidget(overwritePreset);
@@ -381,100 +383,207 @@ void wlayout::recalcMainView()
         emit setMenuItemState(6,1);
     }
 
-    int height=(15-headerCnt)/mainCnt;
-    int roundDiff=15-headerCnt-mainCnt*height;
-    int top=0;
 
-    int xpos = 0;
-    int width = 14;
+    if(width()>height()) {
 
+        int height=(15-headerCnt)/mainCnt;
+        int roundDiff=15-headerCnt-mainCnt*height;
+        int top=0;
+        int xpos = 0;
+        int width = 14;
 
-    if(presetsVisible) {
-        layout->addWidget(overwritePreset,0,0,1,2);
-        overwritePreset->show();
+        if(presetsVisible) {
+            layout->addWidget(overwritePreset,0,0,1,2);
+            overwritePreset->show();
 
-        int presetCount1 = 6;
-        int presetCount2 = 0;
-        if(mainCnt>1) {
-            presetCount1 = 3;
-            presetCount2 = 3;
-            for(int i=0;i<presetCount1;i++) {
-                if(i<scalePresets.size()) {
-                    layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
-                    scalePresets[i]->show();
-                }
-            }
-
-            if(M[1]->isHidden()) {
-                for(int i=0;i<presetCount2;i++) {
-                    if(i<soundPresets.size()) {
-                        layout->addWidget(soundPresets[i],(i+1)*2+presetCount1*2,0,1,2);
-                        soundPresets[i]->show();
-                    }
-                }
-            } else {
-                for(int i=0;i<presetCount2;i++) {
-                    if(i<microtunePresets.size()) {
-                        layout->addWidget(microtunePresets[i],(i+1)*2+presetCount1*2,0,1,2);
-                        microtunePresets[i]->show();
-                    }
-                }
-            }
-
-        } else {
-            for(int i=0;i<presetCount1;i++) {
-                if(M[0]->isHidden()) {
-                    if(M[1]->isHidden()) {
-                        if(i<soundPresets.size()) {
-                            layout->addWidget(soundPresets[i],(i+1)*2,0,1,2);
-                            soundPresets[i]->show();
-                        }
-                    } else {
-                        if(i<microtunePresets.size()) {
-                            layout->addWidget(microtunePresets[i],(i+1)*2,0,1,2);
-                            microtunePresets[i]->show();
-                        }
-                    }
-                } else {
+            int presetCount1 = 6;
+            int presetCount2 = 0;
+            if(mainCnt>1) {
+                presetCount1 = 3;
+                presetCount2 = 3;
+                for(int i=0;i<presetCount1;i++) {
                     if(i<scalePresets.size()) {
                         layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
                         scalePresets[i]->show();
                     }
                 }
+
+                if(M[1]->isHidden()) {
+                    for(int i=0;i<presetCount2;i++) {
+                        if(i<soundPresets.size()) {
+                            layout->addWidget(soundPresets[i],(i+1)*2+presetCount1*2,0,1,2);
+                            soundPresets[i]->show();
+                        }
+                    }
+                } else {
+                    for(int i=0;i<presetCount2;i++) {
+                        if(i<microtunePresets.size()) {
+                            layout->addWidget(microtunePresets[i],(i+1)*2+presetCount1*2,0,1,2);
+                            microtunePresets[i]->show();
+                        }
+                    }
+                }
+
+            } else {
+                for(int i=0;i<presetCount1;i++) {
+                    if(M[0]->isHidden()) {
+                        if(M[1]->isHidden()) {
+                            if(i<soundPresets.size()) {
+                                layout->addWidget(soundPresets[i],(i+1)*2,0,1,2);
+                                soundPresets[i]->show();
+                            }
+                        } else {
+                            if(i<microtunePresets.size()) {
+                                layout->addWidget(microtunePresets[i],(i+1)*2,0,1,2);
+                                microtunePresets[i]->show();
+                            }
+                        }
+                    } else {
+                        if(i<scalePresets.size()) {
+                            layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
+                            scalePresets[i]->show();
+                        }
+                    }
+                }
             }
         }
-    }
 
-    if(presetsVisible) {
-        width-=2;
-        xpos+=2;
-    }
-
-    if(!HS[0]->isHidden()) {
-        width-=2;
-    }
-
-    for(int i=0;i<3;i++) {
-        if(!H[i]->isHidden()) {
-            //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-            layout->addWidget(H[i],top,xpos,2,width);
-            top+=2;
+        if(presetsVisible) {
+            width-=2;
+            xpos+=2;
         }
-    }
 
-    for(int i=0;i<4;i++) {
-        if(!M[i]->isHidden()) {
-            //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-            layout->addWidget(M[i],top,xpos,height+roundDiff,width);
-            top+=height+roundDiff;
-            roundDiff=0;
+        if(headerVisible) {
+            width-=2;
         }
-    }
 
-    for(int i=0;i<7;i++) {
-        if(!HS[i]->isHidden()) {
-            layout->addWidget(HS[i],i*2,xpos+width,2,2);
+        for(int i=0;i<3;i++) {
+            if(!H[i]->isHidden()) {
+                //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                layout->addWidget(H[i],top,xpos,2,width);
+                top+=2;
+            }
         }
+
+        for(int i=0;i<4;i++) {
+            if(!M[i]->isHidden()) {
+                //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                layout->addWidget(M[i],top,xpos,height+roundDiff,width);
+                top+=height+roundDiff;
+                roundDiff=0;
+            }
+        }
+
+        if(headerVisible) {
+            for(int i=0;i<7;i++) {
+                layout->addWidget(HS[i],i*2,xpos+width,2,2);
+                HS[i]->show();
+            }
+        }
+
+    } else {
+
+        /*
+        int height=(11-headerCnt/2)/mainCnt;
+        int roundDiff=11-headerCnt/2-mainCnt*height;
+        */
+
+        int height = 30;
+        int roundDiff = 0;
+
+        int top = 0;
+        int xpos = 0;
+        int width = 7;
+
+        for(int i=0;i<3;i++) {
+            if(!H[i]->isHidden()) {
+                //qDebug() << "layout->addWidget H "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                layout->addWidget(H[i],top,xpos,10,width);
+                top+=10;
+            }
+        }
+
+
+        if(headerVisible) {
+            for(int i=0;i<7;i++) {
+                //qDebug() << "layout->addWidget HS "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                layout->addWidget(HS[i],top,i,10,1);
+                HS[i]->show();
+            }
+            top+=10;
+        }
+
+        if(presetsVisible) {
+            layout->addWidget(overwritePreset,top,xpos,10,1);
+            overwritePreset->show();
+
+            int presetCount1 = 6;
+            int presetCount2 = 0;
+            if(mainCnt>1) {
+                presetCount1 = 3;
+                presetCount2 = 3;
+                for(int i=0;i<presetCount1;i++) {
+                    if(i<scalePresets.size()) {
+                        //qDebug() << "layout->addWidget scalePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                        layout->addWidget(scalePresets[i],top,i+1,10,1);
+                        scalePresets[i]->show();
+                    }
+                }
+
+                if(M[1]->isHidden()) {
+                    for(int i=0;i<presetCount2;i++) {
+                        if(i<soundPresets.size()) {
+                            //qDebug() << "layout->addWidget soundPreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                            layout->addWidget(soundPresets[i],top,i+1+presetCount1,10,1);
+                            soundPresets[i]->show();
+                        }
+                    }
+                } else {
+                    for(int i=0;i<presetCount2;i++) {
+                        if(i<microtunePresets.size()) {
+                            //qDebug() << "layout->addWidget microtunePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                            layout->addWidget(microtunePresets[i],top,(i+1)+presetCount1,10,1);
+                            microtunePresets[i]->show();
+                        }
+                    }
+                }
+            } else {
+                for(int i=0;i<presetCount1;i++) {
+                    if(M[0]->isHidden()) {
+                        if(M[1]->isHidden()) {
+                            if(i<soundPresets.size()) {
+                                //qDebug() << "layout->addWidget soundPreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                                layout->addWidget(soundPresets[i],top,i+1,10,1);
+                                soundPresets[i]->show();
+                            }
+                        } else {
+                            if(i<microtunePresets.size()) {
+                                //qDebug() << "layout->addWidget microtunePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                                layout->addWidget(microtunePresets[i],top,i+1,10,1);
+                                microtunePresets[i]->show();
+                            }
+                        }
+                    } else {
+                        if(i<scalePresets.size()) {
+                            //qDebug() << "layout->addWidget scalePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                            layout->addWidget(scalePresets[i],top,i+1,10,1);
+                            scalePresets[i]->show();
+                        }
+                    }
+                }
+            }
+            top+=10;
+        }
+
+        for(int i=0;i<4;i++) {
+            if(!M[i]->isHidden()) {
+                //qDebug() << "layout->addWidget M "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
+                layout->addWidget(M[i],top,xpos,height,width);
+                top+=height+roundDiff;
+                roundDiff=0;
+            }
+        }
+
     }
 
 }
@@ -487,13 +596,7 @@ void wlayout::togglePresets()
 
 void wlayout::toggleMenu()
 {
-    for(int i=0;i<7;i++) {
-        if(HS[i]->isHidden()) {
-            HS[i]->show();
-        } else {
-            HS[i]->hide();
-        }
-    }
+    headerVisible=!headerVisible;
     recalcMainView();
 }
 
