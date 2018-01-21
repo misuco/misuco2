@@ -257,9 +257,14 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         }
     }
 
-    QString storagePath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    readXml(storagePath.append("/misuco2.xml"));
-
+    //QString storagePath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if(QSysInfo::productType() == "ios") {
+        configPath=QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    } else {
+        configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    }
+    configPath=configPath.append("/misuco2.xml");
+    readXml(configPath);
 
     for(auto presetButton:scalePresets) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
@@ -290,8 +295,7 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
 wlayout::~wlayout()
 {
-    QString storagePath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    writeXml(storagePath.append("/misuco2.xml"));
+    writeXml(configPath);
 }
 
 void wlayout::resizeEvent(QResizeEvent *)

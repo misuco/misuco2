@@ -126,6 +126,8 @@ private:
     MWHeaderSetter * showFreqs;
     MWHeaderSetter * overwritePreset;
 
+    QString configPath;
+
     void recalcMainView();
     void readXml(QString filename);
     void writeXml(QString filename);
