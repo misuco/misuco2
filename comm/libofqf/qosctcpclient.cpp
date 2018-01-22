@@ -34,7 +34,7 @@ QOscTcpClient::QOscTcpClient( const QHostAddress& address, quint16 port, QObject
         , _port( port )
         , _tcp_socket (0)
 {
-//        qDebug() << "QOscClient::QOscClient(" << address << "," << port << "," << p << ")";
+        qDebug() << "QOscClient::QOscClient(" << address << "," << port << "," << p << ")";
         setupTcpSocket();
         QObject::connect( _tcp_socket, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 }
@@ -107,27 +107,27 @@ void QOscTcpClient::tcpStateChanged()
 {
     switch(_tcp_socket->state()) {
         case QAbstractSocket::BoundState:
-//            qDebug() << " bound ";
+            //qDebug() << " bound ";
             break;
         case QAbstractSocket::ListeningState:
-//            qDebug() << " listening ";
+            //qDebug() << " listening ";
             break;
         case QAbstractSocket::UnconnectedState:
-//            qDebug() << " unconnected ";
+            //qDebug() << " unconnected ";
             break;
         case QAbstractSocket::HostLookupState:
-//            qDebug() << " host lookup ";
+            //qDebug() << " host lookup ";
             break;
         case QAbstractSocket::ConnectingState:
-//            qDebug() << " connecting ";
+            qDebug() << " connecting " << _address << " " << _port;
             break;
         case QAbstractSocket::ConnectedState:
-//            qDebug() << " connected ";
+            qDebug() << " connected " << _address << " " << _port;
             _tcp_socket->setSocketOption(QAbstractSocket::LowDelayOption,1);
             emit connected();
             break;
         case QAbstractSocket::ClosingState:
-//        qDebug() << " closing ";
+            //qDebug() << " closing ";
             break;
     }
 }

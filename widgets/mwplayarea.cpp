@@ -197,6 +197,9 @@ void MWPlayArea::calcGeo()
     }
 
     int menubottonsize = width()/20;
+    if(height()>width()) {
+        menubottonsize = height()/20;
+    }
     menux1 = width()-menubottonsize;
     menux2 = width();
     menuy1 = 0;

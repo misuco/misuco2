@@ -33,6 +33,16 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     presetsVisible=false;
     headerVisible=false;
 
+    qDebug() << QSysInfo::productType();
+    if(QSysInfo::productType() == "ios") {
+        configPath=QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    } else if(QSysInfo::productType() == "ubuntu") {
+        configPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    } else {
+        configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    }
+    configPath=configPath.append("/misuco2.xml");
+
     layout = new QGridLayout(this);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
     layout->setContentsMargins(0,0,0,0);
@@ -257,13 +267,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         }
     }
 
-    //QString storagePath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    if(QSysInfo::productType() == "ios") {
-        configPath=QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
-    } else {
-        configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    }
-    configPath=configPath.append("/misuco2.xml");
     readXml(configPath);
 
     for(auto presetButton:scalePresets) {
@@ -301,7 +304,12 @@ wlayout::~wlayout()
 void wlayout::resizeEvent(QResizeEvent *)
 {
     //qDebug() << "wlayout::resizeEvent " << width() << " " << height();
-    MisuWidget::font1size=width()/40;
+    if(width()>height()) {
+        MisuWidget::font1size=width()/40;
+    } else {
+        MisuWidget::font1size=height()/40;
+
+    }
     recalcMainView();
 }
 
