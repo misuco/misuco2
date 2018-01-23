@@ -39,6 +39,11 @@ mobileSynthQT52::mobileSynthQT52()
     //const int BufferSize        = 32768;
     //BufferSize        = 8192;
 
+    for(auto device:QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
+        qDebug() << device.deviceName();
+        m_device=device;
+    }
+
     m_buffer.resize(BufferSize);
     m_buffer.fill(0);
 

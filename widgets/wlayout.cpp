@@ -33,9 +33,15 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     presetsVisible=false;
     headerVisible=false;
 
-    qDebug() << QSysInfo::productType();
+    //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
-        configPath=QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+        configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+        //configPath=QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        //configPath=QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+        //configPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        //configPath=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+        //configPath=QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+        //configPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     } else if(QSysInfo::productType() == "ubuntu") {
         configPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     } else {
@@ -704,9 +710,11 @@ void wlayout::readXml(QString filename)
             file.flush();
             file.close();
             if (!file.open(QFile::ReadOnly | QFile::Text)) {
+                //qDebug() << " cannot reopen " << filename;
                 return;
             }
         } else {
+            //qDebug() << " cannot write " << filename;
             return;
         }
     }
