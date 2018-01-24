@@ -18,6 +18,7 @@ INCLUDEPATH += mobilesynth/mobilesynth/Classes/synth
 INCLUDEPATH += mobilesynth/mobilesynth/Classes
 INCLUDEPATH += mobilesynth/lib
 
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     widgets/wlayout.cpp \
@@ -62,52 +63,7 @@ SOURCES += main.cpp\
     comm/senderoscxy.cpp \
     comm/senderreaktor.cpp \
     comm/sendersupercollider.cpp \
-    widgets/mwmicrotunepreset.cpp \
-    comm/libofqf/qoscclient.cpp \
-    comm/libofqf/qoscmsgparser.cpp \
-    comm/libofqf/qoscproxy.cpp \
-    comm/libofqf/qoscproxyinterface.cpp \
-    comm/libofqf/qoscserver.cpp \
-    comm/libofqf/qosctcpclient.cpp \
-    comm/libofqf/qosctcpserver.cpp \
-    comm/libofqf/qosctcpserverthread.cpp \
-    comm/libofqf/qosctypes.cpp \
-    comm/senderdebug.cpp \
-    comm/sendermobilesynth.cpp \
-    comm/sendermulti.cpp \
-    comm/senderoscmidigeneric.cpp \
-    comm/senderoscpuredata.cpp \
-    comm/senderoscxy.cpp \
-    comm/senderreaktor.cpp \
-    comm/sendersupercollider.cpp \
-    conf/color.cpp \
-    conf/freqtriple.cpp \
-    conf/pitch.cpp \
-    mobilesynth/mobilesynth/Classes/synth/arpeggio.cpp \
-    mobilesynth/mobilesynth/Classes/synth/controller.cpp \
-    mobilesynth/mobilesynth/Classes/synth/envelope.cpp \
-    mobilesynth/mobilesynth/Classes/synth/filter.cpp \
-    mobilesynth/mobilesynth/Classes/synth/key_stack.cpp \
-    mobilesynth/mobilesynth/Classes/synth/lag_processor.cpp \
-    mobilesynth/mobilesynth/Classes/synth/modulation.cpp \
-    mobilesynth/mobilesynth/Classes/synth/oscillator.cpp \
-    mobilesynth/mobilesynth/Classes/synth/parameter.cpp \
-    mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp \
-    widgets/misuwidget.cpp \
-    widgets/mwbasenotesetter.cpp \
-    widgets/mwbscaleswitch.cpp \
-    widgets/mwfadder.cpp \
-    widgets/mwfaderparamctl.cpp \
-    widgets/mwfaderpitch.cpp \
-    widgets/mwheadersetter.cpp \
-    widgets/mwmicrotunepreset.cpp \
-    widgets/mwoctaveranger.cpp \
-    widgets/mwplayarea.cpp \
-    widgets/mwpreset.cpp \
-    widgets/mwsoundpreset.cpp \
-    widgets/wlayout.cpp \
-    main.cpp \
-    mainwindow.cpp
+    widgets/mwmicrotunepreset.cpp
 
 HEADERS  += mainwindow.h \
     widgets/wlayout.h \
@@ -162,61 +118,7 @@ HEADERS  += mainwindow.h \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
     widgets/mwmicrotunepreset.h \
-    conf/initxml.h \
-    comm/libofqf/qoscclient.h \
-    comm/libofqf/qoscclientinterface.h \
-    comm/libofqf/qoscmsgparser.h \
-    comm/libofqf/qoscproxy.h \
-    comm/libofqf/qoscproxyinterface.h \
-    comm/libofqf/qoscserver.h \
-    comm/libofqf/qoscserverinterface.h \
-    comm/libofqf/qosctcpclient.h \
-    comm/libofqf/qosctcpserver.h \
-    comm/libofqf/qosctcpserverthread.h \
-    comm/libofqf/qosctypes.h \
-    comm/isender.h \
-    comm/senderdebug.h \
-    comm/sendermobilesynth.h \
-    comm/sendermulti.h \
-    comm/senderoscmidigeneric.h \
-    comm/senderoscpuredata.h \
-    comm/senderoscxy.h \
-    comm/senderreaktor.h \
-    comm/sendersupercollider.h \
-    conf/color.h \
-    conf/freqtriple.h \
-    conf/initxml.h \
-    conf/pitch.h \
-    conf/platform.h \
-    conf/types.h \
-    mobilesynth/mobilesynth/Classes/synth/arpeggio.h \
-    mobilesynth/mobilesynth/Classes/synth/controller.h \
-    mobilesynth/mobilesynth/Classes/synth/envelope.h \
-    mobilesynth/mobilesynth/Classes/synth/filter.h \
-    mobilesynth/mobilesynth/Classes/synth/key_stack.h \
-    mobilesynth/mobilesynth/Classes/synth/lag_processor.h \
-    mobilesynth/mobilesynth/Classes/synth/modulation.h \
-    mobilesynth/mobilesynth/Classes/synth/oscillator.h \
-    mobilesynth/mobilesynth/Classes/synth/parameter.h \
-    mobilesynth/mobilesynth/Classes/synth/test_util.h \
-    mobilesynth/mobilesynth/Classes/AudioOutput.h \
-    mobilesynth/mobilesynth/Classes/mobilesynthqt52.h \
-    mobilesynth/mobilesynth/Classes/mobilesynthViewControllerRc1.h \
-    mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp \
-    widgets/misuwidget.h \
-    widgets/mwbasenotesetter.h \
-    widgets/mwbscaleswitch.h \
-    widgets/mwfadder.h \
-    widgets/mwfaderparamctl.h \
-    widgets/mwfaderpitch.h \
-    widgets/mwheadersetter.h \
-    widgets/mwmicrotunepreset.h \
-    widgets/mwoctaveranger.h \
-    widgets/mwplayarea.h \
-    widgets/mwpreset.h \
-    widgets/mwsoundpreset.h \
-    widgets/wlayout.h \
-    mainwindow.h
+    conf/initxml.h
 
 CONFIG += mobility
 MOBILITY = 
