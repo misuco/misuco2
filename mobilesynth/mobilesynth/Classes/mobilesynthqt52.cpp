@@ -98,10 +98,12 @@ qint64 mobileSynthQT52::readData(char *data, qint64 len)
 //    qDebug() << "read data " << len << " BufferSize " << m_audioOutput->bufferSize();
 
 //TODO: why this dirty hack? why does windows request odd lens
-    if(len%2!=0) len-=1;
+    if(len%2!=0) {
+        qDebug() << "mobileSynthQT52::readData odd len " << len;
+        len-=1;
+    }
     syctl->GetCharSamples(data,len);
     return len;
-
 }
 
 qint64 mobileSynthQT52::writeData(const char *data, qint64 len)
