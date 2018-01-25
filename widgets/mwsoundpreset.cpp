@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWSoundPreset::MWSoundPreset(QWidget *parent): MisuWidget(parent)
+MWSoundPreset::MWSoundPreset(QObject *parent): MisuWidget(parent)
 {
     PresetSound.volume=800;
     PresetSound.wave_type=qrand() % 4;
@@ -37,7 +37,7 @@ MWSoundPreset::MWSoundPreset(QWidget *parent): MisuWidget(parent)
 
 }
 
-MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QWidget *parent): MisuWidget(parent)
+MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent): MisuWidget(parent)
 {
     PresetSound.volume=vol;
     PresetSound.wave_type=wav;
@@ -76,9 +76,10 @@ void MWSoundPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
         pressed--;
         break;
     }
-    update();
+    //update();
 }
 
+/*
 void MWSoundPreset::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -145,6 +146,7 @@ void MWSoundPreset::resizeEvent(QResizeEvent *)
 {
     fontheight=height()/8;
 }
+*/
 
 void MWSoundPreset::initialSet()
 {

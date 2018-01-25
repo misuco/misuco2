@@ -28,6 +28,8 @@ class FreqTriple: public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QObject * pitch MEMBER pitch CONSTANT)
+
 public:
     explicit FreqTriple(Pitch *p, QObject *parent = 0);
     ~FreqTriple();
@@ -50,6 +52,9 @@ public:
     void setOct(int value);
 
     QString getBasenoteString(int lang) const;
+
+signals:
+    void hueChanged();
 
 public slots:
     void pitchChange();

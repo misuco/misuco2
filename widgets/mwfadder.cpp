@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWFadder::MWFadder(QWidget *parent, Color *c) : MisuWidget(parent)
+MWFadder::MWFadder(QObject *parent, Color *c) : MisuWidget(parent)
 {
     //qDebug() << "MWFadder::MWFadder";
     orient=vertical;
@@ -30,13 +30,13 @@ MWFadder::MWFadder(QWidget *parent, Color *c) : MisuWidget(parent)
     inverted=false;
     valueDisplay=value;
     pressed=0;
-    knobSize=height()/8;
+    knobSize=50; // TODO height()/8;
     setMinValue(-100);
     setMaxValue(100);
     fineness=5;
     color=c;
     calcGeo();
-    update();
+    //update();
 }
 
 void MWFadder::processTouchEvent(misuTouchEvent e)
@@ -55,12 +55,12 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
             emit valueChange(valueDisplay);
         }
         pressed++;
-        update();
+        //update();
         break;
     case Qt::TouchPointMoved:
         if(vertical==orient) {
             if(coarse==fadeMode) {
-                value=valTouchBegin+(e.y-yTouchBegin)*valRange/(height()-2*knobSize);
+                value=valTouchBegin+(e.y-yTouchBegin)*valRange/(/*height()-*/2*knobSize);
             } else {
                 value=valTouchBegin+(e.y-yTouchBegin)/fineness;
             }
@@ -74,20 +74,22 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
             emit valueChange(valueDisplay);
             calcGeo();
         }
-        update();
+        //update();
         break;
     case Qt::TouchPointReleased:
         pressed--;
-        update();
+        //update();
         break;
     }
     //qDebug() << "value " << value << " touch begin v: " << valTouchBegin << " y: " << yTouchBegin;
 }
 
+/*
 void MWFadder::resizeEvent(QResizeEvent *)
 {
     calcGeo();
 }
+*/
 
 int MWFadder::getValue()
 {
@@ -96,8 +98,8 @@ int MWFadder::getValue()
 
 void MWFadder::calcGeo()
 {
-    knobSize=height()/8;
-    fadderY=(value-minValue)*(height()-2*knobSize)/valRange;
+    knobSize=50; // TODO height()/8;
+    fadderY=(value-minValue)*(/*height()-*/2*knobSize)/valRange;
 }
 
 void MWFadder::setMaxValue(int value)
@@ -124,7 +126,7 @@ void MWFadder::setValue(int v)
         value = v;
     }
     calcGeo();
-    update();    
+    //update();    
     emit valueChange(valueDisplay);
 }
 
@@ -134,6 +136,7 @@ void MWFadder::setMinValue(int value)
     valRange=maxValue-minValue;
 }
 
+/*
 void MWFadder::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -157,4 +160,5 @@ void MWFadder::paintEvent(QPaintEvent *)
     painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
     //qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
 }
+*/
 

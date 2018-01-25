@@ -28,14 +28,10 @@ class MWHeaderSetter : public MisuWidget
     Q_OBJECT
 
 public:
-    MWHeaderSetter(int headerId, QWidget *parent);
-    MWHeaderSetter(int headerId, int state, QWidget *parent);
+    MWHeaderSetter(int headerId, QObject *parent);
+    MWHeaderSetter(int headerId, int state, QObject *parent);
     virtual void processTouchEvent(misuTouchEvent e);
     int getState();
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 signals:
     void currentHeader(int i);
@@ -46,7 +42,7 @@ signals:
     void togglePresets();
     void toggleMenu();
     void toggleBW();
-    void scaleUpdate();
+    void scaleupdate();
     void toggleSender(int i);
     void toggleShowFreqs();
 

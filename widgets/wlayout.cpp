@@ -27,9 +27,8 @@
 
 #include <conf/color.h>
 
-wlayout::wlayout(QWidget *parent) : QWidget(parent)
+wlayout::wlayout(QWidget *parent) : QObject(parent)
 {
-    setAttribute(Qt::WA_AcceptTouchEvents,true);
     presetsVisible=false;
     headerVisible=false;
 
@@ -49,57 +48,37 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     }
     configPath=configPath.append("/misuco2.xml");
 
-    layout = new QGridLayout(this);
-    layout->setSizeConstraint(QLayout::SetMinimumSize);
-    layout->setContentsMargins(0,0,0,0);
-    layout->setMargin(0);
-    layout->setHorizontalSpacing(0);
-    layout->setVerticalSpacing(0);
-
     out=new SenderMulti();
-    out->cc(0,0,105,1,1);
+    //out->cc(0,0,105,1,1);
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWPitch[i]=new Pitch(this);
-        MWPitch[i]->setBasenote(i);
-        MWPitch[i]->setPitch(0);
-    }
+        MisuWidget::MWPitch[i]=new Pitch(i,this);
+    }    
 
-    M[0] = new MWPlayArea(MWPitch,this);
+    M[0] = new MWPlayArea(MisuWidget::MWPitch,this);
     ((MWPlayArea *)M[0])->setOut(out);
     connect(M[0],SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
     connect(M[0],SIGNAL(presetsTouch()), this, SLOT(togglePresets()));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        connect( MWPitch[i], SIGNAL(change()), (MWPlayArea *)M[0], SLOT(pitchChange()));
+        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), (MWPlayArea *)M[0], SLOT(pitchChange()));
     }
 
     H[0] = new MWOctaveRanger(this);
     connect(H[0],SIGNAL(setOctConf(int,int)),M[0],SLOT(setOctConf(int,int)));
 
-    M[1] = new QWidget(this);
-    QGridLayout * lPitch = new QGridLayout(M[1]);
-    lPitch->setContentsMargins(0,0,0,0);
-    lPitch->setHorizontalSpacing(0);
-    lPitch->setVerticalSpacing(0);
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        faderMicrotune[i] = new MWFaderPitch(M[1],MWPitch[i]);
+        faderMicrotune[i] = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
         faderMicrotune[i]->setOut(out);
-        connect (faderMicrotune[i],SIGNAL(valueChange(int)),MWPitch[i],SLOT(setPitch(int)));
-        connect( MWPitch[i], SIGNAL(change()), faderMicrotune[i], SLOT(pitchChange()));
+        connect (faderMicrotune[i],SIGNAL(valueChange(int)),MisuWidget::MWPitch[i],SLOT(setPitch(int)));
+        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), faderMicrotune[i], SLOT(pitchChange()));
         connect(H[0],SIGNAL(setOctMid(int)),faderMicrotune[i],SLOT(setOctMid(int)));
-        lPitch->addWidget(faderMicrotune[i],0,i);
     }
 
-    Color * synthCtlColor=new Pitch();
+    Color * synthCtlColor=new Pitch(1,this);
 
-    M[2] = new QWidget(this);
-    QGridLayout * lSynthCtl = new QGridLayout(M[2]);
-    lSynthCtl->setContentsMargins(0,0,0,0);
-    lSynthCtl->setHorizontalSpacing(0);
-    lSynthCtl->setVerticalSpacing(0);
     for(int i=0;i<10;i++) {
-        faderParamCtl[i] = new MWFaderParamCtl(M[2],synthCtlColor,i+102);
+        faderParamCtl[i] = new MWFaderParamCtl(this,synthCtlColor,i+102);
         faderParamCtl[i]->setOut(out);
         faderParamCtl[i]->setMinValue(0);
         if(i==0) {
@@ -108,7 +87,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
             faderParamCtl[i]->setMaxValue(1000);
         }
         faderParamCtl[i]->setInverted(true);
-        lSynthCtl->addWidget(faderParamCtl[i],0,i);
 
         // update fadders on sustain update
         if(i==3) {
@@ -120,145 +98,96 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
         }
     }
 
-    M[3] = new QWidget(this);
-    QGridLayout * lPlayAreaCtl = new QGridLayout(M[3]);
-    lPlayAreaCtl->setContentsMargins(0,0,0,0);
-    lPlayAreaCtl->setHorizontalSpacing(0);
-    lPlayAreaCtl->setVerticalSpacing(0);
-
-    faderPitchTopRange = new MWFaderParamCtl(M[2],synthCtlColor,1);
+    faderPitchTopRange = new MWFaderParamCtl(this,synthCtlColor,1);
     faderPitchTopRange->setOut(out);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
-    lPlayAreaCtl->addWidget(faderPitchTopRange,0,0);
     connect(faderPitchTopRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertTop(int)));
 
-    faderPitchBottomRange = new MWFaderParamCtl(M[2],synthCtlColor,2);
+    faderPitchBottomRange = new MWFaderParamCtl(this,synthCtlColor,2);
     faderPitchBottomRange->setOut(out);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
-    lPlayAreaCtl->addWidget(faderPitchBottomRange,0,1);
     connect(faderPitchBottomRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertBot(int)));
 
     pitchHorizontal = new MWHeaderSetter(15,this);
-    lPlayAreaCtl->addWidget(pitchHorizontal,0,2);
     connect(pitchHorizontal,SIGNAL(setBendHori(bool)),M[0],SLOT(setBendHori(bool)));
     connect(this,SIGNAL(setBendHori(bool)),M[0],SLOT(setBendHori(bool)));
 
-    faderChannel = new MWFaderParamCtl(M[2],synthCtlColor,3);
+    faderChannel = new MWFaderParamCtl(this,synthCtlColor,3);
     faderChannel->setOut(out);
     faderChannel->setMinValue(1);
     faderChannel->setMaxValue(16);
     faderChannel->setInverted(true);
-    lPlayAreaCtl->addWidget(faderChannel,0,3);
     connect(faderChannel,SIGNAL(valueChange(int)),this,SLOT(onChannelChange(int)));
 
     enableCc1 = new MWHeaderSetter(16,1,this);
     MisuWidget::sendCC1 = true;
-    lPlayAreaCtl->addWidget(enableCc1,0,4);
 
     bwMode = new MWHeaderSetter(11,this);
-    lPlayAreaCtl->addWidget(bwMode,0,5);
     connect(bwMode,SIGNAL(toggleBW()),this,SLOT(toggleBW()));
 
     enableMobilesynth = new MWHeaderSetter(17,1,this);
-    lPlayAreaCtl->addWidget(enableMobilesynth,0,6);
     connect(enableMobilesynth,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
 
     enablePuredata = new MWHeaderSetter(18,this);
-    lPlayAreaCtl->addWidget(enablePuredata,0,7);
     connect(enablePuredata,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
 
     enableReaktor = new MWHeaderSetter(19,1,this);
-    lPlayAreaCtl->addWidget(enableReaktor,0,8);
     connect(enableReaktor,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
 
     enableSupercollider = new MWHeaderSetter(20,this);
-    lPlayAreaCtl->addWidget(enableSupercollider,0,9);
     connect(enableSupercollider,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
 
     holdMode = new MWHeaderSetter(21,this);
-    lPlayAreaCtl->addWidget(holdMode,0,10);
 
     overwritePreset = new MWHeaderSetter(12,this);
-    overwritePreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-    mainArea = new QStackedWidget(this);
-
-    H[1] = new QWidget(this);
-    QGridLayout * lBaseNoteSetter=new QGridLayout(H[1]);
-    lBaseNoteSetter->setContentsMargins(0,0,0,0);
-    lBaseNoteSetter->setHorizontalSpacing(0);
-    lBaseNoteSetter->setVerticalSpacing(0);
     for(int i=0;i<12;i++) {
-        BaseNoteSetter[i] = new MWBaseNoteSetter(MWPitch[i],this);
-        BaseNoteSetter[i]->setOut(out);
-        connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),M[0],SLOT(setBaseNote(Pitch *)));
-        connect(BaseNoteSetter[i],SIGNAL(setBaseNote(Pitch *)),this,SLOT(onSetBaseNote(Pitch *)));
-        connect(BaseNoteSetter[i],SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
-        connect(this,SIGNAL(setBaseNote(Pitch*)),BaseNoteSetter[i],SLOT(onSetBaseNote(Pitch*)));
-        connect(H[0],SIGNAL(setOctMid(int)),BaseNoteSetter[i],SLOT(setOctMid(int)));
-        connect(MWPitch[i], SIGNAL(change()) ,BaseNoteSetter[i], SLOT(pitchChange()));
-        lBaseNoteSetter->addWidget(BaseNoteSetter[i],0,i);
+        MWBaseNoteSetter * baseNoteSetter = new MWBaseNoteSetter(MisuWidget::MWPitch[i],this);
+        baseNoteSetter->setOut(out);
+        connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),M[0],SLOT(setBaseNote(Pitch *)));
+        connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),this,SLOT(onSetBaseNote(Pitch *)));
+        connect(baseNoteSetter,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
+        connect(this,SIGNAL(setBaseNote(Pitch*)),baseNoteSetter,SLOT(onSetBaseNote(Pitch*)));
+        connect(H[0],SIGNAL(setOctMid(int)),baseNoteSetter,SLOT(setOctMid(int)));
+        connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,baseNoteSetter, SLOT(pitchChange()));
+        BaseNoteSetter.append(baseNoteSetter);
     }
 
-    H[2] = new QWidget(this);
-    QGridLayout * lBScaleSwitch=new QGridLayout(H[2]);
-    lBScaleSwitch->setContentsMargins(0,0,0,0);
-    lBScaleSwitch->setHorizontalSpacing(0);
-    lBScaleSwitch->setVerticalSpacing(0);
     for(int i=1;i<12;i++) {
-        bScaleSwitch[i-1] = new MWBScaleSwitch(i,MWPitch);
+        bScaleSwitch[i-1] = new MWBScaleSwitch(i,MisuWidget::MWPitch);
         bScaleSwitch[i-1]->setOut(out);
         connect(bScaleSwitch[i-1],SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
-        connect(bScaleSwitch[i-1],SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
+        connect(bScaleSwitch[i-1],SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(H[0],SIGNAL(setOctMid(int)),bScaleSwitch[i-1],SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
             connect(BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bScaleSwitch[i-1],SLOT(setBaseNote(Pitch *)));
         }
-        lBScaleSwitch->addWidget(bScaleSwitch[i-1],0,i);
     }
 
     openScalesArchive = new MWHeaderSetter(13,1,this);
-    lBScaleSwitch->addWidget(openScalesArchive,0,12);
 
-    faderSymbols = new MWFaderParamCtl(M[2],synthCtlColor,4);
+    faderSymbols = new MWFaderParamCtl(this,synthCtlColor,4);
     faderSymbols->setOut(out);
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);
-    lPlayAreaCtl->addWidget(faderSymbols,0,11);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
-    connect(this,SIGNAL(scaleUpdate()),M[0],SLOT(onScaleUpdate()));
-    connect(this,SIGNAL(scaleUpdate()),BaseNoteSetter[0],SLOT(onScaleUpdate()));
+    connect(this,SIGNAL(scaleupdate()),M[0],SLOT(onscaleupdate()));
+    connect(this,SIGNAL(scaleupdate()),BaseNoteSetter[0],SLOT(onscaleupdate()));
     for(int j=1;j<12;j++) {
-        connect(this,SIGNAL(scaleUpdate()),BaseNoteSetter[j],SLOT(onScaleUpdate()));
-        connect(this,SIGNAL(scaleUpdate()),bScaleSwitch[j-1],SLOT(onScaleUpdate()));
+        connect(this,SIGNAL(scaleupdate()),BaseNoteSetter[j],SLOT(onscaleupdate()));
+        connect(this,SIGNAL(scaleupdate()),bScaleSwitch[j-1],SLOT(onscaleupdate()));
     }
 
     showFreqs = new MWHeaderSetter(22,this);
-    lPlayAreaCtl->addWidget(showFreqs,0,12);
     connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
-
-    for(int i=0;i<3;i++) {
-        H[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        H[i]->setContentsMargins(0,0,0,0);
-    }
-
-    M[0]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    M[0]->setContentsMargins(0,0,0,0);
-    M[1]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    M[1]->setContentsMargins(0,0,0,0);
-    M[2]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    M[2]->setContentsMargins(0,0,0,0);
-
-    //qDebug() << "wlayout::wlayout new out " << out;
 
     for(int i=0;i<7;i++) {
         int fctId=i;
         if(i>=3) fctId+=3;
         HS[i] = new MWHeaderSetter(fctId,this);
-        HS[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         connect(this,SIGNAL(setMenuItemState(int,int)),HS[i],SLOT(setState(int,int)));
         if(i<3) {
             connect(HS[i],SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
@@ -277,13 +206,12 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
 
     for(auto presetButton:scalePresets) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
-        connect(presetButton,SIGNAL(scaleUpdate()),this,SLOT(onScaleUpdate()));
+        connect(presetButton,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(presetButton,SIGNAL(setScale(MWScale*)),BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
             connect(presetButton,SIGNAL(setScale(MWScale*)),BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
             connect(presetButton,SIGNAL(setScale(MWScale*)),bScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
         }
-        presetButton->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     }
 
     if(scalePresets.size()>0) {
@@ -297,9 +225,6 @@ wlayout::wlayout(QWidget *parent) : QWidget(parent)
     }
     emit initialSet();
 
-    recalcMainView();
-
-    this->setLayout(layout);
 }
 
 wlayout::~wlayout()
@@ -309,6 +234,7 @@ wlayout::~wlayout()
 
 void wlayout::resizeEvent(QResizeEvent *)
 {
+    /*
     //qDebug() << "wlayout::resizeEvent " << width() << " " << height();
     if(width()>height()) {
         MisuWidget::font1size=width()/40;
@@ -317,11 +243,13 @@ void wlayout::resizeEvent(QResizeEvent *)
 
     }
     recalcMainView();
+    */
 }
 
-void wlayout::currentHeader(int i)
+void wlayout::currentHeader(int)
 {
 
+    /*
     for(int j=0;j<3;j++) {
         if(i!=j) {
             H[j]->hide();
@@ -335,10 +263,12 @@ void wlayout::currentHeader(int i)
         H[i]->hide();
     }
     recalcMainView();
+    */
 }
 
-void wlayout::currentMainView(int i)
+void wlayout::currentMainView(int)
 {
+    /*
     if(i>0) {
         for(int j=1;j<4;j++) {
             if(i!=j) {
@@ -357,10 +287,12 @@ void wlayout::currentMainView(int i)
         emit setMenuItemState(i+6,0);
     }
     recalcMainView();
+    */
 }
 
+/*
 void wlayout::recalcMainView()
-{
+{    
     int mainCnt=0;
     int headerCnt=0;
 
@@ -501,10 +433,7 @@ void wlayout::recalcMainView()
 
     } else {
 
-        /*
-        int height=(11-headerCnt/2)/mainCnt;
-        int roundDiff=11-headerCnt/2-mainCnt*height;
-        */
+
 
         int height = 30;
         int roundDiff = 0;
@@ -604,29 +533,32 @@ void wlayout::recalcMainView()
     }
 
 }
+*/
 
 void wlayout::togglePresets()
 {
     presetsVisible=!presetsVisible;
-    recalcMainView();
+    //recalcMainView();
 }
 
 void wlayout::toggleMenu()
 {
     headerVisible=!headerVisible;
-    recalcMainView();
+    //recalcMainView();
 }
 
 void wlayout::toggleBW()
 {
+    /*
     for(auto widget:scalePresets) {
-        widget->update();
+        widget->//update();
     }
 
     for(int i=0;i<3;i++) {
-        H[i]->update();
-        M[i]->update();
+        H[i]->//update();
+        M[i]->//update();
     }
+    */
 }
 
 void wlayout::onSetBaseNote(Pitch *p)
@@ -646,36 +578,44 @@ void wlayout::setSound(MWSound *s)
     faderParamCtl[7]->setValue(s->mod_filter_cutoff);
     faderParamCtl[8]->setValue(s->mod_filter_resonance);
     faderParamCtl[9]->setValue(s->volume);
+    /*
     for(auto widget:soundPresets) {
-        widget->update();
+        widget->//update();
     }
+    */
 }
 
 void wlayout::setMicrotune(MWMicrotune * m)
 {
     for(int i=0;i<12;i++) {
         MisuWidget::Microtune.tuning[i] = m->tuning[i];
-        MWPitch[i]->setPitch(m->tuning[i]);
+        MisuWidget::MWPitch[i]->setPitch(m->tuning[i]);
         faderMicrotune[i]->setValue(m->tuning[i]);
     }
-    M[0]->update();
+    /*
+    M[0]->//update();
     for(auto widget:microtunePresets) {
-        widget->update();
+        widget->//update();
     }
+    */
 }
 
-void wlayout::onScaleUpdate()
+void wlayout::onscaleupdate()
 {
+    /*
     for(auto widget:scalePresets) {
-        widget->update();
+        widget->//update();
     }
+    */
 }
 
 void wlayout::onSoundSustainUpdate(int)
 {
-    faderParamCtl[2]->update();
-    faderParamCtl[4]->update();
-    faderParamCtl[5]->update();
+    /*
+    faderParamCtl[2]->//update();
+    faderParamCtl[4]->//update();
+    faderParamCtl[5]->//update();
+    */
 }
 
 void wlayout::onChannelChange(int v)
@@ -692,12 +632,12 @@ void wlayout::onToggleSender(int v)
 void wlayout::onSymbolsChange(int v)
 {
     MisuWidget::noteSymbols = v;
-    emit scaleUpdate();
+    emit scaleupdate();
 }
 
 void wlayout::onShowFreqsChange()
 {
-    emit scaleUpdate();
+    emit scaleupdate();
 }
 
 
@@ -826,22 +766,26 @@ void wlayout::writeXml(QString filename)
     for(int i=0;i<3;i++) {
         QString attId;
         attId.sprintf("showH%d",i);
+        /*
         if(H[i]->isHidden()){
             att.sprintf("0");
         } else {
             att.sprintf("1");
         }
+        */
         xml.writeAttribute(attId,att);
     }
 
     for(int i=0;i<4;i++) {
         QString attId;
         attId.sprintf("showM%d",i);
+        /*
         if(M[i]->isHidden()){
             att.sprintf("0");
         } else {
             att.sprintf("1");
         }
+        */
         xml.writeAttribute(attId,att);
     }
 
@@ -864,7 +808,7 @@ void wlayout::readLayout() {
                 attId.sprintf("b%d",i);
                 bscaleRead[i] = xmlr.attributes().value(attId).toInt();
             }
-            scalePresets.append(new MWPreset(MWPitch,
+            scalePresets.append(new MWPreset(MisuWidget::MWPitch,
                                              xmlr.attributes().value("basenote").toString().toInt(),
                                              xmlr.attributes().value("baseoct").toString().toInt(),
                                              xmlr.attributes().value("topoct").toString().toInt(),
@@ -884,7 +828,6 @@ void wlayout::readLayout() {
                         xmlr.attributes().value("mod_resonance").toString().toFloat(),
                         this);
             connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
-            soundPreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
             soundPresets.append(soundPreset);
         } else if (xmlr.name() == "microtune") {
             int microtune[12];
@@ -895,12 +838,12 @@ void wlayout::readLayout() {
             }
             MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,this);
             connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
-            microtunePreset->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
             microtunePresets.append(microtunePreset);
         } else if (xmlr.name() == "setup") {
             for(int i=0;i<3;i++) {
                 QString attId;
                 attId.sprintf("showH%d",i);
+                /*
                 if(xmlr.attributes().value(attId).toString()=="1"){
                     H[i]->show();
                     emit setMenuItemState(i,1);
@@ -908,11 +851,13 @@ void wlayout::readLayout() {
                     H[i]->hide();
                     emit setMenuItemState(i,0);
                 }
+                */
             }
 
             for(int i=0;i<4;i++) {
                 QString attId;
                 attId.sprintf("showM%d",i);
+                /*
                 if(xmlr.attributes().value(attId).toString()=="1"){
                     M[i]->show();
                     emit setMenuItemState(i+6,1);
@@ -920,6 +865,7 @@ void wlayout::readLayout() {
                     M[i]->hide();
                     emit setMenuItemState(i+6,0);
                 }
+                */
             }
 
             faderPitchTopRange->setValue(xmlr.attributes().value("pitchTopRange").toString().toInt());

@@ -29,25 +29,23 @@ class Pitch : public QObject, public Color
     Q_OBJECT
 
 public:
-    explicit Pitch(QObject *parent = 0);
-
-    void setBasenote(int value);
+    explicit Pitch(int basenote, QObject *parent = 0);
 
     int getHue() const override;
     int getBW() const;
-
-//protected:
-    int pitch;
-    int basenote;
-    int color;
+    int getBasenote();
+    int getPitch();
 
 signals:
-    void change();
+    void pitchChanged();
 
 public slots:
     void setPitch(int value);
 
 private:
+    int _basenote;
+    int _pitch;
+    float _color;
     void calcColor();
 };
 

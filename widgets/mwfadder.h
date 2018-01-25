@@ -29,7 +29,7 @@ class MWFadder : public MisuWidget
     Q_OBJECT
 
 public:
-    MWFadder(QWidget *parent, Color * c);
+    MWFadder(QObject *parent, Color * c);
     enum orientation {
         horizontal,
         vertical
@@ -46,9 +46,7 @@ public:
     int getValue();
 
 protected:
-    void paintEvent(QPaintEvent *);
     void processTouchEvent(misuTouchEvent e);
-    void resizeEvent(QResizeEvent *);
     int valueDisplay;
 
 signals:

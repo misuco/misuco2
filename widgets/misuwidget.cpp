@@ -41,6 +41,7 @@ int MisuWidget::lOn = 180;
 int MisuWidget::sOff = 180;
 int MisuWidget::sOn = 180;
 
+Pitch * MisuWidget::MWPitch[BSCALE_SIZE+1];
 MWScale MisuWidget::Scale;
 MWSound MisuWidget::Sound;
 MWMicrotune MisuWidget::Microtune;
@@ -58,12 +59,11 @@ int MisuWidget::channel = 0;
 bool MisuWidget::sendCC1 = true;
 bool MisuWidget::holdMode = false;
 
-MisuWidget::MisuWidget(QWidget *parent) : QWidget(parent)
+MisuWidget::MisuWidget(QObject *parent) : QObject(parent)
 {
     //qDebug() << "MisuWidget::MisuWidget";
     static int nextId=0;
     id=nextId++;
-    setAttribute(Qt::WA_AcceptTouchEvents,true);
 }
 
 MisuWidget::~MisuWidget()
@@ -114,5 +114,5 @@ bool MisuWidget::event(QEvent *event)
         processTouchEvent(e);
         return true;
     }
-    return QWidget::event(event);
+    return 0;//QWidget::event(event);
 }

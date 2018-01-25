@@ -24,7 +24,7 @@
 #include <QWidget>
 #include "conf/types.h"
 
-class MisuWidget : public QWidget
+class MisuWidget : public QObject
 {    
     Q_OBJECT
 
@@ -37,7 +37,7 @@ public:
         long t;
     };
 
-    explicit MisuWidget(QWidget *parent = 0);
+    explicit MisuWidget(QObject *parent = 0);
     ~MisuWidget();
 
     virtual void processTouchEvent(misuTouchEvent e)=0;
@@ -58,6 +58,8 @@ public:
     static int lOn;
     static int sOff;
     static int sOn;
+
+    static Pitch * MWPitch[];
     static MWScale Scale;
     static MWSound Sound;
     static MWMicrotune Microtune;

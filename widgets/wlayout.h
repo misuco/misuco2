@@ -42,14 +42,15 @@
 #include "mwsoundpreset.h"
 #include "mwmicrotunepreset.h"
 
-class wlayout : public QWidget
+class wlayout : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QList<QObject*> baseNoteSetter MEMBER BaseNoteSetter CONSTANT)
+
 public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
-
-    Pitch * MWPitch[BSCALE_SIZE+1];
 
 protected:
     void resizeEvent(QResizeEvent *);
@@ -57,7 +58,7 @@ protected:
 signals:
     void setBaseNote(Pitch * p);
     void initialSet();
-    void scaleUpdate();
+    void scaleupdate();
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
 
@@ -70,7 +71,7 @@ private slots:
     void onSetBaseNote(Pitch * p);
     void setSound(MWSound * s);
     void setMicrotune(MWMicrotune*m);
-    void onScaleUpdate();
+    void onscaleupdate();
     void onSoundSustainUpdate(int);
     void onChannelChange(int v);
     void onToggleSender(int v);
@@ -84,23 +85,22 @@ private:
     QXmlStreamWriter xml;
     QXmlStreamReader xmlr;
 
-    MWBaseNoteSetter * BaseNoteSetter[BSCALE_SIZE+1];
+    QList<QObject*> BaseNoteSetter;
     MWBScaleSwitch * bScaleSwitch[BSCALE_SIZE+1];
     MWOctaveRanger * OctaveRanger;
-    QStackedWidget * mainArea;
 
     // synth ctl faders
     MWFaderParamCtl * faderParamCtl[10];
     MWFaderPitch * faderMicrotune[12];
 
     // header widgets
-    QWidget * H[3];
+    QObject * H[3];
 
     // main area widgets
-    QWidget * M[4];
+    QObject * M[4];
 
     // right menu
-    QWidget * HS[15];
+    QObject * HS[15];
 
     // preset buttons
     QList<MWPreset * > scalePresets;

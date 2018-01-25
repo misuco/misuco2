@@ -32,7 +32,7 @@ class MWFaderPitch : public MWFadder
     Q_OBJECT
 
 public:
-    MWFaderPitch(QWidget *parent, Pitch * p);
+    MWFaderPitch(QObject *parent, Pitch * p);
     ~MWFaderPitch();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);

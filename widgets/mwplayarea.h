@@ -47,15 +47,11 @@ public:
         float f;
     };
 
-    MWPlayArea(Pitch * p[], QWidget *parent);
+    MWPlayArea(Pitch * p[], QObject *parent);
     ~MWPlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
 
     void setOut(ISender *value);
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 public slots:
     void setBaseNote(Pitch * p);
@@ -66,7 +62,7 @@ public slots:
     void setBendVertTop(int b);
     void setBendVertBot(int b);
     void pitchChange();    
-    void onScaleUpdate();
+    void onscaleupdate();
 
 signals:
     void menuTouch();
@@ -119,8 +115,8 @@ private:
     void config();
     void setColumn(int col, int midinote, int basenote);
     void calcGeo();
-    void paintField(int r, int c, int x, int y);
-    void paintField(int r, int c);
+    //void paintField(int r, int c, int x, int y);
+    //void paintField(int r, int c);
 };
 
 #endif // MWPLAYAREA_H

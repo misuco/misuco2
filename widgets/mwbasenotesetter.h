@@ -29,35 +29,52 @@ class MWBaseNoteSetter : public MisuWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(QColor color MEMBER _color NOTIFY colorChanged)
+    Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
+    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY colorChanged)
+    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY colorChanged)
+    Q_PROPERTY(bool underline MEMBER _underline NOTIFY colorChanged)
+
 public:
-    MWBaseNoteSetter(Pitch *pitch, QWidget *parent);
+    MWBaseNoteSetter(Pitch *pitch, QObject *parent);
     ~MWBaseNoteSetter();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
 
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
+    Q_INVOKABLE void onPressed();
+    Q_INVOKABLE void onReleased();
+
+    QObject * pitch();
 
 public slots:
     void setOctMid(int o);
     void pitchChange();
     void onSetBaseNote(Pitch *pitch);
     void onScaleSet(MWScale*scale);
-    void onScaleUpdate();
-
+    void onscaleupdate();
 
 signals:
     void setBaseNote(Pitch *);
-    void scaleUpdate();
+    void scaleupdate();
+    void colorChanged();
+
+    void fChanged();
 
 private:
-    ISender * out;
-    Pitch * p;
-    FreqTriple * f;
-    int vId;
-    int pressed;
-    bool selected;
+    ISender *       _out;
+    Pitch *         _pitch;
+    FreqTriple *    _freq;
+    int             _vId;
+    int             _pressed;
+    bool            _selected;
+
+    QColor          _color;
+    QColor          _fontColor;
+    QString         _text1;
+    QString         _text2;
+    bool            _underline;
+
+    void calcColor();
 };
 
 #endif // MWBASENOTESETTER_H

@@ -53,18 +53,19 @@ void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
         vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         value=!value;
         emit setBscale(bscaleId,value);
-        emit scaleUpdate();
+        emit scaleupdate();
         pressed++;
-        update();
+        //update();
         break;
     case Qt::TouchPointReleased:
         out->noteOff(vId);
         pressed--;
-        update();
+        //update();
         break;
     }
 }
 
+/*
 void MWBScaleSwitch::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -106,6 +107,7 @@ void MWBScaleSwitch::paintEvent(QPaintEvent *)
     cap.sprintf("%d",bscaleId);
     painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
 }
+*/
 
 void MWBScaleSwitch::setOut(ISender *value)
 {
@@ -114,11 +116,11 @@ void MWBScaleSwitch::setOut(ISender *value)
 
 void MWBScaleSwitch::setBaseNote(Pitch *p)
 {
-    basenote=p->basenote;
+    basenote=p->getBasenote();
     int newBaseNote=(basenote+bscaleId)%12;
     //qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
     f->setBasenote(MWPitch[newBaseNote]);
-    update();
+    //update();
 }
 
 void MWBScaleSwitch::setOctMid(int o)
@@ -137,10 +139,10 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
     basenote = (scale->basenote+bscaleId)%12;
     f->setBasenote(MWPitch[basenote]);
 
-    update();
+    //update();
 }
 
-void MWBScaleSwitch::onScaleUpdate()
+void MWBScaleSwitch::onscaleupdate()
 {
-    update();
+    //update();
 }

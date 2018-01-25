@@ -21,12 +21,14 @@
 #include "senderoscmidigeneric.h"
 #include "sendersupercollider.h"
 #include "senderreaktor.h"
+#include "senderdebug.h"
 #include "sendermobilesynth.h"
 #include "qoscclient.h"
 
 SenderMulti::SenderMulti()
 {
-    senders.append(new SenderMobileSynth());
+    //senders.append(new SenderMobileSynth());
+    senders.append(new SenderDebug());
     senders.append(new SenderOscMidiGeneric());
     senders.append(new SenderReaktor());
     senders.append(new SenderSuperCollider());

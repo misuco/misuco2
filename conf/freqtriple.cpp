@@ -47,20 +47,20 @@ void FreqTriple::setMidinote(int m, Pitch * p)
 {
     midinote = m;
     pitch = p;
-    freq = calcFreq(midinote,pitch->pitch);
+    freq = calcFreq(midinote,pitch->getPitch());
     oct = calcOctFromMidinote(midinote);
     //qDebug() << "FreqTriple::setMidinote " << midinote << " freq " << freq << " hue " << hue;
 }
 
 void FreqTriple::initFreq() {
-    midinote = pitch->basenote;
-    freq = calcFreq(midinote,pitch->pitch);
+    midinote = pitch->getBasenote();
+    freq = calcFreq(midinote,pitch->getPitch());
     oct = calcOctFromMidinote(midinote);
 }
 
 int FreqTriple::getPitch() const
 {
-    return pitch->pitch;
+    return pitch->getPitch();
 }
 
 void FreqTriple::setPitch(int value)
@@ -71,7 +71,7 @@ void FreqTriple::setPitch(int value)
 
 int FreqTriple::getHue() const
 {
-    return pitch->color;
+    return pitch->getHue();
 }
 
 bool FreqTriple::getBW() const
@@ -81,14 +81,14 @@ bool FreqTriple::getBW() const
 
 int FreqTriple::getBasenote() const
 {
-    return pitch->basenote;
+    return pitch->getBasenote();
 }
 
 
 QString FreqTriple::getBasenoteString(int lang) const
 {
     if(lang==1) {
-        switch(pitch->basenote) {
+        switch(pitch->getBasenote()) {
                 case 0: return "सा";
                 break;
                 case 1: return "_रे";
@@ -115,7 +115,7 @@ QString FreqTriple::getBasenoteString(int lang) const
                 break;
         }
     } else if(lang==2) {
-        switch(pitch->basenote) {
+        switch(pitch->getBasenote()) {
                 case 0: return "DO";
                 break;
                 case 1: return "_RE";
@@ -142,7 +142,7 @@ QString FreqTriple::getBasenoteString(int lang) const
                 break;
         }
     } else if(lang==3) {
-        switch(pitch->basenote) {
+        switch(pitch->getBasenote()) {
                 case 0: return "SA";
                 break;
                 case 1: return "_RE";
@@ -169,7 +169,7 @@ QString FreqTriple::getBasenoteString(int lang) const
                 break;
         }
     } else if(lang==0) {
-        switch(pitch->basenote) {
+        switch(pitch->getBasenote()) {
         case 0: return "C";
         break;
         case 1: return "_D";
@@ -230,8 +230,8 @@ QString FreqTriple::getBasenoteString(int lang) const
 void FreqTriple::setBasenote(Pitch * p)
 {
     pitch = p;
-    midinote = pitch->basenote+oct*12;
-    freq = calcFreq(midinote,pitch->pitch);
+    midinote = pitch->getBasenote()+oct*12;
+    freq = calcFreq(midinote,pitch->getPitch());
     //qDebug() << "FreqTriple::setBasenote midinote: " << midinote << " freq: " << freq;
 }
 
@@ -243,13 +243,13 @@ int FreqTriple::getOct() const
 void FreqTriple::setOct(int value)
 {
     oct = value;
-    midinote = pitch->basenote+oct*12;
-    freq = calcFreq(midinote,pitch->pitch);
+    midinote = pitch->getBasenote()+oct*12;
+    freq = calcFreq(midinote,pitch->getPitch());
 }
 
 void FreqTriple::pitchChange()
 {
-    freq=calcFreq(midinote,pitch->pitch);
+    freq=calcFreq(midinote,pitch->getPitch());
 }
 
 float FreqTriple::calcFreq(int midinote, int pitch) {

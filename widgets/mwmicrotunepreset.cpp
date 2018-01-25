@@ -22,14 +22,14 @@
 #include <QPainter>
 #include <QDebug>
 
-MWMicrotunePreset::MWMicrotunePreset(QWidget *parent): MisuWidget(parent)
+MWMicrotunePreset::MWMicrotunePreset(QObject *parent): MisuWidget(parent)
 {
     for(int i=0;i<12;i++) {
         PresetMicrotune.tuning[i]=rand()%200-100;
     }
 }
 
-MWMicrotunePreset::MWMicrotunePreset(int tuning[], QWidget *parent): MisuWidget(parent)
+MWMicrotunePreset::MWMicrotunePreset(int tuning[], QObject *parent): MisuWidget(parent)
 {
     for(int i=0;i<12;i++) {
         PresetMicrotune.tuning[i]=tuning[i];
@@ -54,9 +54,10 @@ void MWMicrotunePreset::processTouchEvent(MisuWidget::misuTouchEvent e)
         pressed--;
         break;
     }
-    update();
+    //update();
 }
 
+/*
 void MWMicrotunePreset::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -84,6 +85,7 @@ void MWMicrotunePreset::resizeEvent(QResizeEvent *)
 {
 
 }
+*/
 
 void MWMicrotunePreset::initialSet()
 {

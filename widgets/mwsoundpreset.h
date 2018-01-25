@@ -29,14 +29,10 @@ class MWSoundPreset : public MisuWidget
     Q_OBJECT
 
 public:
-    MWSoundPreset(QWidget *parent);
-    MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QWidget *parent);
+    MWSoundPreset(QObject *parent);
+    MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent);
     virtual void processTouchEvent(misuTouchEvent e);
     MWSound PresetSound;
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 public slots:
     void initialSet();

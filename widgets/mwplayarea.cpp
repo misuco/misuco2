@@ -25,14 +25,13 @@
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
 
-MWPlayArea::MWPlayArea(Pitch *p[], QWidget *parent) : MisuWidget(parent),
+MWPlayArea::MWPlayArea(Pitch *p[], QObject *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1)),
     font3(font1),
     font8(font1),
-    pcalc(this),
+    pcalc(0,this),
     fcalc(&pcalc,this)
 {
-    setAttribute(Qt::WA_AcceptTouchEvents,true);
 
     MWPitch=p;
 
@@ -124,7 +123,7 @@ void MWPlayArea::config()
     }
 
     calcGeo();
-    update();
+    //update();
 }
 
 void MWPlayArea::setColumn(int col, int midinote, int basenote) {
@@ -187,8 +186,8 @@ void MWPlayArea::setColumn(int col, int midinote, int basenote) {
 
 void MWPlayArea::calcGeo()
 {
-    int cw=width()/cols;
-    int rh=height()/rows;
+    int cw=50;//width()/cols;
+    int rh=50;//height()/rows;
     for(int i=0;i<cols;i++) {
         colwidth[i]=cw;
     }
@@ -196,12 +195,16 @@ void MWPlayArea::calcGeo()
         rowheight[i]=rh;
     }
 
+    /* TODO
     int menubottonsize = width()/20;
     if(height()>width()) {
         menubottonsize = height()/20;
     }
-    menux1 = width()-menubottonsize;
-    menux2 = width();
+    */
+    int menubottonsize = 50;
+
+    menux1 = menubottonsize;
+    menux2 = 2*menubottonsize;
     menuy1 = 0;
     menuy2 = menubottonsize;
 
@@ -214,6 +217,7 @@ void MWPlayArea::calcGeo()
     font8.setPixelSize(cw/4);
 }
 
+/*
 void MWPlayArea::paintField(int r, int c, int x, int y) {
     QPainter painter(this);
 
@@ -455,7 +459,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         }
 
 
-        painter.setPen(fgcolor /*Qt::white*/);
+        painter.setPen(fgcolor );
         painter.setBrush(Qt::NoBrush);
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
         break;
@@ -513,13 +517,13 @@ void MWPlayArea::paintEvent(QPaintEvent *)
     painter.drawRect(presetsx1,presetsy1+2*barHeight,presetsx2-presetsx1,barHeight);
     painter.drawRect(presetsx1,presetsy1+4*barHeight,presetsx2-presetsx1,barHeight);
     painter.drawRect(presetsx1,presetsy1+6*barHeight,presetsx2-presetsx1,barHeight);
-
 }
 
 void MWPlayArea::resizeEvent(QResizeEvent *)
 {
     calcGeo();
 }
+    */
 
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
@@ -538,8 +542,12 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     es->x=e.x;
     es->y=e.y;
     int row=0;
+
+    /* TODO
     if(height()>0) row = e.y*rows/height();
     int col=e.x*cols/width();
+    */
+    int col=0;
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
@@ -645,7 +653,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
                 es->col=col;
                 es->f=freq;
                 pf->pressed++;
-                update();
+                //update();
             } else if(freq!=es->f) {
                 out->pitch(channel,es->voiceId,freq,midinote,pitch);
                 es->f=freq;
@@ -666,13 +674,13 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->col=-1;
         break;
     }
-    update();
+    //update();
 
 }
 
 void MWPlayArea::setBaseNote(Pitch *p)
 {
-    Scale.basenote=p->basenote;
+    Scale.basenote=p->getBasenote();
     config();
 }
 
@@ -733,7 +741,7 @@ void MWPlayArea::setOut(ISender *value)
     //qDebug() << "MWPlayArea::setOut:" << out;
 }
 
-void MWPlayArea::onScaleUpdate()
+void MWPlayArea::onscaleupdate()
 {
-    update();
+    //update();
 }

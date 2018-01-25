@@ -40,7 +40,7 @@ MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
     }
 }
 
-MWPreset::MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[], QWidget *parent): MisuWidget(parent)
+MWPreset::MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
 {
     MWPitch=p;
     PresetScale.basenote=basenote;
@@ -78,7 +78,7 @@ void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
         }
         else {
             emit setScale(&PresetScale);
-            emit scaleUpdate();
+            emit scaleupdate();
         }
         pressed++;
         break;
@@ -86,15 +86,16 @@ void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
         pressed--;
         break;
     }
-    update();
+    //update();
 }
 
 void MWPreset::initialSet()
 {
     emit setScale(&PresetScale);
-    emit scaleUpdate();
+    emit scaleupdate();
 }
 
+/*
 void MWPreset::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -146,6 +147,7 @@ void MWPreset::resizeEvent(QResizeEvent *)
 {
 
 }
+*/
 
 bool MWPreset::isSelected()
 {

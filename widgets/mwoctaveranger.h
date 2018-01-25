@@ -28,17 +28,13 @@ class MWOctaveRanger : public MisuWidget
     Q_OBJECT
 
 public:
-    MWOctaveRanger(QWidget *parent);
+    MWOctaveRanger(QObject *parent);
     ~MWOctaveRanger();
     virtual void processTouchEvent(misuTouchEvent e);
 
 signals:
     void setOctConf(int bottom,int top);
     void setOctMid(int mid);
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 private:
     enum border {none,topPad,bottomPad};

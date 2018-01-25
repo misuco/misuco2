@@ -36,16 +36,15 @@ public:
 
 signals:
     void setBscale(int,bool);
-    void scaleUpdate();
+    void scaleupdate();
 
 public slots:
     void setBaseNote(Pitch * p);
     void setOctMid(int o);
     void onScaleSet(MWScale*);
-    void onScaleUpdate();
+    void onscaleupdate();
 
 protected:
-    void paintEvent(QPaintEvent *);
     void processTouchEvent(misuTouchEvent e);
 
 private:

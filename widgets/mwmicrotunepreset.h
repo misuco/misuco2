@@ -29,14 +29,10 @@ class MWMicrotunePreset : public MisuWidget
     Q_OBJECT
 
 public:
-    MWMicrotunePreset(QWidget *parent);
-    MWMicrotunePreset(int tuning[], QWidget *parent);
+    MWMicrotunePreset(QObject *parent);
+    MWMicrotunePreset(int tuning[], QObject *parent);
     virtual void processTouchEvent(misuTouchEvent e);
     MWMicrotune PresetMicrotune;
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 public slots:
     void initialSet();

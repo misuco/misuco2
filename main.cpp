@@ -18,20 +18,39 @@
  *
  */
 
-#include "mainwindow.h"
-#include <QApplication>
-#include <time.h>
-#include <sys/time.h>
-
-#include <QStringList>
+#include "widgets/wlayout.h"
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 int main(int argc, char *argv[])
 {
 
+    /*
     QApplication a(argc, argv);
     MainWindow w;
     w.setGeometry(0,0,400,700);
     w.show();
 
     return a.exec();
+    */
+
+#if defined(Q_OS_WIN)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
+    QGuiApplication app(argc, argv);
+
+    QObject * layout=new wlayout();
+
+    QQmlApplicationEngine engine;
+    QQmlContext* ctx = engine.rootContext();
+    ctx->setContextProperty("layout", layout);
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
+
+    return app.exec();
+
 }

@@ -21,44 +21,45 @@
 #include <QDebug>
 #include "pitch.h"
 
-Pitch::Pitch(QObject *parent) : QObject(parent)
+Pitch::Pitch(int basenote, QObject *parent) : QObject(parent), _basenote(basenote), _pitch(0)
 {
-    basenote=0;
-    color=0;
-}
-
-void Pitch::setBasenote(int value)
-{
-    basenote = value;
     calcColor();
-    emit change();
 }
 
 int Pitch::getHue() const
 {
-    return color;
+    return _color;
 }
 
 int Pitch::getBW() const
 {
     bool white = true;
-    int bn = basenote;
+    int bn = _basenote;
     if(bn == 1 || bn == 3 || bn == 6 || bn == 8 || bn == 10 ) white = false;
     return white;
 }
 
+int Pitch::getBasenote()
+{
+    return _basenote;
+}
+
+int Pitch::getPitch()
+{
+    return _pitch;
+}
+
 void Pitch::calcColor()
 {
-    color = basenote * 30 + pitch * 15 / 100;
-    if(color>360) color -=360;
-    if(color<0) color +=360;
+    _color = (float)_basenote / 12 + _pitch / 2400;
+    if(_color>1) _color -=1;
+    if(_color<0) _color +=1;
 
-    //qDebug() << "Pitch::calcColor " << color << " from basenote " << basenote << " and pitch " << pitch;
+    emit pitchChanged();
 }
 
 void Pitch::setPitch(int value)
 {
-    pitch = value;
+    _pitch = value;
     calcColor();
-    emit change();
 }

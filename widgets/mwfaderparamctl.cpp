@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWFaderParamCtl::MWFaderParamCtl(QWidget *parent, Color * col, int cc) : MWFadder(parent, col), cc(cc)
+MWFaderParamCtl::MWFaderParamCtl(QObject *parent, Color * col, int cc) : MWFadder(parent, col), cc(cc)
 {
 }
 
@@ -39,9 +39,10 @@ void MWFaderParamCtl::setValue(int v)
 {
     MWFadder::setValue(v);
     propagateValueChange();
-    update();
+    //update();
 }
 
+/*
 void MWFaderParamCtl::paintEvent(QPaintEvent *E)
 {
     MWFadder::paintEvent(E);
@@ -145,6 +146,8 @@ void MWFaderParamCtl::paintEvent(QPaintEvent *E)
     //qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
 }
 
+*/
+
 void MWFaderParamCtl::propagateValueChange() {
 
     switch(cc) {
@@ -194,17 +197,17 @@ void MWFaderParamCtl::processTouchEvent(misuTouchEvent e)
         //qDebug() << "MWFaderParamCtl::processTouchEvent TouchPointPressed " << out << " cc:" << cc << " value: " << getValue();
         propagateValueChange();
         pressed++;
-        update();
+        //update();
         break;
     case Qt::TouchPointMoved:
         out->cc(channel,0,cc,getValue(),getValue());
         propagateValueChange();
-        update();
+        //update();
         break;
     case Qt::TouchPointReleased:
         //qDebug() << "MWFaderParamCtl::processTouchEvent TouchPointReleased cc:" << cc;
         pressed--;
-        update();
+        //update();
         break;
     }
 }

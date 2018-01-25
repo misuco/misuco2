@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWOctaveRanger::MWOctaveRanger(QWidget *parent) : MisuWidget(parent)
+MWOctaveRanger::MWOctaveRanger(QObject *parent) : MisuWidget(parent)
 {
     //qDebug() << "MWOctaveRanger::MWOctaveRanger()";
     //setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -76,7 +76,7 @@ void MWOctaveRanger::processTouchEvent(MisuWidget::misuTouchEvent e)
                 mid=midnew;
                 emit setOctMid(mid);
             }
-            update();
+            //update();
         }
         break;
     case Qt::TouchPointReleased:
@@ -86,6 +86,7 @@ void MWOctaveRanger::processTouchEvent(MisuWidget::misuTouchEvent e)
 
 }
 
+/*
 void MWOctaveRanger::paintEvent(QPaintEvent *)
 {
     //qDebug() << "MWOctaveRanger::paintEvent";
@@ -111,4 +112,4 @@ void MWOctaveRanger::resizeEvent(QResizeEvent *)
     //qDebug() << "MWOctaveRanger::resizeEvent";
     segwidth=width()/noct;
 }
-
+*/

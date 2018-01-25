@@ -30,26 +30,21 @@ class MWPreset : public MisuWidget
 
 public:
     MWPreset(Pitch * p[], QWidget *parent);
-    MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QWidget *parent);
+    MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QObject *parent);
 
     virtual void processTouchEvent(misuTouchEvent e);
     MWScale PresetScale;
-
-protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 public slots:
     void initialSet();
 
 signals:
     void setScale(MWScale *);
-    void scaleUpdate();
+    void scaleupdate();
 
 private:
     Pitch ** MWPitch;
     int pressed=0;
-    void setBrush(Pitch *p, int s, int l, QPainter &painter);
     bool isSelected();
 };
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2018 by misuco.org, Claudio Zopfi, Zurich, Switzerland, c@misuco.org
  *
  * This file is part of MISUCO2.
@@ -23,46 +23,48 @@
 #include <QPainter>
 #include <QDebug>
 
-MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QWidget *parent) : MisuWidget(parent)
+MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)
 {
     //qDebug() << "MWBaseNoteSetter::MWBaseNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
-    out=new SenderDebug();
-    p=pitch;
-    f=new FreqTriple(p);
-    f->setOct(4);
-    f->setBasenote(p);
+    _out=new SenderDebug();
+    _pitch=pitch;
+    _freq=new FreqTriple(_pitch);
+    _freq->setOct(4);
+    _freq->setBasenote(_pitch);
     //qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
-    vId=0;
-    pressed=0;
-    selected=false;
+    _vId=0;
+    _pressed=0;
+    _selected=false;
+    calcColor();
 }
 
 MWBaseNoteSetter::~MWBaseNoteSetter()
 {
-    f->deleteLater();
+    _freq->deleteLater();
 }
 
 void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
+        _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
         //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
-        emit setBaseNote(p);
-        emit scaleUpdate();
+        emit setBaseNote(_pitch);
+        emit scaleupdate();
         //qDebug() << "MWBaseNoteSetter::processTouchEvent emit setBaseNote " << f->getBasenote();
-        pressed++;
-        update();
+        _pressed++;
+        //update();
         break;
     case Qt::TouchPointReleased:
         //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointReleased vId:" << vId;
-        out->noteOff(vId);
-        pressed--;
-        update();
+        _out->noteOff(_vId);
+        _pressed--;
+        //update();
         break;
     }
 }
 
+/*
 void MWBaseNoteSetter::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -116,54 +118,122 @@ void MWBaseNoteSetter::paintEvent(QPaintEvent *)
         painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignCenter,cap);
     }
 }
-
-void MWBaseNoteSetter::resizeEvent(QResizeEvent *)
-{
-    //qDebug() << "MWBaseNoteSetter::resizeEvent" << width();
-}
+*/
 
 void MWBaseNoteSetter::setOctMid(int o)
 {
-    f->setOct(o);
-    update();
+    _freq->setOct(o);
+    calcColor();
 }
 
 void MWBaseNoteSetter::pitchChange()
 {
     //qDebug() << "MWBaseNoteSetter::pitchChange "  << f->getPitch();
-    f->pitchChange();
-    update();
+    _freq->pitchChange();
+    calcColor();
 }
 
 void MWBaseNoteSetter::onSetBaseNote(Pitch * pitch)
 {
-    if(pitch == p) {
-        selected = true;
+    if(pitch == _pitch) {
+        _selected = true;
     } else {
-        selected = false;
+        _selected = false;
     }
-    update();
+    calcColor();
 }
 
 void MWBaseNoteSetter::onScaleSet(MWScale * scale)
 {
     //qDebug() << "MWBaseNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
-    if(scale->basenote==p->basenote) {
-        selected = true;
+    if(scale->basenote==_pitch->getBasenote()) {
+        _selected = true;
     } else {
-        selected = false;
+        _selected = false;
     }
-    update();
+    calcColor();
 }
 
-void MWBaseNoteSetter::onScaleUpdate()
+void MWBaseNoteSetter::onscaleupdate()
 {
-    update();
+    calcColor();
+}
+
+void MWBaseNoteSetter::calcColor()
+{
+    int l=lOff;
+    int s=sOff;
+    if(_pressed>0 || _selected) {
+        l=lOn;
+        s=sOn;
+    }
+    if(bwmode) {
+        if(_selected) {
+            if(_pitch->getBW()) {
+                _color = hlwkeycolor;
+            } else {
+                _color = hlbkeycolor;
+            }
+        } else if(_pitch->getBW()) {
+            _color = wkeycolor;
+        } else {
+            _color = bkeycolor;
+        }
+    } else {
+        _color.fromHsl(_pitch->getHue(),s,l);
+    }
+
+
+    if(_pressed>0 || _selected) {
+        _fontColor=highlightcolor;
+    } else {
+        _fontColor=fgcolor;
+    }
+
+    QString basenote = _freq->getBasenoteString(noteSymbols);
+    if(basenote.startsWith("_")) {
+        _underline=true;
+        basenote.remove(0,1);
+        basenote="<u>"+basenote+"</u>";
+    } else {
+        _underline=false;
+    }
+
+    _text1=basenote;
+
+    if(showFreqs) {
+        _text2.sprintf("%5.1f",_freq->getFreq());
+    } else {
+        _text2="";
+    }
+
+    emit colorChanged();
 }
 
 void MWBaseNoteSetter::setOut(ISender *value)
 {
-    out = value;
+    _out = value;
     //qDebug() << "MWBaseNoteSetter::setOut:" << out;
+}
+
+void MWBaseNoteSetter::onPressed()
+{
+    _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    emit setBaseNote(_pitch);
+    emit scaleupdate();
+    _pressed++;
+    calcColor();
+}
+
+void MWBaseNoteSetter::onReleased()
+{
+    _out->noteOff(_vId);
+    _pressed--;
+    calcColor();
+}
+
+QObject *MWBaseNoteSetter::pitch()
+{
+    return _pitch;
 }
 

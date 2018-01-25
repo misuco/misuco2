@@ -24,14 +24,14 @@
 #include <QUrl>
 #include <QDebug>
 
-MWHeaderSetter::MWHeaderSetter(int headerId, QWidget *parent) : MisuWidget(parent)
+MWHeaderSetter::MWHeaderSetter(int headerId, QObject *parent) : MisuWidget(parent)
 {
     this->headerId=headerId;
     pressed=0;
     this->state=0;
 }
 
-MWHeaderSetter::MWHeaderSetter(int headerId, int state, QWidget *parent): MisuWidget(parent)
+MWHeaderSetter::MWHeaderSetter(int headerId, int state, QObject *parent): MisuWidget(parent)
 {
     this->headerId=headerId;
     pressed=0;
@@ -119,7 +119,7 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         case 14:
             noteSymbols++;
             if(noteSymbols>3) noteSymbols=0;
-            emit scaleUpdate();
+            emit scaleupdate();
             break;
         case 16:
             MisuWidget::sendCC1 = ! MisuWidget::sendCC1;
@@ -144,12 +144,12 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
         }
 
         pressed++;
-        update();
+        //update();
         break;
 
     case Qt::TouchPointReleased:
         pressed--;
-        update();
+        //update();
         break;
     }
 }
@@ -164,10 +164,11 @@ void MWHeaderSetter::setState(int id, int s)
     if(headerId == id) {
         //qDebug() << "MWHeaderSetter::setState id:" << id << " state: " << s;
         state = s;
-        update();
+        //update();
     }
 }
 
+/*
 void MWHeaderSetter::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -267,6 +268,7 @@ void MWHeaderSetter::resizeEvent(QResizeEvent *)
 {
 
 }
+*/
 
 QString MWHeaderSetter::midi2TextUrl(int midinote) {
     QString t;
