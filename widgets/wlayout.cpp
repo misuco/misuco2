@@ -152,18 +152,19 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect(this,SIGNAL(setBaseNote(Pitch*)),baseNoteSetter,SLOT(onSetBaseNote(Pitch*)));
         connect(H[0],SIGNAL(setOctMid(int)),baseNoteSetter,SLOT(setOctMid(int)));
         connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,baseNoteSetter, SLOT(pitchChange()));
-        BaseNoteSetter.append(baseNoteSetter);
+        _BaseNoteSetter.append(baseNoteSetter);
     }
 
     for(int i=1;i<12;i++) {
-        bScaleSwitch[i-1] = new MWBScaleSwitch(i,MisuWidget::MWPitch);
-        bScaleSwitch[i-1]->setOut(out);
-        connect(bScaleSwitch[i-1],SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
-        connect(bScaleSwitch[i-1],SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
-        connect(H[0],SIGNAL(setOctMid(int)),bScaleSwitch[i-1],SLOT(setOctMid(int)));
+        MWBScaleSwitch * bs =new MWBScaleSwitch(i);
+        bs->setOut(out);
+        connect(bs,SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
+        connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
+        connect(H[0],SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
-            connect(BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bScaleSwitch[i-1],SLOT(setBaseNote(Pitch *)));
+            connect(_BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bs,SLOT(setBaseNote(Pitch *)));
         }
+        _BScaleSwitch.append(bs);
     }
 
     openScalesArchive = new MWHeaderSetter(13,1,this);
@@ -175,10 +176,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     faderSymbols->setInverted(true);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
     connect(this,SIGNAL(scaleupdate()),M[0],SLOT(onscaleupdate()));
-    connect(this,SIGNAL(scaleupdate()),BaseNoteSetter[0],SLOT(onscaleupdate()));
+    connect(this,SIGNAL(scaleupdate()),_BaseNoteSetter[0],SLOT(onscaleupdate()));
     for(int j=1;j<12;j++) {
-        connect(this,SIGNAL(scaleupdate()),BaseNoteSetter[j],SLOT(onscaleupdate()));
-        connect(this,SIGNAL(scaleupdate()),bScaleSwitch[j-1],SLOT(onscaleupdate()));
+        connect(this,SIGNAL(scaleupdate()),_BaseNoteSetter[j],SLOT(onscaleupdate()));
+        connect(this,SIGNAL(scaleupdate()),_BScaleSwitch[j-1],SLOT(onscaleupdate()));
     }
 
     showFreqs = new MWHeaderSetter(22,this);
@@ -207,10 +208,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     for(auto presetButton:scalePresets) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
         connect(presetButton,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
-        connect(presetButton,SIGNAL(setScale(MWScale*)),BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
+        connect(presetButton,SIGNAL(setScale(MWScale*)),_BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
-            connect(presetButton,SIGNAL(setScale(MWScale*)),BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
-            connect(presetButton,SIGNAL(setScale(MWScale*)),bScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
+            connect(presetButton,SIGNAL(setScale(MWScale*)),_BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
+            connect(presetButton,SIGNAL(setScale(MWScale*)),_BScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
         }
     }
 

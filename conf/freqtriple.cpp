@@ -91,11 +91,11 @@ QString FreqTriple::getBasenoteString(int lang) const
         switch(pitch->getBasenote()) {
                 case 0: return "सा";
                 break;
-                case 1: return "_रे";
+                case 1: return "<u>रे</u>";
                 break;
                 case 2: return "रे";
                 break;
-                case 3: return "_ग";
+                case 3: return "<u>ग</u>";
                 break;
                 case 4: return "ग";
                 break;
@@ -105,11 +105,11 @@ QString FreqTriple::getBasenoteString(int lang) const
                 break;
                 case 7: return "प";
                 break;
-                case 8: return "_ध";
+                case 8: return "<u>ध</u>";
                 break;
                 case 9: return "ध";
                 break;
-                case 10: return "_नि";
+                case 10: return "<u>नि</u>";
                 break;
                 case 11: return "नि";
                 break;
@@ -118,11 +118,11 @@ QString FreqTriple::getBasenoteString(int lang) const
         switch(pitch->getBasenote()) {
                 case 0: return "DO";
                 break;
-                case 1: return "_RE";
+                case 1: return "<u>RE</u>";
                 break;
                 case 2: return "RE";
                 break;
-                case 3: return "_MI";
+                case 3: return "<u>MI</u>";
                 break;
                 case 4: return "MI";
                 break;
@@ -132,11 +132,11 @@ QString FreqTriple::getBasenoteString(int lang) const
                 break;
                 case 7: return "SO";
                 break;
-                case 8: return "_LA";
+                case 8: return "<u>LA</u>";
                 break;
                 case 9: return "LA";
                 break;
-                case 10: return "_TI";
+                case 10: return "<u>TI</u>";
                 break;
                 case 11: return "TI";
                 break;
@@ -145,25 +145,25 @@ QString FreqTriple::getBasenoteString(int lang) const
         switch(pitch->getBasenote()) {
                 case 0: return "SA";
                 break;
-                case 1: return "_RE";
+                case 1: return "<u>RE</u>";
                 break;
                 case 2: return "RE";
                 break;
-                case 3: return "_GA";
+                case 3: return "<u>GA</u>";
                 break;
                 case 4: return "GA";
                 break;
                 case 5: return "MA";
                 break;
-                case 6: return "MA#";
+                case 6: return "MA'";
                 break;
                 case 7: return "PA";
                 break;
-                case 8: return "_DA";
+                case 8: return "<u>DA</u>";
                 break;
                 case 9: return "DA";
                 break;
-                case 10: return "_NI";
+                case 10: return "<u>NI</u>";
                 break;
                 case 11: return "NI";
                 break;
@@ -172,11 +172,11 @@ QString FreqTriple::getBasenoteString(int lang) const
         switch(pitch->getBasenote()) {
         case 0: return "C";
         break;
-        case 1: return "_D";
+        case 1: return "<u>D</u>";
         break;
         case 2: return "D";
         break;
-        case 3: return "_E";
+        case 3: return "<u>E</u>";
         break;
         case 4: return "E";
         break;
@@ -186,11 +186,11 @@ QString FreqTriple::getBasenoteString(int lang) const
         break;
         case 7: return "G";
         break;
-        case 8: return "_A";
+        case 8: return "<u>A</u>";
         break;
         case 9: return "A";
         break;
-        case 10: return "_B";
+        case 10: return "<u>B</u>";
         break;
         case 11: return "B";
         break;

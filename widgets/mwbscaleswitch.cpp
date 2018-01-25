@@ -23,95 +23,91 @@
 #include "comm/senderdebug.h"
 #include <QDebug>
 
-MWBScaleSwitch::MWBScaleSwitch(int i, Pitch **MWP)
+MWBScaleSwitch::MWBScaleSwitch(int i)
 {
     //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
 
-    for(int i=0;i<12;i++) {
-        MWPitch[i]=*(MWP+i);
-        f=new FreqTriple(MWPitch[i],this);
-        f->setBasenote(MWPitch[i]);
-    }
-    // TODO: how to type cast this?
-    //MWPitch=MWP;
-    value=false;
-    pressed=0;
+    //for(int i=0;i<12;i++) {
+        _freq=new FreqTriple(MWPitch[i],this);
+        _freq->setBasenote(MWPitch[i]);
+    //}
+    _value=false;
+    _pressed=0;
     bscaleId=i;
-    f->setOct(4);
-    out=new SenderDebug();
+    _freq->setOct(4);
+    out=nullptr;
+    vId=0;
 }
 
 MWBScaleSwitch::~MWBScaleSwitch()
 {
-    delete(f);
+    delete(_freq);
 }
 
-void MWBScaleSwitch::processTouchEvent(misuTouchEvent e)
+void MWBScaleSwitch::calcColor()
 {
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
-        value=!value;
-        emit setBscale(bscaleId,value);
-        emit scaleupdate();
-        pressed++;
-        //update();
-        break;
-    case Qt::TouchPointReleased:
-        out->noteOff(vId);
-        pressed--;
-        //update();
-        break;
+    int l=lOff;
+    int s=sOff;
+    if(_pressed>0 || _value) {
+        l=lOn;
+        s=sOn;
     }
-}
 
-/*
-void MWBScaleSwitch::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    QString cap;
-    QFont font(font1);
-    font.setPixelSize(font1size);
-    painter.setFont(font);
-
+    int pitch = _freq->getBasenote();
     if(bwmode) {
-        if(value) {
-            if(f->getBW()) {
-                painter.setBrush(hlwkeycolor);
+        if(_value) {
+            if(MWPitch[pitch]->getBW()) {
+                _color = hlwkeycolor;
             } else {
-                painter.setBrush(hlbkeycolor);
+                _color = hlbkeycolor;
             }
-        } else if(f->getBW()) {
-            painter.setBrush(wkeycolor);
+        } else if(MWPitch[pitch]->getBW()) {
+            _color = wkeycolor;
         } else {
-            painter.setBrush(bkeycolor);
+            _color = bkeycolor;
         }
     } else {
-        int l=lOff;
-        int s=sOff;
-        if(value) {
-            l=lOn;
-            s=sOn;
-        }
-        painter.setBrush(QColor::fromHsl(f->getHue(),s,l));
+        _color.fromHsl(MWPitch[pitch]->getHue(),s,l);
     }
 
-    painter.setPen(Qt::NoPen);
-    painter.drawRect(0,0,width(),height());
 
-    if(pressed>0 || value) {
-        painter.setPen(highlightcolor);
+    if(_pressed>0 || _value) {
+        _fontColor=highlightcolor;
     } else {
-        painter.setPen(fgcolor);
+        _fontColor=fgcolor;
     }
-    cap.sprintf("%d",bscaleId);
-    painter.drawText(0,0,width(),height(),Qt::AlignCenter|Qt::AlignHCenter,cap);
+
+    _text1=_freq->getBasenoteString(noteSymbols);
+
+    if(showFreqs) {
+        _text2.sprintf("%5.1f",_freq->getFreq());
+    } else {
+        _text2="";
+    }
+
+    emit colorChanged();
 }
-*/
 
 void MWBScaleSwitch::setOut(ISender *value)
 {
     out = value;
+}
+
+void MWBScaleSwitch::onPressed()
+{
+    if(out) vId=out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    _value=!_value;
+    emit setBscale(bscaleId,_value);
+    emit scaleupdate();
+    _pressed++;
+    calcColor();
+}
+
+void MWBScaleSwitch::onReleased()
+{
+    if(out) out->noteOff(vId);
+    _pressed--;
+    calcColor();
 }
 
 void MWBScaleSwitch::setBaseNote(Pitch *p)
@@ -119,30 +115,30 @@ void MWBScaleSwitch::setBaseNote(Pitch *p)
     basenote=p->getBasenote();
     int newBaseNote=(basenote+bscaleId)%12;
     //qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
-    f->setBasenote(MWPitch[newBaseNote]);
-    //update();
+    _freq->setBasenote(MWPitch[newBaseNote]);
+    calcColor();
 }
 
 void MWBScaleSwitch::setOctMid(int o)
 {
-    f->setOct(o);
+    _freq->setOct(o);
 }
 
 void MWBScaleSwitch::onScaleSet(MWScale * scale)
 {
     if(scale->bscale[bscaleId-1]) {
-        value=true;
+        _value=true;
     } else {
-        value=false;
+        _value=false;
     }
 
     basenote = (scale->basenote+bscaleId)%12;
-    f->setBasenote(MWPitch[basenote]);
+    _freq->setBasenote(MWPitch[basenote]);
 
-    //update();
+    calcColor();
 }
 
 void MWBScaleSwitch::onscaleupdate()
 {
-    //update();
+    calcColor();
 }

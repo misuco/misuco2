@@ -33,12 +33,10 @@ class MWBaseNoteSetter : public MisuWidget
     Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
     Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY colorChanged)
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY colorChanged)
-    Q_PROPERTY(bool underline MEMBER _underline NOTIFY colorChanged)
 
 public:
     MWBaseNoteSetter(Pitch *pitch, QObject *parent);
     ~MWBaseNoteSetter();
-    virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
 
     Q_INVOKABLE void onPressed();
@@ -72,7 +70,6 @@ private:
     QColor          _fontColor;
     QString         _text1;
     QString         _text2;
-    bool            _underline;
 
     void calcColor();
 };

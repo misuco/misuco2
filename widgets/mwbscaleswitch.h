@@ -29,14 +29,23 @@ class MWBScaleSwitch : public MisuWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(QColor color MEMBER _color NOTIFY colorChanged)
+    Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
+    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY colorChanged)
+    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY colorChanged)
+
 public:
-    MWBScaleSwitch(int i, Pitch ** MWP);
+    MWBScaleSwitch(int i);
     ~MWBScaleSwitch();
-    void setOut(ISender *value);
+    void setOut(ISender *_value);
+
+    Q_INVOKABLE void onPressed();
+    Q_INVOKABLE void onReleased();
 
 signals:
     void setBscale(int,bool);
     void scaleupdate();
+    void colorChanged();
 
 public slots:
     void setBaseNote(Pitch * p);
@@ -44,18 +53,24 @@ public slots:
     void onScaleSet(MWScale*);
     void onscaleupdate();
 
-protected:
-    void processTouchEvent(misuTouchEvent e);
+//protected:
+    //void processTouchEvent(misuTouchEvent e);
 
 private:
     ISender * out;
-    FreqTriple * f;    
-    Pitch * MWPitch[12];
+    FreqTriple * _freq;
     int bscaleId;
     int basenote;
     int vId;
-    int pressed;
-    bool value;
+    int _pressed;
+    bool _value;
+
+    QColor          _color;
+    QColor          _fontColor;
+    QString         _text1;
+    QString         _text2;
+
+    void calcColor();
 };
 
 #endif // MWBSCALESWITCH_H

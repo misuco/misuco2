@@ -43,83 +43,6 @@ MWBaseNoteSetter::~MWBaseNoteSetter()
     _freq->deleteLater();
 }
 
-void MWBaseNoteSetter::processTouchEvent(misuTouchEvent e)
-{
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
-        //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
-        emit setBaseNote(_pitch);
-        emit scaleupdate();
-        //qDebug() << "MWBaseNoteSetter::processTouchEvent emit setBaseNote " << f->getBasenote();
-        _pressed++;
-        //update();
-        break;
-    case Qt::TouchPointReleased:
-        //qDebug() << "MWBaseNoteSetter::processTouchEvent TouchPointReleased vId:" << vId;
-        _out->noteOff(_vId);
-        _pressed--;
-        //update();
-        break;
-    }
-}
-
-/*
-void MWBaseNoteSetter::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    QString cap;
-    int l=lOff;
-    int s=sOff;
-    if(pressed>0 || selected) {
-        l=lOn;
-        s=sOn;
-    }
-    if(bwmode) {
-        if(selected) {
-            if(f->getBW()) {
-                painter.setBrush(hlwkeycolor);
-            } else {
-                painter.setBrush(hlbkeycolor);
-            }
-        } else if(f->getBW()) {
-            painter.setBrush(wkeycolor);
-        } else {
-            painter.setBrush(bkeycolor);
-        }
-    } else {
-        painter.setBrush(QColor::fromHsl(f->getHue(),s,l));
-    }
-    painter.setPen(Qt::NoPen);
-    painter.drawRect(0,0,width(),height());
-    //cap.sprintf("%d %5.2f",f->getBasenote(), f->getFreq());
-
-    if(pressed>0 || selected) {
-        painter.setPen(highlightcolor);
-    } else {
-        painter.setPen(fgcolor);
-    }
-
-    QFont font(font1);
-    QString basenote = f->getBasenoteString(noteSymbols);
-    if(basenote.startsWith("_")) {
-        font.setUnderline(true);
-        basenote.remove(0,1);
-    }
-    font.setPixelSize(font1size);
-    painter.setFont(font);
-    cap.sprintf("%s",basenote.toStdString().c_str());
-    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignCenter,cap);
-    font.setUnderline(false);
-
-    if(showFreqs) {
-        painter.setFont(font);
-        cap.sprintf("%5.1f",f->getFreq());
-        painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignCenter,cap);
-    }
-}
-*/
-
 void MWBaseNoteSetter::setOctMid(int o)
 {
     _freq->setOct(o);
@@ -190,16 +113,7 @@ void MWBaseNoteSetter::calcColor()
         _fontColor=fgcolor;
     }
 
-    QString basenote = _freq->getBasenoteString(noteSymbols);
-    if(basenote.startsWith("_")) {
-        _underline=true;
-        basenote.remove(0,1);
-        basenote="<u>"+basenote+"</u>";
-    } else {
-        _underline=false;
-    }
-
-    _text1=basenote;
+    _text1 = _freq->getBasenoteString(noteSymbols);
 
     if(showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());

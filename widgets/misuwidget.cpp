@@ -88,7 +88,7 @@ bool MisuWidget::event(QEvent *event)
             e.state=touchPoint.state();
             e.x=touchPoint.pos().x();
             e.y=touchPoint.pos().y();
-            processTouchEvent(e);
+            //processTouchEvent(e);
         }
         return true;
     } else if(  event->type()==QEvent::MouseMove ||
@@ -111,7 +111,7 @@ bool MisuWidget::event(QEvent *event)
         e.id=9999;
         e.x=meve->pos().x();
         e.y=meve->pos().y();
-        processTouchEvent(e);
+        //processTouchEvent(e);
         return true;
     }
     return 0;//QWidget::event(event);

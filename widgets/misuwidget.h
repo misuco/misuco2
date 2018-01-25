@@ -40,8 +40,6 @@ public:
     explicit MisuWidget(QObject *parent = 0);
     ~MisuWidget();
 
-    virtual void processTouchEvent(misuTouchEvent e)=0;
-
     static QString font1;
     static int font1size;
     static QColor fgcolor;

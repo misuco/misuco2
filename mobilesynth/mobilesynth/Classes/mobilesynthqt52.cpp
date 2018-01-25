@@ -38,7 +38,7 @@ mobileSynthQT52::mobileSynthQT52()
     qDebug() << "mobileSynthQT52::size " << size();
     for(auto device:QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
         qDebug() << "****" << device.deviceName();
-        //m_device=device;
+        if( device.deviceName() == "default") m_device=device;
     }
 
 
