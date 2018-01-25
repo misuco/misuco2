@@ -41,7 +41,7 @@ SenderOscPuredata::~SenderOscPuredata()
     delete(oscout);
 }
 
-void SenderOscPuredata::noteOn(int chan, int voiceId, float, int midinote, int pitch, int scalenote, int)
+void SenderOscPuredata::noteOn(int chan, int, float, int midinote, int pitch, int, int)
 {
     //int f = midinote;
     //int vid=voiceId%1024;
@@ -68,7 +68,7 @@ void SenderOscPuredata::noteOff(int chan, int, int midinote)
     sendOsc("/note",v);
 }
 
-void SenderOscPuredata::pitch(int chan, int, float, int, int pitch, int scalenote)
+void SenderOscPuredata::pitch(int chan, int, float, int, int pitch, int)
 {
     QVariantList v;
     v.append(chan);

@@ -12,13 +12,15 @@ namespace synth {
     
     Oscillator::Oscillator()
     : wave_type_(SINE),
-    frequency_(0),
-    pulse_width_(M_PI),
-    sample_rate_(kDefaultSampleRate),
-    sample_num_(0),
-    phase_(0),
-    phase_inc_(0),
-    pi2(M_PI*2){}
+      frequency_(0),
+      phase_(0),
+      pi2(M_PI*2),
+      pulse_width_(M_PI),
+      sample_rate_(kDefaultSampleRate),
+      sample_num_(0),
+      phase_inc_(0),
+      value(0)
+    {}
     
     Oscillator::~Oscillator() { }
     

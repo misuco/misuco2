@@ -36,7 +36,7 @@ SenderOscXY::~SenderOscXY()
     delete(oscout);
 }
 
-void SenderOscXY::noteOn(int, int, float, int, int, int scalenote, int)
+void SenderOscXY::noteOn(int, int, float, int, int, int, int)
 {
 }
 

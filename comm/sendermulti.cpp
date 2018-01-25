@@ -88,7 +88,7 @@ int SenderMulti::noteOn(int chan, float f, int midinote, int pitch, int v)
     return vid;
 }
 
-void SenderMulti::noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v)
+void SenderMulti::noteOn(int, int, float, int, int, int)
 {
 
 }

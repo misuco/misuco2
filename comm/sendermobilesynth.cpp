@@ -131,11 +131,12 @@ void SenderMobileSynth::cc(int, int voiceId, int cc, float v1, float)
 
 void SenderMobileSynth::pc(int, int) {}
 
-int SenderMobileSynth::noteOn(int, float f, int, int, int)
+int SenderMobileSynth::noteOn(int, float, int, int, int)
 {
+    return 0;
 }
 
-void SenderMobileSynth::noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v)
+void SenderMobileSynth::noteOn(int, int voiceId, float f, int, int, int)
 {
     //qDebug() << "SenderMobileSynth::noteOn " << voiceId << " f: " << f;
     sy->noteOn(voiceId, (float)f);
