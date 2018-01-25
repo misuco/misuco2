@@ -27,8 +27,8 @@
 
 SenderMulti::SenderMulti()
 {
-    senders.append(new SenderMobileSynth());
-    //senders.append(new SenderDebug());
+    //senders.append(new SenderMobileSynth());
+    senders.append(new SenderDebug());
     senders.append(new SenderOscMidiGeneric());
     senders.append(new SenderReaktor());
     senders.append(new SenderSuperCollider());

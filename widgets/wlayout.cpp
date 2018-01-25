@@ -55,17 +55,17 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         MisuWidget::MWPitch[i]=new Pitch(i,this);
     }    
 
-    M[0] = new MWPlayArea(MisuWidget::MWPitch,this);
-    ((MWPlayArea *)M[0])->setOut(out);
-    connect(M[0],SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
-    connect(M[0],SIGNAL(presetsTouch()), this, SLOT(togglePresets()));
+    _PlayArea = new MWPlayArea(this);
+    ((MWPlayArea *)_PlayArea)->setOut(out);
+    connect(_PlayArea,SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
+    connect(_PlayArea,SIGNAL(presetsTouch()), this, SLOT(togglePresets()));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), (MWPlayArea *)M[0], SLOT(pitchChange()));
+        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), (MWPlayArea *)_PlayArea, SLOT(pitchChange()));
     }
 
     H[0] = new MWOctaveRanger(this);
-    connect(H[0],SIGNAL(setOctConf(int,int)),M[0],SLOT(setOctConf(int,int)));
+    connect(H[0],SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         faderMicrotune[i] = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
@@ -102,17 +102,17 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     faderPitchTopRange->setOut(out);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
-    connect(faderPitchTopRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertTop(int)));
+    connect(faderPitchTopRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertTop(int)));
 
     faderPitchBottomRange = new MWFaderParamCtl(this,synthCtlColor,2);
     faderPitchBottomRange->setOut(out);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
-    connect(faderPitchBottomRange,SIGNAL(valueChange(int)),M[0],SLOT(setBendVertBot(int)));
+    connect(faderPitchBottomRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertBot(int)));
 
     pitchHorizontal = new MWHeaderSetter(15,this);
-    connect(pitchHorizontal,SIGNAL(setBendHori(bool)),M[0],SLOT(setBendHori(bool)));
-    connect(this,SIGNAL(setBendHori(bool)),M[0],SLOT(setBendHori(bool)));
+    connect(pitchHorizontal,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
+    connect(this,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
 
     faderChannel = new MWFaderParamCtl(this,synthCtlColor,3);
     faderChannel->setOut(out);
@@ -146,7 +146,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     for(int i=0;i<12;i++) {
         MWBaseNoteSetter * baseNoteSetter = new MWBaseNoteSetter(MisuWidget::MWPitch[i],this);
         baseNoteSetter->setOut(out);
-        connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),M[0],SLOT(setBaseNote(Pitch *)));
+        connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),_PlayArea,SLOT(setBaseNote(Pitch *)));
         connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),this,SLOT(onSetBaseNote(Pitch *)));
         connect(baseNoteSetter,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(this,SIGNAL(setBaseNote(Pitch*)),baseNoteSetter,SLOT(onSetBaseNote(Pitch*)));
@@ -158,7 +158,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     for(int i=1;i<12;i++) {
         MWBScaleSwitch * bs =new MWBScaleSwitch(i);
         bs->setOut(out);
-        connect(bs,SIGNAL(setBscale(int,bool)),M[0],SLOT(setBscale(int,bool)));
+        connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(H[0],SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
@@ -175,7 +175,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
-    connect(this,SIGNAL(scaleupdate()),M[0],SLOT(onscaleupdate()));
+    connect(this,SIGNAL(scaleupdate()),_PlayArea,SLOT(onscaleupdate()));
     connect(this,SIGNAL(scaleupdate()),_BaseNoteSetter[0],SLOT(onscaleupdate()));
     for(int j=1;j<12;j++) {
         connect(this,SIGNAL(scaleupdate()),_BaseNoteSetter[j],SLOT(onscaleupdate()));
@@ -206,7 +206,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     readXml(configPath);
 
     for(auto presetButton:scalePresets) {
-        connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)M[0],SLOT(setScale(MWScale*)));
+        connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
         connect(presetButton,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(presetButton,SIGNAL(setScale(MWScale*)),_BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {

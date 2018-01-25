@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include "conf/types.h"
+#include "conf/pitch.h"
 
 class MisuWidget : public QObject
 {    

@@ -1,0 +1,77 @@
+#include "mwplayfield.h"
+#include "widgets/misuwidget.h"
+#include <QDebug>
+
+MWPlayfield::MWPlayfield(QObject *parent) : QObject(parent)
+{
+
+}
+
+void MWPlayfield::calcColor()
+{
+
+    qDebug() << "MWPlayfield::calcColor " << pressed << " " << this;
+
+    int l=MisuWidget::lOff;
+    int s=MisuWidget::sOff;
+    if(pressed>0 || hold) {
+        l=MisuWidget::lOn;
+        s=MisuWidget::sOn;
+    }
+
+    colorF1 = QColor::fromHsl(f1->getHue(),s,l);
+    colorF1b = QColor::fromHsl(hue1bent,s,l);
+    colorF2 = QColor::fromHsl(f2->getHue(),s,l);
+    colorF2b = QColor::fromHsl(hue2bent,s,l);
+
+    if(MisuWidget::bwmode) {
+        if(f1->getBW()) {
+            if(pressed>0 || hold) {
+                colorF1 = MisuWidget::hlwkeycolor;
+                colorF1b = MisuWidget::hlbkeycolor;
+            } else {
+                colorF1 = MisuWidget::wkeycolor;
+                colorF1b = MisuWidget::bkeycolor;
+            }
+        } else {
+            if(pressed>0 || hold) {
+                colorF1 = MisuWidget::hlbkeycolor;
+                colorF1b =MisuWidget:: hlwkeycolor;
+            } else {
+                colorF1 = MisuWidget::bkeycolor;
+                colorF1b = MisuWidget::wkeycolor;
+            }
+        }
+        if(f2->getBW()) {
+            if(pressed>0 || hold) {
+                colorF2 = MisuWidget::hlwkeycolor;
+                colorF2b = MisuWidget::hlbkeycolor;
+            } else {
+                colorF2 = MisuWidget::wkeycolor;
+                colorF2b = MisuWidget::bkeycolor;
+            }
+        } else {
+            if(pressed>0 || hold) {
+                colorF2 = MisuWidget::hlbkeycolor;
+                colorF2b = MisuWidget::hlwkeycolor;
+            } else {
+                colorF2 = MisuWidget::bkeycolor;
+                colorF2b = MisuWidget::wkeycolor;
+            }
+        }
+    }
+
+    if(pressed>0 || hold) {
+        fontColor=MisuWidget::highlightcolor;
+    } else {
+        fontColor=MisuWidget::fgcolor;
+    }
+    emit colorChanged();
+
+    text1="";
+    text2=f1->getBasenoteString(MisuWidget::noteSymbols);
+    text3="";
+
+    emit textChanged();
+
+}

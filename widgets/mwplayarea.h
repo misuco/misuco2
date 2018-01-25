@@ -25,6 +25,8 @@
 #include "misuwidget.h"
 #include "conf/types.h"
 #include "comm/isender.h"
+#include "pitch.h"
+#include "mwplayfield.h"
 
 #define MAX_COLS 255
 #define MAX_ROWS 3
@@ -34,6 +36,12 @@
 class MWPlayArea : public MisuWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(int rows MEMBER rows NOTIFY playRowsChanged)
+    Q_PROPERTY(int cols MEMBER cols NOTIFY playRowsChanged)
+    Q_PROPERTY(QList<QObject *> row0 READ row0 NOTIFY playRowsChanged)
+    Q_PROPERTY(QList<QObject *> row1 READ row1 NOTIFY playRowsChanged)
+    Q_PROPERTY(QList<QObject *> row2 READ row2 NOTIFY playRowsChanged)
 
 public:
     struct eventStackElement {
@@ -47,11 +55,20 @@ public:
         float f;
     };
 
-    MWPlayArea(Pitch * p[], QObject *parent);
+    MWPlayArea(QObject *parent);
     ~MWPlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
 
     void setOut(ISender *value);
+
+    Q_INVOKABLE void resize(int w, int h);
+    Q_INVOKABLE void onPressed(int id, int x, int y);
+    Q_INVOKABLE void onUpdated(int id, int x, int y);
+    Q_INVOKABLE void onReleased(int id, int x, int y);
+
+    QList<QObject *> row0();
+    QList<QObject *> row1();
+    QList<QObject *> row2();
 
 public slots:
     void setBaseNote(Pitch * p);
@@ -67,6 +84,7 @@ public slots:
 signals:
     void menuTouch();
     void presetsTouch();
+    void playRowsChanged();
 
 private:
     // INFRASTRUCTURE
@@ -83,8 +101,7 @@ private:
 
     // WORKING MEMORY
     // - touch field configuration
-    Pitch ** MWPitch;
-    MWPlayfield fields[MAX_ROWS][MAX_COLS];
+    MWPlayfield fields[MAX_ROWS][MAX_COLS];        
     int rows;
     int cols;
     // - event stack/hashmap
@@ -97,19 +114,10 @@ private:
     int bendVertBot;
 
     // - visual
+    int width;
+    int height;
     int colwidth[MAX_COLS];
     int rowheight[MAX_ROWS];
-
-    // - menu button area
-    int menux1;
-    int menux2;
-    int menuy1;
-    int menuy2;
-
-    int presetsx1;
-    int presetsx2;
-    int presetsy1;
-    int presetsy2;
 
     // helper functions
     void config();

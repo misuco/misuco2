@@ -74,7 +74,8 @@ SOURCES += main.cpp\
     comm/senderoscxy.cpp \
     comm/senderreaktor.cpp \
     comm/sendersupercollider.cpp \
-    widgets/mwmicrotunepreset.cpp
+    widgets/mwmicrotunepreset.cpp \
+    conf/mwplayfield.cpp
 
 HEADERS  += \
     widgets/wlayout.h \
@@ -129,7 +130,8 @@ HEADERS  += \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
     widgets/mwmicrotunepreset.h \
-    conf/initxml.h
+    conf/initxml.h \
+    conf/mwplayfield.h
 
 CONFIG += mobility
 MOBILITY = 

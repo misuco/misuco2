@@ -21,20 +21,18 @@
 #include "mwplayarea.h"
 #include <QDebug>
 #include <QLinearGradient>
-#include <QRadialGradient>
+#include <QTouchEvent>
+#include <QDateTime>
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
 
-MWPlayArea::MWPlayArea(Pitch *p[], QObject *parent) : MisuWidget(parent),
+MWPlayArea::MWPlayArea(QObject *parent) : MisuWidget(parent),
     linearGrad(QPointF(0,1),QPointF(0,1)),
     font3(font1),
     font8(font1),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
-
-    MWPitch=p;
-
     Scale.basenote=0;
     Scale.baseoct=3;
     Scale.topoct=4;
@@ -123,7 +121,8 @@ void MWPlayArea::config()
     }
 
     calcGeo();
-    //update();
+
+    emit playRowsChanged();
 }
 
 void MWPlayArea::setColumn(int col, int midinote, int basenote) {
@@ -186,32 +185,14 @@ void MWPlayArea::setColumn(int col, int midinote, int basenote) {
 
 void MWPlayArea::calcGeo()
 {
-    int cw=50;//width()/cols;
-    int rh=50;//height()/rows;
+    int cw=width/cols;
+    int rh=height/rows;
     for(int i=0;i<cols;i++) {
         colwidth[i]=cw;
     }
     for(int i=0;i<rows;i++) {
         rowheight[i]=rh;
     }
-
-    /* TODO
-    int menubottonsize = width()/20;
-    if(height()>width()) {
-        menubottonsize = height()/20;
-    }
-    */
-    int menubottonsize = 50;
-
-    menux1 = menubottonsize;
-    menux2 = 2*menubottonsize;
-    menuy1 = 0;
-    menuy2 = menubottonsize;
-
-    presetsx1 = 0;
-    presetsx2 = menubottonsize;
-    presetsy1 = 0;
-    presetsy2 = menubottonsize;
 
     font3.setPixelSize(cw/2);
     font8.setPixelSize(cw/4);
@@ -223,55 +204,11 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
 
     painter.setFont(font3);
 
+
+
+
+
     //qDebug() << "MWPlayArea::paintField r " << r << " c " << c;
-    int l=lOff;
-    int s=sOff;
-    if(fields[r][c].pressed>0 || fields[r][c].hold) {
-        l=lOn;
-        s=sOn;
-    }
-
-    QColor colorF1 = QColor::fromHsl(fields[r][c].f1->getHue(),s,l);
-    QColor colorF1b = QColor::fromHsl(fields[r][c].hue1bent,s,l);
-    QColor colorF2 = QColor::fromHsl(fields[r][c].f2->getHue(),s,l);
-    QColor colorF2b = QColor::fromHsl(fields[r][c].hue2bent,s,l);
-    if(bwmode) {
-        if(fields[r][c].f1->getBW()) {
-            if(fields[r][c].pressed>0 || fields[r][c].hold) {
-                colorF1 = hlwkeycolor;
-                colorF1b = hlbkeycolor;
-            } else {
-                colorF1 = wkeycolor;
-                colorF1b = bkeycolor;
-            }
-        } else {
-            if(fields[r][c].pressed>0 || fields[r][c].hold) {
-                colorF1 = hlbkeycolor;
-                colorF1b = hlwkeycolor;
-            } else {
-                colorF1 = bkeycolor;
-                colorF1b = wkeycolor;
-            }
-        }
-        if(fields[r][c].f2->getBW()) {
-            if(fields[r][c].pressed>0 || fields[r][c].hold) {
-                colorF2 = hlwkeycolor;
-                colorF2b = hlbkeycolor;
-            } else {
-                colorF2 = wkeycolor;
-                colorF2b = bkeycolor;
-            }
-        } else {
-            if(fields[r][c].pressed>0 || fields[r][c].hold) {
-                colorF2 = hlbkeycolor;
-                colorF2b = hlwkeycolor;
-            } else {
-                colorF2 = bkeycolor;
-                colorF2b = wkeycolor;
-            }
-        }
-    }
-
     QString basenote;
     switch(fields[r][c].type) {
     case NORMAL:
@@ -529,6 +466,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
     //qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
 
+    /*
     if (e.state==Qt::TouchPointReleased &&  e.x>=menux1 && e.x<=menux2 && e.y>=menuy1 && e.y<=menuy2) {
         emit menuTouch();
     }
@@ -536,6 +474,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     if (e.state==Qt::TouchPointReleased &&  e.x>=presetsx1 && e.x<=presetsx2 && e.y>=presetsy1 && e.y<=presetsy2) {
         emit presetsTouch();
     }
+    */
 
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
@@ -543,17 +482,14 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     es->y=e.y;
     int row=0;
 
-    /* TODO
-    if(height()>0) row = e.y*rows/height();
-    int col=e.x*cols/width();
-    */
-    int col=0;
+    if(height>0) row = e.y*rows/height;
+    int col=e.x*cols/width;
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
 
     MWPlayfield * pf = &fields[row][col];
-    //qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
+    qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
 
     float freq;
     int midinote;
@@ -644,6 +580,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             if(row!=es->row || col!=es->col) {
                 MWPlayfield * ppf = &fields[es->row][es->col];
                 ppf->pressed--;
+                ppf->calcColor();
                 out->noteOff(es->voiceId);
 
                 es->midinote=midinote;
@@ -653,7 +590,6 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
                 es->col=col;
                 es->f=freq;
                 pf->pressed++;
-                //update();
             } else if(freq!=es->f) {
                 out->pitch(channel,es->voiceId,freq,midinote,pitch);
                 es->f=freq;
@@ -674,6 +610,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->col=-1;
         break;
     }
+
+    pf->calcColor();
     //update();
 
 }
@@ -737,9 +675,85 @@ void MWPlayArea::pitchChange()
 
 void MWPlayArea::setOut(ISender *value)
 {
+    delete(out);
     out = value;
     //qDebug() << "MWPlayArea::setOut:" << out;
 }
+
+void MWPlayArea::resize(int w, int h)
+{
+    qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
+    width=w;
+    height=h;
+    calcGeo();
+}
+
+void MWPlayArea::onPressed(int id, int x, int y)
+{
+    qDebug() << "MWPlayArea::onPressed id: " << id << " x: " << x << " y: " << y;
+    misuTouchEvent e;
+    e.id=id;
+    e.x=x;
+    e.y=y;
+    e.state=Qt::TouchPointPressed;
+    e.t=QDateTime::currentMSecsSinceEpoch();
+    processTouchEvent(e);
+}
+
+void MWPlayArea::onUpdated(int id, int x, int y)
+{
+    qDebug() << "MWPlayArea::onUpdated id: " << id << " x: " << x << " y: " << y;
+    misuTouchEvent e;
+    e.id=id;
+    e.x=x;
+    e.y=y;
+    e.state=Qt::TouchPointMoved;
+    e.t=QDateTime::currentMSecsSinceEpoch();
+    processTouchEvent(e);
+}
+
+void MWPlayArea::onReleased(int id, int x, int y)
+{
+    qDebug() << "MWPlayArea::onReleased id: " << id << " x: " << x << " y: " << y;
+    misuTouchEvent e;
+    e.id=id;
+    e.x=x;
+    e.y=y;
+    e.state=Qt::TouchPointReleased;
+    e.t=QDateTime::currentMSecsSinceEpoch();
+    processTouchEvent(e);
+}
+
+QList<QObject *> MWPlayArea::row0()
+{
+    QList<QObject*> colsList;
+    for(int j=0;j<cols;j++) {
+        fields[0][j].calcColor();
+        colsList.append(&fields[0][j]);
+    }
+    return colsList;
+}
+
+QList<QObject *> MWPlayArea::row1()
+{
+    QList<QObject*> colsList;
+    for(int j=0;j<cols;j++) {
+        fields[1][j].calcColor();
+        colsList.append(&fields[1][j]);
+    }
+    return colsList;
+}
+
+QList<QObject *> MWPlayArea::row2()
+{
+    QList<QObject*> colsList;
+    for(int j=0;j<cols;j++) {
+        fields[2][j].calcColor();
+        colsList.append(&fields[2][j]);
+    }
+    return colsList;
+}
+
 
 void MWPlayArea::onscaleupdate()
 {
