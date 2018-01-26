@@ -69,6 +69,8 @@ protected:
     QColor  _bgColor;
     QColor  _fontColor;
 
+    int pressed;
+
 signals:
     void valueChange(int v);
 
@@ -85,7 +87,6 @@ private:
     int valRange;
     int step1;
     int step2;
-    int pressed;
     int pressedTouchId;
     int orient;
     int fineness;

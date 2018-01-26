@@ -27,10 +27,8 @@ MWBScaleSwitch::MWBScaleSwitch(int i)
 {
     //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
 
-    //for(int i=0;i<12;i++) {
-        _freq=new FreqTriple(MWPitch[i],this);
-        _freq->setrootNote(MWPitch[i]);
-    //}
+    _freq=new FreqTriple(MWPitch[i],this);
+    _freq->setrootNote(MWPitch[i]);
     _value=false;
     _pressed=0;
     bscaleId=i;
@@ -67,7 +65,7 @@ void MWBScaleSwitch::calcColor()
             _color = bkeycolor;
         }
     } else {
-        _color.fromHslF(MWPitch[pitch]->getHue(),s,l);
+        _color=QColor::fromHslF(MWPitch[pitch]->getHue(),s,l);
     }
 
 

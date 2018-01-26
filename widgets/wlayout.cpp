@@ -36,6 +36,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _octaveRangerVisible=false;
     _playAreaVisible=true;
     _tuneAreaVisible=false;
+    _scalePresetsVisible=true;
+    _soundPresetsVisible=false;
+    _tunePresetsVisible=false;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -62,12 +65,15 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     _PlayArea = new MWPlayArea(this);
     ((MWPlayArea *)_PlayArea)->setOut(out);
+
+    /*
     connect(_PlayArea,SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
     connect(_PlayArea,SIGNAL(presetsTouch()), this, SLOT(togglePresets()));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), (MWPlayArea *)_PlayArea, SLOT(pitchChange()));
     }
+    */
 
     _OctaveRanger = new MWOctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
@@ -217,7 +223,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     readXml(configPath);
 
-    for(auto presetButton:scalePresets) {
+    for(auto presetButton:_scalePresets) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
         connect(presetButton,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[0],SLOT(onScaleSet(MWScale*)));
@@ -227,8 +233,8 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         }
     }
 
-    if(scalePresets.size()>0) {
-        connect(this,SIGNAL(initialSet()),scalePresets[0],SLOT(initialSet()));
+    if(_scalePresets.size()>0) {
+        connect(this,SIGNAL(initialSet()),_scalePresets[0],SLOT(initialSet()));
     }
     if(soundPresets.size()>0) {
         connect(this,SIGNAL(initialSet()),soundPresets[0],SLOT(initialSet()));
@@ -243,6 +249,15 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 wlayout::~wlayout()
 {
     writeXml(configPath);
+}
+
+QList<QObject *> wlayout::pitches()
+{
+    QList<QObject*> p;
+    for(int i=0;i<BSCALE_SIZE+1;i++) {
+        p.append(MisuWidget::MWPitch[i]);
+    }
+    return p;
 }
 
 void wlayout::currentHeader(int id)
@@ -302,251 +317,6 @@ void wlayout::currentMainView(int id)
     }
     emit layoutChange();
 }
-
-/*
-void wlayout::recalcMainView()
-{    
-    int mainCnt=0;
-    int headerCnt=0;
-
-    for(int i=0;i<4;i++) {
-        layout->removeWidget(M[i]);
-        if(!M[i]->isHidden()) {mainCnt++;}
-    }
-
-    for(int i=0;i<3;i++) {
-        layout->removeWidget(H[i]);
-        if(!H[i]->isHidden()) {headerCnt+=2;}
-    }
-
-    for(int i=0;i<7;i++) {
-        layout->removeWidget(HS[i]);
-        HS[i]->hide();
-    }
-
-    layout->removeWidget(overwritePreset);
-    overwritePreset->hide();
-
-    for(auto widget:scalePresets) {
-        layout->removeWidget(widget);
-        widget->hide();
-    }
-    for(auto widget:soundPresets) {
-        layout->removeWidget(widget);
-        widget->hide();
-    }
-    for(auto widget:microtunePresets) {
-        layout->removeWidget(widget);
-        widget->hide();
-    }
-
-    if(mainCnt==0) {
-        M[0]->show();
-        mainCnt=1;
-        emit setMenuItemState(6,1);
-    }
-
-
-    if(width()>height()) {
-
-        int height=(15-headerCnt)/mainCnt;
-        int roundDiff=15-headerCnt-mainCnt*height;
-        int top=0;
-        int xpos = 0;
-        int width = 14;
-
-        if(presetsVisible) {
-            layout->addWidget(overwritePreset,0,0,1,2);
-            overwritePreset->show();
-
-            int presetCount1 = 6;
-            int presetCount2 = 0;
-            if(mainCnt>1) {
-                presetCount1 = 3;
-                presetCount2 = 3;
-                for(int i=0;i<presetCount1;i++) {
-                    if(i<scalePresets.size()) {
-                        layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
-                        scalePresets[i]->show();
-                    }
-                }
-
-                if(M[1]->isHidden()) {
-                    for(int i=0;i<presetCount2;i++) {
-                        if(i<soundPresets.size()) {
-                            layout->addWidget(soundPresets[i],(i+1)*2+presetCount1*2,0,1,2);
-                            soundPresets[i]->show();
-                        }
-                    }
-                } else {
-                    for(int i=0;i<presetCount2;i++) {
-                        if(i<microtunePresets.size()) {
-                            layout->addWidget(microtunePresets[i],(i+1)*2+presetCount1*2,0,1,2);
-                            microtunePresets[i]->show();
-                        }
-                    }
-                }
-
-            } else {
-                for(int i=0;i<presetCount1;i++) {
-                    if(M[0]->isHidden()) {
-                        if(M[1]->isHidden()) {
-                            if(i<soundPresets.size()) {
-                                layout->addWidget(soundPresets[i],(i+1)*2,0,1,2);
-                                soundPresets[i]->show();
-                            }
-                        } else {
-                            if(i<microtunePresets.size()) {
-                                layout->addWidget(microtunePresets[i],(i+1)*2,0,1,2);
-                                microtunePresets[i]->show();
-                            }
-                        }
-                    } else {
-                        if(i<scalePresets.size()) {
-                            layout->addWidget(scalePresets[i],(i+1)*2,0,1,2);
-                            scalePresets[i]->show();
-                        }
-                    }
-                }
-            }
-        }
-
-        if(presetsVisible) {
-            width-=2;
-            xpos+=2;
-        }
-
-        if(headerVisible) {
-            width-=2;
-        }
-
-        for(int i=0;i<3;i++) {
-            if(!H[i]->isHidden()) {
-                //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                layout->addWidget(H[i],top,xpos,2,width);
-                top+=2;
-            }
-        }
-
-        for(int i=0;i<4;i++) {
-            if(!M[i]->isHidden()) {
-                //qDebug() << "layout->addWidget "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                layout->addWidget(M[i],top,xpos,height+roundDiff,width);
-                top+=height+roundDiff;
-                roundDiff=0;
-            }
-        }
-
-        if(headerVisible) {
-            for(int i=0;i<7;i++) {
-                layout->addWidget(HS[i],i*2,xpos+width,2,2);
-                HS[i]->show();
-            }
-        }
-
-    } else {
-
-
-
-        int height = 30;
-        int roundDiff = 0;
-
-        int top = 0;
-        int xpos = 0;
-        int width = 7;
-
-        if(headerVisible) {
-            for(int i=0;i<7;i++) {
-                //qDebug() << "layout->addWidget HS "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                layout->addWidget(HS[i],top,i,10,1);
-                HS[i]->show();
-            }
-            top+=10;
-        }
-
-        if(presetsVisible) {
-            layout->addWidget(overwritePreset,top,xpos,10,1);
-            overwritePreset->show();
-
-            int presetCount1 = 6;
-            int presetCount2 = 0;
-            if(mainCnt>1) {
-                presetCount1 = 3;
-                presetCount2 = 3;
-                for(int i=0;i<presetCount1;i++) {
-                    if(i<scalePresets.size()) {
-                        //qDebug() << "layout->addWidget scalePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                        layout->addWidget(scalePresets[i],top,i+1,10,1);
-                        scalePresets[i]->show();
-                    }
-                }
-
-                if(M[1]->isHidden()) {
-                    for(int i=0;i<presetCount2;i++) {
-                        if(i<soundPresets.size()) {
-                            //qDebug() << "layout->addWidget soundPreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                            layout->addWidget(soundPresets[i],top,i+1+presetCount1,10,1);
-                            soundPresets[i]->show();
-                        }
-                    }
-                } else {
-                    for(int i=0;i<presetCount2;i++) {
-                        if(i<microtunePresets.size()) {
-                            //qDebug() << "layout->addWidget microtunePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                            layout->addWidget(microtunePresets[i],top,(i+1)+presetCount1,10,1);
-                            microtunePresets[i]->show();
-                        }
-                    }
-                }
-            } else {
-                for(int i=0;i<presetCount1;i++) {
-                    if(M[0]->isHidden()) {
-                        if(M[1]->isHidden()) {
-                            if(i<soundPresets.size()) {
-                                //qDebug() << "layout->addWidget soundPreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                                layout->addWidget(soundPresets[i],top,i+1,10,1);
-                                soundPresets[i]->show();
-                            }
-                        } else {
-                            if(i<microtunePresets.size()) {
-                                //qDebug() << "layout->addWidget microtunePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                                layout->addWidget(microtunePresets[i],top,i+1,10,1);
-                                microtunePresets[i]->show();
-                            }
-                        }
-                    } else {
-                        if(i<scalePresets.size()) {
-                            //qDebug() << "layout->addWidget scalePreset "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                            layout->addWidget(scalePresets[i],top,i+1,10,1);
-                            scalePresets[i]->show();
-                        }
-                    }
-                }
-            }
-            top+=10;
-        }
-
-        for(int i=0;i<3;i++) {
-            if(!H[i]->isHidden()) {
-                //qDebug() << "layout->addWidget H "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                layout->addWidget(H[i],top,xpos,10,width);
-                top+=10;
-            }
-        }
-
-        for(int i=0;i<4;i++) {
-            if(!M[i]->isHidden()) {
-                //qDebug() << "layout->addWidget M "  << i << " top " << top << " xpos " << xpos << " h " << height << " w " << width;
-                layout->addWidget(M[i],top,xpos,height,width);
-                top+=height+roundDiff;
-                roundDiff=0;
-            }
-        }
-
-    }
-
-}
-*/
 
 void wlayout::togglePresets()
 {
@@ -654,7 +424,6 @@ void wlayout::onShowFreqsChange()
     emit scaleupdate();
 }
 
-
 void wlayout::readXml(QString filename)
 {
     QFile file(filename);
@@ -697,20 +466,24 @@ void wlayout::writeXml(QString filename)
     xml.writeStartElement("misuco");
     xml.writeAttribute("version", "2.0");
 
-    for(auto widget:scalePresets) {
-        xml.writeStartElement("scale");
-        att.sprintf("%d",widget->PresetScale.rootNote);
-        xml.writeAttribute("rootNote",att);
-        att.sprintf("%d",widget->PresetScale.baseoct);
-        xml.writeAttribute("baseoct",att);
-        att.sprintf("%d",widget->PresetScale.topoct);
-        xml.writeAttribute("topoct",att);
-        for(int i=0;i<BSCALE_SIZE;i++) {
-            att.sprintf("%d",widget->PresetScale.bscale[i]);
-            attId.sprintf("b%d",i);
-            xml.writeAttribute(attId,att);
+    for(auto widgetQ:_scalePresets) {
+
+        auto widget = qobject_cast<MWPreset*>(widgetQ);
+        if(widget) {
+            xml.writeStartElement("scale");
+            att.sprintf("%d",widget->PresetScale.rootNote);
+            xml.writeAttribute("rootNote",att);
+            att.sprintf("%d",widget->PresetScale.baseoct);
+            xml.writeAttribute("baseoct",att);
+            att.sprintf("%d",widget->PresetScale.topoct);
+            xml.writeAttribute("topoct",att);
+            for(int i=0;i<BSCALE_SIZE;i++) {
+                att.sprintf("%d",widget->PresetScale.bscale[i]);
+                attId.sprintf("b%d",i);
+                xml.writeAttribute(attId,att);
+            }
+            xml.writeEndElement();
         }
-        xml.writeEndElement();
     }
 
     for(auto widget:soundPresets) {
@@ -822,12 +595,13 @@ void wlayout::readLayout() {
                 attId.sprintf("b%d",i);
                 bscaleRead[i] = xmlr.attributes().value(attId).toInt();
             }
-            scalePresets.append(new MWPreset(MisuWidget::MWPitch,
-                                             xmlr.attributes().value("rootNote").toString().toInt(),
+            MWPreset * p = new MWPreset(xmlr.attributes().value("rootNote").toString().toInt(),
                                              xmlr.attributes().value("baseoct").toString().toInt(),
                                              xmlr.attributes().value("topoct").toString().toInt(),
                                              bscaleRead,
-                                             this));
+                                             this);
+            connect(((MWPlayArea *)_PlayArea),SIGNAL(playRowsChanged()),p,SLOT(playAreaChanged()));
+            _scalePresets.append(p);
         } else if (xmlr.name() == "sound") {
             MWSoundPreset * soundPreset = new MWSoundPreset(
                         xmlr.attributes().value("volume").toString().toFloat(),

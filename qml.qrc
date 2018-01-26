@@ -11,5 +11,6 @@
         <file>qml/OctaveRanger.qml</file>
         <file>qml/Menu.qml</file>
         <file>qml/TuneArea.qml</file>
+        <file>qml/ScalePreset.qml</file>
     </qresource>
 </RCC>

@@ -28,22 +28,36 @@ class MWPreset : public MisuWidget
 {
     Q_OBJECT
 
-public:
-    MWPreset(Pitch * p[], QWidget *parent);
-    MWPreset(Pitch *p[], int rootNote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QObject *parent);
+    Q_PROPERTY(int rootNote READ rootnote NOTIFY presetChanged)
+    Q_PROPERTY(QStringList bScale READ bscale NOTIFY presetChanged)
+    Q_PROPERTY(int bScaleSize READ bscalesize NOTIFY presetChanged)
+    Q_PROPERTY(bool selected READ isSelected NOTIFY presetChanged)
 
-    virtual void processTouchEvent(misuTouchEvent e);
+public:
+    MWPreset(QWidget *parent);
+    MWPreset(int rootNote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QObject *parent);
+
     MWScale PresetScale;
+
+    QStringList bscale();
+    int bscalesize();
+    int rootnote();
+
+    Q_INVOKABLE void onPressed();
+    Q_INVOKABLE void onReleased();
 
 public slots:
     void initialSet();
+    void playAreaChanged();
 
 signals:
     void setScale(MWScale *);
     void scaleupdate();
 
+    // QML
+    void presetChanged();
+
 private:
-    Pitch ** MWPitch;
     int pressed=0;
     bool isSelected();
 };

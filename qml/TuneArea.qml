@@ -25,7 +25,7 @@ Item {
                 height: parent.height
 
                 Rectangle {
-                    color: modelData.fgColor
+                    color: modelData.pitchColor
                     width: buttonSize
                     height: modelData.knobSize
                     y: modelData.faderY
@@ -46,30 +46,35 @@ Item {
                     onPressed: {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onPressed(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y,height)
+                            modelData.onPressedPitch(touchPoints[i].pointId)
                         }
                     }
 
                     onTouchUpdated: {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onUpdated(touchPoints[i].pointId,touchPoints[i].y,height)
+                            modelData.onUpdatedPitch(touchPoints[i].pointId)
                         }
                     }
 
                     onUpdated: {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onUpdated(touchPoints[i].pointId,touchPoints[i].y,height)
+                            modelData.onUpdatedPitch(touchPoints[i].pointId)
                         }
                     }
 
                     onCanceled: {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onReleased()
+                            modelData.onReleasedPitch(touchPoints[i].pointId)
                         }
                     }
 
                     onReleased: {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onReleased()
+                            modelData.onReleasedPitch(touchPoints[i].pointId)
                         }
                     }
 

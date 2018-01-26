@@ -78,12 +78,11 @@ public slots:
     void setBendHori(bool b);
     void setBendVertTop(int b);
     void setBendVertBot(int b);
-    void pitchChange();    
+    //void pitchChange();
     void onscaleupdate();
 
 signals:
-    void menuTouch();
-    void presetsTouch();
+    // QML
     void playRowsChanged();
 
 private:

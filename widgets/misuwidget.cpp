@@ -30,7 +30,7 @@ QColor MisuWidget::highlightcolor("Red");
 QString MisuWidget::font1("Sans");
 int MisuWidget::font1size(10);
 
-bool MisuWidget::bwmode = true;
+bool MisuWidget::bwmode = false;
 QColor MisuWidget::bkeycolor("Black");
 QColor MisuWidget::wkeycolor("White");
 QColor MisuWidget::hlbkeycolor(QColor::fromHsl(1,200,20));
@@ -62,8 +62,8 @@ bool MisuWidget::holdMode = false;
 MisuWidget::MisuWidget(QObject *parent) : QObject(parent)
 {
     //qDebug() << "MisuWidget::MisuWidget";
-    static int nextId=0;
-    id=nextId++;
+    //static int nextId=0;
+    //id=nextId++;
 }
 
 MisuWidget::~MisuWidget()

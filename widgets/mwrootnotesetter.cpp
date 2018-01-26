@@ -103,7 +103,7 @@ void MWrootNoteSetter::calcColor()
             _color = bkeycolor;
         }
     } else {
-        _color.fromHslF(_pitch->getHue(),s,l);
+        _color=QColor::fromHslF(_pitch->getHue(),s,l);
     }
 
 

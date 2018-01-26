@@ -13,6 +13,25 @@ Window {
     property int buttonSize: width/12;
     property int menuSize: width/7;
 
+    property int columnWidth: width/4;
+
+    property color bgColor: "Gray"
+
+    property var pitchColor: [
+        "Red",
+        "Green",
+        "Blue",
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "Red",
+        "Green",
+        "Blue",
+        "Cyan",
+        "Magenta",
+        "Yellow"
+    ]
+
     RootNoteSetter {
         id: rootNoteSetterRow
         visible: layout.rootNoteSetterVisible
@@ -44,13 +63,22 @@ Window {
         height: buttonSize
     }
 
+    ScalePreset {
+        id: scalePresetCol
+        visible: layout.scalePresetsVisible
+        anchors.top: menuRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        width: columnWidth
+    }
+
     PlayArea {
         id: playAreaRow
         visible: layout.playAreaVisible
         controller: layout.playArea
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.left: scalePresetCol.right
         anchors.right: parent.right
     }
 
@@ -59,7 +87,7 @@ Window {
         visible: layout.tuneAreaVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.left: scalePresetCol.right
         anchors.right: parent.right
     }
 }

@@ -42,7 +42,6 @@ mobileSynthQT52::mobileSynthQT52()
         //if( device.deviceName() == "default") m_device=device;
     }
 
-
     syctl = new synth::Controller();
     syctl->set_osc1_wave_type_int(0);
     syctl->set_sample_rate(DataSampleRateHz);

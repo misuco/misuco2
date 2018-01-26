@@ -22,10 +22,8 @@
 #include <QPainter>
 #include <QDebug>
 
-MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
+MWPreset::MWPreset(QWidget *parent): MisuWidget(parent)
 {
-    MWPitch=p;
-
     PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
     PresetScale.baseoct=4;
     PresetScale.topoct=5;
@@ -40,9 +38,8 @@ MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
     }
 }
 
-MWPreset::MWPreset(Pitch *p[], int rootNote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
+MWPreset::MWPreset(int rootNote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
 {
-    MWPitch=p;
     PresetScale.rootNote=rootNote;
     PresetScale.baseoct=baseoct;
     PresetScale.topoct=topoct;
@@ -57,42 +54,64 @@ MWPreset::MWPreset(Pitch *p[], int rootNote, int baseoct, int topoct, bool bscal
     }
 }
 
-void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
+QStringList MWPreset::bscale()
 {
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        if(overwrite) {
-            PresetScale.rootNote = MisuWidget::Scale.rootNote;
-            PresetScale.baseoct = MisuWidget::Scale.baseoct;
-            PresetScale.topoct = MisuWidget::Scale.topoct;
-            PresetScale.size = 2;
-
-            //qDebug() << "MWPreset::processTouchEvent " << Scale.rootNote << " note " << Scale.size << " bo " << Scale.baseoct << " to " << Scale.topoct;
-            for(int i=0;i<BSCALE_SIZE;i++) {
-                PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
-                if(PresetScale.bscale[i]) {
-                    PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
-                }
-                //qDebug() << i << " " << Scale.bscale[i];
-            }
-        }
-        else {
-            emit setScale(&PresetScale);
-            emit scaleupdate();
-        }
-        pressed++;
-        break;
-    case Qt::TouchPointReleased:
-        pressed--;
-        break;
+    QStringList l;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        if(PresetScale.bscale[i]) l.append("1");
+        else l.append("0");
     }
-    //update();
+    return l;
+}
+
+int MWPreset::bscalesize()
+{
+    return PresetScale.size;
+}
+
+int MWPreset::rootnote()
+{
+    return PresetScale.rootNote;
+}
+
+void MWPreset::onPressed()
+{
+    if(overwrite) {
+        PresetScale.rootNote = MisuWidget::Scale.rootNote;
+        PresetScale.baseoct = MisuWidget::Scale.baseoct;
+        PresetScale.topoct = MisuWidget::Scale.topoct;
+        PresetScale.size = 2;
+
+        //qDebug() << "MWPreset::processTouchEvent " << Scale.rootNote << " note " << Scale.size << " bo " << Scale.baseoct << " to " << Scale.topoct;
+        for(int i=0;i<BSCALE_SIZE;i++) {
+            PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
+            if(PresetScale.bscale[i]) {
+                PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
+            }
+            //qDebug() << i << " " << Scale.bscale[i];
+        }
+    }
+    else {
+        emit setScale(&PresetScale);
+        emit scaleupdate();
+    }
+    pressed++;
+}
+
+void MWPreset::onReleased()
+{
+    pressed--;
 }
 
 void MWPreset::initialSet()
 {
     emit setScale(&PresetScale);
     emit scaleupdate();
+}
+
+void MWPreset::playAreaChanged()
+{
+    emit presetChanged();
 }
 
 /*
@@ -151,12 +170,11 @@ void MWPreset::resizeEvent(QResizeEvent *)
 
 bool MWPreset::isSelected()
 {
-    bool ret=true;
     if( PresetScale.rootNote!=Scale.rootNote ||
         PresetScale.baseoct!=Scale.baseoct ||
-        PresetScale.topoct!=Scale.topoct ) ret=false;
+        PresetScale.topoct!=Scale.topoct ) return false;
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if( PresetScale.bscale[i]!=Scale.bscale[i] ) ret=false;
+        if( PresetScale.bscale[i]!=Scale.bscale[i] ) return false;
     }
-    return ret;
+    return true;
 }

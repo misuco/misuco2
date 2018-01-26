@@ -77,7 +77,7 @@ public:
 
 protected:
     //bool event(QEvent *event);
-    int id;
+    //int id;
 
 };
 

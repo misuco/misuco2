@@ -63,9 +63,16 @@ class wlayout : public QObject
     Q_PROPERTY(QList<QObject*> tuneArea MEMBER _faderMicrotune CONSTANT)
     Q_PROPERTY(bool tuneAreaVisible MEMBER _tuneAreaVisible NOTIFY layoutChange)
 
+    Q_PROPERTY(QList<QObject*> scalePresets MEMBER _scalePresets CONSTANT)
+    Q_PROPERTY(bool scalePresetsVisible MEMBER _scalePresetsVisible NOTIFY layoutChange)
+
+    Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
+
 public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
+
+    QList<QObject*> pitches();
 
 signals:
     void setrootNote(Pitch * p);
@@ -116,7 +123,7 @@ private:
     QList<QObject *> _menu;
 
     // preset buttons
-    QList<MWPreset * > scalePresets;
+    QList<QObject * > _scalePresets;
     QList<MWSoundPreset * > soundPresets;
     QList<MWMicrotunePreset * > microtunePresets;
 
@@ -145,6 +152,10 @@ private:
     bool _octaveRangerVisible;
     bool _playAreaVisible;
     bool _tuneAreaVisible;
+    bool _scalePresetsVisible;
+    bool _soundPresetsVisible;
+    bool _tunePresetsVisible;
+
 
     QString configPath;
 

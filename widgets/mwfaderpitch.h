@@ -31,25 +31,33 @@ class MWFaderPitch : public MWFadder
 {
     Q_OBJECT
 
+    Q_PROPERTY(QColor pitchColor MEMBER _pitchColor NOTIFY colorChanged)
+
 public:
     MWFaderPitch(QObject *parent, Pitch * p);
     ~MWFaderPitch();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
 
-    //Q_INVOKABLE void onResize(int w, int h);
+    Q_INVOKABLE void onPressedPitch(int id);
+    Q_INVOKABLE void onUpdatedPitch(int id);
+    Q_INVOKABLE void onReleasedPitch(int id);
+
+signals:
+    void colorChanged();
 
 public slots:
     void setOctMid(int o);
-    void pitchChange();
+    void pitchChange();    
 
 private:
     ISender * out;
-
-    Pitch * p;
-    FreqTriple * f;
+    FreqTriple * _freq;
+    QColor _pitchColor;
 
     int vId;
+    int eventId;
+    void calcColor();
 };
 
 #endif // MWFADERPITCH_H

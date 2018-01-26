@@ -22,10 +22,14 @@
 #define PITCH_H
 
 #include <QObject>
+#include <QColor>
 
 class Pitch : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QColor color0 MEMBER _color0 NOTIFY colorChanged)
+    Q_PROPERTY(QColor color1 MEMBER _color1 NOTIFY colorChanged)
 
 public:
     explicit Pitch(int rootNote, QObject *parent = 0);
@@ -38,6 +42,9 @@ public:
 signals:
     void pitchChanged();
 
+    // QML
+    void colorChanged();
+
 public slots:
     void setPitch(int value);
 
@@ -46,6 +53,9 @@ private:
     int _pitch;
     float _color;
     void calcColor();
+
+    QColor _color0;
+    QColor _color1;
 };
 
 #endif // PITCH_H

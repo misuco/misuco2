@@ -20,6 +20,7 @@
 
 #include <QDebug>
 #include "pitch.h"
+#include "widgets/misuwidget.h"
 
 Pitch::Pitch(int rootNote, QObject *parent) : QObject(parent), _rootNote(rootNote), _pitch(0)
 {
@@ -51,10 +52,24 @@ int Pitch::getPitch()
 
 void Pitch::calcColor()
 {
-    _color = (float)_rootNote / 12 + _pitch / 2400;
+    _color = (float)_rootNote / 12 + (float)_pitch / 2400;
     if(_color>1) _color -=1;
     if(_color<0) _color +=1;
 
+    if(MisuWidget::bwmode) {
+        if(getBW()) {
+            _color0 = MisuWidget::wkeycolor;
+            _color1 = MisuWidget::hlwkeycolor;
+        } else {
+            _color0 = MisuWidget::bkeycolor;
+            _color1 = MisuWidget::hlbkeycolor;
+        }
+    } else {
+        _color0 = QColor::fromHslF(_color,MisuWidget::sOff,MisuWidget::lOff);
+        _color1 = QColor::fromHslF(_color,MisuWidget::sOn,MisuWidget::lOn);
+    }
+
+    emit colorChanged();
     emit pitchChanged();
 }
 

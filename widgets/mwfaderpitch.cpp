@@ -23,13 +23,14 @@
 
 MWFaderPitch::MWFaderPitch(QObject *parent, Pitch *p) : MWFadder(parent)
 {
-    f = new FreqTriple(p);
-    f->setOct(4);
+    _freq = new FreqTriple(p);
+    _freq->setOct(4);
+    calcColor();
 }
 
 MWFaderPitch::~MWFaderPitch()
 {
-    f->deleteLater();
+    _freq->deleteLater();
 }
 
 void MWFaderPitch::setOut(ISender *value)
@@ -37,41 +38,85 @@ void MWFaderPitch::setOut(ISender *value)
     out = value;
 }
 
-/*
-void MWFaderPitch::onResize(int w, int h)
+void MWFaderPitch::onPressedPitch(int id)
 {
-    qDebug() << "MWFaderPitch::onResize w: " << w << " h: " << h;
-    MWFadder::onResize(w,h);
+    //qDebug() << "MWFaderPitch::onPressedPitch " << id << " pressed " << pressed << " eventId " << eventId;
+    if(pressed < 2) {
+        eventId=id;
+        vId=out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+        calcColor();
+    }
 }
-*/
+
+void MWFaderPitch::onUpdatedPitch(int id)
+{
+    //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
+    if(id == eventId) {
+        Microtune.tuning[_freq->getrootNote()] = getValue();
+        out->pitch(channel,vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
+    }
+}
+
+void MWFaderPitch::onReleasedPitch(int id)
+{
+    //qDebug() << "MWFaderPitch::onReleasedPitch " << id << " pressed " << pressed << " eventId " << eventId;
+    if(id == eventId) {
+        out->noteOff(vId);
+        calcColor();
+    }
+}
 
 void MWFaderPitch::setOctMid(int o)
 {
-    f->setOct(o);
+    _freq->setOct(o);
 }
 
 void MWFaderPitch::pitchChange()
 {
-    f->pitchChange();
-    //update();
+    _freq->pitchChange();
+    calcColor();
+}
+
+void MWFaderPitch::calcColor()
+{
+    float l=lOff;
+    float s=sOff;
+    if(pressed>0) {
+        l=lOn;
+        s=sOn;
+    }
+
+    int pitch = _freq->getrootNote();
+    if(bwmode) {
+        if(pressed>0) {
+            if(MWPitch[pitch]->getBW()) {
+                _pitchColor = hlwkeycolor;
+            } else {
+                _pitchColor = hlbkeycolor;
+            }
+        } else if(MWPitch[pitch]->getBW()) {
+            _pitchColor = wkeycolor;
+        } else {
+            _pitchColor = bkeycolor;
+        }
+    } else {
+        _pitchColor = QColor::fromHslF(MWPitch[pitch]->getHue(),s,l);
+    }
+    emit colorChanged();
 }
 
 void MWFaderPitch::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         //qDebug() << "MWFaderPitch::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
         //update();
         break;
     case Qt::TouchPointMoved:
-        out->pitch(channel,vId,f->getFreq(),f->getMidinote(),f->getPitch());
-        Microtune.tuning[f->getrootNote()] = getValue();
         //update();
         break;
     case Qt::TouchPointReleased:
         //qDebug() << "MWFaderPitch::processTouchEvent TouchPointReleased vId:" << vId;
-        out->noteOff(vId);
         //update();
         break;
     }
