@@ -31,20 +31,25 @@ mobileSynthQT52::mobileSynthQT52()
     ,   m_device(QAudioDeviceInfo::defaultOutputDevice())
 
 {
-    DataSampleRateHz  = 44100;
+    //DataSampleRateHz  = 44100;
+    DataSampleRateHz  = 48000;
     //BufferSize        = 4096;
     BufferSize        = 16384;
 
     qDebug() << "mobileSynthQT52::size " << size();
     for(auto device:QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
         qDebug() << "****" << device.deviceName();
-        if( device.deviceName() == "default") m_device=device;
+        //if( device.deviceName() == "default") m_device=device;
     }
 
 
     syctl = new synth::Controller();
     syctl->set_osc1_wave_type_int(0);
     syctl->set_sample_rate(DataSampleRateHz);
+
+    QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
+    m_format=info.preferredFormat();
+    qDebug() << "Preferred format is sr " << m_format.sampleRate() << " sn " << m_format.sampleSize() << " ch " << m_format.channelCount();
 
     m_format.setSampleRate(DataSampleRateHz);
     m_format.setChannelCount(1);
@@ -53,15 +58,14 @@ mobileSynthQT52::mobileSynthQT52()
     m_format.setByteOrder(QAudioFormat::LittleEndian);
     m_format.setSampleType(QAudioFormat::SignedInt);
 
-    QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
-    m_format=info.preferredFormat();
-    qDebug() << "Preferred format is sr " << m_format.sampleRate() << " sn " << m_format.sampleSize() << " ch " << m_format.channelCount();
-
     if (!info.isFormatSupported(m_format)) {
         qDebug() << "Default format not supported - trying to use nearest";
         m_format = info.nearestFormat(m_format);
         info.preferredFormat();
+        qDebug() << "nearest format is sr " << m_format.sampleRate() << " sn " << m_format.sampleSize() << " ch " << m_format.channelCount();
     }
+
+    qDebug() << "used format is sr " << m_format.sampleRate() << " sn " << m_format.sampleSize() << " ch " << m_format.channelCount();
 
     syctl->setFormat(&m_format);
 
