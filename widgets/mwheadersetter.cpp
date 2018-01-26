@@ -104,11 +104,11 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             break;
         case 13:
             link ="http://scales.misuco.org/";
-            link.append(midi2TextUrl(Scale.basenote));
+            link.append(midi2TextUrl(Scale.rootNote));
             link.append("-");
             for(int i=0;i<11;i++) {
                 if(Scale.bscale[i]) {
-                    int currnote=Scale.basenote+i+1;
+                    int currnote=Scale.rootNote+i+1;
                     link.append(midi2TextUrl(currnote%12));
                     link.append("-");
                 }
@@ -185,7 +185,7 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
         cap.sprintf("octaves");
         break;
     case 1:
-        cap.sprintf("basenote");
+        cap.sprintf("rootNote");
         break;
     case 2:
         cap.sprintf("scale");

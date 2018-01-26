@@ -48,7 +48,7 @@ signals:
     void colorChanged();
 
 public slots:
-    void setBaseNote(Pitch * p);
+    void setrootNote(Pitch * p);
     void setOctMid(int o);
     void onScaleSet(MWScale*);
     void onscaleupdate();
@@ -60,7 +60,7 @@ private:
     ISender * out;
     FreqTriple * _freq;
     int bscaleId;
-    int basenote;
+    int rootNote;
     int vId;
     int _pressed;
     bool _value;

@@ -29,7 +29,7 @@ MWBScaleSwitch::MWBScaleSwitch(int i)
 
     //for(int i=0;i<12;i++) {
         _freq=new FreqTriple(MWPitch[i],this);
-        _freq->setBasenote(MWPitch[i]);
+        _freq->setrootNote(MWPitch[i]);
     //}
     _value=false;
     _pressed=0;
@@ -53,7 +53,7 @@ void MWBScaleSwitch::calcColor()
         s=sOn;
     }
 
-    int pitch = _freq->getBasenote();
+    int pitch = _freq->getrootNote();
     if(bwmode) {
         if(_value) {
             if(MWPitch[pitch]->getBW()) {
@@ -77,7 +77,7 @@ void MWBScaleSwitch::calcColor()
         _fontColor=fgcolor;
     }
 
-    _text1=_freq->getBasenoteString(noteSymbols);
+    _text1=_freq->getrootNoteString(noteSymbols);
 
     if(showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
@@ -110,12 +110,12 @@ void MWBScaleSwitch::onReleased()
     calcColor();
 }
 
-void MWBScaleSwitch::setBaseNote(Pitch *p)
+void MWBScaleSwitch::setrootNote(Pitch *p)
 {
-    basenote=p->getBasenote();
-    int newBaseNote=(basenote+bscaleId)%12;
-    //qDebug() << "MWBScaleSwitch::setBaseNote " << newBaseNote << " bscaleId " << bscaleId << " basenote " << basenote;
-    _freq->setBasenote(MWPitch[newBaseNote]);
+    rootNote=p->getrootNote();
+    int newrootNote=(rootNote+bscaleId)%12;
+    //qDebug() << "MWBScaleSwitch::setrootNote " << newrootNote << " bscaleId " << bscaleId << " rootNote " << rootNote;
+    _freq->setrootNote(MWPitch[newrootNote]);
     calcColor();
 }
 
@@ -132,8 +132,8 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
         _value=false;
     }
 
-    basenote = (scale->basenote+bscaleId)%12;
-    _freq->setBasenote(MWPitch[basenote]);
+    rootNote = (scale->rootNote+bscaleId)%12;
+    _freq->setrootNote(MWPitch[rootNote]);
 
     calcColor();
 }

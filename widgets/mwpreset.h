@@ -30,7 +30,7 @@ class MWPreset : public MisuWidget
 
 public:
     MWPreset(Pitch * p[], QWidget *parent);
-    MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QObject *parent);
+    MWPreset(Pitch *p[], int rootNote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QObject *parent);
 
     virtual void processTouchEvent(misuTouchEvent e);
     MWScale PresetScale;

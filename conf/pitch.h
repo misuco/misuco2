@@ -28,11 +28,11 @@ class Pitch : public QObject
     Q_OBJECT
 
 public:
-    explicit Pitch(int basenote, QObject *parent = 0);
+    explicit Pitch(int rootNote, QObject *parent = 0);
 
     float getHue() const;
     int getBW() const;
-    int getBasenote();
+    int getrootNote();
     int getPitch();
 
 signals:
@@ -42,7 +42,7 @@ public slots:
     void setPitch(int value);
 
 private:
-    int _basenote;
+    int _rootNote;
     int _pitch;
     float _color;
     void calcColor();

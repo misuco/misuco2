@@ -33,7 +33,7 @@ MWPlayArea::MWPlayArea(QObject *parent) : MisuWidget(parent),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
-    Scale.basenote=0;
+    Scale.rootNote=0;
     Scale.baseoct=3;
     Scale.topoct=4;
     for(int i=0;i<BSCALE_SIZE;i++) {
@@ -88,7 +88,7 @@ void MWPlayArea::config()
 
     cols=0;
     for(int oct=Scale.baseoct;oct<Scale.topoct;oct++) {
-        setColumn(cols,Scale.basenote+oct*12,Scale.basenote);
+        setColumn(cols,Scale.rootNote+oct*12,Scale.rootNote);
         if(bendHoriz) {
             cols+=2;
         } else {
@@ -97,7 +97,7 @@ void MWPlayArea::config()
         for(int note=0;note<BSCALE_SIZE;note++) {
             //qDebug() << "MWPlayArea::config " << note;
             if(Scale.bscale[note]) {
-                setColumn(cols,Scale.basenote+oct*12+note+1,(Scale.basenote+note+1)%(BSCALE_SIZE+1));
+                setColumn(cols,Scale.rootNote+oct*12+note+1,(Scale.rootNote+note+1)%(BSCALE_SIZE+1));
                 //qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
@@ -107,9 +107,9 @@ void MWPlayArea::config()
             }
         }
     }
-    int topnote=Scale.basenote+(Scale.topoct)*12;
-    //qDebug() << "basenote: " << Scale.basenote << "topnote: " << topnote;
-    setColumn(cols,topnote,Scale.basenote);
+    int topnote=Scale.rootNote+(Scale.topoct)*12;
+    //qDebug() << "rootNote: " << Scale.rootNote << "topnote: " << topnote;
+    setColumn(cols,topnote,Scale.rootNote);
     cols++;
 
     for(int r=0;r<rows;r++) {
@@ -125,25 +125,25 @@ void MWPlayArea::config()
     emit playRowsChanged();
 }
 
-void MWPlayArea::setColumn(int col, int midinote, int basenote) {
-    //qDebug() << "setColumn " << col << " midinote " << midinote << " basenote " << basenote;
+void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
+    //qDebug() << "setColumn " << col << " midinote " << midinote << " rootNote " << rootNote;
     rows=0;
 
     float huePerNote = 1.0/12.0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
+        fields[rows][col].f1->setMidinote(midinote,MWPitch[rootNote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertTop;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getrootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
+            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -152,30 +152,30 @@ void MWPlayArea::setColumn(int col, int midinote, int basenote) {
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
+    fields[rows][col].f1->setMidinote(midinote,MWPitch[rootNote]);
     //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
-        fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getrootNote()]);
+        fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
+        fields[rows][col].f1->setMidinote(midinote,MWPitch[rootNote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertBot;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getrootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
+            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -211,7 +211,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
 
 
     //qDebug() << "MWPlayArea::paintField r " << r << " c " << c;
-    QString basenote;
+    QString rootNote;
     switch(fields[r][c].type) {
     case NORMAL:
         if(fields[r][c].pressed>0 || fields[r][c].hold) {
@@ -222,13 +222,13 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setBrush(colorF1);
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        basenote = fields[r][c].f1->getBasenoteString(noteSymbols);
-        if(basenote.startsWith("_")) {
+        rootNote = fields[r][c].f1->getrootNoteString(noteSymbols);
+        if(rootNote.startsWith("_")) {
             font3.setUnderline(true);
             painter.setFont(font3);
-            basenote.remove(0,1);
+            rootNote.remove(0,1);
         }
-        cap.sprintf("%s",basenote.toStdString().c_str());
+        cap.sprintf("%s",rootNote.toStdString().c_str());
         painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);        
         font3.setUnderline(false);
 
@@ -236,7 +236,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             painter.setFont(font8);
             // no text on padw with menu buttons (first and last col in first row)
             if( (c!=0 && c!=cols-1) || r!=0) {
-                cap.sprintf("%d %d %d", (fields[r][c].f1->getBasenote()-Scale.basenote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
+                cap.sprintf("%d %d %d", (fields[r][c].f1->getrootNote()-Scale.rootNote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
                 painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignTop,cap);
             }
             cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
@@ -617,9 +617,9 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
 }
 
-void MWPlayArea::setBaseNote(Pitch *p)
+void MWPlayArea::setrootNote(Pitch *p)
 {
-    Scale.basenote=p->getBasenote();
+    Scale.rootNote=p->getrootNote();
     config();
 }
 
@@ -641,7 +641,7 @@ void MWPlayArea::setBscale(int n, bool v)
 
 void MWPlayArea::setScale(MWScale * s)
 {
-    Scale.basenote=s->basenote;
+    Scale.rootNote=s->rootNote;
     Scale.baseoct=s->baseoct;
     for(int i=0;i<BSCALE_SIZE;i++) {
         Scale.bscale[i]=s->bscale[i];

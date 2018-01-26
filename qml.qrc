@@ -6,5 +6,7 @@
         <file>qml/PlayFieldBendVertTop.qml</file>
         <file>qml/PlayFieldBendVertBot.qml</file>
         <file>qml/PlayFieldBendHori.qml</file>
+        <file>qml/RootNoteSetter.qml</file>
+        <file>qml/BScaleSwitch.qml</file>
     </qresource>
 </RCC>

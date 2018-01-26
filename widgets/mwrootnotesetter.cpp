@@ -18,19 +18,19 @@
  *
  */
 
-#include "mwbasenotesetter.h"
+#include "mwrootnotesetter.h"
 #include "comm/senderdebug.h"
 #include <QPainter>
 #include <QDebug>
 
-MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)
+MWrootNoteSetter::MWrootNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)
 {
-    //qDebug() << "MWBaseNoteSetter::MWBaseNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
+    //qDebug() << "MWrootNoteSetter::MWrootNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
     _out=new SenderDebug();
     _pitch=pitch;
     _freq=new FreqTriple(_pitch);
     _freq->setOct(4);
-    _freq->setBasenote(_pitch);
+    _freq->setrootNote(_pitch);
     //qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
     _vId=0;
     _pressed=0;
@@ -38,25 +38,25 @@ MWBaseNoteSetter::MWBaseNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(
     calcColor();
 }
 
-MWBaseNoteSetter::~MWBaseNoteSetter()
+MWrootNoteSetter::~MWrootNoteSetter()
 {
     _freq->deleteLater();
 }
 
-void MWBaseNoteSetter::setOctMid(int o)
+void MWrootNoteSetter::setOctMid(int o)
 {
     _freq->setOct(o);
     calcColor();
 }
 
-void MWBaseNoteSetter::pitchChange()
+void MWrootNoteSetter::pitchChange()
 {
-    //qDebug() << "MWBaseNoteSetter::pitchChange "  << f->getPitch();
+    //qDebug() << "MWrootNoteSetter::pitchChange "  << f->getPitch();
     _freq->pitchChange();
     calcColor();
 }
 
-void MWBaseNoteSetter::onSetBaseNote(Pitch * pitch)
+void MWrootNoteSetter::onSetrootNote(Pitch * pitch)
 {
     if(pitch == _pitch) {
         _selected = true;
@@ -66,10 +66,10 @@ void MWBaseNoteSetter::onSetBaseNote(Pitch * pitch)
     calcColor();
 }
 
-void MWBaseNoteSetter::onScaleSet(MWScale * scale)
+void MWrootNoteSetter::onScaleSet(MWScale * scale)
 {
-    //qDebug() << "MWBaseNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
-    if(scale->basenote==_pitch->getBasenote()) {
+    //qDebug() << "MWrootNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
+    if(scale->rootNote==_pitch->getrootNote()) {
         _selected = true;
     } else {
         _selected = false;
@@ -77,12 +77,12 @@ void MWBaseNoteSetter::onScaleSet(MWScale * scale)
     calcColor();
 }
 
-void MWBaseNoteSetter::onscaleupdate()
+void MWrootNoteSetter::onscaleupdate()
 {
     calcColor();
 }
 
-void MWBaseNoteSetter::calcColor()
+void MWrootNoteSetter::calcColor()
 {
     float l=lOff;
     float s=sOff;
@@ -113,7 +113,7 @@ void MWBaseNoteSetter::calcColor()
         _fontColor=fgcolor;
     }
 
-    _text1 = _freq->getBasenoteString(noteSymbols);
+    _text1 = _freq->getrootNoteString(noteSymbols);
 
     if(showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
@@ -124,29 +124,29 @@ void MWBaseNoteSetter::calcColor()
     emit colorChanged();
 }
 
-void MWBaseNoteSetter::setOut(ISender *value)
+void MWrootNoteSetter::setOut(ISender *value)
 {
     _out = value;
-    //qDebug() << "MWBaseNoteSetter::setOut:" << out;
+    //qDebug() << "MWrootNoteSetter::setOut:" << out;
 }
 
-void MWBaseNoteSetter::onPressed()
+void MWrootNoteSetter::onPressed()
 {
     _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
-    emit setBaseNote(_pitch);
+    emit setrootNote(_pitch);
     emit scaleupdate();
     _pressed++;
     calcColor();
 }
 
-void MWBaseNoteSetter::onReleased()
+void MWrootNoteSetter::onReleased()
 {
     _out->noteOff(_vId);
     _pressed--;
     calcColor();
 }
 
-QObject *MWBaseNoteSetter::pitch()
+QObject *MWrootNoteSetter::pitch()
 {
     return _pitch;
 }

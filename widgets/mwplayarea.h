@@ -71,7 +71,7 @@ public:
     QList<QObject *> row2();
 
 public slots:
-    void setBaseNote(Pitch * p);
+    void setrootNote(Pitch * p);
     void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
     void setScale(MWScale *s);
@@ -121,7 +121,7 @@ private:
 
     // helper functions
     void config();
-    void setColumn(int col, int midinote, int basenote);
+    void setColumn(int col, int midinote, int rootNote);
     void calcGeo();
     //void paintField(int r, int c, int x, int y);
     //void paintField(int r, int c);

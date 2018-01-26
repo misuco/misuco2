@@ -26,7 +26,7 @@ MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
 {
     MWPitch=p;
 
-    PresetScale.basenote=qrand() % (BSCALE_SIZE+1);
+    PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
     PresetScale.baseoct=4;
     PresetScale.topoct=5;
     PresetScale.size=2;
@@ -40,10 +40,10 @@ MWPreset::MWPreset(Pitch *p[], QWidget *parent): MisuWidget(parent)
     }
 }
 
-MWPreset::MWPreset(Pitch *p[], int basenote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
+MWPreset::MWPreset(Pitch *p[], int rootNote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
 {
     MWPitch=p;
-    PresetScale.basenote=basenote;
+    PresetScale.rootNote=rootNote;
     PresetScale.baseoct=baseoct;
     PresetScale.topoct=topoct;
     PresetScale.size=2;
@@ -62,12 +62,12 @@ void MWPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
     switch(e.state) {
     case Qt::TouchPointPressed:
         if(overwrite) {
-            PresetScale.basenote = MisuWidget::Scale.basenote;
+            PresetScale.rootNote = MisuWidget::Scale.rootNote;
             PresetScale.baseoct = MisuWidget::Scale.baseoct;
             PresetScale.topoct = MisuWidget::Scale.topoct;
             PresetScale.size = 2;
 
-            //qDebug() << "MWPreset::processTouchEvent " << Scale.basenote << " note " << Scale.size << " bo " << Scale.baseoct << " to " << Scale.topoct;
+            //qDebug() << "MWPreset::processTouchEvent " << Scale.rootNote << " note " << Scale.size << " bo " << Scale.baseoct << " to " << Scale.topoct;
             for(int i=0;i<BSCALE_SIZE;i++) {
                 PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
                 if(PresetScale.bscale[i]) {
@@ -109,19 +109,19 @@ void MWPreset::paintEvent(QPaintEvent *)
     }
     painter.setPen(Qt::NoPen);
     for(int i=PresetScale.baseoct;i<PresetScale.topoct;i++) {
-        setBrush(MWPitch[PresetScale.basenote],s,l,painter);
+        setBrush(MWPitch[PresetScale.rootNote],s,l,painter);
         painter.drawRect(x,0,colwidth,height());
         x+=colwidth;
         for(int j=0;j<BSCALE_SIZE;j++) {
             if(PresetScale.bscale[j]) {
-                setBrush(MWPitch[(PresetScale.basenote+1+j)%(BSCALE_SIZE+1)],s,l,painter);
+                setBrush(MWPitch[(PresetScale.rootNote+1+j)%(BSCALE_SIZE+1)],s,l,painter);
                 painter.drawRect(x,0,colwidth+1,height());
                 x+=colwidth;
             }
         }
     }
-    //painter.setBrush(QColor::fromHsl(MWPitch[Scale.basenote]->color,s,l));
-    setBrush(MWPitch[PresetScale.basenote],s,l,painter);
+    //painter.setBrush(QColor::fromHsl(MWPitch[Scale.rootNote]->color,s,l));
+    setBrush(MWPitch[PresetScale.rootNote],s,l,painter);
     painter.drawRect(x,0,colwidth,height());
 }
 
@@ -152,7 +152,7 @@ void MWPreset::resizeEvent(QResizeEvent *)
 bool MWPreset::isSelected()
 {
     bool ret=true;
-    if( PresetScale.basenote!=Scale.basenote ||
+    if( PresetScale.rootNote!=Scale.rootNote ||
         PresetScale.baseoct!=Scale.baseoct ||
         PresetScale.topoct!=Scale.topoct ) ret=false;
     for(int i=0;i<BSCALE_SIZE;i++) {

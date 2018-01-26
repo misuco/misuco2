@@ -57,14 +57,13 @@ SOURCES += main.cpp\
     mobilesynth/mobilesynth/Classes/synth/parameter.cpp \
     comm/sendermobilesynth.cpp \
     mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp \
-    widgets/mwbasenotesetter.cpp \
+    widgets/mwrootnotesetter.cpp \
     widgets/mwoctaveranger.cpp \
     widgets/mwbscaleswitch.cpp \
     widgets/mwheadersetter.cpp \
     widgets/mwfadder.cpp \
     conf/pitch.cpp \
     widgets/mwpreset.cpp \
-    conf/color.cpp \
     widgets/mwfaderpitch.cpp \
     widgets/mwfaderparamctl.cpp \
     widgets/mwsoundpreset.cpp \
@@ -111,7 +110,7 @@ HEADERS  += \
     comm/sendermobilesynth.h \
     mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp \
     mobilesynth/mobilesynth/Classes/mobilesynthqt52.h \
-    widgets/mwbasenotesetter.h \
+    widgets/mwrootnotesetter.h \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
     conf/platform.h \
@@ -119,7 +118,6 @@ HEADERS  += \
     widgets/mwfadder.h \
     conf/pitch.h \
     widgets/mwpreset.h \
-    conf/color.h \
     widgets/mwfaderpitch.h \
     widgets/mwfaderparamctl.h \
     widgets/mwsoundpreset.h \

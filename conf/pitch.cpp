@@ -21,7 +21,7 @@
 #include <QDebug>
 #include "pitch.h"
 
-Pitch::Pitch(int basenote, QObject *parent) : QObject(parent), _basenote(basenote), _pitch(0)
+Pitch::Pitch(int rootNote, QObject *parent) : QObject(parent), _rootNote(rootNote), _pitch(0)
 {
     calcColor();
 }
@@ -34,14 +34,14 @@ float Pitch::getHue() const
 int Pitch::getBW() const
 {
     bool white = true;
-    int bn = _basenote;
+    int bn = _rootNote;
     if(bn == 1 || bn == 3 || bn == 6 || bn == 8 || bn == 10 ) white = false;
     return white;
 }
 
-int Pitch::getBasenote()
+int Pitch::getrootNote()
 {
-    return _basenote;
+    return _rootNote;
 }
 
 int Pitch::getPitch()
@@ -51,7 +51,7 @@ int Pitch::getPitch()
 
 void Pitch::calcColor()
 {
-    _color = (float)_basenote / 12 + _pitch / 2400;
+    _color = (float)_rootNote / 12 + _pitch / 2400;
     if(_color>1) _color -=1;
     if(_color<0) _color +=1;
 

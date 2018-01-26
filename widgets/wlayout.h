@@ -27,7 +27,7 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include "widgets/mwplayarea.h"
-#include "widgets/mwbasenotesetter.h"
+#include "widgets/mwrootnotesetter.h"
 #include "comm/sendermobilesynth.h"
 #include "comm/senderdebug.h"
 #include "widgets/mwoctaveranger.h"
@@ -46,7 +46,7 @@ class wlayout : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QList<QObject*> baseNoteSetter MEMBER _BaseNoteSetter CONSTANT)
+    Q_PROPERTY(QList<QObject*> rootNoteSetter MEMBER _rootNoteSetter CONSTANT)
     Q_PROPERTY(QList<QObject*> bScaleSwitch MEMBER _BScaleSwitch CONSTANT)
     Q_PROPERTY(QObject* playArea MEMBER _PlayArea CONSTANT)
 
@@ -58,7 +58,7 @@ protected:
     void resizeEvent(QResizeEvent *);
 
 signals:
-    void setBaseNote(Pitch * p);
+    void setrootNote(Pitch * p);
     void initialSet();
     void scaleupdate();
     void setMenuItemState(int id, int s);
@@ -70,7 +70,7 @@ private slots:
     void togglePresets();
     void toggleMenu();
     void toggleBW();
-    void onSetBaseNote(Pitch * p);
+    void onSetrootNote(Pitch * p);
     void setSound(MWSound * s);
     void setMicrotune(MWMicrotune*m);
     void onscaleupdate();
@@ -87,7 +87,7 @@ private:
     QXmlStreamWriter xml;
     QXmlStreamReader xmlr;
 
-    QList<QObject*> _BaseNoteSetter;
+    QList<QObject*> _rootNoteSetter;
     QList<QObject*> _BScaleSwitch;
     MWOctaveRanger * OctaveRanger;
     QObject *       _PlayArea;

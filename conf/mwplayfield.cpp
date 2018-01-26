@@ -69,7 +69,7 @@ void MWPlayfield::calcColor()
     emit colorChanged();
 
     text1="";
-    text2=f1->getBasenoteString(MisuWidget::noteSymbols);
+    text2=f1->getrootNoteString(MisuWidget::noteSymbols);
     text3="";
 
     emit textChanged();

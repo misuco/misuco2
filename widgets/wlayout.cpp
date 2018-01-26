@@ -144,15 +144,15 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     overwritePreset = new MWHeaderSetter(12,this);
 
     for(int i=0;i<12;i++) {
-        MWBaseNoteSetter * baseNoteSetter = new MWBaseNoteSetter(MisuWidget::MWPitch[i],this);
-        baseNoteSetter->setOut(out);
-        connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),_PlayArea,SLOT(setBaseNote(Pitch *)));
-        connect(baseNoteSetter,SIGNAL(setBaseNote(Pitch *)),this,SLOT(onSetBaseNote(Pitch *)));
-        connect(baseNoteSetter,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
-        connect(this,SIGNAL(setBaseNote(Pitch*)),baseNoteSetter,SLOT(onSetBaseNote(Pitch*)));
-        connect(H[0],SIGNAL(setOctMid(int)),baseNoteSetter,SLOT(setOctMid(int)));
-        connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,baseNoteSetter, SLOT(pitchChange()));
-        _BaseNoteSetter.append(baseNoteSetter);
+        MWrootNoteSetter * rootNoteSetter = new MWrootNoteSetter(MisuWidget::MWPitch[i],this);
+        rootNoteSetter->setOut(out);
+        connect(rootNoteSetter,SIGNAL(setrootNote(Pitch *)),_PlayArea,SLOT(setrootNote(Pitch *)));
+        connect(rootNoteSetter,SIGNAL(setrootNote(Pitch *)),this,SLOT(onSetrootNote(Pitch *)));
+        connect(rootNoteSetter,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
+        connect(this,SIGNAL(setrootNote(Pitch*)),rootNoteSetter,SLOT(onSetrootNote(Pitch*)));
+        connect(H[0],SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
+        connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
+        _rootNoteSetter.append(rootNoteSetter);
     }
 
     for(int i=1;i<12;i++) {
@@ -162,7 +162,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(H[0],SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
-            connect(_BaseNoteSetter[j],SIGNAL(setBaseNote(Pitch *)),bs,SLOT(setBaseNote(Pitch *)));
+            connect(_rootNoteSetter[j],SIGNAL(setrootNote(Pitch *)),bs,SLOT(setrootNote(Pitch *)));
         }
         _BScaleSwitch.append(bs);
     }
@@ -176,9 +176,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     faderSymbols->setInverted(true);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
     connect(this,SIGNAL(scaleupdate()),_PlayArea,SLOT(onscaleupdate()));
-    connect(this,SIGNAL(scaleupdate()),_BaseNoteSetter[0],SLOT(onscaleupdate()));
+    connect(this,SIGNAL(scaleupdate()),_rootNoteSetter[0],SLOT(onscaleupdate()));
     for(int j=1;j<12;j++) {
-        connect(this,SIGNAL(scaleupdate()),_BaseNoteSetter[j],SLOT(onscaleupdate()));
+        connect(this,SIGNAL(scaleupdate()),_rootNoteSetter[j],SLOT(onscaleupdate()));
         connect(this,SIGNAL(scaleupdate()),_BScaleSwitch[j-1],SLOT(onscaleupdate()));
     }
 
@@ -208,9 +208,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     for(auto presetButton:scalePresets) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
         connect(presetButton,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
-        connect(presetButton,SIGNAL(setScale(MWScale*)),_BaseNoteSetter[0],SLOT(onScaleSet(MWScale*)));
+        connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
-            connect(presetButton,SIGNAL(setScale(MWScale*)),_BaseNoteSetter[j],SLOT(onScaleSet(MWScale*)));
+            connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[j],SLOT(onScaleSet(MWScale*)));
             connect(presetButton,SIGNAL(setScale(MWScale*)),_BScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
         }
     }
@@ -562,9 +562,9 @@ void wlayout::toggleBW()
     */
 }
 
-void wlayout::onSetBaseNote(Pitch *p)
+void wlayout::onSetrootNote(Pitch *p)
 {
-    emit setBaseNote(p);
+    emit setrootNote(p);
 }
 
 void wlayout::setSound(MWSound *s)
@@ -686,8 +686,8 @@ void wlayout::writeXml(QString filename)
 
     for(auto widget:scalePresets) {
         xml.writeStartElement("scale");
-        att.sprintf("%d",widget->PresetScale.basenote);
-        xml.writeAttribute("basenote",att);
+        att.sprintf("%d",widget->PresetScale.rootNote);
+        xml.writeAttribute("rootNote",att);
         att.sprintf("%d",widget->PresetScale.baseoct);
         xml.writeAttribute("baseoct",att);
         att.sprintf("%d",widget->PresetScale.topoct);
@@ -810,7 +810,7 @@ void wlayout::readLayout() {
                 bscaleRead[i] = xmlr.attributes().value(attId).toInt();
             }
             scalePresets.append(new MWPreset(MisuWidget::MWPitch,
-                                             xmlr.attributes().value("basenote").toString().toInt(),
+                                             xmlr.attributes().value("rootNote").toString().toInt(),
                                              xmlr.attributes().value("baseoct").toString().toInt(),
                                              xmlr.attributes().value("topoct").toString().toInt(),
                                              bscaleRead,

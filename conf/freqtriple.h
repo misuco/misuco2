@@ -45,13 +45,13 @@ public:
     float getHue() const;
     bool getBW() const;
 
-    int getBasenote() const;
-    void setBasenote(Pitch *p);
+    int getrootNote() const;
+    void setrootNote(Pitch *p);
 
     int getOct() const;
     void setOct(int value);
 
-    QString getBasenoteString(int lang) const;
+    QString getrootNoteString(int lang) const;
 
 signals:
     void hueChanged();
@@ -71,7 +71,7 @@ private:
     float calcMidi2Fequal(int x);
     double Log2(double n);
     int calcOctFromMidinote(int m);
-    int calcBasenoteFromMidinote(int m);
+    int calcrootNoteFromMidinote(int m);
     void initFreq();
 };
 

@@ -33,7 +33,7 @@ enum MWPlayfieldType {
 };
 
 struct MWScale {
-    int basenote;
+    int rootNote;
     int baseoct;
     int topoct;
     bool bscale[BSCALE_SIZE];

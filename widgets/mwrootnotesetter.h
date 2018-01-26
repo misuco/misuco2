@@ -18,14 +18,14 @@
  *
  */
 
-#ifndef MWBASENOTESETTER_H
-#define MWBASENOTESETTER_H
+#ifndef MWrootNoteSETTER_H
+#define MWrootNoteSETTER_H
 
 #include "misuwidget.h"
 #include "comm/isender.h"
 #include "conf/freqtriple.h"
 
-class MWBaseNoteSetter : public MisuWidget
+class MWrootNoteSetter : public MisuWidget
 {
     Q_OBJECT
 
@@ -35,8 +35,8 @@ class MWBaseNoteSetter : public MisuWidget
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY colorChanged)
 
 public:
-    MWBaseNoteSetter(Pitch *pitch, QObject *parent);
-    ~MWBaseNoteSetter();
+    MWrootNoteSetter(Pitch *pitch, QObject *parent);
+    ~MWrootNoteSetter();
     void setOut(ISender *value);
 
     Q_INVOKABLE void onPressed();
@@ -47,12 +47,12 @@ public:
 public slots:
     void setOctMid(int o);
     void pitchChange();
-    void onSetBaseNote(Pitch *pitch);
+    void onSetrootNote(Pitch *pitch);
     void onScaleSet(MWScale*scale);
     void onscaleupdate();
 
 signals:
-    void setBaseNote(Pitch *);
+    void setrootNote(Pitch *);
     void scaleupdate();
     void colorChanged();
 
@@ -74,4 +74,4 @@ private:
     void calcColor();
 };
 
-#endif // MWBASENOTESETTER_H
+#endif // MWrootNoteSETTER_H
