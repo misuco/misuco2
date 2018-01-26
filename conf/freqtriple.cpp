@@ -69,7 +69,7 @@ void FreqTriple::setPitch(int value)
     initFreq();
 }
 
-int FreqTriple::getHue() const
+float FreqTriple::getHue() const
 {
     return pitch->getHue();
 }

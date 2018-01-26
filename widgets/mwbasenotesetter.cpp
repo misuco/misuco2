@@ -84,8 +84,8 @@ void MWBaseNoteSetter::onscaleupdate()
 
 void MWBaseNoteSetter::calcColor()
 {
-    int l=lOff;
-    int s=sOff;
+    float l=lOff;
+    float s=sOff;
     if(_pressed>0 || _selected) {
         l=lOn;
         s=sOn;
@@ -103,7 +103,7 @@ void MWBaseNoteSetter::calcColor()
             _color = bkeycolor;
         }
     } else {
-        _color.fromHsl(_pitch->getHue(),s,l);
+        _color.fromHslF(_pitch->getHue(),s,l);
     }
 
 

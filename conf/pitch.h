@@ -22,16 +22,15 @@
 #define PITCH_H
 
 #include <QObject>
-#include "color.h"
 
-class Pitch : public QObject, public Color
+class Pitch : public QObject
 {
     Q_OBJECT
 
 public:
     explicit Pitch(int basenote, QObject *parent = 0);
 
-    int getHue() const override;
+    float getHue() const;
     int getBW() const;
     int getBasenote();
     int getPitch();

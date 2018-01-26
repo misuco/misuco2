@@ -25,7 +25,7 @@
 #include <QStackedWidget>
 #include <QStandardPaths>
 
-#include <conf/color.h>
+//#include <conf/color.h>
 
 wlayout::wlayout(QWidget *parent) : QObject(parent)
 {
@@ -75,10 +75,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect(H[0],SIGNAL(setOctMid(int)),faderMicrotune[i],SLOT(setOctMid(int)));
     }
 
-    Color * synthCtlColor=new Pitch(1,this);
+    //Color * synthCtlColor=new Pitch(1,this);
 
     for(int i=0;i<10;i++) {
-        faderParamCtl[i] = new MWFaderParamCtl(this,synthCtlColor,i+102);
+        faderParamCtl[i] = new MWFaderParamCtl(this,i+102);
         faderParamCtl[i]->setOut(out);
         faderParamCtl[i]->setMinValue(0);
         if(i==0) {
@@ -98,13 +98,13 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         }
     }
 
-    faderPitchTopRange = new MWFaderParamCtl(this,synthCtlColor,1);
+    faderPitchTopRange = new MWFaderParamCtl(this,1);
     faderPitchTopRange->setOut(out);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
     connect(faderPitchTopRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertTop(int)));
 
-    faderPitchBottomRange = new MWFaderParamCtl(this,synthCtlColor,2);
+    faderPitchBottomRange = new MWFaderParamCtl(this,2);
     faderPitchBottomRange->setOut(out);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
@@ -114,7 +114,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     connect(pitchHorizontal,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
     connect(this,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
 
-    faderChannel = new MWFaderParamCtl(this,synthCtlColor,3);
+    faderChannel = new MWFaderParamCtl(this,3);
     faderChannel->setOut(out);
     faderChannel->setMinValue(1);
     faderChannel->setMaxValue(16);
@@ -169,7 +169,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     openScalesArchive = new MWHeaderSetter(13,1,this);
 
-    faderSymbols = new MWFaderParamCtl(this,synthCtlColor,4);
+    faderSymbols = new MWFaderParamCtl(this,4);
     faderSymbols->setOut(out);
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(4);

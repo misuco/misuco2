@@ -128,23 +128,25 @@ void MWPlayArea::config()
 void MWPlayArea::setColumn(int col, int midinote, int basenote) {
     //qDebug() << "setColumn " << col << " midinote " << midinote << " basenote " << basenote;
     rows=0;
+
+    float huePerNote = 1.0/12.0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
         fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
-        fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+HUE_NOTES*bendVertTop;
-        if(fields[rows][col].hue1bent>359) fields[rows][col].hue1bent-=359;
-        if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=359;
+        fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertTop;
+        if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
+        if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
             fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
-            fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+HUE_NOTES*bendVertTop;
-            if(fields[rows][col-1].hue1bent>359) fields[rows][col-1].hue1bent-=359;
-            if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=359;
+            fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertTop;
+            if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
+            if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
             fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
-            fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+HUE_NOTES*bendVertTop;
-            if(fields[rows][col-1].hue2bent>359) fields[rows][col-1].hue2bent-=359;
-            if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=359;
+            fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertTop;
+            if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
+            if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
             fields[rows][col-1].pressed=0;
         }
         rows++;
@@ -163,20 +165,20 @@ void MWPlayArea::setColumn(int col, int midinote, int basenote) {
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
         fields[rows][col].f1->setMidinote(midinote,MWPitch[basenote]);
-        fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+HUE_NOTES*bendVertBot;
-        if(fields[rows][col].hue1bent>359) fields[rows][col].hue1bent-=359;
-        if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=359;
+        fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertBot;
+        if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
+        if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
             fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getBasenote()]);
-            fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+HUE_NOTES*bendVertBot;
-            if(fields[rows][col-1].hue1bent>359) fields[rows][col-1].hue1bent-=359;
-            if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=359;
+            fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertBot;
+            if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
+            if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
             fields[rows][col-1].f2->setMidinote(midinote,MWPitch[basenote]);
-            fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+HUE_NOTES*bendVertBot;
-            if(fields[rows][col-1].hue2bent>359) fields[rows][col-1].hue2bent-=359;
-            if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=359;
+            fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertBot;
+            if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
+            if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
             fields[rows][col-1].pressed=0;
         }
         rows++;
@@ -489,7 +491,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
 
     MWPlayfield * pf = &fields[row][col];
-    qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
+    //qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
 
     float freq;
     int midinote;
@@ -612,7 +614,6 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     }
 
     pf->calcColor();
-    //update();
 
 }
 
@@ -682,7 +683,7 @@ void MWPlayArea::setOut(ISender *value)
 
 void MWPlayArea::resize(int w, int h)
 {
-    qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
+    //qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
     width=w;
     height=h;
     calcGeo();
@@ -690,7 +691,7 @@ void MWPlayArea::resize(int w, int h)
 
 void MWPlayArea::onPressed(int id, int x, int y)
 {
-    qDebug() << "MWPlayArea::onPressed id: " << id << " x: " << x << " y: " << y;
+    //qDebug() << "MWPlayArea::onPressed id: " << id << " x: " << x << " y: " << y;
     misuTouchEvent e;
     e.id=id;
     e.x=x;
@@ -702,7 +703,7 @@ void MWPlayArea::onPressed(int id, int x, int y)
 
 void MWPlayArea::onUpdated(int id, int x, int y)
 {
-    qDebug() << "MWPlayArea::onUpdated id: " << id << " x: " << x << " y: " << y;
+    //qDebug() << "MWPlayArea::onUpdated id: " << id << " x: " << x << " y: " << y;
     misuTouchEvent e;
     e.id=id;
     e.x=x;
@@ -714,7 +715,7 @@ void MWPlayArea::onUpdated(int id, int x, int y)
 
 void MWPlayArea::onReleased(int id, int x, int y)
 {
-    qDebug() << "MWPlayArea::onReleased id: " << id << " x: " << x << " y: " << y;
+    //qDebug() << "MWPlayArea::onReleased id: " << id << " x: " << x << " y: " << y;
     misuTouchEvent e;
     e.id=id;
     e.x=x;

@@ -10,7 +10,7 @@ class MWPlayfield : public QObject
 {
     Q_OBJECT
 
-    //Q_PROPERTY(int fieldType MEMBER type NOTIFY typeChanged)
+    Q_PROPERTY(int fieldType MEMBER type NOTIFY textChanged)
     Q_PROPERTY(QColor colorF1 MEMBER colorF1 NOTIFY colorChanged)
     Q_PROPERTY(QColor colorF1b MEMBER colorF1b NOTIFY colorChanged)
     Q_PROPERTY(QColor colorF2 MEMBER colorF2 NOTIFY colorChanged)
@@ -23,11 +23,11 @@ class MWPlayfield : public QObject
 public:
     explicit MWPlayfield(QObject *parent = nullptr);
 
-    MWPlayfieldType type = NORMAL;
+    int type = NORMAL;
     FreqTriple * f1;      // for type normal
     FreqTriple * f2;      // for type vert/hoiz
-    int hue1bent;         // cache for vertical bent hue values
-    int hue2bent;
+    float hue1bent;         // cache for vertical bent hue values
+    float hue2bent;
     unsigned int pressed = 0;
     bool hold = false;
     int voiceId = 0;    // cache for hold voiceId

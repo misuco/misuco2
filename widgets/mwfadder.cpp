@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWFadder::MWFadder(QObject *parent, Color *c) : MisuWidget(parent)
+MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
 {
     //qDebug() << "MWFadder::MWFadder";
     orient=vertical;
@@ -34,7 +34,7 @@ MWFadder::MWFadder(QObject *parent, Color *c) : MisuWidget(parent)
     setMinValue(-100);
     setMaxValue(100);
     fineness=5;
-    color=c;
+    //color=c;
     calcGeo();
     //update();
 }

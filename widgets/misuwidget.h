@@ -53,10 +53,10 @@ public:
     static QColor hlbkeycolor;
     static QColor hlwkeycolor;
 
-    static int lOff;
-    static int lOn;
-    static int sOff;
-    static int sOn;
+    static float lOff;
+    static float lOn;
+    static float sOff;
+    static float sOn;
 
     static Pitch * MWPitch[];
     static MWScale Scale;
@@ -76,7 +76,7 @@ public:
     static bool holdMode;
 
 protected:
-    bool event(QEvent *event);
+    //bool event(QEvent *event);
     int id;
 
 };

@@ -21,7 +21,7 @@
 #include "mwfaderpitch.h"
 #include <QDebug>
 
-MWFaderPitch::MWFaderPitch(QObject *parent, Pitch *p) : MWFadder(parent, p)
+MWFaderPitch::MWFaderPitch(QObject *parent, Pitch *p) : MWFadder(parent)
 {
     f = new FreqTriple(p);
     f->setOct(4);

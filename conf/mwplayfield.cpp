@@ -10,19 +10,19 @@ MWPlayfield::MWPlayfield(QObject *parent) : QObject(parent)
 void MWPlayfield::calcColor()
 {
 
-    qDebug() << "MWPlayfield::calcColor " << pressed << " " << this;
+    //qDebug() << "MWPlayfield::calcColor " << pressed << " " << this;
 
-    int l=MisuWidget::lOff;
-    int s=MisuWidget::sOff;
+    float l=MisuWidget::lOff;
+    float s=MisuWidget::sOff;
     if(pressed>0 || hold) {
         l=MisuWidget::lOn;
         s=MisuWidget::sOn;
     }
 
-    colorF1 = QColor::fromHsl(f1->getHue(),s,l);
-    colorF1b = QColor::fromHsl(hue1bent,s,l);
-    colorF2 = QColor::fromHsl(f2->getHue(),s,l);
-    colorF2b = QColor::fromHsl(hue2bent,s,l);
+    colorF1 = QColor::fromHslF(f1->getHue(),s,l);
+    colorF1b = QColor::fromHslF(hue1bent,s,l);
+    colorF2 = QColor::fromHslF(f2->getHue(),s,l);
+    colorF2b = QColor::fromHslF(hue2bent,s,l);
 
     if(MisuWidget::bwmode) {
         if(f1->getBW()) {

@@ -46,8 +46,8 @@ MWBScaleSwitch::~MWBScaleSwitch()
 
 void MWBScaleSwitch::calcColor()
 {
-    int l=lOff;
-    int s=sOff;
+    float l=lOff;
+    float s=sOff;
     if(_pressed>0 || _value) {
         l=lOn;
         s=sOn;
@@ -67,7 +67,7 @@ void MWBScaleSwitch::calcColor()
             _color = bkeycolor;
         }
     } else {
-        _color.fromHsl(MWPitch[pitch]->getHue(),s,l);
+        _color.fromHslF(MWPitch[pitch]->getHue(),s,l);
     }
 
 

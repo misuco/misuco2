@@ -26,7 +26,7 @@ Pitch::Pitch(int basenote, QObject *parent) : QObject(parent), _basenote(basenot
     calcColor();
 }
 
-int Pitch::getHue() const
+float Pitch::getHue() const
 {
     return _color;
 }

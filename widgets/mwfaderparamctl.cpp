@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QDebug>
 
-MWFaderParamCtl::MWFaderParamCtl(QObject *parent, Color * col, int cc) : MWFadder(parent, col), cc(cc)
+MWFaderParamCtl::MWFaderParamCtl(QObject *parent, int cc) : MWFadder(parent), cc(cc)
 {
 }
 

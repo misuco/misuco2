@@ -24,7 +24,6 @@
 #include <QString>
 
 #define BSCALE_SIZE 11
-#define HUE_NOTES 30
 
 enum MWPlayfieldType {
     NORMAL,

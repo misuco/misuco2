@@ -22,7 +22,7 @@
 #define FREQTRIPLE_H
 
 #include "pitch.h"
-#include "color.h"
+//#include "color.h"
 
 class FreqTriple: public QObject
 {
@@ -42,7 +42,7 @@ public:
     int getPitch() const;
     void setPitch(int value);
 
-    int getHue() const;
+    float getHue() const;
     bool getBW() const;
 
     int getBasenote() const;

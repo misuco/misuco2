@@ -36,10 +36,10 @@ QColor MisuWidget::wkeycolor("White");
 QColor MisuWidget::hlbkeycolor(QColor::fromHsl(1,200,20));
 QColor MisuWidget::hlwkeycolor(QColor::fromHsl(1,200,200));
 
-int MisuWidget::lOff = 80;
-int MisuWidget::lOn = 180;
-int MisuWidget::sOff = 180;
-int MisuWidget::sOn = 180;
+float MisuWidget::lOff = 0.4;
+float MisuWidget::lOn = 0.8;
+float MisuWidget::sOff = 0.8;
+float MisuWidget::sOn = 0.8;
 
 Pitch * MisuWidget::MWPitch[BSCALE_SIZE+1];
 MWScale MisuWidget::Scale;
@@ -71,6 +71,7 @@ MisuWidget::~MisuWidget()
 
 }
 
+/*
 bool MisuWidget::event(QEvent *event)
 {
     misuTouchEvent e;
@@ -116,3 +117,4 @@ bool MisuWidget::event(QEvent *event)
     }
     return 0;//QWidget::event(event);
 }
+*/

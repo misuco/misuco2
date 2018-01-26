@@ -32,7 +32,7 @@ class MWFaderParamCtl : public MWFadder
     Q_OBJECT
 
 public:
-    MWFaderParamCtl(QObject *parent, Color *col, int cc);
+    MWFaderParamCtl(QObject *parent, int cc);
     ~MWFaderParamCtl();
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
