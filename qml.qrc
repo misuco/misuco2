@@ -8,5 +8,6 @@
         <file>qml/PlayFieldBendHori.qml</file>
         <file>qml/RootNoteSetter.qml</file>
         <file>qml/BScaleSwitch.qml</file>
+        <file>qml/OctaveRanger.qml</file>
     </qresource>
 </RCC>

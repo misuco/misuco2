@@ -23,9 +23,18 @@ Window {
         height: buttonSize
     }
 
-    PlayArea {
-        controller: layout.playArea
+    OctaveRanger {
+        id: octaveRangerRow
+        controller: layout.octaveRanger
         anchors.top: bScaleSwitchRow.bottom
+        width: parent.width
+        height: buttonSize
+    }
+
+    PlayArea {
+        id: playAreaRow
+        controller: layout.playArea
+        anchors.top: octaveRangerRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right

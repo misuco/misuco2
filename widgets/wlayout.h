@@ -48,6 +48,7 @@ class wlayout : public QObject
 
     Q_PROPERTY(QList<QObject*> rootNoteSetter MEMBER _rootNoteSetter CONSTANT)
     Q_PROPERTY(QList<QObject*> bScaleSwitch MEMBER _BScaleSwitch CONSTANT)
+    Q_PROPERTY(QObject* octaveRanger MEMBER _OctaveRanger CONSTANT)
     Q_PROPERTY(QObject* playArea MEMBER _PlayArea CONSTANT)
 
 public:
@@ -89,15 +90,12 @@ private:
 
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _BScaleSwitch;
-    MWOctaveRanger * OctaveRanger;
+    MWOctaveRanger * _OctaveRanger;
     QObject *       _PlayArea;
 
     // synth ctl faders
     MWFaderParamCtl * faderParamCtl[10];
     MWFaderPitch * faderMicrotune[12];
-
-    // header widgets
-    QObject * H[3];
 
     // main area widgets
     QObject * M[4];

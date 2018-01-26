@@ -64,15 +64,15 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), (MWPlayArea *)_PlayArea, SLOT(pitchChange()));
     }
 
-    H[0] = new MWOctaveRanger(this);
-    connect(H[0],SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
+    _OctaveRanger = new MWOctaveRanger(this);
+    connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         faderMicrotune[i] = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
         faderMicrotune[i]->setOut(out);
         connect (faderMicrotune[i],SIGNAL(valueChange(int)),MisuWidget::MWPitch[i],SLOT(setPitch(int)));
         connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), faderMicrotune[i], SLOT(pitchChange()));
-        connect(H[0],SIGNAL(setOctMid(int)),faderMicrotune[i],SLOT(setOctMid(int)));
+        connect(_OctaveRanger,SIGNAL(setOctMid(int)),faderMicrotune[i],SLOT(setOctMid(int)));
     }
 
     //Color * synthCtlColor=new Pitch(1,this);
@@ -150,7 +150,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect(rootNoteSetter,SIGNAL(setrootNote(Pitch *)),this,SLOT(onSetrootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(this,SIGNAL(setrootNote(Pitch*)),rootNoteSetter,SLOT(onSetrootNote(Pitch*)));
-        connect(H[0],SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
+        connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
         connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
     }
@@ -160,7 +160,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         bs->setOut(out);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
-        connect(H[0],SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
+        connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
             connect(_rootNoteSetter[j],SIGNAL(setrootNote(Pitch *)),bs,SLOT(setrootNote(Pitch *)));
         }

@@ -27,23 +27,41 @@ class MWOctaveRanger : public MisuWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(int bottom MEMBER bottom NOTIFY bottomChanged)
+    Q_PROPERTY(int top MEMBER top NOTIFY topChanged)
+    Q_PROPERTY(int nOctaves MEMBER noct CONSTANT)
+    Q_PROPERTY(QColor fgColor MEMBER fgColor CONSTANT)
+    Q_PROPERTY(QColor bgColor MEMBER bgColor CONSTANT)
+    Q_PROPERTY(QColor hlColor MEMBER hlColor CONSTANT)
+
 public:
     MWOctaveRanger(QObject *parent);
     ~MWOctaveRanger();
-    virtual void processTouchEvent(misuTouchEvent e);
+
+    Q_INVOKABLE void onUpdated(int id, int x);
+    Q_INVOKABLE void onReleased(int id);
+    Q_INVOKABLE void onResize(int w);
 
 signals:
     void setOctConf(int bottom,int top);
     void setOctMid(int mid);
+    void bottomChanged();
+    void topChanged();
 
 private:
-    enum border {none,topPad,bottomPad};
     int top;
     int mid;
     int bottom;
     int segwidth;
     int noct;
-    border grabed;
+    bool grabedTop;
+    int grabedTopTouchId;
+    bool grabedBot;
+    int grabedBotTouchId;
+
+    QColor bgColor;
+    QColor fgColor;
+    QColor hlColor;
 };
 
 #endif // MWOCTAVERANGER_H
