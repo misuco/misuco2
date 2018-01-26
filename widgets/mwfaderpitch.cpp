@@ -37,6 +37,14 @@ void MWFaderPitch::setOut(ISender *value)
     out = value;
 }
 
+/*
+void MWFaderPitch::onResize(int w, int h)
+{
+    qDebug() << "MWFaderPitch::onResize w: " << w << " h: " << h;
+    MWFadder::onResize(w,h);
+}
+*/
+
 void MWFaderPitch::setOctMid(int o)
 {
     f->setOct(o);
@@ -54,7 +62,6 @@ void MWFaderPitch::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         vId=out->noteOn(channel,f->getFreq(),f->getMidinote(),f->getPitch(),127);
         //qDebug() << "MWFaderPitch::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
-        pressed++;
         //update();
         break;
     case Qt::TouchPointMoved:
@@ -65,9 +72,8 @@ void MWFaderPitch::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointReleased:
         //qDebug() << "MWFaderPitch::processTouchEvent TouchPointReleased vId:" << vId;
         out->noteOff(vId);
-        pressed--;
         //update();
         break;
     }
-    MWFadder::processTouchEvent(e);
+    //MWFadder::processTouchEvent(e);
 }

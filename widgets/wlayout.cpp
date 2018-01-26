@@ -31,6 +31,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 {
     presetsVisible=false;
     headerVisible=false;
+    _rootNoteSetterVisible=true;
+    _bScaleSwitchVisible=false;
+    _octaveRangerVisible=false;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -68,11 +71,12 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        faderMicrotune[i] = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
-        faderMicrotune[i]->setOut(out);
-        connect (faderMicrotune[i],SIGNAL(valueChange(int)),MisuWidget::MWPitch[i],SLOT(setPitch(int)));
-        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), faderMicrotune[i], SLOT(pitchChange()));
-        connect(_OctaveRanger,SIGNAL(setOctMid(int)),faderMicrotune[i],SLOT(setOctMid(int)));
+        MWFaderPitch * fader = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
+        fader->setOut(out);
+        connect (fader,SIGNAL(valueChange(int)),MisuWidget::MWPitch[i],SLOT(setPitch(int)));
+        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
+        connect(_OctaveRanger,SIGNAL(setOctMid(int)),fader,SLOT(setOctMid(int)));
+        _faderMicrotune.append(fader);
     }
 
     //Color * synthCtlColor=new Pitch(1,this);
@@ -188,19 +192,23 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     for(int i=0;i<7;i++) {
         int fctId=i;
         if(i>=3) fctId+=3;
-        HS[i] = new MWHeaderSetter(fctId,this);
-        connect(this,SIGNAL(setMenuItemState(int,int)),HS[i],SLOT(setState(int,int)));
+
+        MWHeaderSetter * hs = new MWHeaderSetter(fctId,this);
+        if(i==0) hs->setState(0,1);
+
+        connect(this,SIGNAL(setMenuItemState(int,int)),hs,SLOT(setState(int,int)));
         if(i<3) {
-            connect(HS[i],SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
+            connect(hs,SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
         } else if(i==3) {
-            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
         } else if(i==4) {
-            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
         } else if(i==5) {
-            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
         } else if(i==6) {
-            connect(HS[i],SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
+            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
         }
+        _menu.append(hs);
     }
 
     readXml(configPath);
@@ -247,24 +255,38 @@ void wlayout::resizeEvent(QResizeEvent *)
     */
 }
 
-void wlayout::currentHeader(int)
+void wlayout::currentHeader(int id)
 {
+    MWHeaderSetter * rootButton = dynamic_cast<MWHeaderSetter *>(_menu[0]);
+    MWHeaderSetter * bscaleButton = dynamic_cast<MWHeaderSetter *>(_menu[1]);
+    MWHeaderSetter * octaveButton = dynamic_cast<MWHeaderSetter *>(_menu[2]);
 
-    /*
-    for(int j=0;j<3;j++) {
-        if(i!=j) {
-            H[j]->hide();
-            emit setMenuItemState(j,0);
-        }
+    _rootNoteSetterVisible=false;
+    _bScaleSwitchVisible=false;
+    _octaveRangerVisible=false;
+
+    if(rootButton) rootButton->setState(0,0);
+    if(bscaleButton) bscaleButton->setState(1,0);
+    if(octaveButton) octaveButton->setState(2,0);
+
+    switch(id) {
+    case 0:
+        _rootNoteSetterVisible=true;
+        if(rootButton) rootButton->setState(0,1);
+        break;
+    case 1:
+        _bScaleSwitchVisible=true;
+        if(bscaleButton) bscaleButton->setState(1,1);
+        break;
+    case 2:
+        _octaveRangerVisible=true;
+        if(octaveButton) octaveButton->setState(2,1);
+        break;
     }
 
-    if(H[i]->isHidden()) {
-        H[i]->show();
-    } else {
-        H[i]->hide();
-    }
-    recalcMainView();
-    */
+
+    emit layoutChange();
+
 }
 
 void wlayout::currentMainView(int)
@@ -591,7 +613,8 @@ void wlayout::setMicrotune(MWMicrotune * m)
     for(int i=0;i<12;i++) {
         MisuWidget::Microtune.tuning[i] = m->tuning[i];
         MisuWidget::MWPitch[i]->setPitch(m->tuning[i]);
-        faderMicrotune[i]->setValue(m->tuning[i]);
+        auto p = qobject_cast<MWFaderPitch*>(_faderMicrotune[i]);
+        if(p) p->setValue(m->tuning[i]);
     }
     /*
     M[0]->//update();

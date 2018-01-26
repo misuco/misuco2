@@ -22,11 +22,18 @@
 #define MWFADDER_H
 
 #include "misuwidget.h"
-//#include "conf/color.h"
 
 class MWFadder : public MisuWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(int faderY MEMBER _faderY NOTIFY geoChanged)
+    Q_PROPERTY(int knobSize MEMBER knobSize NOTIFY geoChanged)
+    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY geoChanged)
+    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY geoChanged)
+    Q_PROPERTY(QColor bgColor MEMBER _bgColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor fgColor MEMBER _fgColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
 
 public:
     MWFadder(QObject *parent);
@@ -39,6 +46,11 @@ public:
         fine
     };
 
+    Q_INVOKABLE void onResize(int h);
+    Q_INVOKABLE void onPressed(int id, int x, int y, int h);
+    Q_INVOKABLE void onUpdated(int id, int y, int h);
+    Q_INVOKABLE void onReleased();
+
     void setMinValue(int value);
     void setMaxValue(int value);    
     void setInverted(bool v);
@@ -46,11 +58,23 @@ public:
     int getValue();
 
 protected:
-    void processTouchEvent(misuTouchEvent e);
     int valueDisplay;
+    int _faderY;
+    int knobSize;
+
+    QString _text1;
+    QString _text2;
+
+    QColor  _fgColor;
+    QColor  _bgColor;
+    QColor  _fontColor;
 
 signals:
     void valueChange(int v);
+
+    // QML
+    void geoChanged();
+    void colorChanged();
 
 private:
     // Fadder state
@@ -62,10 +86,11 @@ private:
     int step1;
     int step2;
     int pressed;
+    int pressedTouchId;
     int orient;
-    int fadderY;
-    int knobSize;
     int fineness;
+
+    int height;
 
     // Touch event state
     int xTouchBegin;

@@ -26,81 +26,168 @@
 
 MWHeaderSetter::MWHeaderSetter(int headerId, QObject *parent) : MisuWidget(parent)
 {
-    this->headerId=headerId;
-    pressed=0;
-    this->state=0;
+    this->_functionId=headerId;
+    _pressed=0;
+    this->_state=0;
+    setText();
 }
 
 MWHeaderSetter::MWHeaderSetter(int headerId, int state, QObject *parent): MisuWidget(parent)
 {
-    this->headerId=headerId;
-    pressed=0;
-    this->state=state;
+    this->_functionId=headerId;
+    _pressed=0;
+    this->_state=state;
+    setText();
 }
 
-void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
+void MWHeaderSetter::setText() {
+
+    _bgColor = bgcolor;
+    _fontColor = fgcolor;
+
+    switch(_functionId) {
+    case 0:
+        _text="root";
+        break;
+    case 1:
+        _text="scale";
+        break;
+    case 2:
+        _text="octave";
+        break;
+    case 3:
+        _text="bend horizontal";
+        break;
+    case 4:
+        _text="bend top";
+        break;
+    case 5:
+        _text="bend bottom";
+        break;
+    case 6:
+        _text="play";
+        break;
+    case 7:
+        _text="tune";
+        break;
+    case 8:
+        _text="synth";
+        break;
+    case 9:
+        _text="setup";
+        break;
+        //_text="%d presets",headerId;
+        //break;
+    case 10:
+        _text="menu";
+        break;
+    case 11:
+        _text="bwmode";
+        break;
+    case 12:
+        _text="overwrite";
+        break;
+    case 13:
+        _text="archive";
+        break;
+    case 14:
+        _text="symbols";
+        break;
+    case 15:
+        _text="bend\nhorizontal";
+        break;
+    case 16:
+        _text="send cc1";
+        break;
+    case 17:
+        _text="mobile\nsynth";
+        break;
+    case 18:
+        _text="puredata";
+        break;
+    case 19:
+        _text="reaktor";
+        break;
+    case 20:
+        _text="super\ncollider";
+        break;
+    case 21:
+        _text="hold";
+        break;
+    case 22:
+        _text="freqs";
+        break;
+    }
+
+}
+
+int MWHeaderSetter::getState()
+{
+    return _state;
+}
+
+void MWHeaderSetter::onPressed(int id)
 {
     QString link;
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        switch(headerId) {
+    if(_pressed == 0) {
+        switch(_functionId) {
         case 0:
         case 1:
         case 2:
-            if(state==0) {
-                state=1;
+            if(_state==0) {
+                _state=1;
             } else {
-                state=0;
+                _state=0;
             }
-            emit currentHeader(headerId);
+            emit currentHeader(_functionId);
             break;
         case 3:
         case 15:
-            if(state==0) {
-                state=1;
+            if(_state==0) {
+                _state=1;
             } else {
-                state=0;
+                _state=0;
             }
-            emit setBendHori(state);
+            emit setBendHori(_state);
             break;
         case 4:
-            if(state==0) {
-                state=2;
+            if(_state==0) {
+                _state=2;
             } else {
-                state=0;
+                _state=0;
             }
-            emit setBendVertTop(state);
+            emit setBendVertTop(_state);
             break;
         case 5:
-            if(state==0) {
-                state=-2;
+            if(_state==0) {
+                _state=-2;
             } else {
-                state=0;
+                _state=0;
             }
-            emit setBendVertBot(state);
+            emit setBendVertBot(_state);
             break;
         case 6:
         case 7:
         case 8:
         case 9:
-            if(state==0) {
-                state=1;
+            if(_state==0) {
+                _state=1;
             } else {
-                state=0;
+                _state=0;
             }
-            emit currentMainView(headerId-6);
+            emit currentMainView(_functionId-6);
             break;
         case 10:
             emit toggleMenu();
             break;
         case 11:
             bwmode=!bwmode;
-            state=bwmode;
+            _state=bwmode;
             emit toggleBW();
             break;
         case 12:
             overwrite=!overwrite;
-            state = overwrite;
+            _state = overwrite;
             break;
         case 13:
             link ="http://scales.misuco.org/";
@@ -123,48 +210,57 @@ void MWHeaderSetter::processTouchEvent(misuTouchEvent e)
             break;
         case 16:
             MisuWidget::sendCC1 = ! MisuWidget::sendCC1;
-            state = MisuWidget::sendCC1;
+            _state = MisuWidget::sendCC1;
             break;
         case 17:
         case 18:
         case 19:
         case 20:
-            emit(toggleSender(headerId-17));
-            if(state==0) state = 1;
-            else state = 0;
+            emit(toggleSender(_functionId-17));
+            if(_state==0) _state = 1;
+            else _state = 0;
             break;
         case 21:
             holdMode=!holdMode;
-            state = holdMode;
+            _state = holdMode;
             break;
         case 22:
             showFreqs=!showFreqs;
-            state = showFreqs;
+            _state = showFreqs;
             break;
         }
 
-        pressed++;
-        //update();
-        break;
-
-    case Qt::TouchPointReleased:
-        pressed--;
-        //update();
-        break;
+        _pressed++;
+        _pressedTouchId = id;
+        _bgColor = highlightcolor;
+        emit stateChanged();
     }
 }
 
-int MWHeaderSetter::getState()
+void MWHeaderSetter::onReleased(int id)
 {
-    return state;
+    if( id == _pressedTouchId) {
+        _pressed--;
+        if(_state>0) {
+            _bgColor = highlightcolor;
+        } else {
+            _bgColor = bgcolor;
+        }
+        emit stateChanged();
+    }
 }
 
 void MWHeaderSetter::setState(int id, int s)
 {
-    if(headerId == id) {
+    if(_functionId == id) {
         //qDebug() << "MWHeaderSetter::setState id:" << id << " state: " << s;
-        state = s;
-        //update();
+        _state = s;
+        if(_state>0) {
+            _bgColor = highlightcolor;
+        } else {
+            _bgColor = bgcolor;
+        }
+        emit stateChanged();
     }
 }
 
@@ -180,80 +276,6 @@ void MWHeaderSetter::paintEvent(QPaintEvent *)
     if(state!=0) painter.setBrush(highlightcolor);
     else painter.setBrush(bgcolor);
     painter.drawRect(0,0,width(),height());
-    switch(headerId) {
-    case 0:
-        cap.sprintf("octaves");
-        break;
-    case 1:
-        cap.sprintf("rootNote");
-        break;
-    case 2:
-        cap.sprintf("scale");
-        break;
-    case 3:
-        cap.sprintf("bend horizontal");
-        break;
-    case 4:
-        cap.sprintf("bend top");
-        break;
-    case 5:
-        cap.sprintf("bend bottom");
-        break;
-    case 6:
-        cap.sprintf("play area");
-        break;
-    case 7:
-        cap.sprintf("microtune");
-        break;
-    case 8:
-        cap.sprintf("synth");
-        break;
-    case 9:
-        cap.sprintf("setup");
-        break;
-        //cap.sprintf("%d presets",headerId);
-        //break;
-    case 10:
-        cap.sprintf("menu");
-        break;
-    case 11:
-        cap.sprintf("bwmode");
-        break;
-    case 12:
-        cap.sprintf("overwrite");
-        break;
-    case 13:
-        cap.sprintf("archive");
-        break;
-    case 14:
-        cap.sprintf("symbols");
-        break;
-    case 15:
-        cap.sprintf("bend\nhorizontal");
-        break;
-    case 16:
-        cap.sprintf("send cc1");
-        break;
-    case 17:
-        cap.sprintf("mobile\nsynth");
-        break;
-    case 18:
-        cap.sprintf("puredata");
-        break;
-    case 19:
-        cap.sprintf("reaktor");
-        break;
-    case 20:
-        cap.sprintf("super\ncollider");
-        break;
-    case 21:
-        cap.sprintf("hold");
-        break;
-    case 22:
-        cap.sprintf("freqs");
-        emit toggleShowFreqs();
-        break;
-    }
 
     if(width()>height()) {
         painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);

@@ -9,5 +9,7 @@
         <file>qml/RootNoteSetter.qml</file>
         <file>qml/BScaleSwitch.qml</file>
         <file>qml/OctaveRanger.qml</file>
+        <file>qml/Menu.qml</file>
+        <file>qml/TuneArea.qml</file>
     </qresource>
 </RCC>

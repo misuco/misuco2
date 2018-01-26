@@ -27,11 +27,20 @@ class MWHeaderSetter : public MisuWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(int functionId MEMBER _functionId CONSTANT)
+    Q_PROPERTY(int pressed MEMBER _pressed NOTIFY stateChanged)
+    Q_PROPERTY(int state MEMBER _state NOTIFY stateChanged)
+    Q_PROPERTY(QString text MEMBER _text CONSTANT)
+    Q_PROPERTY(QColor bgColor MEMBER _bgColor NOTIFY stateChanged)
+    Q_PROPERTY(QColor fontColor MEMBER _fontColor CONSTANT)
+
 public:
-    MWHeaderSetter(int headerId, QObject *parent);
-    MWHeaderSetter(int headerId, int state, QObject *parent);
-    virtual void processTouchEvent(misuTouchEvent e);
+    MWHeaderSetter(int functionId, QObject *parent);
+    MWHeaderSetter(int functionId, int state, QObject *parent);
     int getState();
+
+    Q_INVOKABLE void onPressed(int id);
+    Q_INVOKABLE void onReleased(int id);
 
 signals:
     void currentHeader(int i);
@@ -46,15 +55,22 @@ signals:
     void toggleSender(int i);
     void toggleShowFreqs();
 
+    void stateChanged();
+
 public slots:
     void setState(int id, int s);
 
 private:
-    int headerId;
-    int pressed;
-    int state;
+    int _functionId;
+    int _pressed;
+    int _pressedTouchId;
+    int _state;
+    QString _text;
     QString midi2TextUrl(int midinote);
+    QColor _bgColor;
+    QColor _fontColor;
 
+    void setText();
 };
 
 #endif // MWHEADERSETTER_H

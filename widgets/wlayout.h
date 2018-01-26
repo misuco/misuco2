@@ -47,9 +47,18 @@ class wlayout : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QList<QObject*> rootNoteSetter MEMBER _rootNoteSetter CONSTANT)
+    Q_PROPERTY(bool rootNoteSetterVisible MEMBER _rootNoteSetterVisible NOTIFY layoutChange)
+
     Q_PROPERTY(QList<QObject*> bScaleSwitch MEMBER _BScaleSwitch CONSTANT)
+    Q_PROPERTY(bool bScaleSwitchVisible MEMBER _bScaleSwitchVisible NOTIFY layoutChange)
+
     Q_PROPERTY(QObject* octaveRanger MEMBER _OctaveRanger CONSTANT)
+    Q_PROPERTY(bool octaveRangerVisible MEMBER _octaveRangerVisible NOTIFY layoutChange)
+
     Q_PROPERTY(QObject* playArea MEMBER _PlayArea CONSTANT)
+    Q_PROPERTY(QList<QObject*> menu MEMBER _menu CONSTANT)
+
+    Q_PROPERTY(QList<QObject*> tuneArea MEMBER _faderMicrotune CONSTANT)
 
 public:
     explicit wlayout(QWidget *parent = 0);
@@ -65,8 +74,11 @@ signals:
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
 
+    // QML
+    void layoutChange();
+
 private slots:    
-    void currentHeader(int i);
+    void currentHeader(int id);
     void currentMainView(int i);
     void togglePresets();
     void toggleMenu();
@@ -95,13 +107,13 @@ private:
 
     // synth ctl faders
     MWFaderParamCtl * faderParamCtl[10];
-    MWFaderPitch * faderMicrotune[12];
+    QList<QObject*> _faderMicrotune;
 
     // main area widgets
     QObject * M[4];
 
     // right menu
-    QObject * HS[15];
+    QList<QObject *> _menu;
 
     // preset buttons
     QList<MWPreset * > scalePresets;
@@ -126,6 +138,11 @@ private:
     MWHeaderSetter * holdMode;
     MWHeaderSetter * showFreqs;
     MWHeaderSetter * overwritePreset;
+
+    // layout
+    bool _rootNoteSetterVisible;
+    bool _bScaleSwitchVisible;
+    bool _octaveRangerVisible;
 
     QString configPath;
 

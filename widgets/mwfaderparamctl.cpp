@@ -191,7 +191,7 @@ void MWFaderParamCtl::propagateValueChange() {
 
 void MWFaderParamCtl::processTouchEvent(misuTouchEvent e)
 {
-    MWFadder::processTouchEvent(e);
+    //MWFadder::processTouchEvent(e);
     switch(e.state) {
     case Qt::TouchPointPressed:
         //qDebug() << "MWFaderParamCtl::processTouchEvent TouchPointPressed " << out << " cc:" << cc << " value: " << getValue();

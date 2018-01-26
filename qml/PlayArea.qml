@@ -34,13 +34,13 @@ Item {
 
         onCanceled: {
             for(var i=0;i<touchPoints.length;i++) {
-                controller.onReleased(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y)
+                controller.onReleased()
             }
         }
 
         onReleased: {
             for(var i=0;i<touchPoints.length;i++) {
-                controller.onReleased(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y)
+                controller.onReleased()
             }
         }
 

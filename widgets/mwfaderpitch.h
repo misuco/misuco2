@@ -37,6 +37,8 @@ public:
     virtual void processTouchEvent(misuTouchEvent e);
     void setOut(ISender *value);
 
+    //Q_INVOKABLE void onResize(int w, int h);
+
 public slots:
     void setOctMid(int o);
     void pitchChange();
@@ -48,7 +50,6 @@ private:
     FreqTriple * f;
 
     int vId;
-    int pressed;
 };
 
 #endif // MWFADERPITCH_H

@@ -27,9 +27,6 @@
 #include "comm/sendermobilesynth.h"
 
 MWPlayArea::MWPlayArea(QObject *parent) : MisuWidget(parent),
-    linearGrad(QPointF(0,1),QPointF(0,1)),
-    font3(font1),
-    font8(font1),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
@@ -195,9 +192,6 @@ void MWPlayArea::calcGeo()
     for(int i=0;i<rows;i++) {
         rowheight[i]=rh;
     }
-
-    font3.setPixelSize(cw/2);
-    font8.setPixelSize(cw/4);
 }
 
 /*

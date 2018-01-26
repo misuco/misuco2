@@ -30,39 +30,47 @@ MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
     inverted=false;
     valueDisplay=value;
     pressed=0;
-    knobSize=50; // TODO height()/8;
     setMinValue(-100);
     setMaxValue(100);
     fineness=5;
-    //color=c;
+    height=500;
+    knobSize=50; // TODO height()/8;
+
+    _fgColor = fgcolor;
+    _bgColor = bgcolor;
+    _fontColor = highlightcolor;
+
     calcGeo();
-    //update();
 }
 
-void MWFadder::processTouchEvent(misuTouchEvent e)
+void MWFadder::onPressed(int id, int x, int y, int h)
 {
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        if(0==pressed) {
-            xTouchBegin=e.x;
-            yTouchBegin=e.y;
-            valTouchBegin=value;
-            if(e.y>=fadderY && e.y<=fadderY+2*knobSize) {
-                fadeMode=coarse;
-            } else {
-                fadeMode=fine;
-            }
-            emit valueChange(valueDisplay);
+    height = h;
+    if(0==pressed) {
+        pressedTouchId = id;
+        xTouchBegin=x;
+        yTouchBegin=y;
+        valTouchBegin=value;
+        if(y>=_faderY && y<=_faderY+2*knobSize) {
+            fadeMode=coarse;
+        } else {
+            fadeMode=fine;
         }
-        pressed++;
-        //update();
-        break;
-    case Qt::TouchPointMoved:
+        emit valueChange(valueDisplay);
+    }
+    pressed++;
+
+}
+
+void MWFadder::onUpdated(int id, int y, int h)
+{
+    height = h;
+    if(id==pressedTouchId) {
         if(vertical==orient) {
             if(coarse==fadeMode) {
-                value=valTouchBegin+(e.y-yTouchBegin)*valRange/(/*height()-*/2*knobSize);
+                value=valTouchBegin+(y-yTouchBegin)*valRange/(height-2*knobSize);
             } else {
-                value=valTouchBegin+(e.y-yTouchBegin)/fineness;
+                value=valTouchBegin+(y-yTouchBegin)/fineness;
             }
             if(value>maxValue) value=maxValue;
             if(value<minValue) value=minValue;
@@ -74,22 +82,19 @@ void MWFadder::processTouchEvent(misuTouchEvent e)
             emit valueChange(valueDisplay);
             calcGeo();
         }
-        //update();
-        break;
-    case Qt::TouchPointReleased:
-        pressed--;
-        //update();
-        break;
     }
-    //qDebug() << "value " << value << " touch begin v: " << valTouchBegin << " y: " << yTouchBegin;
 }
 
-/*
-void MWFadder::resizeEvent(QResizeEvent *)
+void MWFadder::onReleased()
 {
+    pressed--;
+}
+
+void MWFadder::onResize(int h)
+{
+    height = h;
     calcGeo();
 }
-*/
 
 int MWFadder::getValue()
 {
@@ -98,8 +103,10 @@ int MWFadder::getValue()
 
 void MWFadder::calcGeo()
 {
-    knobSize=50; // TODO height()/8;
-    fadderY=(value-minValue)*(/*height()-*/2*knobSize)/valRange;
+    knobSize=height/8;
+    _faderY=(value-minValue)*(height-2*knobSize)/valRange;
+    _text1.sprintf("%d",valueDisplay);
+    emit geoChanged();
 }
 
 void MWFadder::setMaxValue(int value)
