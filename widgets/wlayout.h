@@ -56,16 +56,16 @@ class wlayout : public QObject
     Q_PROPERTY(bool octaveRangerVisible MEMBER _octaveRangerVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QObject* playArea MEMBER _PlayArea CONSTANT)
+    Q_PROPERTY(bool playAreaVisible MEMBER _playAreaVisible NOTIFY layoutChange)
+
     Q_PROPERTY(QList<QObject*> menu MEMBER _menu CONSTANT)
 
     Q_PROPERTY(QList<QObject*> tuneArea MEMBER _faderMicrotune CONSTANT)
+    Q_PROPERTY(bool tuneAreaVisible MEMBER _tuneAreaVisible NOTIFY layoutChange)
 
 public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
-
-protected:
-    void resizeEvent(QResizeEvent *);
 
 signals:
     void setrootNote(Pitch * p);
@@ -79,7 +79,7 @@ signals:
 
 private slots:    
     void currentHeader(int id);
-    void currentMainView(int i);
+    void currentMainView(int id);
     void togglePresets();
     void toggleMenu();
     void toggleBW();
@@ -143,6 +143,8 @@ private:
     bool _rootNoteSetterVisible;
     bool _bScaleSwitchVisible;
     bool _octaveRangerVisible;
+    bool _playAreaVisible;
+    bool _tuneAreaVisible;
 
     QString configPath;
 

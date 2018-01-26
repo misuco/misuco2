@@ -44,19 +44,19 @@ Window {
         height: buttonSize
     }
 
-    /*
     PlayArea {
         id: playAreaRow
+        visible: layout.playAreaVisible
         controller: layout.playArea
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
     }
-    */
 
     TuneArea {
         id: tuneAreaRow
+        visible: layout.tuneAreaVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left

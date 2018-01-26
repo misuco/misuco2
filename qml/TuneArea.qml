@@ -63,13 +63,13 @@ Item {
 
                     onCanceled: {
                         for(var i=0;i<touchPoints.length;i++) {
-                            modelData.onReleased(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y)
+                            modelData.onReleased()
                         }
                     }
 
                     onReleased: {
                         for(var i=0;i<touchPoints.length;i++) {
-                            modelData.onReleased(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y)
+                            modelData.onReleased()
                         }
                     }
 

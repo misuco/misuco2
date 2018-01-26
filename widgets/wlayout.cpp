@@ -34,6 +34,8 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _rootNoteSetterVisible=true;
     _bScaleSwitchVisible=false;
     _octaveRangerVisible=false;
+    _playAreaVisible=true;
+    _tuneAreaVisible=false;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -194,7 +196,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         if(i>=3) fctId+=3;
 
         MWHeaderSetter * hs = new MWHeaderSetter(fctId,this);
+        // initially lit menu buttons
         if(i==0) hs->setState(0,1);
+        if(i==3) hs->setState(6,1);
 
         connect(this,SIGNAL(setMenuItemState(int,int)),hs,SLOT(setState(int,int)));
         if(i<3) {
@@ -241,20 +245,6 @@ wlayout::~wlayout()
     writeXml(configPath);
 }
 
-void wlayout::resizeEvent(QResizeEvent *)
-{
-    /*
-    //qDebug() << "wlayout::resizeEvent " << width() << " " << height();
-    if(width()>height()) {
-        MisuWidget::font1size=width()/40;
-    } else {
-        MisuWidget::font1size=height()/40;
-
-    }
-    recalcMainView();
-    */
-}
-
 void wlayout::currentHeader(int id)
 {
     MWHeaderSetter * rootButton = dynamic_cast<MWHeaderSetter *>(_menu[0]);
@@ -284,33 +274,33 @@ void wlayout::currentHeader(int id)
         break;
     }
 
-
     emit layoutChange();
 
 }
 
-void wlayout::currentMainView(int)
+void wlayout::currentMainView(int id)
 {
-    /*
-    if(i>0) {
-        for(int j=1;j<4;j++) {
-            if(i!=j) {
-                M[j]->hide();
-                emit setMenuItemState(j+6,0);
-            }
-        }
-    }
 
+    MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
+    MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
 
-    if(M[i]->isHidden()) {
-        M[i]->show();
-        emit setMenuItemState(i+6,1);
-    } else {
-        M[i]->hide();
-        emit setMenuItemState(i+6,0);
+    _playAreaVisible=false;
+    _tuneAreaVisible=false;
+
+    if(playAreaButton) playAreaButton->setState(6,0);
+    if(tuneAreaButton) tuneAreaButton->setState(7,0);
+
+    switch(id) {
+    case 0:
+        _playAreaVisible=true;
+        if(playAreaButton) playAreaButton->setState(6,1);
+        break;
+    case 1:
+        _tuneAreaVisible=true;
+        if(tuneAreaButton) tuneAreaButton->setState(7,1);
+        break;
     }
-    recalcMainView();
-    */
+    emit layoutChange();
 }
 
 /*

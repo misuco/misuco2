@@ -134,11 +134,6 @@ void MWHeaderSetter::onPressed(int id)
         case 0:
         case 1:
         case 2:
-            if(_state==0) {
-                _state=1;
-            } else {
-                _state=0;
-            }
             emit currentHeader(_functionId);
             break;
         case 3:
@@ -170,11 +165,6 @@ void MWHeaderSetter::onPressed(int id)
         case 7:
         case 8:
         case 9:
-            if(_state==0) {
-                _state=1;
-            } else {
-                _state=0;
-            }
             emit currentMainView(_functionId-6);
             break;
         case 10:
