@@ -156,12 +156,11 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     overwritePreset = new MWHeaderSetter(12,this);
 
     for(int i=0;i<12;i++) {
-        MWrootNoteSetter * rootNoteSetter = new MWrootNoteSetter(MisuWidget::MWPitch[i],this);
+        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MisuWidget::MWPitch[i],this);
         rootNoteSetter->setOut(out);
-        connect(rootNoteSetter,SIGNAL(setrootNote(Pitch *)),_PlayArea,SLOT(setrootNote(Pitch *)));
-        connect(rootNoteSetter,SIGNAL(setrootNote(Pitch *)),this,SLOT(onSetrootNote(Pitch *)));
-        connect(rootNoteSetter,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
-        connect(this,SIGNAL(setrootNote(Pitch*)),rootNoteSetter,SLOT(onSetrootNote(Pitch*)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
+        connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
         connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
@@ -171,10 +170,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         MWBScaleSwitch * bs =new MWBScaleSwitch(i);
         bs->setOut(out);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
-        //connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
-            connect(_rootNoteSetter[j],SIGNAL(setrootNote(Pitch *)),bs,SLOT(setrootNote(Pitch *)));
+            connect(_rootNoteSetter[j],SIGNAL(setRootNote(Pitch *)),bs,SLOT(setRootNote(Pitch *)));
         }
         _BScaleSwitch.append(bs);
     }
@@ -188,11 +186,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     faderSymbols->setInverted(true);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
     connect(this,SIGNAL(scaleupdate()),_PlayArea,SLOT(onscaleupdate()));
-    connect(this,SIGNAL(scaleupdate()),_rootNoteSetter[0],SLOT(onscaleupdate()));
-    for(int j=1;j<12;j++) {
-        connect(this,SIGNAL(scaleupdate()),_rootNoteSetter[j],SLOT(onscaleupdate()));
-        //connect(this,SIGNAL(scaleupdate()),_BScaleSwitch[j-1],SLOT(onscaleupdate()));
-    }
 
     showFreqs = new MWHeaderSetter(22,this);
     connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
@@ -344,9 +337,9 @@ void wlayout::toggleBW()
     */
 }
 
-void wlayout::onSetrootNote(Pitch *p)
+void wlayout::onSetRootNote(Pitch *p)
 {
-    emit setrootNote(p);
+    emit setRootNote(p);
 }
 
 void wlayout::setSound(MWSound *s)

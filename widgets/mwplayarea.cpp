@@ -136,7 +136,7 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getrootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getRootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
@@ -154,7 +154,7 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getrootNote()]);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getRootNote()]);
         fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
         fields[rows][col-1].pressed=0;
     }
@@ -168,7 +168,7 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getrootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getRootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
@@ -216,7 +216,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
         painter.setBrush(colorF1);
         //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
         painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        rootNote = fields[r][c].f1->getrootNoteString(noteSymbols);
+        rootNote = fields[r][c].f1->getRootNoteString(noteSymbols);
         if(rootNote.startsWith("_")) {
             font3.setUnderline(true);
             painter.setFont(font3);
@@ -230,7 +230,7 @@ void MWPlayArea::paintField(int r, int c, int x, int y) {
             painter.setFont(font8);
             // no text on padw with menu buttons (first and last col in first row)
             if( (c!=0 && c!=cols-1) || r!=0) {
-                cap.sprintf("%d %d %d", (fields[r][c].f1->getrootNote()-Scale.rootNote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
+                cap.sprintf("%d %d %d", (fields[r][c].f1->getRootNote()-Scale.rootNote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
                 painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignTop,cap);
             }
             cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
@@ -611,9 +611,9 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
 }
 
-void MWPlayArea::setrootNote(Pitch *p)
+void MWPlayArea::setRootNote(Pitch *p)
 {
-    Scale.rootNote=p->getrootNote();
+    Scale.rootNote=p->getRootNote();
     config();
 }
 

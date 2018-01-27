@@ -42,7 +42,7 @@ MWBScaleSwitch::~MWBScaleSwitch()
 
 void MWBScaleSwitch::calcText()
 {
-    _text1=_freq->getrootNoteString(noteSymbols);
+    _text1=_freq->getRootNoteString(noteSymbols);
 
     if(showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
@@ -61,7 +61,7 @@ void MWBScaleSwitch::setOut(ISender *value)
 int MWBScaleSwitch::pitchId()
 {
     //qDebug() << "MWBScaleSwitch::pitchId " << _freq->getPitch() << " bscaleId" << bscaleId;
-    return _freq->getrootNote();
+    return _freq->getRootNote();
 }
 
 bool MWBScaleSwitch::selected()
@@ -85,17 +85,17 @@ void MWBScaleSwitch::onReleased()
     emit selectedChanged();
 }
 
-void MWBScaleSwitch::setrootNote(Pitch *p)
+void MWBScaleSwitch::setRootNote(Pitch *p)
 {
-    setrootNote(p->getrootNote());
+    setRootNote(p->getRootNote());
 }
 
-void MWBScaleSwitch::setrootNote(int rootNote)
+void MWBScaleSwitch::setRootNote(int rootNote)
 {
-    //qDebug() << "MWBScaleSwitch::setrootNote " << newrootNote << " bscaleId " << bscaleId << " rootNote " << rootNote;
+    //qDebug() << "MWBScaleSwitch::setRootNote " << newrootNote << " bscaleId " << bscaleId << " rootNote " << rootNote;
     int newrootNote=(rootNote+_bscaleId)%12;
     if(newrootNote != _freq->getPitch()) {
-        _freq->setrootNote(MWPitch[newrootNote]);
+        _freq->setRootNote(MWPitch[newrootNote]);
         emit pitchIdChanged();
         calcText();
     }
@@ -120,5 +120,5 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
             emit selectedChanged();
         }
     }
-    setrootNote(scale->rootNote);
+    setRootNote(scale->rootNote);
 }

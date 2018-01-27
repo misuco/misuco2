@@ -52,7 +52,7 @@ void MWFaderPitch::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        Microtune.tuning[_freq->getrootNote()] = getValue();
+        Microtune.tuning[_freq->getRootNote()] = getValue();
         out->pitch(channel,vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
     }
 }
@@ -86,7 +86,7 @@ void MWFaderPitch::calcColor()
         s=sOn;
     }
 
-    int pitch = _freq->getrootNote();
+    int pitch = _freq->getRootNote();
     if(bwmode) {
         if(pressed>0) {
             if(MWPitch[pitch]->getBW()) {

@@ -6,7 +6,7 @@ Item {
             model: layout.rootNoteSetter
 
             Rectangle {
-                color: modelData.color
+                color: modelData.selected ? layout.pitches[modelData.pitchId].color1 : layout.pitches[modelData.pitchId].color0
                 width: buttonSize
                 height: buttonSize
 
@@ -14,7 +14,7 @@ Item {
                     anchors.fill: parent
                     text: modelData.text1
                     font.pixelSize: fontSize1
-                    color: modelData.fontColor
+                    color: modelData.selected ? hlColor : fgColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignTop
                 }
@@ -23,7 +23,7 @@ Item {
                     anchors.fill: parent
                     text: modelData.text2
                     font.pixelSize: fontSize3
-                    color: modelData.fontColor
+                    color: modelData.selected ? hlColor : fgColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignBottom
                 }

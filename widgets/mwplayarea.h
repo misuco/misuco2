@@ -71,7 +71,7 @@ public:
     QList<QObject *> row2();
 
 public slots:
-    void setrootNote(Pitch * p);
+    void setRootNote(Pitch * p);
     void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
     void setScale(MWScale *s);

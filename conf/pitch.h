@@ -36,7 +36,7 @@ public:
 
     float getHue() const;
     int getBW() const;
-    int getrootNote();
+    int getRootNote();
     int getPitch();
 
 signals:

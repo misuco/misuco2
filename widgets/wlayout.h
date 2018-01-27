@@ -75,7 +75,7 @@ public:
     QList<QObject*> pitches();
 
 signals:
-    void setrootNote(Pitch * p);
+    void setRootNote(Pitch * p);
     void initialSet();
     void scaleupdate();
     void setMenuItemState(int id, int s);
@@ -90,7 +90,7 @@ private slots:
     void togglePresets();
     void toggleMenu();
     void toggleBW();
-    void onSetrootNote(Pitch * p);
+    void onSetRootNote(Pitch * p);
     void setSound(MWSound * s);
     void setMicrotune(MWMicrotune*m);
     void onscaleupdate();

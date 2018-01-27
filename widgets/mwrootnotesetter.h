@@ -25,19 +25,21 @@
 #include "comm/isender.h"
 #include "conf/freqtriple.h"
 
-class MWrootNoteSetter : public MisuWidget
+class MWRootNoteSetter : public MisuWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QColor color MEMBER _color NOTIFY colorChanged)
-    Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
-    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY colorChanged)
-    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY colorChanged)
+    Q_PROPERTY(int pitchId READ pitchId CONSTANT)
+    Q_PROPERTY(bool selected MEMBER _selected NOTIFY selectedChanged)
+    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY textChanged)
+    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
-    MWrootNoteSetter(Pitch *pitch, QObject *parent);
-    ~MWrootNoteSetter();
+    MWRootNoteSetter(Pitch *pitch, QObject *parent);
+    ~MWRootNoteSetter();
     void setOut(ISender *value);
+
+    int pitchId();
 
     Q_INVOKABLE void onPressed();
     Q_INVOKABLE void onReleased();
@@ -47,16 +49,15 @@ public:
 public slots:
     void setOctMid(int o);
     void pitchChange();
-    void onSetrootNote(Pitch *pitch);
+    void onSetRootNote(Pitch *pitch);
     void onScaleSet(MWScale*scale);
-    void onscaleupdate();
 
 signals:
-    void setrootNote(Pitch *);
-    void scaleupdate();
-    void colorChanged();
+    void setRootNote(Pitch *);
 
-    void fChanged();
+    // QML
+    void selectedChanged();
+    void textChanged();
 
 private:
     ISender *       _out;
@@ -66,12 +67,10 @@ private:
     int             _pressed;
     bool            _selected;
 
-    QColor          _color;
-    QColor          _fontColor;
     QString         _text1;
     QString         _text2;
 
-    void calcColor();
+    void calcText();
 };
 
 #endif // MWrootNoteSETTER_H

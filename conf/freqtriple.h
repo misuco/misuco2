@@ -45,13 +45,13 @@ public:
     float getHue() const;
     bool getBW() const;
 
-    int getrootNote() const;
-    void setrootNote(Pitch *p);
+    int getRootNote() const;
+    void setRootNote(Pitch *p);
 
     int getOct() const;
     void setOct(int value);
 
-    QString getrootNoteString(int lang) const;
+    QString getRootNoteString(int lang) const;
 
 signals:
     void hueChanged();

@@ -40,7 +40,7 @@ int Pitch::getBW() const
     return white;
 }
 
-int Pitch::getrootNote()
+int Pitch::getRootNote()
 {
     return _rootNote;
 }

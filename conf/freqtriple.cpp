@@ -53,7 +53,7 @@ void FreqTriple::setMidinote(int m, Pitch * p)
 }
 
 void FreqTriple::initFreq() {
-    midinote = pitch->getrootNote();
+    midinote = pitch->getRootNote();
     freq = calcFreq(midinote,pitch->getPitch());
     oct = calcOctFromMidinote(midinote);
 }
@@ -79,16 +79,16 @@ bool FreqTriple::getBW() const
     return pitch->getBW();
 }
 
-int FreqTriple::getrootNote() const
+int FreqTriple::getRootNote() const
 {
-    return pitch->getrootNote();
+    return pitch->getRootNote();
 }
 
 
-QString FreqTriple::getrootNoteString(int lang) const
+QString FreqTriple::getRootNoteString(int lang) const
 {
     if(lang==1) {
-        switch(pitch->getrootNote()) {
+        switch(pitch->getRootNote()) {
                 case 0: return "सा";
                 break;
                 case 1: return "<u>रे</u>";
@@ -115,7 +115,7 @@ QString FreqTriple::getrootNoteString(int lang) const
                 break;
         }
     } else if(lang==2) {
-        switch(pitch->getrootNote()) {
+        switch(pitch->getRootNote()) {
                 case 0: return "DO";
                 break;
                 case 1: return "<u>RE</u>";
@@ -142,7 +142,7 @@ QString FreqTriple::getrootNoteString(int lang) const
                 break;
         }
     } else if(lang==3) {
-        switch(pitch->getrootNote()) {
+        switch(pitch->getRootNote()) {
                 case 0: return "SA";
                 break;
                 case 1: return "<u>RE</u>";
@@ -169,7 +169,7 @@ QString FreqTriple::getrootNoteString(int lang) const
                 break;
         }
     } else if(lang==0) {
-        switch(pitch->getrootNote()) {
+        switch(pitch->getRootNote()) {
         case 0: return "C";
         break;
         case 1: return "<u>D</u>";
@@ -227,12 +227,12 @@ QString FreqTriple::getrootNoteString(int lang) const
 }
 
 
-void FreqTriple::setrootNote(Pitch * p)
+void FreqTriple::setRootNote(Pitch * p)
 {
     pitch = p;
-    midinote = pitch->getrootNote()+oct*12;
+    midinote = pitch->getRootNote()+oct*12;
     freq = calcFreq(midinote,pitch->getPitch());
-    //qDebug() << "FreqTriple::setrootNote midinote: " << midinote << " freq: " << freq;
+    //qDebug() << "FreqTriple::setRootNote midinote: " << midinote << " freq: " << freq;
 }
 
 int FreqTriple::getOct() const
@@ -243,7 +243,7 @@ int FreqTriple::getOct() const
 void FreqTriple::setOct(int value)
 {
     oct = value;
-    midinote = pitch->getrootNote()+oct*12;
+    midinote = pitch->getRootNote()+oct*12;
     freq = calcFreq(midinote,pitch->getPitch());
 }
 

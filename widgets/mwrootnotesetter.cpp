@@ -23,97 +23,73 @@
 #include <QPainter>
 #include <QDebug>
 
-MWrootNoteSetter::MWrootNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)
+MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)
 {
     //qDebug() << "MWrootNoteSetter::MWrootNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
     _out=new SenderDebug();
     _pitch=pitch;
     _freq=new FreqTriple(_pitch);
     _freq->setOct(4);
-    _freq->setrootNote(_pitch);
+    _freq->setRootNote(_pitch);
     //qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
     _vId=0;
     _pressed=0;
     _selected=false;
-    calcColor();
+    calcText();
 }
 
-MWrootNoteSetter::~MWrootNoteSetter()
+MWRootNoteSetter::~MWRootNoteSetter()
 {
     _freq->deleteLater();
 }
 
-void MWrootNoteSetter::setOctMid(int o)
+void MWRootNoteSetter::setOctMid(int o)
 {
     _freq->setOct(o);
-    calcColor();
+    calcText();
 }
 
-void MWrootNoteSetter::pitchChange()
+void MWRootNoteSetter::pitchChange()
 {
     //qDebug() << "MWrootNoteSetter::pitchChange "  << f->getPitch();
     _freq->pitchChange();
-    calcColor();
+    calcText();
 }
 
-void MWrootNoteSetter::onSetrootNote(Pitch * pitch)
+void MWRootNoteSetter::onSetRootNote(Pitch * pitch)
 {
     if(pitch == _pitch) {
-        _selected = true;
-    } else {
-        _selected = false;
-    }
-    calcColor();
-}
-
-void MWrootNoteSetter::onScaleSet(MWScale * scale)
-{
-    //qDebug() << "MWrootNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
-    if(scale->rootNote==_pitch->getrootNote()) {
-        _selected = true;
-    } else {
-        _selected = false;
-    }
-    calcColor();
-}
-
-void MWrootNoteSetter::onscaleupdate()
-{
-    calcColor();
-}
-
-void MWrootNoteSetter::calcColor()
-{
-    float l=lOff;
-    float s=sOff;
-    if(_pressed>0 || _selected) {
-        l=lOn;
-        s=sOn;
-    }
-    if(bwmode) {
-        if(_selected) {
-            if(_pitch->getBW()) {
-                _color = hlwkeycolor;
-            } else {
-                _color = hlbkeycolor;
-            }
-        } else if(_pitch->getBW()) {
-            _color = wkeycolor;
-        } else {
-            _color = bkeycolor;
+        if(!_selected) {
+            _selected = true;
+            emit selectedChanged();
         }
     } else {
-        _color=QColor::fromHslF(_pitch->getHue(),s,l);
+        if(_selected) {
+            _selected = false;
+            emit selectedChanged();
+        }
     }
+}
 
-
-    if(_pressed>0 || _selected) {
-        _fontColor=highlightcolor;
+void MWRootNoteSetter::onScaleSet(MWScale * scale)
+{
+    //qDebug() << "MWrootNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
+    if(scale->rootNote==_pitch->getRootNote()) {
+        if(!_selected) {
+            _selected = true;
+            emit selectedChanged();
+        }
     } else {
-        _fontColor=fgcolor;
+        if(_selected) {
+            _selected = false;
+            emit selectedChanged();
+        }
     }
+}
 
-    _text1 = _freq->getrootNoteString(noteSymbols);
+void MWRootNoteSetter::calcText()
+{
+    _text1 = _freq->getRootNoteString(noteSymbols);
 
     if(showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
@@ -121,32 +97,35 @@ void MWrootNoteSetter::calcColor()
         _text2="";
     }
 
-    emit colorChanged();
+    emit textChanged();
 }
 
-void MWrootNoteSetter::setOut(ISender *value)
+void MWRootNoteSetter::setOut(ISender *value)
 {
     _out = value;
-    //qDebug() << "MWrootNoteSetter::setOut:" << out;
 }
 
-void MWrootNoteSetter::onPressed()
+int MWRootNoteSetter::pitchId()
+{
+    return _pitch->getRootNote();
+}
+
+void MWRootNoteSetter::onPressed()
 {
     _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
-    emit setrootNote(_pitch);
-    emit scaleupdate();
+    emit setRootNote(_pitch);
+    emit selectedChanged();
     _pressed++;
-    calcColor();
 }
 
-void MWrootNoteSetter::onReleased()
+void MWRootNoteSetter::onReleased()
 {
     _out->noteOff(_vId);
     _pressed--;
-    calcColor();
+    calcText();
 }
 
-QObject *MWrootNoteSetter::pitch()
+QObject *MWRootNoteSetter::pitch()
 {
     return _pitch;
 }

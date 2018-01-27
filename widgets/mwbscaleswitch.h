@@ -54,7 +54,7 @@ signals:
     void textChanged();
 
 public slots:
-    void setrootNote(Pitch * p);
+    void setRootNote(Pitch * p);
     void setOctMid(int o);
     void onScaleSet(MWScale*);
 
@@ -70,7 +70,7 @@ private:
     QString         _text2;
 
     void calcText();
-    void setrootNote(int rootNote);
+    void setRootNote(int rootNote);
 };
 
 #endif // MWBSCALESWITCH_H
