@@ -76,6 +76,12 @@ int MWPreset::rootnote()
 
 void MWPreset::onPressed()
 {
+
+    pressed++;
+}
+
+void MWPreset::onPressAndHold()
+{
     if(overwrite) {
         PresetScale.rootNote = MisuWidget::Scale.rootNote;
         PresetScale.baseoct = MisuWidget::Scale.baseoct;
@@ -95,11 +101,17 @@ void MWPreset::onPressed()
         emit setScale(&PresetScale);
         emit scaleupdate();
     }
-    pressed++;
+
+}
+
+void MWPreset::onCanceled()
+{
+
 }
 
 void MWPreset::onReleased()
 {
+
     pressed--;
 }
 

@@ -44,6 +44,8 @@ public:
     int rootnote();
 
     Q_INVOKABLE void onPressed();
+    Q_INVOKABLE void onPressAndHold();
+    Q_INVOKABLE void onCanceled();
     Q_INVOKABLE void onReleased();
 
 public slots:

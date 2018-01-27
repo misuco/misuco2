@@ -6,6 +6,7 @@ Window {
     width: 640
     height: 480
     title: qsTr("misuco2")
+    color: bgColor;
 
     property int fontSize1: width/20;
     property int fontSize2: width/32;
@@ -15,22 +16,16 @@ Window {
 
     property int columnWidth: width/4;
 
-    property color bgColor: "Gray"
+    property color bgColor: "#333333"
 
-    property var pitchColor: [
-        "Red",
-        "Green",
-        "Blue",
-        "Cyan",
-        "Magenta",
-        "Yellow",
-        "Red",
-        "Green",
-        "Blue",
-        "Cyan",
-        "Magenta",
-        "Yellow"
-    ]
+    ScalePresetScroll {
+        id: scalePresetCol
+        visible: layout.scalePresetsVisible
+        anchors.top: menuRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        width: columnWidth
+    }
 
     RootNoteSetter {
         id: rootNoteSetterRow
@@ -61,15 +56,6 @@ Window {
         anchors.top: octaveRangerRow.bottom
         width: parent.width
         height: buttonSize
-    }
-
-    ScalePreset {
-        id: scalePresetCol
-        visible: layout.scalePresetsVisible
-        anchors.top: menuRow.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: columnWidth
     }
 
     PlayArea {

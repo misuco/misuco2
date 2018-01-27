@@ -12,5 +12,6 @@
         <file>qml/Menu.qml</file>
         <file>qml/TuneArea.qml</file>
         <file>qml/ScalePreset.qml</file>
+        <file>qml/ScalePresetScroll.qml</file>
     </qresource>
 </RCC>
