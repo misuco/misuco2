@@ -68,7 +68,6 @@ void MWBScaleSwitch::calcColor()
         _color=QColor::fromHslF(MWPitch[pitch]->getHue(),s,l);
     }
 
-
     if(_pressed>0 || _value) {
         _fontColor=highlightcolor;
     } else {

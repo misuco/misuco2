@@ -57,6 +57,7 @@ MWPreset::MWPreset(int rootNote, int baseoct, int topoct, bool bscale[], QObject
 QStringList MWPreset::bscale()
 {
     QStringList l;
+    l.append("1");
     for(int i=0;i<BSCALE_SIZE;i++) {
         if(PresetScale.bscale[i]) l.append("1");
         else l.append("0");
@@ -125,60 +126,6 @@ void MWPreset::playAreaChanged()
 {
     emit presetChanged();
 }
-
-/*
-void MWPreset::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    float colwidth=(float)width()/(float)PresetScale.size;
-    float x=0;
-    int l=lOff;
-    int s=sOff;
-    if(pressed>0 || isSelected()) {
-        l=lOn;
-        s=sOn;
-    }
-    painter.setPen(Qt::NoPen);
-    for(int i=PresetScale.baseoct;i<PresetScale.topoct;i++) {
-        setBrush(MWPitch[PresetScale.rootNote],s,l,painter);
-        painter.drawRect(x,0,colwidth,height());
-        x+=colwidth;
-        for(int j=0;j<BSCALE_SIZE;j++) {
-            if(PresetScale.bscale[j]) {
-                setBrush(MWPitch[(PresetScale.rootNote+1+j)%(BSCALE_SIZE+1)],s,l,painter);
-                painter.drawRect(x,0,colwidth+1,height());
-                x+=colwidth;
-            }
-        }
-    }
-    //painter.setBrush(QColor::fromHsl(MWPitch[Scale.rootNote]->color,s,l));
-    setBrush(MWPitch[PresetScale.rootNote],s,l,painter);
-    painter.drawRect(x,0,colwidth,height());
-}
-
-void MWPreset::setBrush(Pitch * p, int s, int l, QPainter &painter) {
-    if(bwmode) {
-        if(isSelected()) {
-            if(p->getBW()) {
-                painter.setBrush(hlwkeycolor);
-            } else {
-                painter.setBrush(hlbkeycolor);
-            }
-        } else if(p->getBW()) {
-            painter.setBrush(wkeycolor);
-        } else {
-            painter.setBrush(bkeycolor);
-        }
-    } else {
-        painter.setBrush(QColor::fromHsl(p->color,s,l));
-    }
-}
-
-void MWPreset::resizeEvent(QResizeEvent *)
-{
-
-}
-*/
 
 bool MWPreset::isSelected()
 {

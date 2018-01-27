@@ -20,8 +20,9 @@ Item {
                 text: index
             }
 
-            property int presetNoteWidth: columnWidth / (modelData.bScaleSize - 2);
+            property int presetNoteWidth: columnWidth / (modelData.bScaleSize - 1);
             property int presetSelected: modelData.selected;
+            property int presetRootNote: modelData.rootNote;
 
             MouseArea {
                 anchors.fill: parent
@@ -36,9 +37,10 @@ Item {
                     model: modelData.bScale
 
                     Rectangle {
+                        property int pitchIndex: (index+presetRootNote)%12
                         width:  modelData == "1" ? presetNoteWidth : 0
                         height: buttonSize
-                        color: presetSelected ? layout.pitches[index].color1 : layout.pitches[index].color0
+                        color: presetSelected ? layout.pitches[pitchIndex].color1 : layout.pitches[pitchIndex].color0
                     }
                 }
             }
