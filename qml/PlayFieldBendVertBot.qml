@@ -29,5 +29,12 @@ Item {
             verticalAlignment: Text.AlignBottom
         }
     }
+    Rectangle {
+        anchors.fill: parent
+        radius: buttonRadius
+        border.width: borderWidth
+        border.color: borderColor
+        color: "Transparent"
+    }
 }
 

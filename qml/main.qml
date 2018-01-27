@@ -2,23 +2,29 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 
 Window {
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("misuco2")
-    color: bgColor;
+    property int fontSize1: width/20
+    property int fontSize2: width/32
+    property int fontSize3: width/48
 
-    property int fontSize1: width/20;
-    property int fontSize2: width/32;
-    property int fontSize3: width/48;
-    property int buttonSize: width/12;
-    property int menuSize: width/7;
+    property int buttonSize: width/12
+    property int menuSize: width/7
+
+    property int faderRadius: buttonSize/2
+    property int buttonRadius: buttonSize/5
+    property int borderWidth: 3
+    property color borderColor: "#333333"
 
     property int columnWidth: width/4;
 
     property color bgColor: "#333333"
     property color fgColor: "#CCCCCC"
     property color hlColor: "#CC0000"
+
+    visible: true
+    width: 640
+    height: 480
+    title: qsTr("misuco2")
+    color: bgColor
 
     ScalePresetScroll {
         id: scalePresetCol

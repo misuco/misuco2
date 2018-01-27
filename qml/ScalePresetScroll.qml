@@ -8,29 +8,11 @@ Item {
         cellWidth: columnWidth
         cellHeight: buttonSize
 
-
         delegate:
-        Rectangle {
-            color: bgColor
-            width: columnWidth
-            height: buttonSize
-
-            Text {
-                anchors.fill: parent
-                text: index
-            }
-
+        Item {
             property int presetNoteWidth: columnWidth / (modelData.bScaleSize - 1);
             property int presetSelected: modelData.selected;
             property int presetRootNote: modelData.rootNote;
-
-            MouseArea {
-                anchors.fill: parent
-                onPressed: modelData.onPressed()
-                onPressAndHold: modelData.onPressAndHold()
-                onCanceled: modelData.onCanceled()
-                onReleased: modelData.onReleased()
-            }
 
             Row {
                 Repeater {
@@ -40,9 +22,28 @@ Item {
                         property int pitchIndex: (index+presetRootNote)%12
                         width:  modelData == "1" ? presetNoteWidth : 0
                         height: buttonSize
+                        radius: buttonRadius
                         color: presetSelected ? layout.pitches[pitchIndex].color1 : layout.pitches[pitchIndex].color0
                     }
                 }
+            }
+
+            Rectangle {
+                color: "Transparent"
+                width: columnWidth
+                height: buttonSize
+                radius: buttonRadius
+                border.width: borderWidth
+                border.color: borderColor
+
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: modelData.onPressed()
+                    onPressAndHold: modelData.onPressAndHold()
+                    onCanceled: modelData.onCanceled()
+                    onReleased: modelData.onReleased()
+                }
+
             }
         }
     }

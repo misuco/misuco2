@@ -11,13 +11,19 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: controller.bgColor
+        radius: buttonRadius
+        border.width: borderWidth
+        border.color: borderColor
 
         Rectangle {
             x: controller.bottom * segWidth
             y: 0
+            color: controller.hlColor
             width: (controller.top - controller.bottom + 1) * segWidth
             height: parent.height
-            color: controller.hlColor
+            radius: buttonRadius
+            border.width: borderWidth
+            border.color: borderColor
         }
 
         Row {

@@ -9,6 +9,10 @@ Item {
                 color: bgColor
                 width: columnWidth
                 height: buttonSize
+                radius: buttonRadius
+                border.width: borderWidth
+                border.color: borderColor
+                clip: true
 
                 Text {
                     anchors.fill: parent

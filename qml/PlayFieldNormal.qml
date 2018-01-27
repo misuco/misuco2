@@ -4,6 +4,9 @@ Item {
     Rectangle {
         color: modelData.colorF1
         anchors.fill: parent
+        radius: buttonRadius
+        border.width: borderWidth
+        border.color: borderColor
 
         Text {
             anchors.fill: parent

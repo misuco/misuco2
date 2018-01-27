@@ -11,6 +11,9 @@ Item {
                 color: modelData.bgColor
                 width: menuSize
                 height: buttonSize
+                radius: buttonRadius
+                border.width: borderWidth
+                border.color: borderColor
 
                 Text {
                     anchors.fill: parent

@@ -19,6 +19,9 @@ Item {
                 id: faderBackground
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                radius: faderRadius
+                border.width: borderWidth
+                border.color: borderColor
 
                 color: modelData.bgColor
                 width: buttonSize
@@ -28,6 +31,9 @@ Item {
                     color: modelData.pitchColor
                     width: buttonSize
                     height: modelData.knobSize
+                    radius: faderRadius
+                    border.width: borderWidth
+                    border.color: borderColor
                     y: modelData.faderY
                 }
 

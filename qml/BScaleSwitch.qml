@@ -9,6 +9,9 @@ Item {
                 color: modelData.selected ? layout.pitches[modelData.pitchId].color1 : layout.pitches[modelData.pitchId].color0
                 width: buttonSize
                 height: buttonSize
+                radius: buttonRadius
+                border.width: borderWidth
+                border.color: borderColor
 
                 Text {
                     anchors.fill: parent

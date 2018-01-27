@@ -6,6 +6,7 @@ Item {
         anchors.fill: parent
         start: Qt.point(0, 0)
         end: Qt.point(0, height)
+
         gradient: Gradient {
             GradientStop { position: 0.0; color: modelData.colorF1b }
             GradientStop { position: 1.0; color: modelData.colorF1 }
@@ -28,6 +29,14 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignBottom
         }
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        radius: buttonRadius
+        border.width: borderWidth
+        border.color: borderColor
+        color: "Transparent"
     }
 }
 
