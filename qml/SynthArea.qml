@@ -13,11 +13,11 @@ Item {
         }
 
         Repeater  {
-            model: layout.tuneArea
+            model: layout.synthArea
             Loader {
                 width: buttonSize
                 height: parent.height
-                property var faderColor: modelData.selected ? layout.pitches[modelData.pitchId].color1 : layout.pitches[modelData.pitchId].color0
+                property color faderColor: fgColor
                 source: "Fader.qml"
             }
         }

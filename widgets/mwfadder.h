@@ -27,8 +27,7 @@ class MWFadder : public MisuWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(int faderY MEMBER _faderY NOTIFY geoChanged)
-    Q_PROPERTY(int knobSize MEMBER knobSize NOTIFY geoChanged)
+    Q_PROPERTY(float faderY MEMBER _faderY NOTIFY geoChanged)
     Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY geoChanged)
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY geoChanged)
 
@@ -56,7 +55,7 @@ public:
 
 protected:
     int valueDisplay;
-    int _faderY;
+    float _faderY;
     int knobSize;
 
     QString _text1;

@@ -42,12 +42,16 @@ MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
 void MWFadder::onPressed(int id, int x, int y, int h)
 {
     height = h;
-    if(0==pressed) {
+    knobSize=height/8;
+    if(pressed<2) {
         pressedTouchId = id;
         xTouchBegin=x;
         yTouchBegin=y;
         valTouchBegin=value;
-        if(y>=_faderY && y<=_faderY+2*knobSize) {
+
+        float yRelative1 = (float)(y-knobSize) / (float)(height-knobSize);
+        float yRelative2 = (float)y / (float)(height-knobSize);
+        if(yRelative1<=_faderY && yRelative2>=_faderY) {
             fadeMode=coarse;
         } else {
             fadeMode=fine;
@@ -55,12 +59,12 @@ void MWFadder::onPressed(int id, int x, int y, int h)
         emit valueChange(valueDisplay);
     }
     pressed++;
-
 }
 
 void MWFadder::onUpdated(int id, int y, int h)
 {
     height = h;
+    knobSize=height/8;
     if(id==pressedTouchId) {
         if(vertical==orient) {
             if(coarse==fadeMode) {
@@ -99,8 +103,7 @@ int MWFadder::getValue()
 
 void MWFadder::calcGeo()
 {
-    knobSize=height/8;
-    _faderY=(value-minValue)*(height-2*knobSize)/valRange;
+    _faderY=((float)value-(float)minValue)/(float)valRange;
     _text1.sprintf("%d",valueDisplay);
     emit geoChanged();
 }
@@ -109,6 +112,7 @@ void MWFadder::setMaxValue(int value)
 {
     maxValue = value;
     valRange=maxValue-minValue;
+    calcGeo();
 }
 
 void MWFadder::setInverted(bool v)
@@ -117,6 +121,7 @@ void MWFadder::setInverted(bool v)
     if(inverted) {
         value=maxValue;
     }
+    calcGeo();
 }
 
 void MWFadder::setValue(int v)
@@ -129,7 +134,6 @@ void MWFadder::setValue(int v)
         value = v;
     }
     calcGeo();
-    //update();    
     emit valueChange(valueDisplay);
 }
 
@@ -137,6 +141,7 @@ void MWFadder::setMinValue(int value)
 {
     minValue = value;
     valRange=maxValue-minValue;
+    calcGeo();
 }
 
 /*

@@ -66,6 +66,11 @@ class wlayout : public QObject
     Q_PROPERTY(QList<QObject*> scalePresets MEMBER _scalePresets CONSTANT)
     Q_PROPERTY(bool scalePresetsVisible MEMBER _scalePresetsVisible NOTIFY layoutChange)
 
+    Q_PROPERTY(QList<QObject*> synthArea MEMBER _faderParamCtl CONSTANT)
+    Q_PROPERTY(bool synthAreaVisible MEMBER _synthAreaVisible NOTIFY layoutChange)
+
+    Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
+
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
 
 public:
@@ -113,7 +118,7 @@ private:
     QObject *       _PlayArea;
 
     // synth ctl faders
-    MWFaderParamCtl * faderParamCtl[10];
+    QList<QObject*> _faderParamCtl;
     QList<QObject*> _faderMicrotune;
 
     // main area widgets
@@ -152,6 +157,8 @@ private:
     bool _octaveRangerVisible;
     bool _playAreaVisible;
     bool _tuneAreaVisible;
+    bool _synthAreaVisible;
+    bool _confAreaVisible;
     bool _scalePresetsVisible;
     bool _soundPresetsVisible;
     bool _tunePresetsVisible;

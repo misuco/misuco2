@@ -85,4 +85,13 @@ Window {
         anchors.left: scalePresetCol.right
         anchors.right: parent.right
     }
+
+    SynthArea {
+        id: synthAreaRow
+        visible: layout.synthAreaVisible
+        anchors.top: menuRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: scalePresetCol.right
+        anchors.right: parent.right
+    }
 }

@@ -34,15 +34,20 @@ class MWFaderParamCtl : public MWFadder
 public:
     MWFaderParamCtl(QObject *parent, int cc);
     ~MWFaderParamCtl();
-    virtual void processTouchEvent(misuTouchEvent e);
+
     void setOut(ISender *value);
     void setValue(int v);
+
+    Q_INVOKABLE void onPressedPitch(int id);
+    Q_INVOKABLE void onUpdatedPitch(int id);
+    Q_INVOKABLE void onReleasedPitch(int id);
 
 private:
     ISender * out;
 
     int cc;
     int pressed;
+    int eventId;
     void propagateValueChange();
 };
 

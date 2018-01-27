@@ -13,5 +13,7 @@
         <file>qml/TuneArea.qml</file>
         <file>qml/ScalePreset.qml</file>
         <file>qml/ScalePresetScroll.qml</file>
+        <file>qml/Fader.qml</file>
+        <file>qml/SynthArea.qml</file>
     </qresource>
 </RCC>

@@ -90,24 +90,26 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     //Color * synthCtlColor=new Pitch(1,this);
 
     for(int i=0;i<10;i++) {
-        faderParamCtl[i] = new MWFaderParamCtl(this,i+102);
-        faderParamCtl[i]->setOut(out);
-        faderParamCtl[i]->setMinValue(0);
+        MWFaderParamCtl * fader = new MWFaderParamCtl(this,i+102);
+        fader->setOut(out);
+        fader->setMinValue(0);
         if(i==0) {
-            faderParamCtl[i]->setMaxValue(4);
+            fader->setMaxValue(4);
         } else {
-            faderParamCtl[i]->setMaxValue(1000);
+            fader->setMaxValue(1000);
         }
-        faderParamCtl[i]->setInverted(true);
+        fader->setInverted(true);
 
         // update fadders on sustain update
         if(i==3) {
-            connect(faderParamCtl[i],SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
+            connect(fader,SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
         }
         // update fadders on filter res update
         if(i==6) {
-            connect(faderParamCtl[i],SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
+            connect(fader,SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
         }
+        _faderParamCtl.append(fader);
+
     }
 
     faderPitchTopRange = new MWFaderParamCtl(this,1);
@@ -291,12 +293,15 @@ void wlayout::currentMainView(int id)
 
     MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
     MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
+    MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
 
     _playAreaVisible=false;
     _tuneAreaVisible=false;
+    _synthAreaVisible=false;
 
     if(playAreaButton) playAreaButton->setState(6,0);
     if(tuneAreaButton) tuneAreaButton->setState(7,0);
+    if(synthAreaButton) synthAreaButton->setState(8,0);
 
     switch(id) {
     case 0:
@@ -306,6 +311,10 @@ void wlayout::currentMainView(int id)
     case 1:
         _tuneAreaVisible=true;
         if(tuneAreaButton) tuneAreaButton->setState(7,1);
+        break;
+    case 2:
+        _synthAreaVisible=true;
+        if(synthAreaButton) synthAreaButton->setState(8,1);
         break;
     }
     emit layoutChange();
@@ -344,16 +353,45 @@ void wlayout::onSetRootNote(Pitch *p)
 
 void wlayout::setSound(MWSound *s)
 {
-    faderParamCtl[0]->setValue(s->wave_type);
-    faderParamCtl[1]->setValue(s->attack);
-    faderParamCtl[2]->setValue(s->decay);
-    faderParamCtl[3]->setValue(s->sustain);
-    faderParamCtl[4]->setValue(s->release);
-    faderParamCtl[5]->setValue(s->filter_cutoff);
-    faderParamCtl[6]->setValue(s->filter_resonance);
-    faderParamCtl[7]->setValue(s->mod_filter_cutoff);
-    faderParamCtl[8]->setValue(s->mod_filter_resonance);
-    faderParamCtl[9]->setValue(s->volume);
+    int i=0;
+    for(auto o:_faderParamCtl) {
+        auto p = qobject_cast<MWFaderParamCtl*>(o);
+        if(p) {
+            switch(i) {
+            case 0:
+                p->setValue(s->wave_type);
+                break;
+            case 1:
+                p->setValue(s->attack);
+                break;
+            case 2:
+                p->setValue(s->decay);
+                break;
+            case 3:
+                p->setValue(s->sustain);
+                break;
+            case 4:
+                p->setValue(s->release);
+                break;
+            case 5:
+                p->setValue(s->filter_cutoff);
+                break;
+            case 6:
+                p->setValue(s->filter_resonance);
+                break;
+            case 7:
+                p->setValue(s->mod_filter_cutoff);
+                break;
+            case 8:
+                p->setValue(s->mod_filter_resonance);
+                break;
+            case 9:
+                p->setValue(s->volume);
+                break;
+            }
+        }
+        i++;
+    }
     /*
     for(auto widget:soundPresets) {
         widget->//update();

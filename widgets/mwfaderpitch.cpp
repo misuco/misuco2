@@ -85,20 +85,3 @@ void MWFaderPitch::pitchChange()
     _freq->pitchChange();
 }
 
-void MWFaderPitch::processTouchEvent(misuTouchEvent e)
-{
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        //qDebug() << "MWFaderPitch::processTouchEvent TouchPointPressed " << out << " vId:" << vId;
-        //update();
-        break;
-    case Qt::TouchPointMoved:
-        //update();
-        break;
-    case Qt::TouchPointReleased:
-        //qDebug() << "MWFaderPitch::processTouchEvent TouchPointReleased vId:" << vId;
-        //update();
-        break;
-    }
-    //MWFadder::processTouchEvent(e);
-}
