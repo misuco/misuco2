@@ -8,7 +8,7 @@ Item {
             model: layout.menu
 
             Rectangle {
-                color: modelData.bgColor
+                color: modelData.selected ? hlColor : llColor
                 width: menuSize
                 height: buttonSize
                 radius: buttonRadius
@@ -19,7 +19,7 @@ Item {
                     anchors.fill: parent
                     text: modelData.text
                     font.pixelSize: fontSize2
-                    color: modelData.fontColor
+                    color: fgColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignTop
                 }

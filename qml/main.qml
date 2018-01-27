@@ -16,6 +16,7 @@ Window {
 
     property int columnWidth: width/4;
 
+    property color llColor: "#000000"
     property color bgColor: "#333333"
     property color fgColor: "#CCCCCC"
     property color hlColor: "#CC0000"

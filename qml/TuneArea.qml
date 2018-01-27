@@ -23,12 +23,12 @@ Item {
                 border.width: borderWidth
                 border.color: borderColor
 
-                color: modelData.bgColor
+                color: llColor
                 width: buttonSize
                 height: parent.height
 
                 Rectangle {
-                    color: modelData.pitchColor
+                    color: modelData.selected ? layout.pitches[modelData.pitchId].color1 : layout.pitches[modelData.pitchId].color0
                     width: buttonSize
                     height: modelData.knobSize
                     radius: faderRadius
@@ -41,7 +41,7 @@ Item {
                     anchors.fill: parent
                     text: modelData.text1
                     font.pixelSize: fontSize1
-                    color: modelData.fontColor
+                    color: hlColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignTop
                 }

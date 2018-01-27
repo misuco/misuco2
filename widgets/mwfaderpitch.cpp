@@ -25,7 +25,6 @@ MWFaderPitch::MWFaderPitch(QObject *parent, Pitch *p) : MWFadder(parent)
 {
     _freq = new FreqTriple(p);
     _freq->setOct(4);
-    calcColor();
 }
 
 MWFaderPitch::~MWFaderPitch()
@@ -38,13 +37,23 @@ void MWFaderPitch::setOut(ISender *value)
     out = value;
 }
 
+int MWFaderPitch::pitchId()
+{
+    return _freq->getRootNote();
+}
+
+bool MWFaderPitch::selected()
+{
+    return pressed>0;
+}
+
 void MWFaderPitch::onPressedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onPressedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(pressed < 2) {
         eventId=id;
         vId=out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
-        calcColor();
+        emit selectedChanged();
     }
 }
 
@@ -62,7 +71,7 @@ void MWFaderPitch::onReleasedPitch(int id)
     //qDebug() << "MWFaderPitch::onReleasedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
         out->noteOff(vId);
-        calcColor();
+        emit selectedChanged();
     }
 }
 
@@ -74,35 +83,6 @@ void MWFaderPitch::setOctMid(int o)
 void MWFaderPitch::pitchChange()
 {
     _freq->pitchChange();
-    calcColor();
-}
-
-void MWFaderPitch::calcColor()
-{
-    float l=lOff;
-    float s=sOff;
-    if(pressed>0) {
-        l=lOn;
-        s=sOn;
-    }
-
-    int pitch = _freq->getRootNote();
-    if(bwmode) {
-        if(pressed>0) {
-            if(MWPitch[pitch]->getBW()) {
-                _pitchColor = hlwkeycolor;
-            } else {
-                _pitchColor = hlbkeycolor;
-            }
-        } else if(MWPitch[pitch]->getBW()) {
-            _pitchColor = wkeycolor;
-        } else {
-            _pitchColor = bkeycolor;
-        }
-    } else {
-        _pitchColor = QColor::fromHslF(MWPitch[pitch]->getHue(),s,l);
-    }
-    emit colorChanged();
 }
 
 void MWFaderPitch::processTouchEvent(misuTouchEvent e)

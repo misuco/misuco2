@@ -36,10 +36,6 @@ MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
     height=500;
     knobSize=50; // TODO height()/8;
 
-    _fgColor = fgcolor;
-    _bgColor = bgcolor;
-    _fontColor = highlightcolor;
-
     calcGeo();
 }
 

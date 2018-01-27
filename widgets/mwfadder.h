@@ -31,9 +31,6 @@ class MWFadder : public MisuWidget
     Q_PROPERTY(int knobSize MEMBER knobSize NOTIFY geoChanged)
     Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY geoChanged)
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY geoChanged)
-    Q_PROPERTY(QColor bgColor MEMBER _bgColor NOTIFY colorChanged)
-    Q_PROPERTY(QColor fgColor MEMBER _fgColor NOTIFY colorChanged)
-    Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
 
 public:
     MWFadder(QObject *parent);
@@ -65,10 +62,6 @@ protected:
     QString _text1;
     QString _text2;
 
-    QColor  _fgColor;
-    QColor  _bgColor;
-    QColor  _fontColor;
-
     int pressed;
 
 signals:
@@ -76,7 +69,6 @@ signals:
 
     // QML
     void geoChanged();
-    void colorChanged();
 
 private:
     // Fadder state

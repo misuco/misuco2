@@ -42,9 +42,6 @@ MWHeaderSetter::MWHeaderSetter(int headerId, int state, QObject *parent): MisuWi
 
 void MWHeaderSetter::setText() {
 
-    _bgColor = bgcolor;
-    _fontColor = fgcolor;
-
     switch(_functionId) {
     case 0:
         _text="root";
@@ -118,12 +115,20 @@ void MWHeaderSetter::setText() {
         _text="freqs";
         break;
     }
-
 }
 
 int MWHeaderSetter::getState()
 {
     return _state;
+}
+
+bool MWHeaderSetter::selected()
+{
+    if(_state>0 || _pressed>0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void MWHeaderSetter::onPressed(int id)
@@ -219,11 +224,9 @@ void MWHeaderSetter::onPressed(int id)
             _state = showFreqs;
             break;
         }
-
         _pressed++;
         _pressedTouchId = id;
-        _bgColor = highlightcolor;
-        emit stateChanged();
+        emit selectedChanged();
     }
 }
 
@@ -231,12 +234,7 @@ void MWHeaderSetter::onReleased(int id)
 {
     if( id == _pressedTouchId) {
         _pressed--;
-        if(_state>0) {
-            _bgColor = highlightcolor;
-        } else {
-            _bgColor = bgcolor;
-        }
-        emit stateChanged();
+        emit selectedChanged();
     }
 }
 
@@ -245,42 +243,9 @@ void MWHeaderSetter::setState(int id, int s)
     if(_functionId == id) {
         //qDebug() << "MWHeaderSetter::setState id:" << id << " state: " << s;
         _state = s;
-        if(_state>0) {
-            _bgColor = highlightcolor;
-        } else {
-            _bgColor = bgcolor;
-        }
-        emit stateChanged();
+        emit selectedChanged();
     }
 }
-
-/*
-void MWHeaderSetter::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    QString cap;
-    QFont font(font1);
-    font.setPixelSize(font1size);
-    painter.setFont(font);
-    painter.setPen(fgcolor);
-    if(state!=0) painter.setBrush(highlightcolor);
-    else painter.setBrush(bgcolor);
-    painter.drawRect(0,0,width(),height());
-
-    if(width()>height()) {
-        painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
-    } else {
-        painter.rotate(90);
-        painter.drawText(0,-width(),height(),width(),Qt::AlignTop|Qt::AlignLeft,cap);
-        painter.rotate(-90);
-    }
-}
-
-void MWHeaderSetter::resizeEvent(QResizeEvent *)
-{
-
-}
-*/
 
 QString MWHeaderSetter::midi2TextUrl(int midinote) {
     QString t;

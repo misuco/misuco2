@@ -2,10 +2,12 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.0
 
 Item {
-    LinearGradient {
+    Rectangle {
         anchors.fill: parent
-        start: Qt.point(0, 0)
-        end: Qt.point(0, height)
+        radius: buttonRadius
+        border.width: borderWidth
+        border.color: borderColor
+        color: "Transparent"
 
         gradient: Gradient {
             GradientStop { position: 0.0; color: modelData.colorF1b }
@@ -29,14 +31,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignBottom
         }
-    }
 
-    Rectangle {
-        anchors.fill: parent
-        radius: buttonRadius
-        border.width: borderWidth
-        border.color: borderColor
-        color: "Transparent"
     }
 }
 

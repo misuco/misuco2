@@ -28,16 +28,18 @@ class MWHeaderSetter : public MisuWidget
     Q_OBJECT
 
     Q_PROPERTY(int functionId MEMBER _functionId CONSTANT)
-    Q_PROPERTY(int pressed MEMBER _pressed NOTIFY stateChanged)
-    Q_PROPERTY(int state MEMBER _state NOTIFY stateChanged)
+    Q_PROPERTY(int pressed MEMBER _pressed NOTIFY selectedChanged)
+    Q_PROPERTY(int state MEMBER _state NOTIFY selectedChanged)
     Q_PROPERTY(QString text MEMBER _text CONSTANT)
-    Q_PROPERTY(QColor bgColor MEMBER _bgColor NOTIFY stateChanged)
-    Q_PROPERTY(QColor fontColor MEMBER _fontColor CONSTANT)
+    Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
 
 public:
     MWHeaderSetter(int functionId, QObject *parent);
     MWHeaderSetter(int functionId, int state, QObject *parent);
+
     int getState();
+
+    bool selected();
 
     Q_INVOKABLE void onPressed(int id);
     Q_INVOKABLE void onReleased(int id);
@@ -55,7 +57,8 @@ signals:
     void toggleSender(int i);
     void toggleShowFreqs();
 
-    void stateChanged();
+    // QML
+    void selectedChanged();
 
 public slots:
     void setState(int id, int s);
@@ -67,8 +70,6 @@ private:
     int _state;
     QString _text;
     QString midi2TextUrl(int midinote);
-    QColor _bgColor;
-    QColor _fontColor;
 
     void setText();
 };
