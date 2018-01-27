@@ -29,48 +29,48 @@ class MWBScaleSwitch : public MisuWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QColor color MEMBER _color NOTIFY colorChanged)
-    Q_PROPERTY(QColor fontColor MEMBER _fontColor NOTIFY colorChanged)
-    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY colorChanged)
-    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY colorChanged)
+    Q_PROPERTY(int pitchId READ pitchId NOTIFY pitchIdChanged)
+    Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
+    Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY textChanged)
+    Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
     MWBScaleSwitch(int i);
     ~MWBScaleSwitch();
     void setOut(ISender *_value);
 
+    int pitchId();
+    bool selected();
+
     Q_INVOKABLE void onPressed();
     Q_INVOKABLE void onReleased();
 
 signals:
     void setBscale(int,bool);
-    void scaleupdate();
-    void colorChanged();
+
+    // QML
+    void pitchIdChanged();
+    void selectedChanged();
+    void textChanged();
 
 public slots:
     void setrootNote(Pitch * p);
     void setOctMid(int o);
     void onScaleSet(MWScale*);
-    void onscaleupdate();
-
-//protected:
-    //void processTouchEvent(misuTouchEvent e);
 
 private:
-    ISender * out;
+    ISender * _out;
     FreqTriple * _freq;
-    int bscaleId;
-    int rootNote;
-    int vId;
+    int _bscaleId;
+    int _vid;
     int _pressed;
     bool _value;
 
-    QColor          _color;
-    QColor          _fontColor;
     QString         _text1;
     QString         _text2;
 
-    void calcColor();
+    void calcText();
+    void setrootNote(int rootNote);
 };
 
 #endif // MWBSCALESWITCH_H

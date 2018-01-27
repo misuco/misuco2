@@ -171,7 +171,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         MWBScaleSwitch * bs =new MWBScaleSwitch(i);
         bs->setOut(out);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
-        connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
+        //connect(bs,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(int j=0;j<12;j++) {
             connect(_rootNoteSetter[j],SIGNAL(setrootNote(Pitch *)),bs,SLOT(setrootNote(Pitch *)));
@@ -191,7 +191,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     connect(this,SIGNAL(scaleupdate()),_rootNoteSetter[0],SLOT(onscaleupdate()));
     for(int j=1;j<12;j++) {
         connect(this,SIGNAL(scaleupdate()),_rootNoteSetter[j],SLOT(onscaleupdate()));
-        connect(this,SIGNAL(scaleupdate()),_BScaleSwitch[j-1],SLOT(onscaleupdate()));
+        //connect(this,SIGNAL(scaleupdate()),_BScaleSwitch[j-1],SLOT(onscaleupdate()));
     }
 
     showFreqs = new MWHeaderSetter(22,this);

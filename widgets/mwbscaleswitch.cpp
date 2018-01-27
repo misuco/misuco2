@@ -26,54 +26,22 @@
 MWBScaleSwitch::MWBScaleSwitch(int i)
 {
     //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
-
     _freq=new FreqTriple(MWPitch[i],this);
-    _freq->setrootNote(MWPitch[i]);
     _value=false;
     _pressed=0;
-    bscaleId=i;
+    _bscaleId=i;
     _freq->setOct(4);
-    out=nullptr;
-    vId=0;
+    _out=nullptr;
+    _vid=0;
 }
 
 MWBScaleSwitch::~MWBScaleSwitch()
 {
-    delete(_freq);
+    _freq->deleteLater();
 }
 
-void MWBScaleSwitch::calcColor()
+void MWBScaleSwitch::calcText()
 {
-    float l=lOff;
-    float s=sOff;
-    if(_pressed>0 || _value) {
-        l=lOn;
-        s=sOn;
-    }
-
-    int pitch = _freq->getrootNote();
-    if(bwmode) {
-        if(_value) {
-            if(MWPitch[pitch]->getBW()) {
-                _color = hlwkeycolor;
-            } else {
-                _color = hlbkeycolor;
-            }
-        } else if(MWPitch[pitch]->getBW()) {
-            _color = wkeycolor;
-        } else {
-            _color = bkeycolor;
-        }
-    } else {
-        _color=QColor::fromHslF(MWPitch[pitch]->getHue(),s,l);
-    }
-
-    if(_pressed>0 || _value) {
-        _fontColor=highlightcolor;
-    } else {
-        _fontColor=fgcolor;
-    }
-
     _text1=_freq->getrootNoteString(noteSymbols);
 
     if(showFreqs) {
@@ -82,38 +50,55 @@ void MWBScaleSwitch::calcColor()
         _text2="";
     }
 
-    emit colorChanged();
+    emit textChanged();
 }
 
 void MWBScaleSwitch::setOut(ISender *value)
 {
-    out = value;
+    _out = value;
+}
+
+int MWBScaleSwitch::pitchId()
+{
+    //qDebug() << "MWBScaleSwitch::pitchId " << _freq->getPitch() << " bscaleId" << bscaleId;
+    return _freq->getrootNote();
+}
+
+bool MWBScaleSwitch::selected()
+{
+    return (_pressed>0 || _value);
 }
 
 void MWBScaleSwitch::onPressed()
 {
-    if(out) vId=out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    if(_out) _vid=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _value=!_value;
-    emit setBscale(bscaleId,_value);
-    emit scaleupdate();
+    emit setBscale(_bscaleId,_value);
     _pressed++;
-    calcColor();
+    emit selectedChanged();
 }
 
 void MWBScaleSwitch::onReleased()
 {
-    if(out) out->noteOff(vId);
+    if(_out) _out->noteOff(_vid);
     _pressed--;
-    calcColor();
+    emit selectedChanged();
 }
 
 void MWBScaleSwitch::setrootNote(Pitch *p)
 {
-    rootNote=p->getrootNote();
-    int newrootNote=(rootNote+bscaleId)%12;
+    setrootNote(p->getrootNote());
+}
+
+void MWBScaleSwitch::setrootNote(int rootNote)
+{
     //qDebug() << "MWBScaleSwitch::setrootNote " << newrootNote << " bscaleId " << bscaleId << " rootNote " << rootNote;
-    _freq->setrootNote(MWPitch[newrootNote]);
-    calcColor();
+    int newrootNote=(rootNote+_bscaleId)%12;
+    if(newrootNote != _freq->getPitch()) {
+        _freq->setrootNote(MWPitch[newrootNote]);
+        emit pitchIdChanged();
+        calcText();
+    }
 }
 
 void MWBScaleSwitch::setOctMid(int o)
@@ -123,19 +108,17 @@ void MWBScaleSwitch::setOctMid(int o)
 
 void MWBScaleSwitch::onScaleSet(MWScale * scale)
 {
-    if(scale->bscale[bscaleId-1]) {
-        _value=true;
+    //qDebug() << "MWBScaleSwitch::onScaleSet" << bscaleId;
+    if(scale->bscale[_bscaleId-1]) {
+        if(!_value) {
+            _value=true;
+            emit selectedChanged();
+        }
     } else {
-        _value=false;
+        if(_value) {
+            _value=false;
+            emit selectedChanged();
+        }
     }
-
-    rootNote = (scale->rootNote+bscaleId)%12;
-    _freq->setrootNote(MWPitch[rootNote]);
-
-    calcColor();
-}
-
-void MWBScaleSwitch::onscaleupdate()
-{
-    calcColor();
+    setrootNote(scale->rootNote);
 }
