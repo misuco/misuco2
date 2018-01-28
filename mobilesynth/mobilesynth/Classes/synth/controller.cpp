@@ -188,12 +188,15 @@ namespace synth {
     float Controller::GetSample() {
         float value=0;
         for(int i=0;i<key_stack_.GetSize();i++) {
-            value += key_stack_.getFilter(i)->GetValue(key_stack_.getOsc(i)->GetValue()*key_stack_.getEnvelope(0, i)->GetValue());
-            // Clip!
-            value = fmaxf(-1.0f, value);
-            value = fminf(1.0f, value);
+            float voiceValue = key_stack_.getFilter(i)->GetValue(key_stack_.getOsc(i)->GetValue()*key_stack_.getEnvelope(0, i)->GetValue());
+            voiceValue *= volume_;
+            value += voiceValue;
         }
-        value *= volume_;
+
+        // Clip!
+        value = fmaxf(-1.0f, value);
+        value = fminf(1.0f, value);
+
         // Adjust volume
         for(int i=0;i<key_stack_.GetSize();i++) {
             if(key_stack_.getEnvelope(0, i)->released()) {
