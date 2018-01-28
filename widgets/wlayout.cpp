@@ -292,6 +292,8 @@ void wlayout::currentHeader(int id)
     MWHeaderSetter * bscaleButton = dynamic_cast<MWHeaderSetter *>(_menu[1]);
     MWHeaderSetter * octaveButton = dynamic_cast<MWHeaderSetter *>(_menu[2]);
 
+    /*
+
     _rootNoteSetterVisible=false;
     _bScaleSwitchVisible=false;
     _octaveRangerVisible=false;
@@ -312,6 +314,22 @@ void wlayout::currentHeader(int id)
     case 2:
         _octaveRangerVisible=true;
         if(octaveButton) octaveButton->setState(2,1);
+        break;
+    }
+    */
+
+    switch(id) {
+    case 0:
+        _rootNoteSetterVisible=!_rootNoteSetterVisible;
+        if(rootButton) rootButton->setState(0,_rootNoteSetterVisible);
+        break;
+    case 1:
+        _bScaleSwitchVisible=!_bScaleSwitchVisible;
+        if(bscaleButton) bscaleButton->setState(1,_bScaleSwitchVisible);
+        break;
+    case 2:
+        _octaveRangerVisible=!_octaveRangerVisible;
+        if(octaveButton) octaveButton->setState(2,_octaveRangerVisible);
         break;
     }
 
