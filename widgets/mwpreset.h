@@ -43,6 +43,8 @@ public:
     int bscalesize();
     int rootnote();
 
+    void overwrite();
+
     Q_INVOKABLE void onPressed();
     Q_INVOKABLE void onPressAndHold();
     Q_INVOKABLE void onCanceled();
@@ -54,14 +56,15 @@ public slots:
 
 signals:
     void setScale(MWScale *);
-    void scaleupdate();
+    void editPreset();
 
     // QML
     void presetChanged();
 
 private:
-    int pressed=0;
+    int pressed;
     bool isSelected();
+    bool canceled;
 };
 
 #endif // MWPRESET_H

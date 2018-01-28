@@ -39,6 +39,7 @@ public slots:
 
 signals:
     void setMicrotune(MWMicrotune * m);
+    void editPreset();
 
 private:
     int pressed=0;

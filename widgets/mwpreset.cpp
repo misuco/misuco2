@@ -36,6 +36,7 @@ MWPreset::MWPreset(QWidget *parent): MisuWidget(parent)
             PresetScale.bscale[i]=false;
         }
     }
+    pressed=0;
 }
 
 MWPreset::MWPreset(int rootNote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
@@ -52,6 +53,7 @@ MWPreset::MWPreset(int rootNote, int baseoct, int topoct, bool bscale[], QObject
             PresetScale.bscale[i]=false;
         }
     }
+    pressed=0;
 }
 
 QStringList MWPreset::bscale()
@@ -75,50 +77,52 @@ int MWPreset::rootnote()
     return PresetScale.rootNote;
 }
 
+void MWPreset::overwrite()
+{
+    PresetScale.rootNote = MisuWidget::Scale.rootNote;
+    PresetScale.baseoct = MisuWidget::Scale.baseoct;
+    PresetScale.topoct = MisuWidget::Scale.topoct;
+    PresetScale.size = 2;
+
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
+        if(PresetScale.bscale[i]) {
+            PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
+        }
+    }
+
+    emit setScale(&PresetScale);
+}
+
 void MWPreset::onPressed()
 {
-
     pressed++;
+    canceled = false;
 }
 
 void MWPreset::onPressAndHold()
 {
-    if(overwrite) {
-        PresetScale.rootNote = MisuWidget::Scale.rootNote;
-        PresetScale.baseoct = MisuWidget::Scale.baseoct;
-        PresetScale.topoct = MisuWidget::Scale.topoct;
-        PresetScale.size = 2;
-
-        //qDebug() << "MWPreset::processTouchEvent " << Scale.rootNote << " note " << Scale.size << " bo " << Scale.baseoct << " to " << Scale.topoct;
-        for(int i=0;i<BSCALE_SIZE;i++) {
-            PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
-            if(PresetScale.bscale[i]) {
-                PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
-            }
-            //qDebug() << i << " " << Scale.bscale[i];
-        }
-    }
-    else {
-        emit setScale(&PresetScale);
-        emit scaleupdate();
-    }
-
+    canceled = true;
+    overwritePreset = this;
+    emit editPreset();
 }
 
 void MWPreset::onCanceled()
 {
-
+    canceled = true;
 }
 
 void MWPreset::onReleased()
 {
+    if(!canceled) {
+        emit setScale(&PresetScale);
+    }
     pressed--;
 }
 
 void MWPreset::initialSet()
 {
     emit setScale(&PresetScale);
-    emit scaleupdate();
 }
 
 void MWPreset::playAreaChanged()

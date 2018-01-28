@@ -52,6 +52,8 @@ public:
     float mod_resonance();
     float volume();
 
+    void overwrite();
+
     Q_INVOKABLE void onPressed();
     Q_INVOKABLE void onPressAndHold();
     Q_INVOKABLE void onCanceled();
@@ -63,6 +65,7 @@ public slots:
 
 signals:
     void setSound(MWSound * s);
+    void editPreset();
 
     // QML
     void presetChanged();
@@ -74,6 +77,8 @@ private:
     int pressed=0;
     int fontheight=8;
     bool isSelected();
+
+    bool canceled;
 };
 
 #endif // MWSound_H

@@ -29,20 +29,20 @@ Window {
 
     ScalePresetScroll {
         id: scalePresetCol
-        visible: layout.scalePresetsVisible && !layout.confAreaVisible
+        visible: layout.scalePresetsVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: layout.confAreaVisible ? 0 : columnWidth
+        width: layout.scalePresetsVisible ? columnWidth : 0
     }
 
     SynthPresetScroll {
         id: synthPresetCol
-        visible: layout.synthPresetsVisible && !layout.confAreaVisible
+        visible: layout.synthPresetsVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: layout.confAreaVisible ? 0 : columnWidth
+        width: layout.synthPresetsVisible ? columnWidth : 0
     }
 
     RootNoteSetter {
@@ -100,7 +100,7 @@ Window {
         visible: layout.synthAreaVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: scalePresetCol.right
+        anchors.left: synthPresetCol.right
         anchors.right: parent.right
     }
 
@@ -111,6 +111,12 @@ Window {
         anchors.bottom: parent.bottom
         anchors.left: scalePresetCol.right
         width: layout.confAreaVisible ? 6 * buttonSize : 0
+    }
+
+    DialogPreset {
+        id: presetDialog
+        visible: layout.dialogPresetsVisible
+        anchors.fill: parent
     }
 
 }

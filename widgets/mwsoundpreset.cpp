@@ -34,7 +34,6 @@ MWSoundPreset::MWSoundPreset(QObject *parent): MisuWidget(parent)
     PresetSound.filter_resonance=qrand() % 100;
     PresetSound.mod_filter_cutoff=50;
     PresetSound.mod_filter_resonance=0;
-
 }
 
 MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent): MisuWidget(parent)
@@ -101,41 +100,50 @@ float MWSoundPreset::volume()
     return PresetSound.volume;
 }
 
+void MWSoundPreset::overwrite()
+{
+    PresetSound.volume=Sound.volume;
+    PresetSound.wave_type=Sound.wave_type;
+    PresetSound.attack=Sound.attack;
+    PresetSound.decay=Sound.decay;
+    PresetSound.sustain=Sound.sustain;
+    PresetSound.release=Sound.release;
+    PresetSound.filter_cutoff=Sound.filter_cutoff;
+    PresetSound.filter_resonance=Sound.filter_resonance;
+    PresetSound.mod_filter_cutoff=Sound.mod_filter_cutoff;
+    PresetSound.mod_filter_resonance=Sound.mod_filter_resonance;
+
+    emit presetChanged();
+    emit selectedChanged();
+}
+
 void MWSoundPreset::onPressed()
 {
+    //qDebug() << "MWSoundPreset::onPressed";
     pressed++;
-    if(overwrite) {
-        PresetSound.volume=Sound.volume;
-        PresetSound.wave_type=Sound.wave_type;
-        PresetSound.attack=Sound.attack;
-        PresetSound.decay=Sound.decay;
-        PresetSound.sustain=Sound.sustain;
-        PresetSound.release=Sound.release;
-        PresetSound.filter_cutoff=Sound.filter_cutoff;
-        PresetSound.filter_resonance=Sound.filter_resonance;
-        PresetSound.mod_filter_cutoff=Sound.mod_filter_cutoff;
-        PresetSound.mod_filter_resonance=Sound.mod_filter_resonance;
-
-        emit presetChanged();
-        emit selectedChanged();
-    }
-    else {
-        emit setSound(&PresetSound);
-    }
+    canceled = false;
 }
 
 void MWSoundPreset::onPressAndHold()
 {
-
+    //qDebug() << "MWSoundPreset::onPressAndHold";
+    overwritePreset = this;
+    canceled = true;
+    emit editPreset();
 }
 
 void MWSoundPreset::onCanceled()
 {
-
+    //qDebug() << "MWSoundPreset::onCanceled";
+    canceled = true;
 }
 
 void MWSoundPreset::onReleased()
 {
+    //qDebug() << "MWSoundPreset::onReleased";
+    if(!canceled) {
+        emit setSound(&PresetSound);
+    }
     pressed--;
 }
 

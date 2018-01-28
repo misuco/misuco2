@@ -34,7 +34,7 @@ Item {
                         top: parent.top
                         bottom: parent.bottom
                         left: parent.left
-                        margins: height/5
+                        margins: parent.height/5
                     }
 
                     width: parent.width / 2
@@ -62,7 +62,7 @@ Item {
                         top: parent.top
                         bottom: parent.bottom
                         left: iconWave.right
-                        margins: height/5
+                        margins: parent.height/5
                     }
                     width: parent.width / 2
                 }

@@ -40,7 +40,7 @@ void MWMicrotunePreset::processTouchEvent(MisuWidget::misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:
-        if(overwrite) {
+        if(1/*overwrite*/) {
             for(int i=0;i<12;i++) {
                 PresetMicrotune.tuning[i]=Microtune.tuning[i];
             }

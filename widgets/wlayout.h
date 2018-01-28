@@ -90,6 +90,7 @@ class wlayout : public QObject
     Q_PROPERTY(QObject* confChannelFader MEMBER faderChannel CONSTANT)
 
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
+    Q_PROPERTY(bool dialogPresetsVisible MEMBER _dialogPresetsVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
 
@@ -99,6 +100,9 @@ public:
 
     QList<QObject*> pitches();
     QList<QObject*> confPitchFaders();
+
+    Q_INVOKABLE void closeDialogPreset();
+    Q_INVOKABLE void overwritePreset();
 
 signals:
     void setRootNote(Pitch * p);
@@ -125,6 +129,8 @@ private slots:
     void onSymbolsChange(int v);
     void onShowFreqsChange();
     void onSoundChanged(int);
+
+    void onEditPreset();
 
 private:
     QGridLayout * layout;
@@ -170,7 +176,6 @@ private:
     MWHeaderSetter * openScalesArchive;
     MWHeaderSetter * holdMode;
     MWHeaderSetter * showFreqs;
-    MWHeaderSetter * overwritePreset;
 
     // layout
     bool _rootNoteSetterVisible;
@@ -184,6 +189,7 @@ private:
     bool _synthPresetsVisible;
     bool _tunePresetsVisible;
 
+    bool _dialogPresetsVisible;
 
     QString configPath;
 

@@ -62,22 +62,16 @@ public:
     static MWScale Scale;
     static MWSound Sound;
     static MWMicrotune Microtune;
-    static bool overwrite;
     static int noteSymbols;
     static bool showFreqs;
 
     static int channel;
 
-    //static int pitchTopRange;
-    //static int pitchBottomRange;
-    //static bool pitchHorizontal;
-
     static bool sendCC1;
     static bool holdMode;
 
-protected:
-    //bool event(QEvent *event);
-    //int id;
+    static QObject * overwritePreset;
+
 
 };
 

@@ -181,8 +181,10 @@ void MWHeaderSetter::onPressed(int id)
             emit toggleBW();
             break;
         case 12:
+            /*
             overwrite=!overwrite;
             _state = overwrite;
+            */
             break;
         case 13:
             link ="http://scales.misuco.org/";

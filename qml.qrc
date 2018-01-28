@@ -24,5 +24,6 @@
         <file>qml/icons/Saw.qml</file>
         <file>qml/icons/Tri.qml</file>
         <file>qml/icons/Envelope.qml</file>
+        <file>qml/DialogPreset.qml</file>
     </qresource>
 </RCC>

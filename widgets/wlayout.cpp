@@ -34,9 +34,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _octaveRangerVisible=false;
     _playAreaVisible=true;
     _tuneAreaVisible=false;
-    _scalePresetsVisible=false;
-    _synthPresetsVisible=true;
+    _scalePresetsVisible=true;
+    _synthPresetsVisible=false;
     _tunePresetsVisible=false;
+    _dialogPresetsVisible=false;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -148,8 +149,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     holdMode = new MWHeaderSetter(21,this);
 
-    overwritePreset = new MWHeaderSetter(12,this);
-
     for(int i=0;i<12;i++) {
         MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MisuWidget::MWPitch[i],this);
         rootNoteSetter->setOut(out);
@@ -257,6 +256,30 @@ QList<QObject *> wlayout::confPitchFaders()
     return p;
 }
 
+void wlayout::closeDialogPreset()
+{
+    _dialogPresetsVisible=false;
+    emit layoutChange();
+}
+
+void wlayout::overwritePreset()
+{
+    auto soundPreset = qobject_cast<MWSoundPreset *>(MisuWidget::overwritePreset);
+    if(soundPreset) {
+        soundPreset->overwrite();
+        MisuWidget::overwritePreset = nullptr;
+    }
+
+    auto scalePreset = qobject_cast<MWPreset *>(MisuWidget::overwritePreset);
+    if(scalePreset) {
+        scalePreset->overwrite();
+        MisuWidget::overwritePreset = nullptr;
+    }
+
+    _dialogPresetsVisible=false;
+    emit layoutChange();
+}
+
 void wlayout::currentHeader(int id)
 {
     MWHeaderSetter * rootButton = dynamic_cast<MWHeaderSetter *>(_menu[0]);
@@ -298,6 +321,9 @@ void wlayout::currentMainView(int id)
     MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
     MWHeaderSetter * confAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[6]);
 
+    _synthPresetsVisible=false;
+    _scalePresetsVisible=false;
+    _tunePresetsVisible=false;
     _playAreaVisible=false;
     _tuneAreaVisible=false;
     _synthAreaVisible=false;
@@ -311,14 +337,17 @@ void wlayout::currentMainView(int id)
     switch(id) {
     case 0:
         _playAreaVisible=true;
+        _scalePresetsVisible=true;
         if(playAreaButton) playAreaButton->setState(6,1);
         break;
     case 1:
         _tuneAreaVisible=true;
+        _tunePresetsVisible=true;
         if(tuneAreaButton) tuneAreaButton->setState(7,1);
         break;
     case 2:
         _synthAreaVisible=true;
+        _synthPresetsVisible=true;
         if(synthAreaButton) synthAreaButton->setState(8,1);
         break;
     case 3:
@@ -426,6 +455,12 @@ void wlayout::onShowFreqsChange()
 void wlayout::onSoundChanged(int)
 {
     emit soundChanged();
+}
+
+void wlayout::onEditPreset()
+{
+    _dialogPresetsVisible = true;
+    emit layoutChange();
 }
 
 void wlayout::readXml(QString filename)
@@ -609,6 +644,7 @@ void wlayout::readLayout() {
                                              bscaleRead,
                                              this);
             connect(((MWPlayArea *)_PlayArea),SIGNAL(playRowsChanged()),p,SLOT(playAreaChanged()));
+            connect(p,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
             _scalePresets.append(p);
         } else if (xmlr.name() == "sound") {
             MWSoundPreset * soundPreset = new MWSoundPreset(
@@ -624,6 +660,7 @@ void wlayout::readLayout() {
                         xmlr.attributes().value("mod_resonance").toString().toFloat(),
                         this);
             connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
+            connect(soundPreset,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
             connect(this, SIGNAL(soundChanged()), soundPreset, SLOT(onSoundChanged()));
             _synthPresets.append(soundPreset);
         } else if (xmlr.name() == "microtune") {
@@ -635,6 +672,7 @@ void wlayout::readLayout() {
             }
             MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,this);
             connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
+            connect(microtunePreset,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
             _tunePresets.append(microtunePreset);
         } else if (xmlr.name() == "setup") {
             for(int i=0;i<3;i++) {
