@@ -12,7 +12,7 @@ Window {
     property int faderRadius: buttonSize/2
     property int buttonRadius: buttonSize/5
     property int borderWidth: 3
-    property color borderColor: "#003300"
+    property color borderColor: "#333333"
 
     property int columnWidth: width/4;
 
@@ -30,6 +30,15 @@ Window {
     ScalePresetScroll {
         id: scalePresetCol
         visible: layout.scalePresetsVisible && !layout.confAreaVisible
+        anchors.top: menuRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        width: layout.confAreaVisible ? 0 : columnWidth
+    }
+
+    SynthPresetScroll {
+        id: synthPresetCol
+        visible: layout.synthPresetsVisible && !layout.confAreaVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left

@@ -28,19 +28,49 @@ class MWSoundPreset : public MisuWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(int wave READ wave NOTIFY presetChanged)
+    Q_PROPERTY(int attack READ attack NOTIFY presetChanged)
+    Q_PROPERTY(int decay READ decay NOTIFY presetChanged)
+    Q_PROPERTY(float sustain READ sustain NOTIFY presetChanged)
+    Q_PROPERTY(int release READ release NOTIFY presetChanged)
+    Q_PROPERTY(float cutoff READ cutoff NOTIFY presetChanged)
+    Q_PROPERTY(float resonance READ resonance NOTIFY presetChanged)
+    Q_PROPERTY(bool selected READ isSelected NOTIFY selectedChanged)
+
 public:
     MWSoundPreset(QObject *parent);
     MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent);
-    virtual void processTouchEvent(misuTouchEvent e);
-    MWSound PresetSound;
+
+    int wave();
+    int attack();
+    int decay();
+    float sustain();
+    int release();
+    float cutoff();
+    float resonance();
+    float mod_cutoff();
+    float mod_resonance();
+    float volume();
+
+    Q_INVOKABLE void onPressed();
+    Q_INVOKABLE void onPressAndHold();
+    Q_INVOKABLE void onCanceled();
+    Q_INVOKABLE void onReleased();
 
 public slots:
     void initialSet();
+    void onSoundChanged();
 
 signals:
     void setSound(MWSound * s);
 
+    // QML
+    void presetChanged();
+    void selectedChanged();
+
 private:
+    MWSound PresetSound;
+
     int pressed=0;
     int fontheight=8;
     bool isSelected();

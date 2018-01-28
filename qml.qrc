@@ -17,5 +17,12 @@
         <file>qml/SynthArea.qml</file>
         <file>qml/ConfArea.qml</file>
         <file>qml/Button.qml</file>
+        <file>qml/SynthPresetScroll.qml</file>
+        <file>qml/icons/Sine.qml</file>
+        <file>qml/icons/Square.qml</file>
+        <file>qml/icons/Rnd.qml</file>
+        <file>qml/icons/Saw.qml</file>
+        <file>qml/icons/Tri.qml</file>
+        <file>qml/icons/Envelope.qml</file>
     </qresource>
 </RCC>

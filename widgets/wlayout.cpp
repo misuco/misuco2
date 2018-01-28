@@ -34,8 +34,8 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _octaveRangerVisible=false;
     _playAreaVisible=true;
     _tuneAreaVisible=false;
-    _scalePresetsVisible=true;
-    _soundPresetsVisible=false;
+    _scalePresetsVisible=false;
+    _synthPresetsVisible=true;
     _tunePresetsVisible=false;
 
     //qDebug() << QSysInfo::productType();
@@ -95,6 +95,8 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
             fader->setMaxValue(1000);
         }
         fader->setInverted(true);
+
+        connect(fader,SIGNAL(valueChange(int)),this,SLOT(onSoundChanged(int)));
 
         _faderParamCtl.append(fader);
 
@@ -223,11 +225,11 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     if(_scalePresets.size()>0) {
         connect(this,SIGNAL(initialSet()),_scalePresets[0],SLOT(initialSet()));
     }
-    if(soundPresets.size()>0) {
-        connect(this,SIGNAL(initialSet()),soundPresets[0],SLOT(initialSet()));
+    if(_synthPresets.size()>0) {
+        connect(this,SIGNAL(initialSet()),_synthPresets[0],SLOT(initialSet()));
     }
-    if(microtunePresets.size()>0) {
-        connect(this,SIGNAL(initialSet()),microtunePresets[0],SLOT(initialSet()));
+    if(_tunePresets.size()>0) {
+        connect(this,SIGNAL(initialSet()),_tunePresets[0],SLOT(initialSet()));
     }
     emit initialSet();
 
@@ -385,11 +387,8 @@ void wlayout::setSound(MWSound *s)
         }
         i++;
     }
-    /*
-    for(auto widget:soundPresets) {
-        widget->//update();
-    }
-    */
+
+    emit soundChanged();
 }
 
 void wlayout::setMicrotune(MWMicrotune * m)
@@ -422,6 +421,11 @@ void wlayout::onSymbolsChange(int v)
 void wlayout::onShowFreqsChange()
 {
     emit symbolsChanged();
+}
+
+void wlayout::onSoundChanged(int)
+{
+    emit soundChanged();
 }
 
 void wlayout::readXml(QString filename)
@@ -486,32 +490,36 @@ void wlayout::writeXml(QString filename)
         }
     }
 
-    for(auto widget:soundPresets) {
-        xml.writeStartElement("sound");
-        att.sprintf("%d",widget->PresetSound.wave_type);
-        xml.writeAttribute("wave",att);
-        att.sprintf("%d",widget->PresetSound.attack);
-        xml.writeAttribute("attack",att);
-        att.sprintf("%d",widget->PresetSound.decay);
-        xml.writeAttribute("decay",att);
-        att.sprintf("%f",widget->PresetSound.sustain);
-        xml.writeAttribute("sustain",att);
-        att.sprintf("%d",widget->PresetSound.release);
-        xml.writeAttribute("release",att);
-        att.sprintf("%f",widget->PresetSound.filter_cutoff);
-        xml.writeAttribute("cutoff",att);
-        att.sprintf("%f",widget->PresetSound.filter_resonance);
-        xml.writeAttribute("resonance",att);
-        att.sprintf("%f",widget->PresetSound.mod_filter_cutoff);
-        xml.writeAttribute("mod_cutoff",att);
-        att.sprintf("%f",widget->PresetSound.mod_filter_resonance);
-        xml.writeAttribute("mod_resonance",att);
-        att.sprintf("%f",widget->PresetSound.volume);
-        xml.writeAttribute("volume",att);
-        xml.writeEndElement();
+    for(auto o:_synthPresets) {
+        auto widget = qobject_cast<MWSoundPreset *>(o);
+        if(widget) {
+            xml.writeStartElement("sound");
+            att.sprintf("%d",widget->wave());
+            xml.writeAttribute("wave",att);
+            att.sprintf("%d",widget->attack());
+            xml.writeAttribute("attack",att);
+            att.sprintf("%d",widget->decay());
+            xml.writeAttribute("decay",att);
+            att.sprintf("%f",widget->sustain());
+            xml.writeAttribute("sustain",att);
+            att.sprintf("%d",widget->release());
+            xml.writeAttribute("release",att);
+            att.sprintf("%f",widget->cutoff());
+            xml.writeAttribute("cutoff",att);
+            att.sprintf("%f",widget->resonance());
+            xml.writeAttribute("resonance",att);
+            att.sprintf("%f",widget->mod_cutoff());
+            xml.writeAttribute("mod_cutoff",att);
+            att.sprintf("%f",widget->mod_resonance());
+            xml.writeAttribute("mod_resonance",att);
+            att.sprintf("%f",widget->volume());
+            xml.writeAttribute("volume",att);
+            xml.writeEndElement();
+        }
     }
 
-    for(auto widget:microtunePresets) {
+    for(auto o:_tunePresets) {
+        auto widget = qobject_cast<MWMicrotunePreset *>(o);
         xml.writeStartElement("microtune");
         for(int i=0;i<12;i++) {
             att.sprintf("%d",widget->PresetMicrotune.tuning[i]);
@@ -616,7 +624,8 @@ void wlayout::readLayout() {
                         xmlr.attributes().value("mod_resonance").toString().toFloat(),
                         this);
             connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
-            soundPresets.append(soundPreset);
+            connect(this, SIGNAL(soundChanged()), soundPreset, SLOT(onSoundChanged()));
+            _synthPresets.append(soundPreset);
         } else if (xmlr.name() == "microtune") {
             int microtune[12];
             for(int i=0;i<12;i++) {
@@ -626,7 +635,7 @@ void wlayout::readLayout() {
             }
             MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,this);
             connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
-            microtunePresets.append(microtunePreset);
+            _tunePresets.append(microtunePreset);
         } else if (xmlr.name() == "setup") {
             for(int i=0;i<3;i++) {
                 QString attId;

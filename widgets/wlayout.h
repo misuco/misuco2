@@ -66,6 +66,12 @@ class wlayout : public QObject
     Q_PROPERTY(QList<QObject*> scalePresets MEMBER _scalePresets CONSTANT)
     Q_PROPERTY(bool scalePresetsVisible MEMBER _scalePresetsVisible NOTIFY layoutChange)
 
+    Q_PROPERTY(QList<QObject*> synthPresets MEMBER _synthPresets CONSTANT)
+    Q_PROPERTY(bool synthPresetsVisible MEMBER _synthPresetsVisible NOTIFY layoutChange)
+
+    Q_PROPERTY(QList<QObject*> tunePresets MEMBER _tunePresets CONSTANT)
+    Q_PROPERTY(bool tunePresetsVisible MEMBER _tunePresetsVisible NOTIFY layoutChange)
+
     Q_PROPERTY(QList<QObject*> synthArea MEMBER _faderParamCtl CONSTANT)
     Q_PROPERTY(bool synthAreaVisible MEMBER _synthAreaVisible NOTIFY layoutChange)
 
@@ -101,6 +107,7 @@ signals:
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
     void symbolsChanged();
+    void soundChanged();
 
     // QML
     void layoutChange();
@@ -117,6 +124,7 @@ private slots:
     void onToggleSender(int v);
     void onSymbolsChange(int v);
     void onShowFreqsChange();
+    void onSoundChanged(int);
 
 private:
     QGridLayout * layout;
@@ -142,8 +150,8 @@ private:
 
     // preset buttons
     QList<QObject * > _scalePresets;
-    QList<MWSoundPreset * > soundPresets;
-    QList<MWMicrotunePreset * > microtunePresets;
+    QList<QObject * > _synthPresets;
+    QList<QObject * > _tunePresets;
 
     bool presetsVisible;
     bool headerVisible;
@@ -173,7 +181,7 @@ private:
     bool _synthAreaVisible;
     bool _confAreaVisible;
     bool _scalePresetsVisible;
-    bool _soundPresetsVisible;
+    bool _synthPresetsVisible;
     bool _tunePresetsVisible;
 
 

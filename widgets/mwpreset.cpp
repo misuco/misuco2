@@ -112,7 +112,6 @@ void MWPreset::onCanceled()
 
 void MWPreset::onReleased()
 {
-
     pressed--;
 }
 

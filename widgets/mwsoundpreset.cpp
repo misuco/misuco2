@@ -51,106 +51,102 @@ MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, in
     PresetSound.mod_filter_resonance=modres;
 }
 
-void MWSoundPreset::processTouchEvent(MisuWidget::misuTouchEvent e)
+int MWSoundPreset::wave()
 {
-    switch(e.state) {
-    case Qt::TouchPointPressed:
-        if(overwrite) {
-            PresetSound.volume=Sound.volume;
-            PresetSound.wave_type=Sound.wave_type;
-            PresetSound.attack=Sound.attack;
-            PresetSound.decay=Sound.decay;
-            PresetSound.sustain=Sound.sustain;
-            PresetSound.release=Sound.release;
-            PresetSound.filter_cutoff=Sound.filter_cutoff;
-            PresetSound.filter_resonance=Sound.filter_resonance;
-            PresetSound.mod_filter_cutoff=Sound.mod_filter_cutoff;
-            PresetSound.mod_filter_resonance=Sound.mod_filter_resonance;
-        }
-        else {
-            emit setSound(&PresetSound);
-        }
-        pressed++;
-        break;
-    case Qt::TouchPointReleased:
-        pressed--;
-        break;
-    }
-    //update();
+    return PresetSound.wave_type;
 }
 
-/*
-void MWSoundPreset::paintEvent(QPaintEvent *)
+int MWSoundPreset::attack()
 {
-    QPainter painter(this);
+    return PresetSound.attack;
+}
 
-    int xr=width()/8;
-    int h=height()-2*xr;
+int MWSoundPreset::decay()
+{
+    return PresetSound.decay;
+}
 
-    QFont font(font1);
-    font.setPixelSize(fontheight);
-    painter.setFont(font);
+float MWSoundPreset::sustain()
+{
+    return PresetSound.sustain;
+}
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(bgcolor);
+int MWSoundPreset::release()
+{
+    return PresetSound.release;
+}
 
-    QPen pen1 = QPen(fgcolor);
-    QPen pen2 = QPen(highlightcolor);
-    pen1.setWidth(2);
-    pen2.setWidth(2);
+float MWSoundPreset::cutoff()
+{
+    return PresetSound.filter_cutoff;
+}
 
-    painter.drawRect(0,0,width(),height());
-    if(isSelected()) {
-        painter.setPen(pen2);
-    } else {
-        painter.setPen(pen1);
+float MWSoundPreset::resonance()
+{
+    return PresetSound.filter_resonance;
+}
+
+float MWSoundPreset::mod_cutoff()
+{
+    return PresetSound.mod_filter_cutoff;
+}
+
+float MWSoundPreset::mod_resonance()
+{
+    return PresetSound.mod_filter_resonance;
+}
+
+float MWSoundPreset::volume()
+{
+    return PresetSound.volume;
+}
+
+void MWSoundPreset::onPressed()
+{
+    pressed++;
+    if(overwrite) {
+        PresetSound.volume=Sound.volume;
+        PresetSound.wave_type=Sound.wave_type;
+        PresetSound.attack=Sound.attack;
+        PresetSound.decay=Sound.decay;
+        PresetSound.sustain=Sound.sustain;
+        PresetSound.release=Sound.release;
+        PresetSound.filter_cutoff=Sound.filter_cutoff;
+        PresetSound.filter_resonance=Sound.filter_resonance;
+        PresetSound.mod_filter_cutoff=Sound.mod_filter_cutoff;
+        PresetSound.mod_filter_resonance=Sound.mod_filter_resonance;
+
+        emit presetChanged();
+        emit selectedChanged();
     }
-
-    switch(PresetSound.wave_type) {
-    case 0:
-        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"SQR");
-        break;
-    case 1:
-        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"SAW");
-        break;
-    case 2:
-        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"SIN");
-        break;
-    case 3:
-        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"TRI");
-        break;
-    default:
-        painter.drawText(xr,xr,xr*3,height(),Qt::AlignLeft|Qt::AlignVCenter,"RND");
-        break;
+    else {
+        emit setSound(&PresetSound);
     }
+}
 
-    int xenv = xr*4;
-    int xdiff=xr*PresetSound.attack/1000;
-    painter.drawLine(xenv,xr+h,xenv+xdiff,xr);
-
-    xenv+=xdiff;
-    xdiff=xr*PresetSound.decay/1000;
-    int ydiff=h-PresetSound.sustain*h/1000;
-    painter.drawLine(xenv,xr,xenv+xdiff,xr+ydiff);
-
-    xenv+=xdiff;
-    painter.drawLine(xenv,xr+ydiff,xenv+xr,xr+ydiff);
-
-    xenv+=xr;
-    xdiff=xr*PresetSound.release/1000;
-    painter.drawLine(xenv,xr+ydiff,xenv+xdiff,xr+h);
+void MWSoundPreset::onPressAndHold()
+{
 
 }
 
-void MWSoundPreset::resizeEvent(QResizeEvent *)
+void MWSoundPreset::onCanceled()
 {
-    fontheight=height()/8;
+
 }
-*/
+
+void MWSoundPreset::onReleased()
+{
+    pressed--;
+}
 
 void MWSoundPreset::initialSet()
 {
     emit setSound(&PresetSound);
+}
+
+void MWSoundPreset::onSoundChanged()
+{
+    emit selectedChanged();
 }
 
 bool MWSoundPreset::isSelected() {
