@@ -89,6 +89,10 @@ class wlayout : public QObject
 
     Q_PROPERTY(QObject* confChannelFader MEMBER faderChannel CONSTANT)
 
+    Q_PROPERTY(QObject* showPresets MEMBER showPresets CONSTANT)
+    Q_PROPERTY(QObject* showMenu MEMBER showMenu CONSTANT)
+    Q_PROPERTY(bool menuVisible MEMBER _menuVisible NOTIFY layoutChange)
+
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
     Q_PROPERTY(bool dialogPresetsVisible MEMBER _dialogPresetsVisible NOTIFY layoutChange)
 
@@ -159,9 +163,6 @@ private:
     QList<QObject * > _synthPresets;
     QList<QObject * > _tunePresets;
 
-    bool presetsVisible;
-    bool headerVisible;
-
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;
     MWFaderParamCtl * faderChannel;
@@ -176,8 +177,12 @@ private:
     MWHeaderSetter * openScalesArchive;
     MWHeaderSetter * holdMode;
     MWHeaderSetter * showFreqs;
+    MWHeaderSetter * showPresets;
+    MWHeaderSetter * showMenu;
 
     // layout
+    bool presetsVisible;
+    bool _menuVisible;
     bool _rootNoteSetterVisible;
     bool _bScaleSwitchVisible;
     bool _octaveRangerVisible;

@@ -82,7 +82,7 @@ void MWHeaderSetter::setText() {
         _text="BW";
         break;
     case 12:
-        _text="overwrite";
+        _text="P";
         break;
     case 13:
         _text="archive";
@@ -181,10 +181,7 @@ void MWHeaderSetter::onPressed(int id)
             emit toggleBW();
             break;
         case 12:
-            /*
-            overwrite=!overwrite;
-            _state = overwrite;
-            */
+            emit togglePresets();
             break;
         case 13:
             link ="http://scales.misuco.org/";

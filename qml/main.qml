@@ -71,9 +71,10 @@ Window {
 
     Menu {
         id: menuRow
+        visible: layout.menuVisible
         anchors.top: octaveRangerRow.bottom
         width: parent.width
-        height: buttonSize
+        height: layout.menuVisible ? buttonSize : 0
     }
 
     PlayArea {
@@ -111,6 +112,32 @@ Window {
         anchors.bottom: parent.bottom
         anchors.left: scalePresetCol.right
         width: layout.confAreaVisible ? 6 * buttonSize : 0
+    }
+
+    Loader {
+        id: showFreqsButton
+        anchors {
+            top: playAreaRow.top
+            left: playAreaRow.left
+        }
+        width: buttonSize
+        height: buttonSize
+
+        property var modelData: layout.showPresets
+        source: "Button.qml"
+    }
+
+    Loader {
+        id: showMenuButton
+        anchors {
+            top: playAreaRow.top
+            right: parent.right
+        }
+        width: buttonSize
+        height: buttonSize
+
+        property var modelData: layout.showMenu
+        source: "Button.qml"
     }
 
     DialogPreset {

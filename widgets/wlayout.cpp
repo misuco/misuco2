@@ -28,13 +28,13 @@
 wlayout::wlayout(QWidget *parent) : QObject(parent)
 {
     presetsVisible=false;
-    headerVisible=false;
+    _menuVisible=false;
     _rootNoteSetterVisible=true;
     _bScaleSwitchVisible=false;
     _octaveRangerVisible=false;
     _playAreaVisible=true;
     _tuneAreaVisible=false;
-    _scalePresetsVisible=true;
+    _scalePresetsVisible=false;
     _synthPresetsVisible=false;
     _tunePresetsVisible=false;
     _dialogPresetsVisible=false;
@@ -146,6 +146,12 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     enableSupercollider = new MWHeaderSetter(20,this);
     connect(enableSupercollider,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+
+    showPresets = new MWHeaderSetter(12,this);
+    connect(showPresets,SIGNAL(togglePresets()),this,SLOT(togglePresets()));
+
+    showMenu = new MWHeaderSetter(10,this);
+    connect(showMenu,SIGNAL(toggleMenu()),this,SLOT(toggleMenu()));
 
     holdMode = new MWHeaderSetter(21,this);
 
@@ -337,17 +343,17 @@ void wlayout::currentMainView(int id)
     switch(id) {
     case 0:
         _playAreaVisible=true;
-        _scalePresetsVisible=true;
+        if(presetsVisible) _scalePresetsVisible=true;
         if(playAreaButton) playAreaButton->setState(6,1);
         break;
     case 1:
         _tuneAreaVisible=true;
-        _tunePresetsVisible=true;
+        if(presetsVisible) _tunePresetsVisible=true;
         if(tuneAreaButton) tuneAreaButton->setState(7,1);
         break;
     case 2:
         _synthAreaVisible=true;
-        _synthPresetsVisible=true;
+        if(presetsVisible) _synthPresetsVisible=true;
         if(synthAreaButton) synthAreaButton->setState(8,1);
         break;
     case 3:
@@ -359,15 +365,30 @@ void wlayout::currentMainView(int id)
 }
 
 void wlayout::togglePresets()
-{
+{    
     presetsVisible=!presetsVisible;
-    //recalcMainView();
+    if(presetsVisible) {
+        if(_playAreaVisible) {
+            _scalePresetsVisible = true;
+        }
+        if(_synthAreaVisible) {
+            _synthPresetsVisible = true;
+        }
+        if(_tuneAreaVisible) {
+            _tunePresetsVisible = true;
+        }
+    } else {
+        _scalePresetsVisible = false;
+        _synthPresetsVisible = false;
+        _tunePresetsVisible = false;
+    }
+    emit layoutChange();
 }
 
 void wlayout::toggleMenu()
 {
-    headerVisible=!headerVisible;
-    //recalcMainView();
+    _menuVisible=!_menuVisible;
+    emit layoutChange();
 }
 
 void wlayout::onSetRootNote(Pitch *p)
