@@ -34,8 +34,7 @@ MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
     setMaxValue(100);
     fineness=5;
     height=500;
-    knobSize=50; // TODO height()/8;
-
+    knobSize=height/8;
     calcGeo();
 }
 
@@ -50,11 +49,14 @@ void MWFadder::onPressed(int id, int x, int y, int h)
         valTouchBegin=value;
 
         float yRelative1 = (float)(y-knobSize) / (float)(height-knobSize);
-        float yRelative2 = (float)y / (float)(height-knobSize);
-        if(yRelative1<=_faderY && yRelative2>=_faderY) {
+        float yRelative2 = (float)(y) / (float)(height-knobSize);
+        bool fineModeAvailable = (float)valRange/(float)(height-knobSize) > 1.0/(float)fineness;
+        if((_faderY >= yRelative1 && _faderY <= yRelative2) || !fineModeAvailable) {
             fadeMode=coarse;
+            qDebug() << "coarse fade";
         } else {
             fadeMode=fine;
+            qDebug() << "fine fade";
         }
         emit valueChange(valueDisplay);
     }
@@ -68,7 +70,7 @@ void MWFadder::onUpdated(int id, int y, int h)
     if(id==pressedTouchId) {
         if(vertical==orient) {
             if(coarse==fadeMode) {
-                value=valTouchBegin+(y-yTouchBegin)*valRange/(height-2*knobSize);
+                value=valTouchBegin+(y-yTouchBegin)*valRange/(height-knobSize);
             } else {
                 value=valTouchBegin+(y-yTouchBegin)/fineness;
             }

@@ -12,7 +12,7 @@ Window {
     property int faderRadius: buttonSize/2
     property int buttonRadius: buttonSize/5
     property int borderWidth: 3
-    property color borderColor: "#333333"
+    property color borderColor: "#003300"
 
     property int columnWidth: width/4;
 
