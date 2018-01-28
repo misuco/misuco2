@@ -87,6 +87,11 @@ void MWRootNoteSetter::onScaleSet(MWScale * scale)
     }
 }
 
+void MWRootNoteSetter::onSymbolsChanged()
+{
+    calcText();
+}
+
 void MWRootNoteSetter::calcText()
 {
     _text1 = _freq->getRootNoteString(noteSymbols);

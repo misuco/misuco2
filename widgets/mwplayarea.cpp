@@ -752,7 +752,12 @@ QList<QObject *> MWPlayArea::row2()
 }
 
 
-void MWPlayArea::onscaleupdate()
+void MWPlayArea::onToggleBW()
 {
-    //update();
+    config();
+}
+
+void MWPlayArea::onSymbolsChanged()
+{
+    config();
 }

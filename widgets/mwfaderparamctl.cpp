@@ -26,10 +26,10 @@ MWFaderParamCtl::MWFaderParamCtl(QObject *parent, int cc) : MWFadder(parent), cc
 {
     switch(cc) {
     case 1:
-        _text2="bend\ntop";
+        _text2="top";
         break;
     case 2:
-        _text2="bend\nbot";
+        _text2="bot";
         break;
     case 3:
         _text2="channel";

@@ -29,11 +29,11 @@ Window {
 
     ScalePresetScroll {
         id: scalePresetCol
-        visible: layout.scalePresetsVisible
+        visible: layout.scalePresetsVisible && !layout.confAreaVisible
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: columnWidth
+        width: layout.confAreaVisible ? 0 : columnWidth
     }
 
     RootNoteSetter {
@@ -69,12 +69,12 @@ Window {
 
     PlayArea {
         id: playAreaRow
-        visible: layout.playAreaVisible
+        visible: layout.playAreaVisible || layout.confAreaVisible
         controller: layout.playArea
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: scalePresetCol.right
-        anchors.right: parent.right
+        anchors.left: confAreaRow.right
+        width: parent.width
     }
 
     TuneArea {
@@ -94,4 +94,14 @@ Window {
         anchors.left: scalePresetCol.right
         anchors.right: parent.right
     }
+
+    ConfArea {
+        id: confAreaRow
+        visible: layout.confAreaVisible
+        anchors.top: menuRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: scalePresetCol.right
+        width: layout.confAreaVisible ? 6 * buttonSize : 0
+    }
+
 }

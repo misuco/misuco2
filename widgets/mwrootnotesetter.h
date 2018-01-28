@@ -51,6 +51,7 @@ public slots:
     void pitchChange();
     void onSetRootNote(Pitch *pitch);
     void onScaleSet(MWScale*scale);
+    void onSymbolsChanged();
 
 signals:
     void setRootNote(Pitch *);

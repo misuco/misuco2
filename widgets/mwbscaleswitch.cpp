@@ -122,3 +122,8 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
     }
     setRootNote(scale->rootNote);
 }
+
+void MWBScaleSwitch::onSymbolsChanged()
+{
+    calcText();
+}

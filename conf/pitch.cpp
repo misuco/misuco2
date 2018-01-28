@@ -70,11 +70,16 @@ void Pitch::calcColor()
     }
 
     emit colorChanged();
-    emit pitchChanged();
 }
 
 void Pitch::setPitch(int value)
 {
     _pitch = value;
+    emit pitchChanged();
+    calcColor();
+}
+
+void Pitch::bwModeChanged()
+{
     calcColor();
 }

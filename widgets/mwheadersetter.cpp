@@ -53,7 +53,7 @@ void MWHeaderSetter::setText() {
         _text="octave";
         break;
     case 3:
-        _text="bend horizontal";
+        _text="horizontal";
         break;
     case 4:
         _text="bend top";
@@ -79,7 +79,7 @@ void MWHeaderSetter::setText() {
         _text="menu";
         break;
     case 11:
-        _text="bwmode";
+        _text="BW";
         break;
     case 12:
         _text="overwrite";
@@ -91,10 +91,10 @@ void MWHeaderSetter::setText() {
         _text="symbols";
         break;
     case 15:
-        _text="bend\nhorizontal";
+        _text="horizontal";
         break;
     case 16:
-        _text="send cc1";
+        _text="CC1";
         break;
     case 17:
         _text="mobile\nsynth";
@@ -222,6 +222,7 @@ void MWHeaderSetter::onPressed(int id)
         case 22:
             showFreqs=!showFreqs;
             _state = showFreqs;
+            emit toggleShowFreqs();
             break;
         }
         _pressed++;

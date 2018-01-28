@@ -79,7 +79,8 @@ public slots:
     void setBendVertTop(int b);
     void setBendVertBot(int b);
     //void pitchChange();
-    void onscaleupdate();
+    void onToggleBW();
+    void onSymbolsChanged();
 
 signals:
     // QML

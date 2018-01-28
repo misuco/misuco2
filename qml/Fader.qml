@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Item {
-    property var knobSize: height/8
+    property int knobSize: buttonSize
 
     Text {
         id: faderValueText

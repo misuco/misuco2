@@ -69,6 +69,20 @@ class wlayout : public QObject
     Q_PROPERTY(QList<QObject*> synthArea MEMBER _faderParamCtl CONSTANT)
     Q_PROPERTY(bool synthAreaVisible MEMBER _synthAreaVisible NOTIFY layoutChange)
 
+    Q_PROPERTY(QList<QObject*> confPitchFaders READ confPitchFaders CONSTANT)
+    Q_PROPERTY(QObject* confPitchHorizButton MEMBER pitchHorizontal CONSTANT)
+
+    Q_PROPERTY(QObject* confSymbolFader MEMBER faderSymbols CONSTANT)
+    Q_PROPERTY(QObject* confBWModeButton MEMBER bwMode CONSTANT)
+    Q_PROPERTY(QObject* confShowFreqsButton MEMBER showFreqs CONSTANT)
+    Q_PROPERTY(QObject* confCC1Button MEMBER enableCc1 CONSTANT)
+    Q_PROPERTY(QObject* confSendMobile MEMBER enableMobilesynth CONSTANT)
+    Q_PROPERTY(QObject* confSendPuredata MEMBER enablePuredata CONSTANT)
+    Q_PROPERTY(QObject* confSendReaktor MEMBER enableReaktor CONSTANT)
+    Q_PROPERTY(QObject* confSendSupercollider MEMBER enableSupercollider CONSTANT)
+
+    Q_PROPERTY(QObject* confChannelFader MEMBER faderChannel CONSTANT)
+
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
@@ -78,6 +92,7 @@ public:
     ~wlayout();
 
     QList<QObject*> pitches();
+    QList<QObject*> confPitchFaders();
 
 signals:
     void setRootNote(Pitch * p);
@@ -85,6 +100,7 @@ signals:
     void scaleupdate();
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
+    void symbolsChanged();
 
     // QML
     void layoutChange();
@@ -94,12 +110,9 @@ private slots:
     void currentMainView(int id);
     void togglePresets();
     void toggleMenu();
-    void toggleBW();
     void onSetRootNote(Pitch * p);
     void setSound(MWSound * s);
     void setMicrotune(MWMicrotune*m);
-    void onscaleupdate();
-    void onSoundSustainUpdate(int);
     void onChannelChange(int v);
     void onToggleSender(int v);
     void onSymbolsChange(int v);

@@ -11,6 +11,9 @@ Item {
     property int playFieldWidth: root.width/controller.cols
     property int playFieldHeight: root.height/controller.rows
 
+    property int fontSizeL: playFieldWidth>playFieldHeight ? playFieldHeight/2 :  playFieldWidth/2
+    property int fontSizeM: playFieldWidth>playFieldHeight ? playFieldHeight/4 :  playFieldWidth/4
+
     MultiPointTouchArea {
         anchors.fill: parent
 

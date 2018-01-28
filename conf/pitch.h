@@ -47,6 +47,7 @@ signals:
 
 public slots:
     void setPitch(int value);
+    void bwModeChanged();
 
 private:
     int _rootNote;

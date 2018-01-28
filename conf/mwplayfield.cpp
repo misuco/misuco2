@@ -71,6 +71,14 @@ void MWPlayfield::calcColor()
     text1="";
     text2=f1->getRootNoteString(MisuWidget::noteSymbols);
     text3="";
+    if(MisuWidget::showFreqs) {
+        text1.sprintf("%4.1f",f1->getFreq());
+        text3.sprintf("%d",f1->getOct());
+        if(type==1 || type==2) {
+            text1.sprintf("%4.1f",f1->getFreq());
+            text3.sprintf("%4.1f",f2->getFreq());
+        }
+    }
 
     emit textChanged();
 

@@ -25,8 +25,6 @@
 #include <QStackedWidget>
 #include <QStandardPaths>
 
-//#include <conf/color.h>
-
 wlayout::wlayout(QWidget *parent) : QObject(parent)
 {
     presetsVisible=false;
@@ -87,8 +85,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         _faderMicrotune.append(fader);
     }
 
-    //Color * synthCtlColor=new Pitch(1,this);
-
     for(int i=0;i<10;i++) {
         MWFaderParamCtl * fader = new MWFaderParamCtl(this,i+102);
         fader->setOut(out);
@@ -100,14 +96,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         }
         fader->setInverted(true);
 
-        // update fadders on sustain update
-        if(i==3) {
-            connect(fader,SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
-        }
-        // update fadders on filter res update
-        if(i==6) {
-            connect(fader,SIGNAL(valueChange(int)),this,SLOT(onSoundSustainUpdate(int)));
-        }
         _faderParamCtl.append(fader);
 
     }
@@ -139,7 +127,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     MisuWidget::sendCC1 = true;
 
     bwMode = new MWHeaderSetter(11,this);
-    connect(bwMode,SIGNAL(toggleBW()),this,SLOT(toggleBW()));
+    connect(bwMode,SIGNAL(toggleBW()),_PlayArea,SLOT(onToggleBW()));
+    for(int i=0;i<BSCALE_SIZE+1;i++) {
+        connect(bwMode,SIGNAL(toggleBW()),MisuWidget::MWPitch[i],SLOT(bwModeChanged()));
+    }
 
     enableMobilesynth = new MWHeaderSetter(17,1,this);
     connect(enableMobilesynth,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
@@ -163,6 +154,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
         connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
+        connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
         connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
@@ -173,6 +165,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         bs->setOut(out);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
+        connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
         for(int j=0;j<12;j++) {
             connect(_rootNoteSetter[j],SIGNAL(setRootNote(Pitch *)),bs,SLOT(setRootNote(Pitch *)));
         }
@@ -187,7 +180,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
-    connect(this,SIGNAL(scaleupdate()),_PlayArea,SLOT(onscaleupdate()));
+    connect(this,SIGNAL(symbolsChanged()),_PlayArea,SLOT(onSymbolsChanged()));
 
     showFreqs = new MWHeaderSetter(22,this);
     connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
@@ -220,7 +213,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     for(auto presetButton:_scalePresets) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
-        connect(presetButton,SIGNAL(scaleupdate()),this,SLOT(onscaleupdate()));
         connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
             connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[j],SLOT(onScaleSet(MWScale*)));
@@ -252,6 +244,14 @@ QList<QObject *> wlayout::pitches()
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         p.append(MisuWidget::MWPitch[i]);
     }
+    return p;
+}
+
+QList<QObject *> wlayout::confPitchFaders()
+{
+    QList<QObject*> p;
+    p.append(faderPitchTopRange);
+    p.append(faderPitchBottomRange);
     return p;
 }
 
@@ -294,14 +294,17 @@ void wlayout::currentMainView(int id)
     MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
     MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
     MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
+    MWHeaderSetter * confAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[6]);
 
     _playAreaVisible=false;
     _tuneAreaVisible=false;
     _synthAreaVisible=false;
+    _confAreaVisible=false;
 
     if(playAreaButton) playAreaButton->setState(6,0);
     if(tuneAreaButton) tuneAreaButton->setState(7,0);
     if(synthAreaButton) synthAreaButton->setState(8,0);
+    if(confAreaButton) confAreaButton->setState(9,0);
 
     switch(id) {
     case 0:
@@ -315,6 +318,10 @@ void wlayout::currentMainView(int id)
     case 2:
         _synthAreaVisible=true;
         if(synthAreaButton) synthAreaButton->setState(8,1);
+        break;
+    case 3:
+        _confAreaVisible=true;
+        if(confAreaButton) confAreaButton->setState(9,1);
         break;
     }
     emit layoutChange();
@@ -330,20 +337,6 @@ void wlayout::toggleMenu()
 {
     headerVisible=!headerVisible;
     //recalcMainView();
-}
-
-void wlayout::toggleBW()
-{
-    /*
-    for(auto widget:scalePresets) {
-        widget->//update();
-    }
-
-    for(int i=0;i<3;i++) {
-        H[i]->//update();
-        M[i]->//update();
-    }
-    */
 }
 
 void wlayout::onSetRootNote(Pitch *p)
@@ -407,30 +400,6 @@ void wlayout::setMicrotune(MWMicrotune * m)
         auto p = qobject_cast<MWFaderPitch*>(_faderMicrotune[i]);
         if(p) p->setValue(m->tuning[i]);
     }
-    /*
-    M[0]->//update();
-    for(auto widget:microtunePresets) {
-        widget->//update();
-    }
-    */
-}
-
-void wlayout::onscaleupdate()
-{
-    /*
-    for(auto widget:scalePresets) {
-        widget->//update();
-    }
-    */
-}
-
-void wlayout::onSoundSustainUpdate(int)
-{
-    /*
-    faderParamCtl[2]->//update();
-    faderParamCtl[4]->//update();
-    faderParamCtl[5]->//update();
-    */
 }
 
 void wlayout::onChannelChange(int v)
@@ -447,12 +416,12 @@ void wlayout::onToggleSender(int v)
 void wlayout::onSymbolsChange(int v)
 {
     MisuWidget::noteSymbols = v;
-    emit scaleupdate();
+    emit symbolsChanged();
 }
 
 void wlayout::onShowFreqsChange()
 {
-    emit scaleupdate();
+    emit symbolsChanged();
 }
 
 void wlayout::readXml(QString filename)

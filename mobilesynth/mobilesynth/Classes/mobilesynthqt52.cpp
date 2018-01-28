@@ -31,8 +31,8 @@ mobileSynthQT52::mobileSynthQT52()
     ,   m_device(QAudioDeviceInfo::defaultOutputDevice())
 
 {
-    //DataSampleRateHz  = 44100;
-    DataSampleRateHz  = 48000;
+    DataSampleRateHz  = 44100;
+    //DataSampleRateHz  = 48000;
     //BufferSize        = 4096;
     BufferSize        = 16384;
 

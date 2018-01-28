@@ -15,5 +15,7 @@
         <file>qml/ScalePresetScroll.qml</file>
         <file>qml/Fader.qml</file>
         <file>qml/SynthArea.qml</file>
+        <file>qml/ConfArea.qml</file>
+        <file>qml/Button.qml</file>
     </qresource>
 </RCC>

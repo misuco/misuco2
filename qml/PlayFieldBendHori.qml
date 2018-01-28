@@ -14,7 +14,7 @@ Item {
         Text {
             anchors.fill: parent
             text: modelData.text1
-            font.pixelSize: fontSize1
+            font.pixelSize: fontSizeM
             color: modelData.colorF1
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignTop
@@ -24,7 +24,16 @@ Item {
             anchors.fill: parent
             text: modelData.text2
             color: modelData.fontColor
-            font.pixelSize: fontSize1
+            font.pixelSize: fontSizeL
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        Text {
+            anchors.fill: parent
+            text: modelData.text3
+            color: modelData.fontColor
+            font.pixelSize: fontSizeM
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignBottom
         }

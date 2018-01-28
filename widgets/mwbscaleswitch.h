@@ -57,6 +57,7 @@ public slots:
     void setRootNote(Pitch * p);
     void setOctMid(int o);
     void onScaleSet(MWScale*);
+    void onSymbolsChanged();
 
 private:
     ISender * _out;
