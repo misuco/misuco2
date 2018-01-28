@@ -56,6 +56,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confPitchHorizButton
+            property bool transparent: false
             source: "Button.qml"
         }
 
@@ -110,6 +111,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confShowFreqsButton
+            property bool transparent: false
             source: "Button.qml"
         }
 
@@ -122,6 +124,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confBWModeButton
+            property bool transparent: false
             source: "Button.qml"
         }
     }
@@ -174,6 +177,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confCC1Button
+            property bool transparent: false
             source: "Button.qml"
         }
 
@@ -187,6 +191,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confSendMobile
+            property bool transparent: false
             source: "Button.qml"
         }
 
@@ -200,6 +205,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confSendPuredata
+            property bool transparent: false
             source: "Button.qml"
         }
 
@@ -213,6 +219,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confSendReaktor
+            property bool transparent: false
             source: "Button.qml"
         }
 
@@ -226,6 +233,7 @@ Item {
             height: buttonSize
 
             property var modelData: layout.confSendSupercollider
+            property bool transparent: false
             source: "Button.qml"
         }
     }

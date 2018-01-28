@@ -39,6 +39,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _tunePresetsVisible=false;
     _dialogPresetsVisible=false;
 
+    _botOct=4;
+    _topOct=5;
+
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
         configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
@@ -76,6 +79,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     _OctaveRanger = new MWOctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
+    connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWFaderPitch * fader = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
@@ -152,6 +156,12 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     showMenu = new MWHeaderSetter(10,this);
     connect(showMenu,SIGNAL(toggleMenu()),this,SLOT(toggleMenu()));
+
+    octUp = new MWHeaderSetter(23,this);
+    connect(octUp,SIGNAL(octUp()),_OctaveRanger,SLOT(octUp()));
+
+    octDown = new MWHeaderSetter(24,this);
+    connect(octDown,SIGNAL(octDown()),_OctaveRanger,SLOT(octDown()));
 
     holdMode = new MWHeaderSetter(21,this);
 
@@ -500,6 +510,13 @@ void wlayout::onEditPreset()
 {
     _dialogPresetsVisible = true;
     emit layoutChange();
+}
+
+void wlayout::setOctConf(int bot, int top)
+{
+    _botOct = bot;
+    _topOct = top;
+    emit octConfChanged();
 }
 
 void wlayout::readXml(QString filename)

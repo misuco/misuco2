@@ -114,6 +114,12 @@ void MWHeaderSetter::setText() {
     case 22:
         _text="freqs";
         break;
+    case 23:
+        _text="up";
+        break;
+    case 24:
+        _text="down";
+        break;
     }
 }
 
@@ -222,6 +228,12 @@ void MWHeaderSetter::onPressed(int id)
             showFreqs=!showFreqs;
             _state = showFreqs;
             emit toggleShowFreqs();
+            break;
+        case 23:
+            emit octUp();
+            break;
+        case 24:
+            emit octDown();
             break;
         }
         _pressed++;

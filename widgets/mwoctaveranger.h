@@ -48,6 +48,10 @@ signals:
     void bottomChanged();
     void topChanged();
 
+public slots:
+    void octUp();
+    void octDown();
+
 private:
     int top;
     int mid;

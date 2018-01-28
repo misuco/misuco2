@@ -93,10 +93,17 @@ class wlayout : public QObject
     Q_PROPERTY(QObject* showMenu MEMBER showMenu CONSTANT)
     Q_PROPERTY(bool menuVisible MEMBER _menuVisible NOTIFY layoutChange)
 
+    Q_PROPERTY(QObject* octUp MEMBER octUp CONSTANT)
+    Q_PROPERTY(QObject* octDown MEMBER octDown CONSTANT)
+    Q_PROPERTY(int topOct MEMBER _topOct NOTIFY octConfChanged)
+    Q_PROPERTY(int botOct MEMBER _botOct NOTIFY octConfChanged)
+
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
     Q_PROPERTY(bool dialogPresetsVisible MEMBER _dialogPresetsVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
+
+
 
 public:
     explicit wlayout(QWidget *parent = 0);
@@ -119,6 +126,7 @@ signals:
 
     // QML
     void layoutChange();
+    void octConfChanged();
 
 private slots:    
     void currentHeader(int id);
@@ -135,6 +143,7 @@ private slots:
     void onSoundChanged(int);
 
     void onEditPreset();
+    void setOctConf(int bot, int top);
 
 private:
     QGridLayout * layout;
@@ -179,6 +188,8 @@ private:
     MWHeaderSetter * showFreqs;
     MWHeaderSetter * showPresets;
     MWHeaderSetter * showMenu;
+    MWHeaderSetter * octUp;
+    MWHeaderSetter * octDown;
 
     // layout
     bool presetsVisible;
@@ -195,6 +206,9 @@ private:
     bool _tunePresetsVisible;
 
     bool _dialogPresetsVisible;
+
+    int _botOct;
+    int _topOct;
 
     QString configPath;
 

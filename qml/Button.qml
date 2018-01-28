@@ -1,9 +1,11 @@
 import QtQuick 2.0
 
 Item {
+
     Rectangle {
         anchors.fill: parent
-        color: modelData.selected ? hlColor : llColor;
+        color: transparent ? "Transparent" :
+            modelData.selected ? hlColor : llColor;
 
         radius: buttonRadius
         border.width: borderWidth
@@ -15,7 +17,7 @@ Item {
             font.pixelSize: fontSize2
             color: fgColor
             horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignTop
+            verticalAlignment: Text.AlignVCenter
         }
 
         MultiPointTouchArea {

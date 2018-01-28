@@ -56,6 +56,8 @@ signals:
     void scaleupdate();
     void toggleSender(int i);
     void toggleShowFreqs();
+    void octUp();
+    void octDown();
 
     // QML
     void selectedChanged();

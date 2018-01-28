@@ -100,3 +100,29 @@ void MWOctaveRanger::onResize(int w)
 {
     segwidth = w / noct;
 }
+
+void MWOctaveRanger::octUp()
+{
+    if(top<9) {
+        top++;
+        mid++;
+        bottom++;
+        emit setOctConf(bottom,top);
+        emit setOctMid(mid);
+        emit topChanged();
+        emit bottomChanged();
+    }
+}
+
+void MWOctaveRanger::octDown()
+{
+    if(bottom>0) {
+        top--;
+        mid--;
+        bottom--;
+        emit setOctConf(bottom,top);
+        emit setOctMid(mid);
+        emit topChanged();
+        emit bottomChanged();
+    }
+}

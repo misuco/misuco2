@@ -14,7 +14,7 @@ Window {
     property int borderWidth: 3
     property color borderColor: "#333333"
 
-    property int columnWidth: width/4;
+    property int columnWidth: width/6;
 
     property color llColor: "#000000"
     property color bgColor: "#333333"
@@ -115,7 +115,7 @@ Window {
     }
 
     Loader {
-        id: showFreqsButton
+        id: showPresetsButton
         anchors {
             top: playAreaRow.top
             left: playAreaRow.left
@@ -124,6 +124,7 @@ Window {
         height: buttonSize
 
         property var modelData: layout.showPresets
+        property bool transparent: true
         source: "Button.qml"
     }
 
@@ -137,6 +138,38 @@ Window {
         height: buttonSize
 
         property var modelData: layout.showMenu
+        property bool transparent: true
+        source: "Button.qml"
+    }
+
+    Loader {
+        id: octDown
+        visible: layout.playAreaVisible && layout.botOct > 0
+        anchors {
+            bottom: playAreaRow.bottom
+            left: playAreaRow.left
+        }
+        width: buttonSize
+        height: buttonSize
+
+        property var modelData: layout.octDown
+        property bool transparent: true
+        source: "Button.qml"
+    }
+
+
+    Loader {
+        id: octUp
+        visible: layout.playAreaVisible && layout.topOct < 9
+        anchors {
+            bottom: playAreaRow.bottom
+            right: parent.right
+        }
+        width: buttonSize
+        height: buttonSize
+
+        property var modelData: layout.octUp
+        property bool transparent: true
         source: "Button.qml"
     }
 
