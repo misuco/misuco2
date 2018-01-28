@@ -14,7 +14,7 @@ Window {
     property int borderWidth: 3
     property color borderColor: "#333333"
 
-    property int columnWidth: width/6;
+    property int columnWidth: width/8;
 
     property color llColor: "#000000"
     property color bgColor: "#333333"
@@ -84,7 +84,8 @@ Window {
         anchors.top: menuRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: confAreaRow.right
-        width: parent.width
+        width: layout.scalePresetsVisible ? parent.width - columnWidth : parent.width
+        //width: parent.width - columnWidth
     }
 
     TuneArea {
@@ -116,6 +117,7 @@ Window {
 
     Loader {
         id: showPresetsButton
+        visible: layout.playAreaVisible
         anchors {
             top: playAreaRow.top
             left: playAreaRow.left
@@ -130,6 +132,7 @@ Window {
 
     Loader {
         id: showMenuButton
+        visible: layout.playAreaVisible
         anchors {
             top: playAreaRow.top
             right: parent.right

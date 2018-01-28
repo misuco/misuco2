@@ -32,7 +32,7 @@ Item {
                 color: "Transparent"
                 width: columnWidth
                 height: buttonSize
-                radius: buttonRadius
+                //radius: buttonRadius
                 border.width: borderWidth
                 border.color: borderColor
 

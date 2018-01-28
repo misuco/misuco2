@@ -82,7 +82,7 @@ void MWHeaderSetter::setText() {
         _text="BW";
         break;
     case 12:
-        _text="P";
+        _text="memo";
         break;
     case 13:
         _text="archive";

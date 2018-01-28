@@ -381,7 +381,7 @@ void wlayout::currentMainView(int id)
         break;
     case 2:
         _synthAreaVisible=true;
-        if(presetsVisible) _synthPresetsVisible=true;
+        _synthPresetsVisible=true;
         if(synthAreaButton) synthAreaButton->setState(8,1);
         break;
     case 3:
