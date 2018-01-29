@@ -192,7 +192,6 @@ private:
     MWHeaderSetter * octDown;
 
     // layout
-    bool presetsVisible;
     bool _menuVisible;
     bool _rootNoteSetterVisible;
     bool _bScaleSwitchVisible;
@@ -201,6 +200,7 @@ private:
     bool _tuneAreaVisible;
     bool _synthAreaVisible;
     bool _confAreaVisible;
+    bool _presetsVisible;
     bool _scalePresetsVisible;
     bool _synthPresetsVisible;
     bool _tunePresetsVisible;
