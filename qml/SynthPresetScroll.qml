@@ -18,7 +18,7 @@ Item {
                 height: buttonSize
                 radius: buttonRadius
                 border.width: borderWidth
-                border.color: borderColor
+                border.color: modelData.selected ? hlColor: borderColor
 
                 Text {
                     id: synthPresetTitle
