@@ -30,7 +30,7 @@ Window {
     ScalePresetScroll {
         id: scalePresetCol
         visible: layout.scalePresetsVisible
-        anchors.top: octaveRangerRow.bottom
+        anchors.top: rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         width: layout.scalePresetsVisible ? columnWidth : 0
@@ -39,7 +39,7 @@ Window {
     SynthPresetScroll {
         id: synthPresetCol
         visible: layout.synthPresetsVisible
-        anchors.top: octaveRangerRow.bottom
+        anchors.top: rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         width: layout.synthPresetsVisible ? columnWidth : 0
@@ -55,27 +55,27 @@ Window {
 
     OctaveRanger {
         id: octaveRangerRow
-        visible: layout.octaveRangerVisible && layout.playAreaVisible
+        visible: layout.octaveRangerVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         controller: layout.octaveRanger
         anchors.top: menuRow.bottom
         width: parent.width
-        height: layout.octaveRangerVisible && layout.playAreaVisible ? buttonSize : 0
+        height: layout.octaveRangerVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
     }
 
     BScaleSwitch {
         id: bScaleSwitchRow
-        visible: layout.bScaleSwitchVisible && layout.playAreaVisible
+        visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         anchors.top: octaveRangerRow.bottom
         width: parent.width
-        height: layout.bScaleSwitchVisible && layout.playAreaVisible ? buttonSize : 0
+        height: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
     }
 
     RootNoteSetter {
         id: rootNoteSetterRow
         anchors.top: bScaleSwitchRow.bottom
-        visible: layout.rootNoteSetterVisible && layout.playAreaVisible
+        visible: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         width: parent.width
-        height: layout.rootNoteSetterVisible && layout.playAreaVisible ? buttonSize : 0
+        height: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
     }
 
     PlayArea {
@@ -91,7 +91,7 @@ Window {
     TuneArea {
         id: tuneAreaRow
         visible: layout.tuneAreaVisible
-        anchors.top: menuRow.bottom
+        anchors.top: rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: scalePresetCol.right
         anchors.right: parent.right
@@ -100,7 +100,7 @@ Window {
     SynthArea {
         id: synthAreaRow
         visible: layout.synthAreaVisible
-        anchors.top: menuRow.bottom
+        anchors.top: rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: synthPresetCol.right
         anchors.right: parent.right

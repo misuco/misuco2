@@ -1,30 +1,37 @@
 import QtQuick 2.0
-import QtQuick.Shapes 1.0
 
 Item {
     property int xStep: width / 8
     property int yStep: height / 8
 
-    Shape {
+    property var bgColorHl: modelData.selected ? hlColor : bgColor
+    property int strokeWidth: 1+height/50
 
+    Rectangle {
         anchors.fill: parent
+        color: bgColorHl
+    }
 
-        ShapePath {
-            strokeWidth: 1+height/50
-            strokeColor: modelData.selected ? hlColor : fgColor
-            fillColor: "Transparent"
+    Canvas {
+        anchors.fill: parent
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.lineWidth = strokeWidth
+            ctx.strokeStyle = fgColor
+            ctx.fillStyle = fgColor
 
-            startX: 0
-            startY: yStep * 4
+            ctx.beginPath()
+            ctx.moveTo(0,yStep * 4)
+            ctx.lineTo(xStep * 1, yStep * 2)
+            ctx.lineTo(xStep * 2, yStep * 7)
+            ctx.lineTo(xStep * 3, yStep * 3)
+            ctx.lineTo(xStep * 4, yStep * 8)
+            ctx.lineTo(xStep * 5, yStep * 1)
+            ctx.lineTo(xStep * 6, yStep * 6)
+            ctx.lineTo(xStep * 7, yStep * 3)
+            ctx.lineTo(xStep * 8, yStep * 4)
 
-            PathLine { x: xStep * 1; y: yStep  *  2}
-            PathLine { x: xStep * 2; y: yStep  *  7}
-            PathLine { x: xStep * 3; y: yStep  *  3}
-            PathLine { x: xStep * 4; y: yStep  *  8}
-            PathLine { x: xStep * 5; y: yStep  *  1}
-            PathLine { x: xStep * 6; y: yStep  *  6}
-            PathLine { x: xStep * 7; y: yStep  *  3}
-            PathLine { x: xStep * 8; y: yStep  *  4}
+            ctx.stroke()
         }
     }
 }

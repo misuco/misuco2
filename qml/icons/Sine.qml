@@ -1,25 +1,32 @@
 import QtQuick 2.0
-import QtQuick.Shapes 1.0
 
 Item {
-    property int xStep: width / 2
+    property int xStep: width / 4
     property int yStep: height / 2
-    property int radius: height / 4
+    property int radius: width / 4
 
-    Shape {
+    property var bgColorHl: modelData.selected ? hlColor : bgColor
+    property int strokeWidth: 1+height/50
 
+    Rectangle {
         anchors.fill: parent
-
-        ShapePath {
-            strokeWidth: 1+height/50
-            strokeColor: modelData.selected ? hlColor : fgColor
-            fillColor: "Transparent"
-
-            startX: 0; startY: yStep
-
-            PathArc { x: xStep; y: yStep; radiusX: radius; radiusY: radius }
-            PathArc { x: xStep*2; y: yStep; radiusX: radius; radiusY: radius; direction: PathArc.Counterclockwise}
-        }
+        color: bgColorHl
     }
 
+    Canvas {
+        anchors.fill: parent
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.lineWidth = strokeWidth
+            ctx.strokeStyle = fgColor
+            ctx.fillStyle = fgColor
+
+            ctx.beginPath()
+            ctx.arc(xStep,yStep,radius,Math.PI,Math.PI*2)
+            ctx.stroke()
+            ctx.beginPath()
+            ctx.arc(3*xStep,yStep,radius,0,Math.PI)
+            ctx.stroke()
+        }
+    }
 }
