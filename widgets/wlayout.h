@@ -213,7 +213,7 @@ private:
     void recalcMainView();
     void readXml(QString filename);
     void writeXml(QString filename);
-    void readLayout();
+    void readLayout(QString version);
     void updateMenuButtonState();
 };
 

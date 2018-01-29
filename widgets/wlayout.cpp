@@ -396,6 +396,7 @@ void wlayout::currentMainView(int id)
     // play area is automatically visible, if no other is visible
     if(!_tuneAreaVisible && !_synthAreaVisible && !_confAreaVisible) {
         _playAreaVisible=true;
+        _synthPresetsVisible=false;
         if(_presetsVisible) _scalePresetsVisible=true;
     }
 
@@ -552,10 +553,11 @@ void wlayout::readXml(QString filename)
     xmlr.setDevice(&file);
     if (xmlr.readNextStartElement()) {
         //qDebug() << " xmlr.name() " << xmlr.name();
-        if (xmlr.name() == "misuco" && xmlr.attributes().value("version") == "2.0")
-            readLayout();
-        else
-            xmlr.raiseError(QObject::tr("The file is not a MISUCO version 1.0 file."));
+        if (xmlr.name() == "misuco" )
+            readLayout(xmlr.attributes().value("version").toString());
+        else {
+            return;
+        }
     }
     file.close();
 }
@@ -572,7 +574,7 @@ void wlayout::writeXml(QString filename)
         xml.writeStartDocument();
         xml.writeDTD("<!DOCTYPE misuco>");
         xml.writeStartElement("misuco");
-        xml.writeAttribute("version", "2.0");
+        xml.writeAttribute("version", "2.1");
 
         for(auto widgetQ:_scalePresets) {
 
@@ -697,7 +699,7 @@ void wlayout::writeXml(QString filename)
 
 }
 
-void wlayout::readLayout() {
+void wlayout::readLayout(QString version) {
 
     while (xmlr.readNextStartElement()) {
         //qDebug() << "xmlr row name " << xmlr.name();
@@ -745,17 +747,20 @@ void wlayout::readLayout() {
             connect(microtunePreset,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
             _tunePresets.append(microtunePreset);
         } else if (xmlr.name() == "setup") {
-            _presetsVisible=xmlr.attributes().value("presetsVisible").toInt();
-            _menuVisible=xmlr.attributes().value("menuVisible").toInt();
-            _rootNoteSetterVisible=xmlr.attributes().value("rootNoteSetterVisible").toInt();
-            _bScaleSwitchVisible=xmlr.attributes().value("bScaleSwitchVisible").toInt();
-            _octaveRangerVisible=xmlr.attributes().value("octaveRangerVisible").toInt();
-            _playAreaVisible=xmlr.attributes().value("playAreaVisible").toInt();
-            _tuneAreaVisible=xmlr.attributes().value("tuneAreaVisible").toInt();
-            _scalePresetsVisible=xmlr.attributes().value("scalePresetsVisible").toInt();
-            _synthPresetsVisible=xmlr.attributes().value("synthPresetsVisible").toInt();
-            _tunePresetsVisible=xmlr.attributes().value("tunePresetsVisible").toInt();
-            _dialogPresetsVisible=xmlr.attributes().value("dialogPresetsVisible").toInt();
+
+            if(version != "2.0") {
+                _presetsVisible=xmlr.attributes().value("presetsVisible").toInt();
+                _menuVisible=xmlr.attributes().value("menuVisible").toInt();
+                _rootNoteSetterVisible=xmlr.attributes().value("rootNoteSetterVisible").toInt();
+                _bScaleSwitchVisible=xmlr.attributes().value("bScaleSwitchVisible").toInt();
+                _octaveRangerVisible=xmlr.attributes().value("octaveRangerVisible").toInt();
+                _playAreaVisible=xmlr.attributes().value("playAreaVisible").toInt();
+                _tuneAreaVisible=xmlr.attributes().value("tuneAreaVisible").toInt();
+                _scalePresetsVisible=xmlr.attributes().value("scalePresetsVisible").toInt();
+                _synthPresetsVisible=xmlr.attributes().value("synthPresetsVisible").toInt();
+                _tunePresetsVisible=xmlr.attributes().value("tunePresetsVisible").toInt();
+                _dialogPresetsVisible=xmlr.attributes().value("dialogPresetsVisible").toInt();
+            }
 
             faderPitchTopRange->setValue(xmlr.attributes().value("pitchTopRange").toString().toInt());
             faderPitchBottomRange->setValue(xmlr.attributes().value("pitchBottomRange").toString().toInt());
