@@ -562,7 +562,7 @@ void wlayout::readXml(QString filename)
 
 void wlayout::writeXml(QString filename)
 {
-    qDebug() << "wlayout::writeXml";
+    //qDebug() << "wlayout::writeXml";
     QFile file(filename);
     if(file.open(QIODevice::WriteOnly)) {
         xml.setDevice(&file);
