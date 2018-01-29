@@ -53,10 +53,10 @@ void MWFadder::onPressed(int id, int x, int y, int h, int w)
         bool fineModeAvailable = (float)valRange/(float)(height-knobSize) > 1.0/(float)fineness;
         if((_faderY >= yRelative1 && _faderY <= yRelative2) || !fineModeAvailable) {
             fadeMode=coarse;
-            qDebug() << "coarse fade";
+            //qDebug() << "coarse fade";
         } else {
             fadeMode=fine;
-            qDebug() << "fine fade";
+            //qDebug() << "fine fade";
         }
         emit valueChange(valueDisplay);
     }
@@ -145,30 +145,3 @@ void MWFadder::setMinValue(int value)
     valRange=maxValue-minValue;
     calcGeo();
 }
-
-/*
-void MWFadder::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    QString cap;
-
-    painter.setBrush(bgcolor);
-    painter.setPen(fgcolor);
-
-    painter.drawRect(0,0,width(),height());
-
-    if(pressed>0) painter.setBrush(QColor::fromHsl(color->getHue(),sOn,lOn));
-    else painter.setBrush(QColor::fromHsl(color->getHue(),sOff,lOff));
-    //painter.drawRect(0,fadderY-knobSize,width(),knobSize*2);
-    painter.drawRect(0,fadderY,width(),knobSize*2);
-
-    painter.setBrush(Qt::black);
-    QFont font(font1);
-    font.setPixelSize(font1size);
-    painter.setFont(font);
-    cap.sprintf("%d",valueDisplay);
-    painter.drawText(0,0,width(),height(),Qt::AlignTop|Qt::AlignLeft,cap);
-    //qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
-}
-*/
-
