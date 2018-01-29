@@ -89,6 +89,8 @@ class wlayout : public QObject
 
     Q_PROPERTY(QObject* confChannelFader MEMBER faderChannel CONSTANT)
 
+    Q_PROPERTY(QObject* openArchive MEMBER openArchive  CONSTANT)
+
     Q_PROPERTY(QObject* showPresets MEMBER showPresets CONSTANT)
     Q_PROPERTY(QObject* showMenu MEMBER showMenu CONSTANT)
     Q_PROPERTY(bool menuVisible MEMBER _menuVisible NOTIFY layoutChange)
@@ -181,7 +183,7 @@ private:
     MWHeaderSetter * enablePuredata;
     MWHeaderSetter * enableSupercollider;
     MWFaderParamCtl * faderSymbols;
-    MWHeaderSetter * openScalesArchive;
+    MWHeaderSetter * openArchive;
     MWHeaderSetter * holdMode;
     MWHeaderSetter * showFreqs;
     MWHeaderSetter * showPresets;

@@ -178,7 +178,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         _BScaleSwitch.append(bs);
     }
 
-    openScalesArchive = new MWHeaderSetter(13,1,this);
+    openArchive = new MWHeaderSetter(13,1,this);
 
     faderSymbols = new MWFaderParamCtl(this,4);
     faderSymbols->setOut(out);

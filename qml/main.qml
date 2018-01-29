@@ -66,8 +66,23 @@ Window {
         id: bScaleSwitchRow
         visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         anchors.top: octaveRangerRow.bottom
-        width: parent.width
+        width: parent.width - buttonSize
         height: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
+    }
+
+    Loader {
+        id: openArchiveButton
+        visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
+        anchors {
+            top: octaveRangerRow.bottom
+            left: bScaleSwitchRow.right
+        }
+        width: buttonSize
+        height: buttonSize
+
+        property bool transparent: true
+        property var modelData: layout.openArchive
+        source: "Button.qml"
     }
 
     RootNoteSetter {
