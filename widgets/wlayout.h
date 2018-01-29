@@ -208,13 +208,16 @@ private:
     int _botOct;
     int _topOct;
 
-    QString configPath;
+    QString _configPath;
 
     void recalcMainView();
-    void readXml(QString filename);
-    void writeXml(QString filename);
-    void readLayout(QString version);
+    void readXml(QString filetype);
+    void writeXml(QString filetype);
     void updateMenuButtonState();
+    void decodeConfigRecord();
+    void decodeScaleRecord();
+    void decodeSynthRecord();
+    void decodeTuneRecord();
 };
 
 #endif // WLAYOUT_H

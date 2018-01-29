@@ -33,6 +33,8 @@ MWBScaleSwitch::MWBScaleSwitch(int i)
     _freq->setOct(4);
     _out=nullptr;
     _vid=0;
+    _oct=4;
+    _higherOct=0;
 }
 
 MWBScaleSwitch::~MWBScaleSwitch()
@@ -92,18 +94,28 @@ void MWBScaleSwitch::setRootNote(Pitch *p)
 
 void MWBScaleSwitch::setRootNote(int rootNote)
 {
-    //qDebug() << "MWBScaleSwitch::setRootNote " << newrootNote << " bscaleId " << bscaleId << " rootNote " << rootNote;
-    int newrootNote=(rootNote+_bscaleId)%12;
-    if(newrootNote != _freq->getPitch()) {
+    int newrootNote=rootNote+_bscaleId;
+    if(newrootNote>11) {
+        newrootNote-=12;
+        _higherOct=1;
+    } else {
+        _higherOct=0;
+    }
+
+    //if(newrootNote != _freq->getPitch()) {
+        _freq->setOct(_oct+_higherOct);
         _freq->setRootNote(MWPitch[newrootNote]);
         emit pitchIdChanged();
         calcText();
-    }
+    //}
+
+    qDebug() << "MWBScaleSwitch::setRootNote new: " << newrootNote << " bscaleId " << _bscaleId << " rootNote " << rootNote;
 }
 
 void MWBScaleSwitch::setOctMid(int o)
 {
-    _freq->setOct(o);
+    _oct = o;
+    _freq->setOct(_oct + _higherOct);
 }
 
 void MWBScaleSwitch::onScaleSet(MWScale * scale)

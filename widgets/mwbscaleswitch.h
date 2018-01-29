@@ -67,6 +67,9 @@ private:
     int _pressed;
     bool _value;
 
+    int _oct;
+    int _higherOct;
+
     QString         _text1;
     QString         _text2;
 

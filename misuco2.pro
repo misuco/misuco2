@@ -129,7 +129,6 @@ HEADERS  += \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
     widgets/mwmicrotunepreset.h \
-    conf/initxml.h \
     conf/mwplayfield.h
 
 CONFIG += mobility

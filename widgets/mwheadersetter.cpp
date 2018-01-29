@@ -71,7 +71,7 @@ void MWHeaderSetter::setText() {
         _text="synth";
         break;
     case 9:
-        _text="setup";
+        _text="conf";
         break;
         //_text="%d presets",headerId;
         //break;

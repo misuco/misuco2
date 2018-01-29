@@ -25,5 +25,9 @@
         <file>qml/icons/Tri.qml</file>
         <file>qml/icons/Envelope.qml</file>
         <file>qml/DialogPreset.qml</file>
+        <file>xml/conf.xml</file>
+        <file>xml/scales.xml</file>
+        <file>xml/synth.xml</file>
+        <file>xml/tune.xml</file>
     </qresource>
 </RCC>

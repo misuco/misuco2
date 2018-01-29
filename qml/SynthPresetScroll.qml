@@ -23,6 +23,7 @@ Item {
                 Text {
                     id: synthPresetTitle
                     anchors.fill: parent
+                    font.pixelSize: fontSize2
                     color: modelData.selected ? hlColor : fgColor
                     text: index
                 }

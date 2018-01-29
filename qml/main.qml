@@ -147,7 +147,7 @@ Window {
 
     Loader {
         id: octDown
-        visible: layout.playAreaVisible && layout.botOct > 0
+        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0
         anchors {
             bottom: playAreaRow.bottom
             left: playAreaRow.left
@@ -163,7 +163,7 @@ Window {
 
     Loader {
         id: octUp
-        visible: layout.playAreaVisible && layout.topOct < 9
+        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9
         anchors {
             bottom: playAreaRow.bottom
             right: parent.right
