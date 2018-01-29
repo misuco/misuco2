@@ -68,7 +68,6 @@ public:
     static int channel;
 
     static bool sendCC1;
-    static bool holdMode;
 
     static QObject * overwritePreset;
 

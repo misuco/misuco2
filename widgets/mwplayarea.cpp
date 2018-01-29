@@ -30,12 +30,14 @@ MWPlayArea::MWPlayArea(QObject *parent) : MisuWidget(parent),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
+    /*
     Scale.rootNote=0;
     Scale.baseoct=3;
     Scale.topoct=4;
     for(int i=0;i<BSCALE_SIZE;i++) {
         Scale.bscale[i]=false;
     }
+    */
 
     bendHoriz=false;
     bendVertTop=0;
@@ -75,6 +77,7 @@ void MWPlayArea::config()
      *  |.|.||.|.|.| |
      */
 
+    /*
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
             if(fields[r][c].hold) {
@@ -82,6 +85,7 @@ void MWPlayArea::config()
             }
         }
     }
+    */
 
     cols=0;
     for(int oct=Scale.baseoct;oct<Scale.topoct;oct++) {
@@ -109,6 +113,7 @@ void MWPlayArea::config()
     setColumn(cols,topnote,Scale.rootNote);
     cols++;
 
+    /*
     for(int r=0;r<rows;r++) {
         for(int c=0;c<cols;c++) {
             if(fields[r][c].hold) {
@@ -116,6 +121,7 @@ void MWPlayArea::config()
             }
         }
     }
+    */
 
     calcGeo();
 
@@ -462,15 +468,10 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
     //qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
 
-    /*
-    if (e.state==Qt::TouchPointReleased &&  e.x>=menux1 && e.x<=menux2 && e.y>=menuy1 && e.y<=menuy2) {
-        emit menuTouch();
+    if(e.id<0) {
+        qDebug() << "ignoring touch event with negative id " << e.id;
+        return;
     }
-
-    if (e.state==Qt::TouchPointReleased &&  e.x>=presetsx1 && e.x<=presetsx2 && e.y>=presetsy1 && e.y<=presetsy2) {
-        emit presetsTouch();
-    }
-    */
 
     int eventHash=e.id%64;
     eventStackElement * es = &eventStack[eventHash];
@@ -557,58 +558,45 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->row=row;
         es->col=col;
         es->f=freq;
-        if(holdMode && pf->pressed==0) {
-            if(pf->hold) {
-                out->noteOff(pf->voiceId);
-                pf->hold=false;
-            } else {
-                pf->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
-                pf->hold=true;
-            }
-        } else {
-            es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
-            pf->pressed++;
-        }
+        es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
+        pf->pressed++;
         break;
 
     case Qt::TouchPointMoved:
-        if(!holdMode) {
-            if(row!=es->row || col!=es->col) {
-                MWPlayfield * ppf = &fields[es->row][es->col];
-                ppf->pressed--;
-                ppf->calcColor();
-                out->noteOff(es->voiceId);
+        if(row!=es->row || col!=es->col) {
+            MWPlayfield * ppf = &fields[es->row][es->col];
+            ppf->pressed--;
+            ppf->calcColor();
+            out->noteOff(es->voiceId);
 
-                es->midinote=midinote;
-                es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
+            es->midinote=midinote;
+            es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
 
-                es->row=row;
-                es->col=col;
-                es->f=freq;
-                pf->pressed++;
-            } else if(freq!=es->f) {
-                out->pitch(channel,es->voiceId,freq,midinote,pitch);
-                es->f=freq;
-            }
+            es->row=row;
+            es->col=col;
+            es->f=freq;
+            pf->pressed++;
+        } else if(freq!=es->f) {
+            out->pitch(channel,es->voiceId,freq,midinote,pitch);
+            es->f=freq;
         }
+
         if(sendCC1) {
             out->cc(channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;
 
     case Qt::TouchPointReleased:
-        if(!holdMode) {
-            out->noteOff(es->voiceId);
-            pf->pressed--;
-        }
+
+        out->noteOff(es->voiceId);
+        if(pf->pressed>0) pf->pressed--;
+
         es->eventId=-1;
         es->row=-1;
         es->col=-1;
         break;
     }
-
     pf->calcColor();
-
 }
 
 void MWPlayArea::setRootNote(Pitch *p)
@@ -662,13 +650,6 @@ void MWPlayArea::setBendVertBot(int b)
     bendVertBot=b;
     config();
 }
-
-/*
-void MWPlayArea::pitchChange()
-{
-    config();
-}
-*/
 
 void MWPlayArea::setOut(ISender *value)
 {

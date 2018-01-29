@@ -37,7 +37,7 @@ Item {
                         margins: parent.height/5
                     }
 
-                    width: columnWidth / 2
+                    width: columnWidth / 3
 
                     source: {
                         switch(modelData.wave) {
@@ -64,7 +64,7 @@ Item {
                         left: iconWave.right
                         margins: parent.height/5
                     }
-                    width: columnWidth / 2
+                    width: columnWidth / 3
                 }
 
                 MouseArea {

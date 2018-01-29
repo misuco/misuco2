@@ -29,8 +29,6 @@ public:
     float hue1bent;         // cache for vertical bent hue values
     float hue2bent;
     unsigned int pressed = 0;
-    bool hold = false;
-    int voiceId = 0;    // cache for hold voiceId
 
     void calcColor();
 

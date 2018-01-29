@@ -221,8 +221,10 @@ void MWHeaderSetter::onPressed(int id)
             else _state = 0;
             break;
         case 21:
+            /*
             holdMode=!holdMode;
             _state = holdMode;
+            */
             break;
         case 22:
             showFreqs=!showFreqs;

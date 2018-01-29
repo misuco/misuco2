@@ -43,8 +43,8 @@ public:
     };
 
     Q_INVOKABLE void onResize(int h);
-    Q_INVOKABLE void onPressed(int id, int x, int y, int h);
-    Q_INVOKABLE void onUpdated(int id, int y, int h);
+    Q_INVOKABLE void onPressed(int id, int x, int y, int h, int w);
+    Q_INVOKABLE void onUpdated(int id, int y, int h, int w);
     Q_INVOKABLE void onReleased();
 
     void setMinValue(int value);

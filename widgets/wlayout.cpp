@@ -657,8 +657,6 @@ void wlayout::writeXml(QString filename)
         xml.writeAttribute("reaktor",att);
         att.sprintf("%d",out->senderEnabled[3]);
         xml.writeAttribute("superCollider",att);
-        att.sprintf("%d",MisuWidget::holdMode);
-        xml.writeAttribute("holdMode",att);
         att.sprintf("%d",MisuWidget::noteSymbols);
         xml.writeAttribute("noteSymbols",att);
         att.sprintf("%d",MisuWidget::showFreqs);
@@ -787,9 +785,6 @@ void wlayout::readLayout(QString version) {
 
             out->senderEnabled[3] = xmlr.attributes().value("superCollider").toString().toInt();
             enableSupercollider->setState(20,xmlr.attributes().value("superCollider").toString().toInt());
-
-            MisuWidget::holdMode = xmlr.attributes().value("holdMode").toString().toInt();
-            holdMode->setState(21,xmlr.attributes().value("holdMode").toString().toInt());
 
             faderSymbols->setValue(xmlr.attributes().value("noteSymbols").toString().toInt());
 

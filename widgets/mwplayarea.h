@@ -78,7 +78,6 @@ public slots:
     void setBendHori(bool b);
     void setBendVertTop(int b);
     void setBendVertBot(int b);
-    //void pitchChange();
     void onToggleBW();
     void onSymbolsChanged();
 

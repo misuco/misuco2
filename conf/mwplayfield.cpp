@@ -14,7 +14,7 @@ void MWPlayfield::calcColor()
 
     float l=MisuWidget::lOff;
     float s=MisuWidget::sOff;
-    if(pressed>0 || hold) {
+    if(pressed>0) {
         l=MisuWidget::lOn;
         s=MisuWidget::sOn;
     }
@@ -26,7 +26,7 @@ void MWPlayfield::calcColor()
 
     if(MisuWidget::bwmode) {
         if(f1->getBW()) {
-            if(pressed>0 || hold) {
+            if(pressed>0) {
                 colorF1 = MisuWidget::hlwkeycolor;
                 colorF1b = MisuWidget::hlbkeycolor;
             } else {
@@ -34,7 +34,7 @@ void MWPlayfield::calcColor()
                 colorF1b = MisuWidget::bkeycolor;
             }
         } else {
-            if(pressed>0 || hold) {
+            if(pressed>0) {
                 colorF1 = MisuWidget::hlbkeycolor;
                 colorF1b =MisuWidget:: hlwkeycolor;
             } else {
@@ -43,7 +43,7 @@ void MWPlayfield::calcColor()
             }
         }
         if(f2->getBW()) {
-            if(pressed>0 || hold) {
+            if(pressed>0) {
                 colorF2 = MisuWidget::hlwkeycolor;
                 colorF2b = MisuWidget::hlbkeycolor;
             } else {
@@ -51,7 +51,7 @@ void MWPlayfield::calcColor()
                 colorF2b = MisuWidget::bkeycolor;
             }
         } else {
-            if(pressed>0 || hold) {
+            if(pressed>0) {
                 colorF2 = MisuWidget::hlbkeycolor;
                 colorF2b = MisuWidget::hlwkeycolor;
             } else {
@@ -61,7 +61,7 @@ void MWPlayfield::calcColor()
         }
     }
 
-    if(pressed>0 || hold) {
+    if(pressed>0) {
         fontColor=MisuWidget::highlightcolor;
     } else {
         fontColor=MisuWidget::fgcolor;

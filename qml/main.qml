@@ -9,9 +9,9 @@ Window {
     property int buttonSize: width/12
     property int menuSize: width/7
 
-    property int faderRadius: buttonSize/2
+    property int faderRadius:  buttonSize/2
     property int buttonRadius: buttonSize/5
-    property int borderWidth: 3
+    property int borderWidth: 1+buttonSize/50
     property color borderColor: "#333333"
 
     property int columnWidth: width/8;
@@ -53,40 +53,39 @@ Window {
         height: layout.menuVisible ? buttonSize : 0
     }
 
-    RootNoteSetter {
-        id: rootNoteSetterRow
+    OctaveRanger {
+        id: octaveRangerRow
+        visible: layout.octaveRangerVisible && layout.playAreaVisible
+        controller: layout.octaveRanger
         anchors.top: menuRow.bottom
-        visible: layout.rootNoteSetterVisible && layout.playAreaVisible
         width: parent.width
-        height: layout.rootNoteSetterVisible && layout.playAreaVisible ? buttonSize : 0
+        height: layout.octaveRangerVisible && layout.playAreaVisible ? buttonSize : 0
     }
 
     BScaleSwitch {
         id: bScaleSwitchRow
         visible: layout.bScaleSwitchVisible && layout.playAreaVisible
-        anchors.top: rootNoteSetterRow.bottom
+        anchors.top: octaveRangerRow.bottom
         width: parent.width
         height: layout.bScaleSwitchVisible && layout.playAreaVisible ? buttonSize : 0
     }
 
-    OctaveRanger {
-        id: octaveRangerRow
-        visible: layout.octaveRangerVisible && layout.playAreaVisible
-        controller: layout.octaveRanger
+    RootNoteSetter {
+        id: rootNoteSetterRow
         anchors.top: bScaleSwitchRow.bottom
+        visible: layout.rootNoteSetterVisible && layout.playAreaVisible
         width: parent.width
-        height: layout.octaveRangerVisible && layout.playAreaVisible ? buttonSize : 0
+        height: layout.rootNoteSetterVisible && layout.playAreaVisible ? buttonSize : 0
     }
 
     PlayArea {
         id: playAreaRow
         visible: layout.playAreaVisible || layout.confAreaVisible
         controller: layout.playArea
-        anchors.top: octaveRangerRow.bottom
+        anchors.top: rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: confAreaRow.right
         width: layout.scalePresetsVisible ? parent.width - columnWidth : parent.width
-        //width: parent.width - columnWidth
     }
 
     TuneArea {

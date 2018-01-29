@@ -38,10 +38,10 @@ MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
     calcGeo();
 }
 
-void MWFadder::onPressed(int id, int x, int y, int h)
+void MWFadder::onPressed(int id, int x, int y, int h, int w)
 {
     height = h;
-    knobSize=height/8;
+    knobSize = w;
     if(pressed<2) {
         pressedTouchId = id;
         xTouchBegin=x;
@@ -63,10 +63,10 @@ void MWFadder::onPressed(int id, int x, int y, int h)
     pressed++;
 }
 
-void MWFadder::onUpdated(int id, int y, int h)
+void MWFadder::onUpdated(int id, int y, int h, int w)
 {
     height = h;
-    knobSize=height/8;
+    knobSize = w;
     if(id==pressedTouchId) {
         if(vertical==orient) {
             if(coarse==fadeMode) {

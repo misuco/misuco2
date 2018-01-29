@@ -57,21 +57,21 @@ Item {
 
             onPressed: {
                 for(var i=0;i<touchPoints.length;i++) {
-                    modelData.onPressed(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y,height)
+                    modelData.onPressed(touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y,height,width)
                     modelData.onPressedPitch(touchPoints[i].pointId)
                 }
             }
 
             onTouchUpdated: {
                 for(var i=0;i<touchPoints.length;i++) {
-                    modelData.onUpdated(touchPoints[i].pointId,touchPoints[i].y,height)
+                    modelData.onUpdated(touchPoints[i].pointId,touchPoints[i].y,height,width)
                     modelData.onUpdatedPitch(touchPoints[i].pointId)
                 }
             }
 
             onUpdated: {
                 for(var i=0;i<touchPoints.length;i++) {
-                    modelData.onUpdated(touchPoints[i].pointId,touchPoints[i].y,height)
+                    modelData.onUpdated(touchPoints[i].pointId,touchPoints[i].y,height,width)
                     modelData.onUpdatedPitch(touchPoints[i].pointId)
                 }
             }

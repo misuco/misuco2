@@ -52,7 +52,6 @@ bool MisuWidget::showFreqs = false;
 int MisuWidget::channel = 0;
 
 bool MisuWidget::sendCC1 = true;
-bool MisuWidget::holdMode = false;
 QObject * MisuWidget::overwritePreset = 0;
 
 MisuWidget::MisuWidget(QObject *parent) : QObject(parent)
