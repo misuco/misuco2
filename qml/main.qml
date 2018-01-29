@@ -30,7 +30,7 @@ Window {
     ScalePresetScroll {
         id: scalePresetCol
         visible: layout.scalePresetsVisible
-        anchors.top: menuRow.bottom
+        anchors.top: octaveRangerRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         width: layout.scalePresetsVisible ? columnWidth : 0
@@ -39,49 +39,50 @@ Window {
     SynthPresetScroll {
         id: synthPresetCol
         visible: layout.synthPresetsVisible
-        anchors.top: menuRow.bottom
+        anchors.top: octaveRangerRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         width: layout.synthPresetsVisible ? columnWidth : 0
     }
 
+    Menu {
+        id: menuRow
+        visible: layout.menuVisible
+        anchors.top: parent.top
+        width: parent.width
+        height: layout.menuVisible ? buttonSize : 0
+    }
+
     RootNoteSetter {
         id: rootNoteSetterRow
-        visible: layout.rootNoteSetterVisible
+        anchors.top: menuRow.bottom
+        visible: layout.rootNoteSetterVisible && layout.playAreaVisible
         width: parent.width
-        height: layout.rootNoteSetterVisible ? buttonSize : 0
+        height: layout.rootNoteSetterVisible && layout.playAreaVisible ? buttonSize : 0
     }
 
     BScaleSwitch {
         id: bScaleSwitchRow
-        visible: layout.bScaleSwitchVisible
+        visible: layout.bScaleSwitchVisible && layout.playAreaVisible
         anchors.top: rootNoteSetterRow.bottom
         width: parent.width
-        height: layout.bScaleSwitchVisible ? buttonSize : 0
+        height: layout.bScaleSwitchVisible && layout.playAreaVisible ? buttonSize : 0
     }
 
     OctaveRanger {
         id: octaveRangerRow
-        visible: layout.octaveRangerVisible
+        visible: layout.octaveRangerVisible && layout.playAreaVisible
         controller: layout.octaveRanger
         anchors.top: bScaleSwitchRow.bottom
         width: parent.width
-        height: layout.octaveRangerVisible ? buttonSize : 0
-    }
-
-    Menu {
-        id: menuRow
-        visible: layout.menuVisible
-        anchors.top: octaveRangerRow.bottom
-        width: parent.width
-        height: layout.menuVisible ? buttonSize : 0
+        height: layout.octaveRangerVisible && layout.playAreaVisible ? buttonSize : 0
     }
 
     PlayArea {
         id: playAreaRow
         visible: layout.playAreaVisible || layout.confAreaVisible
         controller: layout.playArea
-        anchors.top: menuRow.bottom
+        anchors.top: octaveRangerRow.bottom
         anchors.bottom: parent.bottom
         anchors.left: confAreaRow.right
         width: layout.scalePresetsVisible ? parent.width - columnWidth : parent.width

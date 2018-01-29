@@ -68,15 +68,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _PlayArea = new MWPlayArea(this);
     ((MWPlayArea *)_PlayArea)->setOut(out);
 
-    /*
-    connect(_PlayArea,SIGNAL(menuTouch()), this, SLOT(toggleMenu()));
-    connect(_PlayArea,SIGNAL(presetsTouch()), this, SLOT(togglePresets()));
-
-    for(int i=0;i<BSCALE_SIZE+1;i++) {
-        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), (MWPlayArea *)_PlayArea, SLOT(pitchChange()));
-    }
-    */
-
     _OctaveRanger = new MWOctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
@@ -296,11 +287,28 @@ void wlayout::overwritePreset()
     emit layoutChange();
 }
 
-void wlayout::currentHeader(int id)
-{
+void wlayout::updateMenuButtonState() {
+
+    MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
+    MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
+    MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
+    MWHeaderSetter * confAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[6]);
     MWHeaderSetter * rootButton = dynamic_cast<MWHeaderSetter *>(_menu[0]);
     MWHeaderSetter * bscaleButton = dynamic_cast<MWHeaderSetter *>(_menu[1]);
     MWHeaderSetter * octaveButton = dynamic_cast<MWHeaderSetter *>(_menu[2]);
+
+    if(playAreaButton) playAreaButton->setState(6,_playAreaVisible);
+    if(tuneAreaButton) tuneAreaButton->setState(7,_tuneAreaVisible);
+    if(synthAreaButton) synthAreaButton->setState(8,_synthAreaVisible);
+    if(confAreaButton) confAreaButton->setState(9,_confAreaVisible);
+    if(rootButton) rootButton->setState(0,_rootNoteSetterVisible);
+    if(bscaleButton) bscaleButton->setState(1,_bScaleSwitchVisible);
+    if(octaveButton) octaveButton->setState(2,_octaveRangerVisible);
+
+}
+
+void wlayout::currentHeader(int id)
+{
 
     /*
 
@@ -331,65 +339,69 @@ void wlayout::currentHeader(int id)
     switch(id) {
     case 0:
         _rootNoteSetterVisible=!_rootNoteSetterVisible;
-        if(rootButton) rootButton->setState(0,_rootNoteSetterVisible);
         break;
     case 1:
         _bScaleSwitchVisible=!_bScaleSwitchVisible;
-        if(bscaleButton) bscaleButton->setState(1,_bScaleSwitchVisible);
         break;
     case 2:
         _octaveRangerVisible=!_octaveRangerVisible;
-        if(octaveButton) octaveButton->setState(2,_octaveRangerVisible);
         break;
     }
 
     emit layoutChange();
+    updateMenuButtonState();
+    writeXml(configPath);
 
 }
 
 void wlayout::currentMainView(int id)
 {
 
-    MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
-    MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
-    MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
-    MWHeaderSetter * confAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[6]);
-
     _synthPresetsVisible=false;
     _scalePresetsVisible=false;
     _tunePresetsVisible=false;
     _playAreaVisible=false;
-    _tuneAreaVisible=false;
-    _synthAreaVisible=false;
-    _confAreaVisible=false;
-
-    if(playAreaButton) playAreaButton->setState(6,0);
-    if(tuneAreaButton) tuneAreaButton->setState(7,0);
-    if(synthAreaButton) synthAreaButton->setState(8,0);
-    if(confAreaButton) confAreaButton->setState(9,0);
 
     switch(id) {
     case 0:
-        _playAreaVisible=true;
-        if(_presetsVisible) _scalePresetsVisible=true;
-        if(playAreaButton) playAreaButton->setState(6,1);
+        _synthAreaVisible=false;
+        _tuneAreaVisible=false;
+        _confAreaVisible=false;
         break;
     case 1:
-        _tuneAreaVisible=true;
-        if(_presetsVisible) _tunePresetsVisible=true;
-        if(tuneAreaButton) tuneAreaButton->setState(7,1);
+        _tuneAreaVisible=!_tuneAreaVisible;
+        if(_presetsVisible) _tunePresetsVisible=_tuneAreaVisible;
+        if(_tuneAreaVisible) {
+            _synthAreaVisible=false;
+            _confAreaVisible=false;
+        }
         break;
     case 2:
-        _synthAreaVisible=true;
+        _synthAreaVisible=!_synthAreaVisible;
         _synthPresetsVisible=true;
-        if(synthAreaButton) synthAreaButton->setState(8,1);
+        if(_synthAreaVisible) {
+            _tuneAreaVisible=false;
+            _confAreaVisible=false;
+        }
         break;
     case 3:
-        _confAreaVisible=true;
-        if(confAreaButton) confAreaButton->setState(9,1);
+        _confAreaVisible=!_confAreaVisible;
+        if(_confAreaVisible) {
+            _synthAreaVisible=false;
+            _tuneAreaVisible=false;
+        }
         break;
     }
+
+    // play area is automatically visible, if no other is visible
+    if(!_tuneAreaVisible && !_synthAreaVisible && !_confAreaVisible) {
+        _playAreaVisible=true;
+        if(_presetsVisible) _scalePresetsVisible=true;
+    }
+
     emit layoutChange();
+    updateMenuButtonState();
+    writeXml(configPath);
 }
 
 void wlayout::togglePresets()
@@ -733,33 +745,17 @@ void wlayout::readLayout() {
             connect(microtunePreset,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
             _tunePresets.append(microtunePreset);
         } else if (xmlr.name() == "setup") {
-            for(int i=0;i<3;i++) {
-                QString attId;
-                attId.sprintf("showH%d",i);
-                /*
-                if(xmlr.attributes().value(attId).toString()=="1"){
-                    H[i]->show();
-                    emit setMenuItemState(i,1);
-                } else {
-                    H[i]->hide();
-                    emit setMenuItemState(i,0);
-                }
-                */
-            }
-
-            for(int i=0;i<4;i++) {
-                QString attId;
-                attId.sprintf("showM%d",i);
-                /*
-                if(xmlr.attributes().value(attId).toString()=="1"){
-                    M[i]->show();
-                    emit setMenuItemState(i+6,1);
-                } else {
-                    M[i]->hide();
-                    emit setMenuItemState(i+6,0);
-                }
-                */
-            }
+            _presetsVisible=xmlr.attributes().value("presetsVisible").toInt();
+            _menuVisible=xmlr.attributes().value("menuVisible").toInt();
+            _rootNoteSetterVisible=xmlr.attributes().value("rootNoteSetterVisible").toInt();
+            _bScaleSwitchVisible=xmlr.attributes().value("bScaleSwitchVisible").toInt();
+            _octaveRangerVisible=xmlr.attributes().value("octaveRangerVisible").toInt();
+            _playAreaVisible=xmlr.attributes().value("playAreaVisible").toInt();
+            _tuneAreaVisible=xmlr.attributes().value("tuneAreaVisible").toInt();
+            _scalePresetsVisible=xmlr.attributes().value("scalePresetsVisible").toInt();
+            _synthPresetsVisible=xmlr.attributes().value("synthPresetsVisible").toInt();
+            _tunePresetsVisible=xmlr.attributes().value("tunePresetsVisible").toInt();
+            _dialogPresetsVisible=xmlr.attributes().value("dialogPresetsVisible").toInt();
 
             faderPitchTopRange->setValue(xmlr.attributes().value("pitchTopRange").toString().toInt());
             faderPitchBottomRange->setValue(xmlr.attributes().value("pitchBottomRange").toString().toInt());
@@ -797,4 +793,6 @@ void wlayout::readLayout() {
         }
         xmlr.skipCurrentElement();
     }
+
+    updateMenuButtonState();
 }

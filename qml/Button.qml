@@ -14,7 +14,7 @@ Item {
         Text {
             anchors.fill: parent
             text: modelData.text
-            font.pixelSize: fontSize2
+            font.pixelSize: transparent ? fontSize3 : fontSize2
             color: fgColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

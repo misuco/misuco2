@@ -103,8 +103,6 @@ class wlayout : public QObject
 
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
 
-
-
 public:
     explicit wlayout(QWidget *parent = 0);
     ~wlayout();
@@ -216,6 +214,7 @@ private:
     void readXml(QString filename);
     void writeXml(QString filename);
     void readLayout();
+    void updateMenuButtonState();
 };
 
 #endif // WLAYOUT_H
