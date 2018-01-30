@@ -128,6 +128,8 @@ void MWPreset::playAreaChanged()
 
 bool MWPreset::isSelected()
 {
+    if(PresetScale.rootNote!=Scale.rootNote ) return false;
+
     for(int i=0;i<BSCALE_SIZE;i++) {
         if( PresetScale.bscale[i]!=Scale.bscale[i] ) return false;
     }
