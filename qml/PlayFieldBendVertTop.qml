@@ -27,7 +27,7 @@ Item {
             anchors.fill: parent
             text: modelData.text1
             font.pixelSize: fontSizeM
-            color: modelData.fontColor
+            color: modelData.colorF1b
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignBottom
         }

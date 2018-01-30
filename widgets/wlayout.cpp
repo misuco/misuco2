@@ -188,9 +188,6 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
     connect(this,SIGNAL(symbolsChanged()),_PlayArea,SLOT(onSymbolsChanged()));
 
-    showFreqs = new MWHeaderSetter(22,this);
-    connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
-
     for(int i=0;i<7;i++) {
         int fctId=i;
         if(i>=3) fctId+=3;
@@ -214,6 +211,9 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         }
         _menu.append(hs);
     }
+
+    showFreqs = new MWHeaderSetter(22,this);
+    connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
 
     readXml("conf.xml");
     readXml("scales.xml");
