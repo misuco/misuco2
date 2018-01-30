@@ -38,8 +38,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _tunePresetsVisible=false;
     _dialogPresetsVisible=false;
 
-    _botOct=4;
-    _topOct=5;
+    _botOct=5;
+    _topOct=6;
+    MisuWidget::Scale.baseoct = 5;
+    MisuWidget::Scale.topoct = 6;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -641,8 +643,6 @@ void wlayout::decodeScaleRecord() {
             bscaleRead[i] = xmlr.attributes().value(attId).toInt();
         }
         MWPreset * p = new MWPreset(xmlr.attributes().value("rootNote").toString().toInt(),
-                                         xmlr.attributes().value("baseoct").toString().toInt(),
-                                         xmlr.attributes().value("topoct").toString().toInt(),
                                          bscaleRead,
                                          this);
         connect(((MWPlayArea *)_PlayArea),SIGNAL(playRowsChanged()),p,SLOT(playAreaChanged()));

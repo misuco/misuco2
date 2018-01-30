@@ -624,12 +624,11 @@ void MWPlayArea::setBscale(int n, bool v)
 void MWPlayArea::setScale(MWScale * s)
 {
     Scale.rootNote=s->rootNote;
-    Scale.baseoct=s->baseoct;
+    Scale.size=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
         Scale.bscale[i]=s->bscale[i];
+        if(Scale.bscale[i]) Scale.size+=Scale.topoct-Scale.baseoct;
     }
-    Scale.size=s->size;
-    Scale.topoct=s->topoct;
     config();
 }
 

@@ -25,9 +25,9 @@
 MWOctaveRanger::MWOctaveRanger(QObject *parent) : MisuWidget(parent)
 {
     //qDebug() << "MWOctaveRanger::MWOctaveRanger()";
-    top=4;
-    mid=3;
-    bottom=3;
+    top=6;
+    mid=5;
+    bottom=5;
     noct=10;
     grabedTop=false;
     grabedBot=false;

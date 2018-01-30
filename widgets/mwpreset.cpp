@@ -31,7 +31,7 @@ MWPreset::MWPreset(QWidget *parent): MisuWidget(parent)
     for(int i=0;i<BSCALE_SIZE;i++) {
         if(qrand() % 2) {
             PresetScale.bscale[i]=true;
-            PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
+            PresetScale.size+=1;
         } else {
             PresetScale.bscale[i]=false;
         }
@@ -39,16 +39,14 @@ MWPreset::MWPreset(QWidget *parent): MisuWidget(parent)
     pressed=0;
 }
 
-MWPreset::MWPreset(int rootNote, int baseoct, int topoct, bool bscale[], QObject *parent): MisuWidget(parent)
+MWPreset::MWPreset(int rootNote, bool bscale[], QObject *parent): MisuWidget(parent)
 {
     PresetScale.rootNote=rootNote;
-    PresetScale.baseoct=baseoct;
-    PresetScale.topoct=topoct;
     PresetScale.size=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
         if(bscale[i]) {
             PresetScale.bscale[i]=true;
-            PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
+            PresetScale.size+=1;
         } else {
             PresetScale.bscale[i]=false;
         }
@@ -80,14 +78,12 @@ int MWPreset::rootnote()
 void MWPreset::overwrite()
 {
     PresetScale.rootNote = MisuWidget::Scale.rootNote;
-    PresetScale.baseoct = MisuWidget::Scale.baseoct;
-    PresetScale.topoct = MisuWidget::Scale.topoct;
     PresetScale.size = 2;
 
     for(int i=0;i<BSCALE_SIZE;i++) {
         PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
         if(PresetScale.bscale[i]) {
-            PresetScale.size+=PresetScale.topoct-PresetScale.baseoct;
+            PresetScale.size+=1;
         }
     }
 
@@ -132,9 +128,6 @@ void MWPreset::playAreaChanged()
 
 bool MWPreset::isSelected()
 {
-    if( PresetScale.rootNote!=Scale.rootNote ||
-        PresetScale.baseoct!=Scale.baseoct ||
-        PresetScale.topoct!=Scale.topoct ) return false;
     for(int i=0;i<BSCALE_SIZE;i++) {
         if( PresetScale.bscale[i]!=Scale.bscale[i] ) return false;
     }

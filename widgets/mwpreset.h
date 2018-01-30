@@ -35,7 +35,7 @@ class MWPreset : public MisuWidget
 
 public:
     MWPreset(QWidget *parent);
-    MWPreset(int rootNote, int baseoct, int topoct, bool bscale[BSCALE_SIZE], QObject *parent);
+    MWPreset(int rootNote, bool bscale[BSCALE_SIZE], QObject *parent);
 
     MWScale PresetScale;
 

@@ -43,6 +43,7 @@ float MisuWidget::sOn = 0.8;
 
 Pitch * MisuWidget::MWPitch[BSCALE_SIZE+1];
 MWScale MisuWidget::Scale;
+
 MWSound MisuWidget::Sound;
 MWMicrotune MisuWidget::Microtune;
 
