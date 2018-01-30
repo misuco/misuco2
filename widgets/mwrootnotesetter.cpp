@@ -20,7 +20,6 @@
 
 #include "mwrootnotesetter.h"
 #include "comm/senderdebug.h"
-#include <QPainter>
 #include <QDebug>
 
 MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)

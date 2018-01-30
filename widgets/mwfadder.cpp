@@ -19,7 +19,6 @@
  */
 
 #include "mwfadder.h"
-#include <QPainter>
 #include <QDebug>
 
 MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)

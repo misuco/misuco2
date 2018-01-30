@@ -19,7 +19,6 @@
  */
 
 #include "mwbscaleswitch.h"
-#include <QPainter>
 #include "comm/senderdebug.h"
 #include <QDebug>
 

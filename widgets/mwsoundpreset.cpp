@@ -19,7 +19,6 @@
  */
 
 #include "mwsoundpreset.h"
-#include <QPainter>
 #include <QDebug>
 
 MWSoundPreset::MWSoundPreset(QObject *parent): MisuWidget(parent)

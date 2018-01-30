@@ -19,7 +19,6 @@
  */
 
 #include "mwpreset.h"
-#include <QPainter>
 #include <QDebug>
 
 MWPreset::MWPreset(QWidget *parent): MisuWidget(parent)

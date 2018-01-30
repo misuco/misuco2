@@ -19,7 +19,6 @@
  */
 
 #include "mwfaderparamctl.h"
-#include <QPainter>
 #include <QDebug>
 
 MWFaderParamCtl::MWFaderParamCtl(QObject *parent, int cc) : MWFadder(parent), cc(cc)

@@ -19,7 +19,6 @@
  */
 
 #include "mwoctaveranger.h"
-#include <QPainter>
 #include <QDebug>
 
 MWOctaveRanger::MWOctaveRanger(QObject *parent) : MisuWidget(parent)

@@ -19,7 +19,6 @@
  */
 
 #include "mwheadersetter.h"
-#include <QPainter>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDebug>

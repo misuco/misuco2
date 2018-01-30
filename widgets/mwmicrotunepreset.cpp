@@ -19,7 +19,6 @@
  */
 
 #include "mwmicrotunepreset.h"
-#include <QPainter>
 #include <QDebug>
 
 MWMicrotunePreset::MWMicrotunePreset(QObject *parent): MisuWidget(parent)

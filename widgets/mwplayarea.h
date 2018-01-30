@@ -21,7 +21,6 @@
 #ifndef MWPLAYAREA_H
 #define MWPLAYAREA_H
 
-#include <QPainter>
 #include "misuwidget.h"
 #include "conf/types.h"
 #include "comm/isender.h"
