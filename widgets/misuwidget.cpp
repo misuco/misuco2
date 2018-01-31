@@ -55,6 +55,11 @@ int MisuWidget::channel = 0;
 bool MisuWidget::sendCC1 = true;
 QObject * MisuWidget::overwritePreset = 0;
 
+int MisuWidget::playAreaWidth = 0;
+int MisuWidget::playAreaHeight = 0;
+int MisuWidget::playFieldWidth = 0;
+int MisuWidget::playFieldHeight = 0;
+
 MisuWidget::MisuWidget(QObject *parent) : QObject(parent)
 {
 }

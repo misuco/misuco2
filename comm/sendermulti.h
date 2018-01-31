@@ -41,44 +41,20 @@ public:
 
     virtual void setDestination(char * a,int p);
     virtual void reconnect();
-    virtual bool voiceBased() {return true;}
 
-    bool senderEnabled[4];
-
-    //void sync(int mode, int bar, float bpm);
-
-    //void setSeq(Sequencer * s) {this->seq=s;}
+    bool senderEnabled[5];
 
     void setDestination(int i, char * a,int p);
-    /*
-
-    void sendOff();
-    
-    int repeatOff;
-    
-    struct offRepeat {
-        int voiceId;
-        int midinote;
-        int chan;
-        int offSent;
-    };
-
-    QHostAddress getIP() {
-        return syncout->getIP();
-    }
-    */
+    void addSender(ISender * s);
 
 private:
     QList<ISender *> senders;
-    //QList<offRepeat *> offToRepeat;
-    //QOscClient* syncout;
 
     int nextVoiceId;
 
     bool midiOn[256];
     quint8 * notestate;   // currently played notes
     int onCnt;
-    //void createOTR(int chan, int nextVoiceId, int midinote);
 };
 
 #endif // SENDERMULTI_H

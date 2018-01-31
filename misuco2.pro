@@ -75,7 +75,8 @@ SOURCES += main.cpp\
     comm/senderreaktor.cpp \
     comm/sendersupercollider.cpp \
     widgets/mwmicrotunepreset.cpp \
-    conf/mwplayfield.cpp
+    conf/mwplayfield.cpp \
+    widgets/mwgame.cpp
 
 HEADERS  += \
     widgets/wlayout.h \
@@ -129,7 +130,8 @@ HEADERS  += \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
     widgets/mwmicrotunepreset.h \
-    conf/mwplayfield.h
+    conf/mwplayfield.h \
+    widgets/mwgame.h
 
 CONFIG += mobility
 MOBILITY = 

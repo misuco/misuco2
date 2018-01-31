@@ -31,12 +31,6 @@ public:
     virtual void pitch(int chan, int voiceId, float f, int midinote, int pitch)=0;
     virtual void setDestination(char * adr, int port)=0;
     virtual void reconnect()=0;
-    /*
-     * a voice based sender supports voice identification by voiceId
-     * in contrast to midi senders where voice is identified by
-     * midinote and thus only one voice per note can exist
-     */
-    virtual bool voiceBased()=0;
 };
 
 #endif // ISENDER_H

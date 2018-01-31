@@ -31,5 +31,6 @@
         <file>xml/tune.xml</file>
         <file>qml/PlayFieldBendVertHorizBot.qml</file>
         <file>qml/PlayFieldBendVertHorizTop.qml</file>
+        <file>qml/DialogGame.qml</file>
     </qresource>
 </RCC>

@@ -38,10 +38,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
     _tunePresetsVisible=false;
     _dialogPresetsVisible=false;
 
-    _botOct=5;
-    _topOct=6;
-    MisuWidget::Scale.baseoct = 5;
-    MisuWidget::Scale.topoct = 6;
+    _botOct=6;
+    _topOct=7;
+    MisuWidget::Scale.baseoct = 6;
+    MisuWidget::Scale.topoct = 7;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -241,6 +241,10 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
         connect(this,SIGNAL(initialSet()),_tunePresets[0],SLOT(initialSet()));
     }
     emit initialSet();
+
+    _game = new MWGame((MWPlayArea *)_PlayArea,this);
+    out->addSender(_game);
+    _game->start();
 }
 
 wlayout::~wlayout()
@@ -362,7 +366,8 @@ void wlayout::currentHeader(int id)
 }
 
 void wlayout::currentMainView(int id)
-{
+{    
+    if(id==0 && _playAreaVisible) _game->start();
 
     _synthPresetsVisible=false;
     _scalePresetsVisible=false;

@@ -41,6 +41,7 @@
 #include "mwpreset.h"
 #include "mwsoundpreset.h"
 #include "mwmicrotunepreset.h"
+#include "mwgame.h"
 
 class wlayout : public QObject
 {
@@ -104,6 +105,8 @@ class wlayout : public QObject
     Q_PROPERTY(bool dialogPresetsVisible MEMBER _dialogPresetsVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
+
+    Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
 
 public:
     explicit wlayout(QWidget *parent = 0);
@@ -190,6 +193,8 @@ private:
     MWHeaderSetter * showMenu;
     MWHeaderSetter * octUp;
     MWHeaderSetter * octDown;
+
+    MWGame * _game;
 
     // layout
     bool _menuVisible;

@@ -38,7 +38,6 @@ public:
     virtual void reconnect();
     virtual int getPort() {return port;}
     virtual char* getAddress() {return adr;}
-    virtual bool voiceBased() {return false;}
 
 private:
     QOscClientInterface* oscout;

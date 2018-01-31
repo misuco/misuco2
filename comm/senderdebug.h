@@ -33,7 +33,6 @@ public:
     virtual void pitch(int chan, int voiceId, float f, int midinote, int pitch);
     virtual void setDestination(char *,int) {}
     virtual void reconnect() {}
-    virtual bool voiceBased() {return false;}
 
 private:
     int nextVid=1;

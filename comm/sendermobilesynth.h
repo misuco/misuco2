@@ -44,7 +44,6 @@ public:
     virtual void reconnect() {}
     virtual int getPort() {return 0;}
     virtual char* getAddress() {return 0;}
-    virtual bool voiceBased() {return true;}
     synth::Controller * getSynthController() {
 #ifdef RC1_IOS
         return sy;

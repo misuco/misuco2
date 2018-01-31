@@ -190,14 +190,19 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
 
 void MWPlayArea::calcGeo()
 {
-    int cw=width/cols;
-    int rh=height/rows;
+    playFieldWidth=playAreaWidth/cols;
+    playFieldHeight=playAreaHeight/rows;
     for(int i=0;i<cols;i++) {
-        colwidth[i]=cw;
+        colwidth[i]=playFieldWidth;
     }
     for(int i=0;i<rows;i++) {
-        rowheight[i]=rh;
+        rowheight[i]=playFieldHeight;
     }
+}
+
+int MWPlayArea::getMidinoteAtField(int i)
+{
+    return fields[0][i].f1->getMidinote();
 }
 
 /*
@@ -479,8 +484,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     es->y=e.y;
     int row=0;
 
-    if(height>0) row = e.y*rows/height;
-    int col=e.x*cols/width;
+    if(playAreaHeight>0) row = e.y*rows/playAreaHeight;
+    int col=e.x*cols/playAreaWidth;
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
@@ -660,8 +665,8 @@ void MWPlayArea::setOut(ISender *value)
 void MWPlayArea::resize(int w, int h)
 {
     //qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
-    width=w;
-    height=h;
+    playAreaWidth=w;
+    playAreaHeight=h;
     calcGeo();
 }
 

@@ -65,9 +65,8 @@ public:
     Q_INVOKABLE void onUpdated(int id, int x, int y);
     Q_INVOKABLE void onReleased(int id, int x, int y);
 
-    QList<QObject *> row0();
-    QList<QObject *> row1();
-    QList<QObject *> row2();
+    // game helper
+    int getMidinoteAtField(int i);
 
 public slots:
     void setRootNote(Pitch * p);
@@ -110,8 +109,6 @@ private:
     int bendVertBot;
 
     // - visual
-    int width;
-    int height;
     int colwidth[MAX_COLS];
     int rowheight[MAX_ROWS];
 
@@ -119,8 +116,12 @@ private:
     void config();
     void setColumn(int col, int midinote, int rootNote);
     void calcGeo();
-    //void paintField(int r, int c, int x, int y);
-    //void paintField(int r, int c);
+
+    // QML
+    QList<QObject *> row0();
+    QList<QObject *> row1();
+    QList<QObject *> row2();
+
 };
 
 #endif // MWPLAYAREA_H

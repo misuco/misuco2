@@ -71,6 +71,11 @@ public:
 
     static QObject * overwritePreset;
 
+    // that game knows where to touch
+    static int playAreaWidth;
+    static int playAreaHeight;
+    static int playFieldWidth;
+    static int playFieldHeight;
 
 };
 

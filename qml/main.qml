@@ -197,4 +197,10 @@ Window {
         anchors.fill: parent
     }
 
+    DialogGame {
+        id: gameDialog
+        visible: layout.game.visible
+        anchors.fill: parent
+    }
+
 }
