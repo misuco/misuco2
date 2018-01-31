@@ -244,7 +244,7 @@ wlayout::wlayout(QWidget *parent) : QObject(parent)
 
     _game = new MWGame((MWPlayArea *)_PlayArea,this);
     out->addSender(_game);
-    _game->start();
+    //_game->start();
 }
 
 wlayout::~wlayout()
@@ -320,33 +320,6 @@ void wlayout::updateMenuButtonState() {
 
 void wlayout::currentHeader(int id)
 {
-
-    /*
-
-    _rootNoteSetterVisible=false;
-    _bScaleSwitchVisible=false;
-    _octaveRangerVisible=false;
-
-    if(rootButton) rootButton->setState(0,0);
-    if(bscaleButton) bscaleButton->setState(1,0);
-    if(octaveButton) octaveButton->setState(2,0);
-
-    switch(id) {
-    case 0:
-        _rootNoteSetterVisible=true;
-        if(rootButton) rootButton->setState(0,1);
-        break;
-    case 1:
-        _bScaleSwitchVisible=true;
-        if(bscaleButton) bscaleButton->setState(1,1);
-        break;
-    case 2:
-        _octaveRangerVisible=true;
-        if(octaveButton) octaveButton->setState(2,1);
-        break;
-    }
-    */
-
     switch(id) {
     case 0:
         _rootNoteSetterVisible=!_rootNoteSetterVisible;

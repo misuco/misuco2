@@ -495,7 +495,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
     float freq;
     int midinote;
-    int pitch;
+    int pitch=0;
     int velocity=127;
 
     float freqdiff;

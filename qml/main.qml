@@ -2,11 +2,12 @@ import QtQuick 2.0
 import QtQuick.Window 2.2
 
 Window {
+    property bool portrait: height > width
     property int fontSize1: width/20
     property int fontSize2: width/32
     property int fontSize3: width/48
 
-    property int buttonSize: width/12
+    property int buttonSize: portrait ? width/6 : width/12
     property int menuSize: width/7
 
     property int faderRadius:  buttonSize/2
@@ -22,8 +23,8 @@ Window {
     property color hlColor: "#CC0000"
 
     visible: true
-    width: 640
-    height: 480
+    width: 480
+    height: 640
     title: qsTr("misuco2")
     color: bgColor
 
@@ -31,18 +32,18 @@ Window {
         id: scalePresetCol
         visible: layout.scalePresetsVisible
         anchors.top: rootNoteSetterRow.bottom
-        anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: layout.scalePresetsVisible ? columnWidth : 0
+        width: layout.scalePresetsVisible ? (portrait ? parent.width : columnWidth) : 0
+        height: layout.scalePresetsVisible ? (portrait ? buttonSize : playAreaRow.height) : 0
     }
 
     SynthPresetScroll {
         id: synthPresetCol
         visible: layout.synthPresetsVisible
         anchors.top: rootNoteSetterRow.bottom
-        anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: layout.synthPresetsVisible ? columnWidth : 0
+        width: layout.synthPresetsVisible ? (portrait ? parent.width : columnWidth) : 0
+        height: layout.synthPresetsVisible ? (portrait ? buttonSize : playAreaRow.height) : 0
     }
 
     Menu {
@@ -97,10 +98,10 @@ Window {
         id: playAreaRow
         visible: layout.playAreaVisible || layout.confAreaVisible
         controller: layout.playArea
-        anchors.top: rootNoteSetterRow.bottom
+        anchors.top: portrait ? scalePresetCol.bottom : rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: confAreaRow.right
-        width: layout.scalePresetsVisible ? parent.width - columnWidth : parent.width
+        anchors.left: portrait ? parent.left : scalePresetCol.right
+        width: layout.scalePresetsVisible && !portrait ? parent.width - columnWidth : parent.width
     }
 
     TuneArea {
@@ -108,16 +109,16 @@ Window {
         visible: layout.tuneAreaVisible
         anchors.top: rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: scalePresetCol.right
+        anchors.left: portrait ? parent.left : scalePresetCol.right
         anchors.right: parent.right
     }
 
     SynthArea {
         id: synthAreaRow
         visible: layout.synthAreaVisible
-        anchors.top: rootNoteSetterRow.bottom
+        anchors.top: portrait ? synthPresetCol.bottom : rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: synthPresetCol.right
+        anchors.left: portrait ? parent.left : synthPresetCol.right
         anchors.right: parent.right
     }
 

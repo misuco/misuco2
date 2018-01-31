@@ -22,10 +22,10 @@ Item {
 
             ctx.beginPath()
             ctx.moveTo(0,yStep)
-            ctx.lineTo(0, 0)
-            ctx.lineTo(xStep, 0)
-            ctx.lineTo(xStep, yStep * 2)
-            ctx.lineTo(xStep * 2, yStep * 2)
+            ctx.lineTo(0, 1)
+            ctx.lineTo(xStep, 1)
+            ctx.lineTo(xStep, yStep * 2 -1)
+            ctx.lineTo(xStep * 2, yStep * 2 -1)
             ctx.lineTo(xStep * 2, yStep)
 
             ctx.stroke()

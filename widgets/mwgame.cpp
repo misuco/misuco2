@@ -5,6 +5,7 @@ MWGame::MWGame(MWPlayArea * playArea, QObject *parent) : MisuWidget(parent), _pl
 {
     _noteOn = false;
     _buttonsVisible = false;
+    _gameVisible = false;
     _text = "";
 }
 

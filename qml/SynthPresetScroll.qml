@@ -24,6 +24,8 @@ Item {
                     id: synthPresetTitle
                     anchors.fill: parent
                     font.pixelSize: fontSize2
+                    verticalAlignment: portrait ? Qt.AlignTop : Qt.AlignVCenter
+                    horizontalAlignment: portrait ? Qt.AlignHCenter : Qt.AlignLeft
                     color: modelData.selected ? hlColor : fgColor
                     text: index
                 }
@@ -32,14 +34,14 @@ Item {
                     id: iconWave
 
                     anchors {
-                        top: parent.top
-                        bottom: parent.bottom
+                        verticalCenter: parent.verticalCenter
                         left: parent.left
-                        margins: parent.height/5
+                        leftMargin: parent.width/6
+                        topMargin: parent.width/6
+                        bottomMargin: parent.width/6
                     }
-
-                    width: columnWidth / 3
-
+                    width: parent.width / 3
+                    height: parent.width / 3
                     source: {
                         switch(modelData.wave) {
                         case 0:
@@ -53,19 +55,19 @@ Item {
                         case 4:
                             return "icons/Rnd.qml"
                         }
-
                     }
-
                 }
 
                 Envelope {
                     anchors {
-                        top: parent.top
-                        bottom: parent.bottom
+                        verticalCenter: parent.verticalCenter
                         left: iconWave.right
-                        margins: parent.height/5
+                        leftMargin: parent.width/6
+                        topMargin: parent.width/6
+                        bottomMargin: parent.width/6
                     }
-                    width: columnWidth / 3
+                    width: parent.width / 3
+                    height: parent.width / 3
                 }
 
                 MouseArea {
