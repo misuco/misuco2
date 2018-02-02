@@ -14,34 +14,43 @@ Item {
             color: bgColor
 
             anchors.fill: parent
-            anchors.leftMargin: buttonSize * 3
+            anchors.topMargin: portrait ? buttonSize * 2 : 0
+            anchors.leftMargin: portrait ? 0 : buttonSize * 2
 
             Text {
+                id: mainText
                 anchors {
                     top: parent.top
                     left: parent.left
-                    margins: buttonSize
+                    right: parent.right
                 }
-                text: "Would you like to "
+
+                anchors.margins: buttonSize
+                text: "You have pressed and hold a preset button. Would you like to overwrite the preset with the current scale? "
                 color: fgColor
                 font.pixelSize: fontSize1
+                wrapMode: Text.WordWrap
             }
 
             Rectangle {
                 anchors {
-                    bottom: parent.bottom
+                    top: mainText.bottom
                     left: parent.left
                     margins: buttonSize
                 }
-                width: buttonSize*2
+                width: portrait ? buttonSize*1.5 : buttonSize*2
                 height: buttonSize
                 color: bgColor
+                border.width: 1
+                border.color: fgColor
 
                 Text {
                     anchors.fill: parent
-                    text: "Cancel "
+                    text: "Cancel"
                     color: fgColor
-                    font.pixelSize: fontSize1
+                    font.pixelSize: fontSize2
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
                 }
 
                 MultiPointTouchArea {
@@ -54,19 +63,23 @@ Item {
 
             Rectangle {
                 anchors {
-                    bottom: parent.bottom
+                    top: mainText.bottom
                     right: parent.right
                     margins: buttonSize
                 }
-                width: buttonSize*2
+                width: portrait ? buttonSize*1.5 : buttonSize*2
                 height: buttonSize
                 color: bgColor
+                border.width: 1
+                border.color: fgColor
 
                 Text {
                     anchors.fill: parent
-                    text: "Overwrite "
+                    text: "Overwrite"
                     color: fgColor
-                    font.pixelSize: fontSize1
+                    font.pixelSize: fontSize2
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
                 }
 
                 MultiPointTouchArea {

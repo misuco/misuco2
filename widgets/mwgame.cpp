@@ -62,16 +62,14 @@ void MWGame::noteOn(int, int, float, int midinote, int, int)
             _buttonsVisible = true;
             _status = intro;
             emit buttonsChanged();
-        }
-        _hearIndex++;
-
-        if(_hearIndex == _played.size()) {
+        } else if(_hearIndex == _played.size()) {
             _text = QString("GOOD.... Your score is %1.\nReady for the next?").arg(_played.size());
             _buttonsVisible = true;
             _status = intro;
             addRandNote();
             emit buttonsChanged();
         }
+        _hearIndex++;
         emit textChanged();
     }
 }

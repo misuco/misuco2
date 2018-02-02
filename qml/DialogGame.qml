@@ -37,7 +37,7 @@ Item {
         Rectangle {
             visible: layout.game.buttonsVisible
             anchors {
-                bottom: parent.bottom
+                top: gameText.bottom
                 left: parent.left
                 margins: buttonSize
             }
@@ -50,6 +50,7 @@ Item {
                 text: "NO"
                 color: fgColor
                 font.pixelSize: fontSize1
+                horizontalAlignment: Qt.AlignHCenter
             }
 
             MultiPointTouchArea {
@@ -63,7 +64,7 @@ Item {
         Rectangle {
             visible: layout.game.buttonsVisible
             anchors {
-                bottom: parent.bottom
+                top: gameText.bottom
                 right: parent.right
                 margins: buttonSize
             }
@@ -76,6 +77,7 @@ Item {
                 text: "YES"
                 color: fgColor
                 font.pixelSize: fontSize1
+                horizontalAlignment: Qt.AlignHCenter
             }
 
             MultiPointTouchArea {

@@ -3,9 +3,10 @@ import QtQuick.Window 2.2
 
 Window {
     property bool portrait: height > width
-    property int fontSize1: width/20
-    property int fontSize2: width/32
-    property int fontSize3: width/48
+
+    property int fontSize1: portrait ? height / 20 : width / 20
+    property int fontSize2: portrait ? height / 32 : width / 32
+    property int fontSize3: portrait ? height / 48 : width / 48
 
     property int buttonSize: portrait ? width/6 : width/12
     property int menuSize: width/7
@@ -34,7 +35,7 @@ Window {
         anchors.top: rootNoteSetterRow.bottom
         anchors.left: parent.left
         width: layout.scalePresetsVisible ? (portrait ? parent.width : columnWidth) : 0
-        height: layout.scalePresetsVisible ? (portrait ? buttonSize : playAreaRow.height) : 0
+        height: layout.scalePresetsVisible ? (portrait ? buttonSize : parent.height - buttonSize) : 0
     }
 
     SynthPresetScroll {
@@ -96,11 +97,11 @@ Window {
 
     PlayArea {
         id: playAreaRow
-        visible: layout.playAreaVisible || layout.confAreaVisible
+        visible: layout.playAreaVisible || (layout.confAreaVisible && !portrait)
         controller: layout.playArea
         anchors.top: portrait ? scalePresetCol.bottom : rootNoteSetterRow.bottom
         anchors.bottom: parent.bottom
-        anchors.left: portrait ? parent.left : scalePresetCol.right
+        anchors.left: portrait ? parent.left : (layout.confAreaVisible ? confAreaRow.right : scalePresetCol.right)
         width: layout.scalePresetsVisible && !portrait ? parent.width - columnWidth : parent.width
     }
 

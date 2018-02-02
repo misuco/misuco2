@@ -8,6 +8,8 @@ Item {
         cellWidth: columnWidth
         cellHeight: buttonSize
 
+        flow: portrait ? GridView.FlowTopToBottom : GridView.FlowLeftToRight
+
         delegate:
         Item {
             property int presetNoteWidth: columnWidth / (modelData.bScaleSize - 1);
