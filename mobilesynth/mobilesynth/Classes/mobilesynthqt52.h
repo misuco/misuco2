@@ -23,9 +23,9 @@
 #include <QAudioOutput>
 #include <QByteArray>
 #include <QIODevice>
-#include <QMainWindow>
 #include <QObject>
 #include <QTimer>
+#include <QTimerEvent>
 
 #include "synth/controller.h"
 
@@ -48,6 +48,9 @@ public:
 
     synth::Controller * getSyctl() {return syctl;}
 
+private slots:
+    void sampleTimerEvent();
+
 private:
     int DataSampleRateHz;
     int BufferSize;
@@ -56,6 +59,16 @@ private:
     QIODevice *m_output; // not owned
     QAudioFormat m_format;
     QAudioDeviceInfo m_device;
+
+    QTimer sampleTimer;
+
+    char * sampleMemory;
+    int sampleMemorySize;
+    int writePointer;
+    int readPointer;
+    int samplesPerInterrupt;
+    bool writeBehindReadPointer;
+
 };
 
 #endif // MOBILESYNTHQT52_H

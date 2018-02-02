@@ -20,7 +20,6 @@
 #include <QAudioDeviceInfo>
 #include <QAudioOutput>
 #include <QDebug>
-#include <QVBoxLayout>
 #include <qmath.h>
 #include <qendian.h>
 
@@ -31,6 +30,7 @@ mobileSynthQT52::mobileSynthQT52()
     ,   m_device(QAudioDeviceInfo::defaultOutputDevice())
 
 {
+    writeBehindReadPointer = false;
     DataSampleRateHz  = 44100;
     //DataSampleRateHz  = 48000;
     //BufferSize        = 4096;
@@ -70,12 +70,21 @@ mobileSynthQT52::mobileSynthQT52()
 
     m_audioOutput = new QAudioOutput(m_device, m_format, this);
     m_audioOutput->setBufferSize(BufferSize);
-    //m_audioOutput->setBufferSize(0);
 
     this->start();
     qDebug() << "buffer size is " << m_audioOutput->bufferSize();
 
+    sampleMemorySize = BufferSize * 2;
+    sampleMemory = new char[sampleMemorySize];
+    for(int i=0;i<sampleMemorySize;i++) sampleMemory[i]=0;
+    writePointer = 0;
+    readPointer = 0;
+    samplesPerInterrupt = DataSampleRateHz * 2 / 16;
+
     m_audioOutput->start(this);
+
+    connect(&sampleTimer,SIGNAL(timeout()),this,SLOT(sampleTimerEvent()));
+    sampleTimer.start(50);
 }
 
 mobileSynthQT52::~mobileSynthQT52()
@@ -98,14 +107,27 @@ void mobileSynthQT52::stop()
 
 qint64 mobileSynthQT52::readData(char *data, qint64 len)
 {
-//    qDebug() << "read data " << len << " BufferSize " << m_audioOutput->bufferSize();
+    //qDebug() << "read data " << len << " readPointer " << readPointer << " writePointer " << writePointer;
 
-//TODO: why this dirty hack? why does windows request odd lens
+    //TODO: why this dirty hack? why does windows request odd lens
     if(len%2!=0) {
         qDebug() << "mobileSynthQT52::readData odd len " << len;
         len-=1;
     }
-    syctl->GetCharSamples(data,len);
+
+    memcpy(data,sampleMemory+readPointer,len);
+
+    /*
+    for(int i=0;i<len;i++) {
+        *(data+i) = *(sampleMemory+readPointer+i);
+    }
+    */
+
+    readPointer+=len;
+    if(readPointer>=sampleMemorySize) {
+        readPointer -= sampleMemorySize;
+        writeBehindReadPointer = false;
+    }
     return len;
 }
 
@@ -126,3 +148,33 @@ void mobileSynthQT52::noteOff(int vid)
 {
     syctl->NoteOff(vid);
 }
+
+void mobileSynthQT52::sampleTimerEvent()
+{
+    //qDebug() << "timerEvent " << writePointer;
+
+    if(writeBehindReadPointer && writePointer+samplesPerInterrupt > readPointer) {
+        //qDebug() << "avoiding write pointer to overrun read pointer";
+        return;
+    }
+
+    if(writePointer+samplesPerInterrupt >= sampleMemorySize) {
+        int readBytes = sampleMemorySize - writePointer;
+        syctl->GetCharSamples(sampleMemory+writePointer, readBytes);
+        writePointer = 0;
+        writeBehindReadPointer = true;
+        if(readPointer>0) {
+            readBytes = samplesPerInterrupt - readBytes;
+            syctl->GetCharSamples(sampleMemory+writePointer, readBytes);
+            writePointer += readBytes;
+        }
+    } else {
+        syctl->GetCharSamples(sampleMemory+writePointer, samplesPerInterrupt);
+        writePointer += samplesPerInterrupt;
+        if(writePointer>=sampleMemorySize) {
+            writePointer = 0;
+            writeBehindReadPointer = true;
+        }
+    }
+}
+
