@@ -21,8 +21,6 @@
 #ifndef WLAYOUT_H
 #define WLAYOUT_H
 
-#include <QWidget>
-#include <QGridLayout>
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
@@ -32,7 +30,6 @@
 #include "comm/senderdebug.h"
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
-#include <QStackedWidget>
 #include "mwfaderparamctl.h"
 #include "mwbscaleswitch.h"
 #include "mwheadersetter.h"
@@ -109,7 +106,7 @@ class wlayout : public QObject
     Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
 
 public:
-    explicit wlayout(QWidget *parent = 0);
+    explicit wlayout(QObject *parent = 0);
     ~wlayout();
 
     QList<QObject*> pitches();
@@ -149,7 +146,7 @@ private slots:
     void setOctConf(int bot, int top);
 
 private:
-    QGridLayout * layout;
+    //QGridLayout * layout;
     SenderMulti * out;
 
     QXmlStreamWriter xml;

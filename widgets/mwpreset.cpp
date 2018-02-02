@@ -21,7 +21,7 @@
 #include "mwpreset.h"
 #include <QDebug>
 
-MWPreset::MWPreset(QWidget *parent): MisuWidget(parent)
+MWPreset::MWPreset(QObject *parent): MisuWidget(parent)
 {
     PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
     PresetScale.baseoct=4;

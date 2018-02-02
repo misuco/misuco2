@@ -67,23 +67,8 @@ namespace synth {
         void set_filter_resonance(float value);
         
         // Get a single sample
-        float GetSample();
-        
-        void GetFloatSamples(float* buffer, int size);
-        void GetInt32Sapmles(int* buffer, int size);
+        float GetSample();        
         void GetCharSamples(char *buffer, int size);
-
-        float getSampleMem(int i) {
-            float r=0.0f;
-            if(!released()) {
-                if(sampleMemory) {
-                    if(i<sampleMemorySize) {
-                        r=sampleMemory[i];
-                    }
-                }
-            }
-            return r;
-        }
         
         void setFormat(QAudioFormat * f);
         
@@ -99,10 +84,6 @@ namespace synth {
         void incVoices();
 
     private:
-        // Invoked when one of the routing parameters changes, such as the source
-        // or destination of modulation.
-        // void reset_routing();
-        
         KeyStack key_stack_;
         bool osc_sync_;
         float sample_rate_;
@@ -111,10 +92,6 @@ namespace synth {
         int sampleBytes;
 
         float volume_;
-
-        float * sampleMemory;
-        int sampleMemorySize;
-        int sampleMemoryPnt;
 
     };
     

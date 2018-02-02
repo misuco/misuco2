@@ -14,11 +14,8 @@
 #
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-QT       += core gui network multimedia quick
+QT       += core network multimedia quick
 CONFIG   += c++11
-CONFIG   += console
 DEFINES  += QT_DEPRECATED_WARNINGS
 
 TARGET = misuco2

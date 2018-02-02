@@ -19,12 +19,10 @@
  */
 
 #include "wlayout.h"
-#include <QPushButton>
 #include <QDebug>
-#include <QStackedWidget>
 #include <QStandardPaths>
 
-wlayout::wlayout(QWidget *parent) : QObject(parent)
+wlayout::wlayout(QObject *parent) : QObject(parent)
 {
     _presetsVisible=true;
     _menuVisible=false;

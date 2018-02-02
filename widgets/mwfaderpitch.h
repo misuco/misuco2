@@ -22,7 +22,6 @@
 #define MWFADERPITCH_H
 
 #include <QObject>
-#include <QWidget>
 #include <widgets/mwfadder.h>
 #include <conf/freqtriple.h>
 #include "comm/isender.h"

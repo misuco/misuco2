@@ -21,9 +21,6 @@ namespace synth {
         //key_stack_.setADSR(1, 0,   0,   1, 1000);
         format=0;
         volume_=0.1;
-        sampleMemory=new float[2048];
-        sampleMemorySize=2048;
-        sampleMemoryPnt=0;
     }
 
     void Controller::set_volume(float volume)
@@ -75,31 +72,7 @@ namespace synth {
     void Controller::set_filter_resonance(float value) {
         key_stack_.setFilterRes(value);
     }
-    
-    void Controller::GetFloatSamples(float* buffer, int size) {
-        ////qDebug() << "GetFloatSamples " <<  size << " from " <<  buffer;
-        for (int i = 0; i < size; ++i) {
-            sampleMemory[sampleMemoryPnt]=GetSample();
-            buffer[i] = sampleMemory[sampleMemoryPnt];
-            sampleMemoryPnt++;
-            if(sampleMemoryPnt>=sampleMemorySize) {
-                sampleMemoryPnt=0;
-            }
-        }
-    }
-    
-    void Controller::GetInt32Sapmles(int* buffer, int size) {
-        ////qDebug() << "GetInt32Sapmles " <<  size << " from " <<  buffer;
-        for (int i = 0; i < size; ++i) {
-            sampleMemory[sampleMemoryPnt]=GetSample();
-            buffer[i] = sampleMemory[sampleMemoryPnt]* 2147483648L;
-            sampleMemoryPnt++;
-            if(sampleMemoryPnt>=sampleMemorySize) {
-                sampleMemoryPnt=0;
-            }
-        }
-    }
-    
+        
     void Controller::setADSR(int n, long a, long d, float s, long r) {
         key_stack_.setADSR(n,a,d,s,r);
     }
@@ -137,19 +110,10 @@ namespace synth {
     void Controller::GetCharSamples(char* buffer, int size) {
         
         if(format!=0) {
-            //delete(sampleMemory);
-            //sampleMemory=new float[size];
-            //qDebug() << "GetCharSamples size " << size << " sampleBytes " << sampleBytes;
-            //Q_ASSERT(size % sampleBytes == 0);
             Q_UNUSED(sampleBytes) // suppress warning in release builds
             unsigned char *ptr = reinterpret_cast<unsigned char *>(buffer);
-            while (size) {
-                sampleMemory[sampleMemoryPnt]=GetSample();
-                qreal x=sampleMemory[sampleMemoryPnt];
-                sampleMemoryPnt++;
-                if(sampleMemoryPnt>=sampleMemorySize) {
-                    sampleMemoryPnt=0;
-                }
+            while (size>0) {
+                qreal x=GetSample();
                 for (int i=0; i<format->channelCount(); ++i) {
                     if (format->sampleSize() == 8 && format->sampleType() == QAudioFormat::UnSignedInt) {
                         const quint8 value = static_cast<quint8>((1.0 + x) / 2 * 255);

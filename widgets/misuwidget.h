@@ -21,7 +21,6 @@
 #ifndef MISUWIDGET_H
 #define MISUWIDGET_H
 
-#include <QWidget>
 #include "conf/types.h"
 #include "conf/pitch.h"
 

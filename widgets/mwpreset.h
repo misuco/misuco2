@@ -34,7 +34,7 @@ class MWPreset : public MisuWidget
     Q_PROPERTY(bool selected READ isSelected NOTIFY presetChanged)
 
 public:
-    MWPreset(QWidget *parent);
+    MWPreset(QObject *parent);
     MWPreset(int rootNote, bool bscale[BSCALE_SIZE], QObject *parent);
 
     MWScale PresetScale;

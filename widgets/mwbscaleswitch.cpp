@@ -110,7 +110,7 @@ void MWBScaleSwitch::setRootNote(int rootNote)
         calcText();
     //}
 
-    qDebug() << "MWBScaleSwitch::setRootNote new: " << newrootNote << " bscaleId " << _bscaleId << " rootNote " << rootNote;
+    //qDebug() << "MWBScaleSwitch::setRootNote new: " << newrootNote << " bscaleId " << _bscaleId << " rootNote " << rootNote;
 }
 
 void MWBScaleSwitch::setOctMid(int o)
