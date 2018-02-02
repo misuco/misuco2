@@ -32,7 +32,7 @@ MWBScaleSwitch::MWBScaleSwitch(int i)
     _freq->setOct(4);
     _out=nullptr;
     _vid=0;
-    _oct=4;
+    _oct=6;
     _higherOct=0;
 }
 
@@ -72,16 +72,18 @@ bool MWBScaleSwitch::selected()
 
 void MWBScaleSwitch::onPressed()
 {
-    if(_out) _vid=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
-    _value=!_value;
-    emit setBscale(_bscaleId,_value);
+    if(_out && _pressed == 0) _vid=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
     emit selectedChanged();
 }
 
 void MWBScaleSwitch::onReleased()
 {
-    if(_out) _out->noteOff(_vid);
+    if(_out && _pressed == 1)  {
+        _out->noteOff(_vid);
+        _value=!_value;
+        emit setBscale(_bscaleId,_value);
+    }
     _pressed--;
     emit selectedChanged();
 }

@@ -9,7 +9,7 @@ Window {
     property int fontSize3: portrait ? height / 48 : width / 48
 
     property int buttonSize: portrait ? width/6 : width/12
-    property int menuSize: width/7
+    property int menuButtonSize: width/7
 
     property int faderRadius:  buttonSize/2
     property int buttonRadius: buttonSize/5

@@ -28,7 +28,7 @@ MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(
     _out=new SenderDebug();
     _pitch=pitch;
     _freq=new FreqTriple(_pitch);
-    _freq->setOct(4);
+    _freq->setOct(6);
     _freq->setRootNote(_pitch);
     //qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
     _vId=0;
@@ -116,17 +116,18 @@ int MWRootNoteSetter::pitchId()
 
 void MWRootNoteSetter::onPressed()
 {
-    _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
-    emit setRootNote(_pitch);
-    emit selectedChanged();
+    if(_out && _pressed == 0) _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
 }
 
 void MWRootNoteSetter::onReleased()
 {
-    _out->noteOff(_vId);
+    if(_out && _pressed == 1) {
+        _out->noteOff(_vId);
+        emit setRootNote(_pitch);
+        emit selectedChanged();
+    }
     _pressed--;
-    calcText();
 }
 
 QObject *MWRootNoteSetter::pitch()

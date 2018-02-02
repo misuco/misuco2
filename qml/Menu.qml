@@ -9,7 +9,7 @@ Item {
 
             Rectangle {
                 color: modelData.selected ? hlColor : llColor
-                width: menuSize
+                width: menuButtonSize
                 height: buttonSize
                 radius: buttonRadius
                 border.width: borderWidth
