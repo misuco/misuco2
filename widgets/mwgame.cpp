@@ -11,6 +11,7 @@ MWGame::MWGame(MWPlayArea * playArea, QObject *parent) : MisuWidget(parent), _pl
 
 void MWGame::yes()
 {
+    qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
     if(_status == intro ) {
         _status = play;
         _text = "watch and LISTEN...";
@@ -113,7 +114,6 @@ void MWGame::timerEvent(QTimerEvent *) {
 
 void MWGame::addRandNote()
 {
-    srand(QDateTime::currentDateTime().toMSecsSinceEpoch());
     int note = (float)Scale.size * (float)qrand()/(float)RAND_MAX;
     _played.append(note);
 }
