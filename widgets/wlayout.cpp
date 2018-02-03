@@ -513,6 +513,9 @@ void wlayout::onSoundChanged(int)
 void wlayout::onGameStarted()
 {
     _presetsVisible = false;
+    _scalePresetsVisible=false;
+    _synthPresetsVisible=false;
+    _tunePresetsVisible=false;
     _menuVisible=false;
     _rootNoteSetterVisible=false;
     _bScaleSwitchVisible=false;
