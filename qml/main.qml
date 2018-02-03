@@ -68,7 +68,7 @@ Window {
         id: bScaleSwitchRow
         visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         anchors.top: octaveRangerRow.bottom
-        width: parent.width - buttonSize
+        width: portrait ? parent.width - 2 * buttonSize :  parent.width - buttonSize
         height: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
     }
 
@@ -77,7 +77,7 @@ Window {
         visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         anchors {
             top: octaveRangerRow.bottom
-            left: bScaleSwitchRow.right
+            right: parent.right
         }
         width: buttonSize
         height: buttonSize
