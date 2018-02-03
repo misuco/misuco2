@@ -134,7 +134,7 @@ Window {
 
     Loader {
         id: showPresetsButton
-        visible: layout.playAreaVisible
+        visible: layout.playAreaVisible && !layout.game.visible
         anchors {
             top: playAreaRow.top
             left: playAreaRow.left
@@ -149,7 +149,7 @@ Window {
 
     Loader {
         id: showMenuButton
-        visible: layout.playAreaVisible
+        visible: layout.playAreaVisible && !layout.game.visible
         anchors {
             top: playAreaRow.top
             right: parent.right
@@ -164,7 +164,7 @@ Window {
 
     Loader {
         id: octDown
-        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0
+        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0 && !layout.game.visible
         anchors {
             bottom: playAreaRow.bottom
             left: playAreaRow.left
@@ -180,7 +180,7 @@ Window {
 
     Loader {
         id: octUp
-        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9
+        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9 && !layout.game.visible
         anchors {
             bottom: playAreaRow.bottom
             right: parent.right

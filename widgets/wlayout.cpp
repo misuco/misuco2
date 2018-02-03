@@ -242,6 +242,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
 
     _game = new MWGame((MWPlayArea *)_PlayArea,this);
     out->addSender(_game);
+    connect(_game,SIGNAL(gameStarted()),this,SLOT(onGameStarted()));
     _game->start();
 }
 
@@ -338,7 +339,9 @@ void wlayout::currentHeader(int id)
 
 void wlayout::currentMainView(int id)
 {    
-    if(id==0 && _playAreaVisible) _game->start();
+    if(id==0 && _playAreaVisible) {
+        _game->start();
+    }
 
     _synthPresetsVisible=false;
     _scalePresetsVisible=false;
@@ -505,6 +508,16 @@ void wlayout::onShowFreqsChange()
 void wlayout::onSoundChanged(int)
 {
     emit soundChanged();
+}
+
+void wlayout::onGameStarted()
+{
+    _presetsVisible = false;
+    _menuVisible=false;
+    _rootNoteSetterVisible=false;
+    _bScaleSwitchVisible=false;
+    _octaveRangerVisible=false;
+    emit layoutChange();
 }
 
 void wlayout::onEditPreset()

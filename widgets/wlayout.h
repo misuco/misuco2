@@ -141,6 +141,7 @@ private slots:
     void onSymbolsChange(int v);
     void onShowFreqsChange();
     void onSoundChanged(int);
+    void onGameStarted();
 
     void onEditPreset();
     void setOctConf(int bot, int top);

@@ -38,6 +38,7 @@ public:
 signals:
     void textChanged();
     void buttonsChanged();
+    void gameStarted();
 
 protected:
     virtual void timerEvent(QTimerEvent *e);

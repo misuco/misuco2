@@ -13,6 +13,7 @@ void MWGame::yes()
 {
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
     if(_status == intro ) {
+        emit gameStarted();
         _status = play;
         _text = "watch and LISTEN...";
         _buttonsVisible = false;
@@ -41,7 +42,7 @@ void MWGame::start()
 {
     if(!_gameVisible) {
         _status = intro;
-        _text = "Ready to play ?";
+        _text = "Play an introductory game?";
         _buttonsVisible = true;
         _gameVisible = true;
         emit textChanged();
