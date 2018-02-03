@@ -4,8 +4,8 @@ import QtQuick.Window 2.2
 Window {
     property bool portrait: height > width
 
-    property int fontSize1: portrait ? height / 20 : width / 20
-    property int fontSize2: portrait ? height / 32 : width / 32
+    property int fontSize1: portrait ? height / 25 : width / 20
+    property int fontSize2: portrait ? height / 55 : width / 32
     property int fontSize3: portrait ? height / 48 : width / 48
 
     property int buttonSize: portrait ? width/6 : width/12

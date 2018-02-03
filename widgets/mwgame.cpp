@@ -88,7 +88,7 @@ void MWGame::timerEvent(QTimerEvent *) {
         break;
     case play:
         touchEvent.id=9999;
-        touchEvent.x = _played[_playIndex]*MisuWidget::playFieldWidth;
+        touchEvent.x = _played[_playIndex]*MisuWidget::playFieldWidth + MisuWidget::playFieldWidth/2;
         touchEvent.y = MisuWidget::playAreaHeight/2;
         touchEvent.t = 0;
         if(_noteOn) {

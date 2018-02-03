@@ -11,7 +11,7 @@ Item {
         height: fontSize2
         text: modelData.text1
         font.pixelSize: fontSize2
-        color: hlColor
+        color: fgColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignTop
     }
@@ -24,7 +24,7 @@ Item {
         height: fontSize3
         text: modelData.text2
         font.pixelSize: fontSize3
-        color: hlColor
+        color: fgColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignTop
     }

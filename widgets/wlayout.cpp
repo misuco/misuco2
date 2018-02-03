@@ -520,6 +520,10 @@ void wlayout::onGameStarted()
     _rootNoteSetterVisible=false;
     _bScaleSwitchVisible=false;
     _octaveRangerVisible=false;
+    _synthAreaVisible=false;
+    _confAreaVisible=false;
+    _playAreaVisible=true;
+    updateMenuButtonState();
     emit layoutChange();
 }
 
