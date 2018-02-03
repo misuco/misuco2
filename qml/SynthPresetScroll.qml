@@ -6,7 +6,7 @@ Item {
         model: layout.synthPresets
 
         anchors.fill: parent
-        cellWidth: columnWidth
+        cellWidth: portrait ? buttonSize : columnWidth
         cellHeight: buttonSize
 
         delegate:
@@ -14,7 +14,7 @@ Item {
 
             Rectangle {
                 color: "Transparent"
-                width: columnWidth
+                width: portrait ? buttonSize : columnWidth
                 height: buttonSize
                 radius: buttonRadius
                 border.width: borderWidth

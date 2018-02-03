@@ -5,14 +5,15 @@ Item {
         model: layout.scalePresets
 
         anchors.fill: parent
-        cellWidth: columnWidth
+        cellWidth: portrait ? buttonSize : columnWidth
         cellHeight: buttonSize
 
         flow: portrait ? GridView.FlowTopToBottom : GridView.FlowLeftToRight
 
         delegate:
         Item {
-            property int presetNoteWidth: columnWidth / (modelData.bScaleSize - 1);
+            property int cellWidth: portrait ? buttonSize : columnWidth
+            property int presetNoteWidth: cellWidth / (modelData.bScaleSize - 1);
             property int presetSelected: modelData.selected;
             property int presetRootNote: modelData.rootNote;
 
@@ -32,7 +33,7 @@ Item {
 
             Rectangle {
                 color: "Transparent"
-                width: columnWidth
+                width: cellWidth
                 height: buttonSize
                 //radius: buttonRadius
                 border.width: borderWidth

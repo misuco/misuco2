@@ -41,7 +41,7 @@ void MWGame::start()
 {
     if(!_gameVisible) {
         _status = intro;
-        _text = "Ready to play ?...";
+        _text = "Ready to play ?";
         _buttonsVisible = true;
         _gameVisible = true;
         emit textChanged();
@@ -95,7 +95,7 @@ void MWGame::timerEvent(QTimerEvent *) {
             _noteOn = false;
             _playIndex++;
             if(_playIndex>=_played.size()) {
-                _text = "Now its your turn: PLAY...";
+                _text = "Now its your turn:\nPLAY what you have heard...";
                 emit textChanged();
                 _status = listen;
             }

@@ -242,7 +242,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
 
     _game = new MWGame((MWPlayArea *)_PlayArea,this);
     out->addSender(_game);
-    //_game->start();
+    _game->start();
 }
 
 wlayout::~wlayout()
