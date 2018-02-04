@@ -5,14 +5,11 @@
 //  Created by Allen Porter on 12/20/08.
 //  Copyright 2008 thebends. All rights reserved.
 //
-#include "platform.h"
-#ifdef RC1_IOS
+#include <QtGlobal>
+#ifdef Q_OS_IOS
 
 #import <Foundation/Foundation.h>
 #import <AudioUnit/AUComponent.h>
-
-#define NUM_BUFFERS 3
-#define BUFFER_SIZE 1024
 
 @protocol SampleGenerator 
 @required

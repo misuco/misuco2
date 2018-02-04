@@ -141,6 +141,13 @@ namespace synth {
             }
         }
     }
+
+    void Controller::GetInt32Sapmles(int* buffer, int size) {
+        //qDebug() << "GetInt32Sapmles " <<  size << " from " <<  buffer;
+        for (int i = 0; i < size; ++i) {
+            buffer[i] = GetSample() * 2147483648L;
+        }
+    }
     
     void Controller::setFormat(QAudioFormat *f)
     {

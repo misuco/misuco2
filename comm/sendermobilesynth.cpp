@@ -17,22 +17,22 @@
  
  */
 #include <QDebug>
-#include "conf/platform.h"
+#include <QtGlobal>
 #include "sendermobilesynth.h"
 
-#ifdef RC1_IOS
+#ifdef Q_OS_IOS
 
 SenderMobileSynth::SenderMobileSynth()
 {
     
-    //syco=new mobilesynthview::Widget();
+    syco=new mobilesynthview::Widget();
     sy=new synth::Controller();
-    //syco->setController(sy);
+    syco->setController(sy);
 }
 
 SenderMobileSynth::~SenderMobileSynth()
 {
-    //delete(syco);
+    delete(syco);
     delete(sy);
 }
 
@@ -65,12 +65,12 @@ void SenderMobileSynth::cc(int, int voiceId, int cc, float v1, float)
 
 void SenderMobileSynth::pc(int, int) {}
 
-int SenderMobileSynth::noteOn(int, float f, int, int, int)
+int SenderMobileSynth::noteOn(int, float, int, int, int)
 {
     return 0;
 }
 
-void SenderMobileSynth::noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v)
+void SenderMobileSynth::noteOn(int, int voiceId, float f, int, int, int)
 {
     sy->NoteOn(voiceId, (float)f);
 }

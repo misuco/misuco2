@@ -73,7 +73,7 @@ SOURCES += main.cpp\
     comm/sendersupercollider.cpp \
     widgets/mwmicrotunepreset.cpp \
     conf/mwplayfield.cpp \
-    widgets/mwgame.cpp
+    widgets/mwgame.cpp \
 
 HEADERS  += \
     widgets/wlayout.h \
@@ -112,7 +112,6 @@ HEADERS  += \
     widgets/mwrootnotesetter.h \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
-    conf/platform.h \
     widgets/mwheadersetter.h \
     widgets/mwfadder.h \
     conf/pitch.h \
@@ -166,7 +165,11 @@ DISTFILES += \
     ios/Images.xcassets/AppIcon.appiconset/Icon@2x.png \
     ios/Images.xcassets/Brand Assets.launchimage/Default-568h@2x.png \
     ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork.png \
-    ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png
+    ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png \
+
+OBJECTIVE_SOURCES += \
+    mobilesynth/mobilesynth/Classes/mobilesynthViewControllerRc1.mm \
+    mobilesynth/mobilesynth/Classes/AudioOutput.m \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

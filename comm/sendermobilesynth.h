@@ -20,9 +20,9 @@
 #ifndef SENDERMOBILESYNTH_H
 #define SENDERMOBILESYNTH_H
 
-#include "platform.h"
+#include <QtGlobal>
 #include "isender.h"
-#ifdef RC1_IOS
+#ifdef Q_OS_IOS
 #include "../mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp"
 #include "../mobilesynth/mobilesynth/Classes/synth/controller.h"
 #else
@@ -45,7 +45,7 @@ public:
     virtual int getPort() {return 0;}
     virtual char* getAddress() {return 0;}
     synth::Controller * getSynthController() {
-#ifdef RC1_IOS
+#ifdef Q_OS_IOS
         return sy;
 #else
         return sy->getSyctl();
@@ -53,8 +53,8 @@ public:
     }
     
 private:
-#ifdef RC1_IOS
-    //mobilesynthview::Widget * syco;
+#ifdef Q_OS_IOS
+    mobilesynthview::Widget * syco;
     synth::Controller * sy;
 #else
     mobileSynthQT52 * sy;

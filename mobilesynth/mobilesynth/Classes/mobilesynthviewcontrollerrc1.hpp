@@ -1,6 +1,6 @@
-#include "platform.h"
+#include <QtGlobal>
 
-#ifdef RC1_IOS
+#ifdef Q_OS_IOS
 
 #ifndef MOBILESYNTHVIEWCONTROLLERRC1_HPP
 #define MOBILESYNTHVIEWCONTROLLERRC1_HPP

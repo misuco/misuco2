@@ -69,7 +69,8 @@ namespace synth {
         // Get a single sample
         float GetSample();        
         void GetCharSamples(char *buffer, int size);
-        
+        void GetInt32Sapmles(int *buffer, int size);
+
         void setFormat(QAudioFormat * f);
         
         void setAttack(int n, long a);
@@ -82,6 +83,7 @@ namespace synth {
         float getVF(int i) {return key_stack_.GetFreq(i);}
         void decVoices();
         void incVoices();
+
 
     private:
         KeyStack key_stack_;

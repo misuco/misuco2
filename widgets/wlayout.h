@@ -147,7 +147,6 @@ private slots:
     void setOctConf(int bot, int top);
 
 private:
-    //QGridLayout * layout;
     SenderMulti * out;
 
     QXmlStreamWriter xml;
