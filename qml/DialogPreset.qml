@@ -40,6 +40,7 @@ Item {
                 }
                 width: portrait ? buttonSize*1.5 : buttonSize*2
                 height: buttonSize
+                radius: buttonRadius
                 color: bgColor
                 border.width: 1
                 border.color: fgColor
@@ -69,6 +70,7 @@ Item {
                 }
                 width: portrait ? buttonSize*1.5 : buttonSize*2
                 height: buttonSize
+                radius: buttonRadius
                 color: bgColor
                 border.width: 1
                 border.color: fgColor

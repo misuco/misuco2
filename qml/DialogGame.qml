@@ -41,9 +41,12 @@ Item {
                 left: parent.left
                 margins: buttonSize
             }
-            width: buttonSize*2
+            width: buttonSize*1.5
             height: buttonSize
-            color: "Transparent"
+            radius: buttonRadius
+            color: bgColor
+            border.width: 1
+            border.color: fgColor
 
             Text {
                 anchors.fill: parent
@@ -51,6 +54,7 @@ Item {
                 color: fgColor
                 font.pixelSize: fontSize1
                 horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
             }
 
             MultiPointTouchArea {
@@ -68,9 +72,12 @@ Item {
                 right: parent.right
                 margins: buttonSize
             }
-            width: buttonSize*2
+            width: buttonSize*1.5
             height: buttonSize
-            color: "Transparent"
+            radius: buttonRadius
+            color: bgColor
+            border.width: 1
+            border.color: fgColor
 
             Text {
                 anchors.fill: parent
@@ -78,6 +85,7 @@ Item {
                 color: fgColor
                 font.pixelSize: fontSize1
                 horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
             }
 
             MultiPointTouchArea {
