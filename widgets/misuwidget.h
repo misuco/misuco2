@@ -29,14 +29,6 @@ class MisuWidget : public QObject
     Q_OBJECT
 
 public:
-    struct misuTouchEvent {
-        int id;
-        int x;
-        int y;
-        int state;
-        long t;
-    };
-
     explicit MisuWidget(QObject *parent = 0);
     ~MisuWidget();
 

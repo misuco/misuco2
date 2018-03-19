@@ -35,7 +35,7 @@ MWMicrotunePreset::MWMicrotunePreset(int tuning[], QObject *parent): MisuWidget(
     }
 }
 
-void MWMicrotunePreset::processTouchEvent(MisuWidget::misuTouchEvent e)
+void MWMicrotunePreset::processTouchEvent(misuTouchEvent e)
 {
     switch(e.state) {
     case Qt::TouchPointPressed:

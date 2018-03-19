@@ -57,5 +57,13 @@ struct MWSound {
     float volume;
 };
 
+struct misuTouchEvent {
+    int id;
+    int x;
+    int y;
+    int state;
+    long t;
+};
+
 #endif // TYPES_H
 
