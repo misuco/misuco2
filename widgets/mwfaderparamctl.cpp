@@ -195,41 +195,41 @@ void MWFaderParamCtl::propagateValueChange() {
 
     switch(cc) {
     case 3:
-        channel=getValue();
+        MisuWidget::channel=getValue();
         break;
     case 102:
-        Sound.wave_type=getValue();
+        MisuWidget::Sound.wave_type=getValue();
         break;
     case 103:
-        Sound.attack=getValue();
+        MisuWidget::Sound.attack=getValue();
         break;
     case 104:
-        Sound.decay=getValue();
+        MisuWidget::Sound.decay=getValue();
         break;
     case 105:
-        Sound.sustain=getValue();
+        MisuWidget::Sound.sustain=getValue();
         break;
     case 106:
-        Sound.release=getValue();
+        MisuWidget::Sound.release=getValue();
         break;
     case 107:
-        Sound.filter_cutoff=getValue();
+        MisuWidget::Sound.filter_cutoff=getValue();
         break;
     case 108:
-        Sound.filter_resonance=getValue();
+        MisuWidget::Sound.filter_resonance=getValue();
         break;
     case 109:
-        Sound.mod_filter_cutoff=getValue();
+        MisuWidget::Sound.mod_filter_cutoff=getValue();
         break;
     case 110:
-        Sound.mod_filter_resonance=getValue();
+        MisuWidget::Sound.mod_filter_resonance=getValue();
         break;
     case 111:
-        Sound.volume=getValue();
+        MisuWidget::Sound.volume=getValue();
         break;
     }
 
-    out->cc(channel,0,cc,getValue(),getValue());
+    out->cc(MisuWidget::channel,0,cc,getValue(),getValue());
 }
 
 void MWFaderParamCtl::onPressedPitch(int id)
@@ -245,7 +245,7 @@ void MWFaderParamCtl::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        out->cc(channel,0,cc,getValue(),getValue());
+        out->cc(MisuWidget::channel,0,cc,getValue(),getValue());
         propagateValueChange();
     }
 }

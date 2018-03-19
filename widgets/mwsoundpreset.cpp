@@ -21,7 +21,7 @@
 #include "mwsoundpreset.h"
 #include <QDebug>
 
-MWSoundPreset::MWSoundPreset(QObject *parent): MisuWidget(parent)
+MWSoundPreset::MWSoundPreset(QObject *parent): QObject(parent)
 {
     PresetSound.volume=800;
     PresetSound.wave_type=qrand() % 4;
@@ -35,7 +35,7 @@ MWSoundPreset::MWSoundPreset(QObject *parent): MisuWidget(parent)
     PresetSound.mod_filter_resonance=0;
 }
 
-MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent): MisuWidget(parent)
+MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent): QObject(parent)
 {
     PresetSound.volume=vol;
     PresetSound.wave_type=wav;
@@ -101,16 +101,16 @@ float MWSoundPreset::volume()
 
 void MWSoundPreset::overwrite()
 {
-    PresetSound.volume=Sound.volume;
-    PresetSound.wave_type=Sound.wave_type;
-    PresetSound.attack=Sound.attack;
-    PresetSound.decay=Sound.decay;
-    PresetSound.sustain=Sound.sustain;
-    PresetSound.release=Sound.release;
-    PresetSound.filter_cutoff=Sound.filter_cutoff;
-    PresetSound.filter_resonance=Sound.filter_resonance;
-    PresetSound.mod_filter_cutoff=Sound.mod_filter_cutoff;
-    PresetSound.mod_filter_resonance=Sound.mod_filter_resonance;
+    PresetSound.volume=MisuWidget::Sound.volume;
+    PresetSound.wave_type=MisuWidget::Sound.wave_type;
+    PresetSound.attack=MisuWidget::Sound.attack;
+    PresetSound.decay=MisuWidget::Sound.decay;
+    PresetSound.sustain=MisuWidget::Sound.sustain;
+    PresetSound.release=MisuWidget::Sound.release;
+    PresetSound.filter_cutoff=MisuWidget::Sound.filter_cutoff;
+    PresetSound.filter_resonance=MisuWidget::Sound.filter_resonance;
+    PresetSound.mod_filter_cutoff=MisuWidget::Sound.mod_filter_cutoff;
+    PresetSound.mod_filter_resonance=MisuWidget::Sound.mod_filter_resonance;
 
     emit presetChanged();
     emit selectedChanged();
@@ -126,7 +126,7 @@ void MWSoundPreset::onPressed()
 void MWSoundPreset::onPressAndHold()
 {
     //qDebug() << "MWSoundPreset::onPressAndHold";
-    overwritePreset = this;
+    MisuWidget::overwritePreset = this;
     canceled = true;
     emit editPreset();
 }
@@ -157,16 +157,16 @@ void MWSoundPreset::onSoundChanged()
 }
 
 bool MWSoundPreset::isSelected() {
-    if( PresetSound.volume==Sound.volume &&
-        PresetSound.wave_type==Sound.wave_type &&
-        PresetSound.attack==Sound.attack &&
-        PresetSound.decay==Sound.decay &&
-        PresetSound.sustain==Sound.sustain &&
-        PresetSound.release==Sound.release &&
-        PresetSound.filter_cutoff==Sound.filter_cutoff &&
-        PresetSound.filter_resonance==Sound.filter_resonance &&
-        PresetSound.mod_filter_cutoff==Sound.mod_filter_cutoff &&
-        PresetSound.mod_filter_resonance==Sound.mod_filter_resonance
+    if( PresetSound.volume==MisuWidget::Sound.volume &&
+        PresetSound.wave_type==MisuWidget::Sound.wave_type &&
+        PresetSound.attack==MisuWidget::Sound.attack &&
+        PresetSound.decay==MisuWidget::Sound.decay &&
+        PresetSound.sustain==MisuWidget::Sound.sustain &&
+        PresetSound.release==MisuWidget::Sound.release &&
+        PresetSound.filter_cutoff==MisuWidget::Sound.filter_cutoff &&
+        PresetSound.filter_resonance==MisuWidget::Sound.filter_resonance &&
+        PresetSound.mod_filter_cutoff==MisuWidget::Sound.mod_filter_cutoff &&
+        PresetSound.mod_filter_resonance==MisuWidget::Sound.mod_filter_resonance
     ) return true;
-    else return false;
+    return false;
 }

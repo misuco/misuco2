@@ -32,7 +32,7 @@
 #define EVENT_STACK_SIZE 64
 
 
-class MWPlayArea : public MisuWidget
+class MWPlayArea : public QObject
 {
     Q_OBJECT
 

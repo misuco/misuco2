@@ -21,7 +21,7 @@
 #include "mwfadder.h"
 #include <QDebug>
 
-MWFadder::MWFadder(QObject *parent) : MisuWidget(parent)
+MWFadder::MWFadder(QObject *parent) : QObject(parent)
 {
     //qDebug() << "MWFadder::MWFadder";
     orient=vertical;

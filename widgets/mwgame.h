@@ -6,7 +6,7 @@
 #include "mwplayarea.h"
 #include "comm/isender.h"
 
-class MWGame : public MisuWidget, public ISender
+class MWGame : public QObject, public ISender
 {
     Q_OBJECT
 

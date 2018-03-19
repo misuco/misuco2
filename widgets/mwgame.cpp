@@ -1,7 +1,7 @@
 #include "mwgame.h"
 #include <QDateTime>
 
-MWGame::MWGame(MWPlayArea * playArea, QObject *parent) : MisuWidget(parent), _playArea(playArea)
+MWGame::MWGame(MWPlayArea * playArea, QObject *parent) : QObject(parent), _playArea(playArea)
 {
     _noteOn = false;
     _buttonsVisible = false;
@@ -115,7 +115,7 @@ void MWGame::timerEvent(QTimerEvent *) {
 
 void MWGame::addRandNote()
 {
-    int note = (float)Scale.size * (float)qrand()/(float)RAND_MAX;
+    int note = (float)MisuWidget::Scale.size * (float)qrand()/(float)RAND_MAX;
     _played.append(note);
 }
 

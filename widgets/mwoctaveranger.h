@@ -23,7 +23,7 @@
 
 #include "misuwidget.h"
 
-class MWOctaveRanger : public MisuWidget
+class MWOctaveRanger : public QObject
 {
     Q_OBJECT
 

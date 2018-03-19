@@ -26,7 +26,7 @@
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
 
-MWPlayArea::MWPlayArea(QObject *parent) : MisuWidget(parent),
+MWPlayArea::MWPlayArea(QObject *parent) : QObject(parent),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
@@ -52,8 +52,8 @@ MWPlayArea::MWPlayArea(QObject *parent) : MisuWidget(parent),
 
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
-            fields[r][c].f1=new FreqTriple(MWPitch[c%(BSCALE_SIZE+1)],this);
-            fields[r][c].f2=new FreqTriple(MWPitch[c%(BSCALE_SIZE+1)],this);
+            fields[r][c].f1=new FreqTriple(MisuWidget::MWPitch[c%(BSCALE_SIZE+1)],this);
+            fields[r][c].f2=new FreqTriple(MisuWidget::MWPitch[c%(BSCALE_SIZE+1)],this);
         }
     }
 
@@ -88,8 +88,8 @@ void MWPlayArea::config()
     */
 
     cols=0;
-    for(int oct=Scale.baseoct;oct<Scale.topoct;oct++) {
-        setColumn(cols,Scale.rootNote+oct*12,Scale.rootNote);
+    for(int oct=MisuWidget::Scale.baseoct;oct<MisuWidget::Scale.topoct;oct++) {
+        setColumn(cols,MisuWidget::Scale.rootNote+oct*12,MisuWidget::Scale.rootNote);
         if(bendHoriz) {
             cols+=2;
         } else {
@@ -97,8 +97,8 @@ void MWPlayArea::config()
         }
         for(int note=0;note<BSCALE_SIZE;note++) {
             //qDebug() << "MWPlayArea::config " << note;
-            if(Scale.bscale[note]) {
-                setColumn(cols,Scale.rootNote+oct*12+note+1,(Scale.rootNote+note+1)%(BSCALE_SIZE+1));
+            if(MisuWidget::Scale.bscale[note]) {
+                setColumn(cols,MisuWidget::Scale.rootNote+oct*12+note+1,(MisuWidget::Scale.rootNote+note+1)%(BSCALE_SIZE+1));
                 //qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
@@ -108,9 +108,9 @@ void MWPlayArea::config()
             }
         }
     }
-    int topnote=Scale.rootNote+(Scale.topoct)*12;
+    int topnote=MisuWidget::Scale.rootNote+(MisuWidget::Scale.topoct)*12;
     //qDebug() << "rootNote: " << Scale.rootNote << "topnote: " << topnote;
-    setColumn(cols,topnote,Scale.rootNote);
+    setColumn(cols,topnote,MisuWidget::Scale.rootNote);
     cols++;
 
     /*
@@ -135,18 +135,18 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
     float huePerNote = 1.0/12.0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MWPitch[rootNote]);
+        fields[rows][col].f1->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertTop;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getRootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MisuWidget::MWPitch[fields[rows][col-2].f1->getRootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
+            fields[rows][col-1].f2->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -155,30 +155,30 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1->setMidinote(midinote,MWPitch[rootNote]);
+    fields[rows][col].f1->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
     //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getRootNote()]);
-        fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MisuWidget::MWPitch[fields[rows][col-2].f1->getRootNote()]);
+        fields[rows][col-1].f2->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MWPitch[rootNote]);
+        fields[rows][col].f1->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertBot;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MWPitch[fields[rows][col-2].f1->getRootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MisuWidget::MWPitch[fields[rows][col-2].f1->getRootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MWPitch[rootNote]);
+            fields[rows][col-1].f2->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -190,13 +190,13 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
 
 void MWPlayArea::calcGeo()
 {
-    playFieldWidth=playAreaWidth/cols;
-    playFieldHeight=playAreaHeight/rows;
+    MisuWidget::playFieldWidth=MisuWidget::playAreaWidth/cols;
+    MisuWidget::playFieldHeight=MisuWidget::playAreaHeight/rows;
     for(int i=0;i<cols;i++) {
-        colwidth[i]=playFieldWidth;
+        colwidth[i]=MisuWidget::playFieldWidth;
     }
     for(int i=0;i<rows;i++) {
-        rowheight[i]=playFieldHeight;
+        rowheight[i]=MisuWidget::playFieldHeight;
     }
 }
 
@@ -204,270 +204,6 @@ int MWPlayArea::getMidinoteAtField(int i)
 {
     return fields[0][i].f1->getMidinote();
 }
-
-/*
-void MWPlayArea::paintField(int r, int c, int x, int y) {
-    QPainter painter(this);
-
-    painter.setFont(font3);
-
-
-
-
-
-    //qDebug() << "MWPlayArea::paintField r " << r << " c " << c;
-    QString rootNote;
-    switch(fields[r][c].type) {
-    case NORMAL:
-        if(fields[r][c].pressed>0 || fields[r][c].hold) {
-            painter.setPen(highlightcolor);
-        } else {
-            painter.setPen(fgcolor);
-        }
-        painter.setBrush(colorF1);
-        //qDebug() << "setBrush hue " << fields[r][c].f1->getHue();
-        painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        rootNote = fields[r][c].f1->getRootNoteString(noteSymbols);
-        if(rootNote.startsWith("_")) {
-            font3.setUnderline(true);
-            painter.setFont(font3);
-            rootNote.remove(0,1);
-        }
-        cap.sprintf("%s",rootNote.toStdString().c_str());
-        painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignCenter,cap);        
-        font3.setUnderline(false);
-
-        if(showFreqs) {
-            painter.setFont(font8);
-            // no text on padw with menu buttons (first and last col in first row)
-            if( (c!=0 && c!=cols-1) || r!=0) {
-                cap.sprintf("%d %d %d", (fields[r][c].f1->getRootNote()-Scale.rootNote+12)%12, fields[r][c].f1->getMidinote(), fields[r][c].f1->getOct());
-                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignTop,cap);
-            }
-            cap.sprintf("%5.2f",fields[r][c].f1->getFreq());
-            painter.drawText(x,y+rowheight[r]/3,colwidth[c],rowheight[r],Qt::AlignCenter,cap);
-        }
-
-        break;
-
-    case BEND_VERT:
-        linearGrad.setStart(QPointF(x,y));
-        linearGrad.setFinalStop(QPointF(x, y+rowheight[r]));
-        if(0==r) {
-            linearGrad.setColorAt(0, colorF1b);
-            linearGrad.setColorAt(1, colorF1);
-        } else {
-            linearGrad.setColorAt(0, colorF1);
-            linearGrad.setColorAt(1, colorF1b);
-        }
-        painter.setPen(fgcolor);
-        painter.setBrush(linearGrad);
-        painter.drawRect(x,y,colwidth[c],rowheight[r]);
-
-        if(showFreqs) {
-            painter.setFont(font8);
-            if(0==r) {
-                // no text on padw with menu buttons (first and last col in first row)
-                if( (c!=0 && c!=cols-1) || r!=0) {
-                    cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertTop);
-                    painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
-                }
-                cap.sprintf("%d",fields[r][c].f1->getMidinote());
-                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
-            } else {
-                // no text on padw with menu buttons (first and last col in first row)
-                if( (c!=0 && c!=cols-1) || r!=0) {
-                    cap.sprintf("%d",fields[r][c].f1->getMidinote()+bendVertBot);
-                    painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignBottom,cap);
-                }
-                cap.sprintf("%d",fields[r][c].f1->getMidinote());
-                painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignHCenter|Qt::AlignTop,cap);
-            }
-        }
-        break;
-
-    case BEND_HORIZ:
-        linearGrad.setStart(QPointF(x,y));
-        linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
-        linearGrad.setColorAt(0, colorF1);
-        linearGrad.setColorAt(1, colorF2);
-        painter.setPen(fgcolor);
-        painter.setBrush(linearGrad);
-        painter.drawRect(x,y,colwidth[c],rowheight[r]);
-
-        if(showFreqs) {
-            painter.setFont(font8);
-            cap.sprintf("%d",fields[r][c].f1->getMidinote());
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignLeft|Qt::AlignBottom,cap);
-            cap.sprintf("%d",fields[r][c].f2->getMidinote());
-            painter.drawText(x,y,colwidth[c],rowheight[r],Qt::AlignRight|Qt::AlignBottom,cap);
-        }
-
-        break;
-
-    case BEND_VERT_HORIZ:
-        if(bwmode) {
-            int hue1;
-            int sat1;
-            int lum1;
-            float lum1f;
-            int alp1;
-            colorF1.getHsl(&hue1,&sat1,&lum1,&alp1);
-
-            int hue2;
-            int sat2;
-            int lum2;
-            float lum2f;
-            int alp2;
-            colorF2.getHsl(&hue2,&sat2,&lum2,&alp2);
-
-            linearGrad.setStart(QPointF(x,y));
-            linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
-
-            float inclum1;
-            if(lum1>127) inclum1 = -lum1;
-            else inclum1 = 255-lum1;
-            inclum1=inclum1/(float)rowheight[r];
-
-            float inclum2;
-            if(lum2>127) inclum2 = -lum2;
-            else inclum2 = 255-lum2;
-            inclum2=inclum2/(float)rowheight[r];
-
-            lum1f=lum1;
-            lum2f=lum2;
-
-            painter.setPen(Qt::NoPen);
-            if(0==r) {
-                for(int y1=y+rowheight[r];y1>=y;y1--) {
-                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,sat1,lum1f,alp1));
-                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,sat2,lum2f,alp2));
-                    painter.setBrush(linearGrad);
-                    painter.drawRect(x,y1,colwidth[c],1);
-                    lum1f+=inclum1;
-                    lum2f+=inclum2;
-                }
-            } else {
-                for(int y1=y;y1<=y+rowheight[r];y1++) {
-                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,sat1,lum1f,alp1));
-                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,sat2,lum2f,alp2));
-                    painter.setBrush(linearGrad);
-                    painter.drawRect(x,y1,colwidth[c],1);
-                    lum1f+=inclum1;
-                    lum2f+=inclum2;
-                }
-            }
-
-        } else {
-            linearGrad.setStart(QPointF(x,y));
-            linearGrad.setFinalStop(QPointF(QPointF(x+colwidth[c], y)));
-            float hue1=fields[r][c].f1->getHue();
-            float hue2=fields[r][c].f2->getHue();
-            float inchue;
-
-            painter.setPen(Qt::NoPen);
-            if(0==r) {
-                inchue=(float)(bendVertTop*HUE_NOTES)/(float)rowheight[r];
-                //qDebug() << "bendVertTop inchue " << inchue;
-                for(int y1=y+rowheight[r];y1>=y;y1--) {
-                    //qDebug() << "hue 1 " << hue1 << " hue2 " << hue2;
-                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,s,l));
-                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,s,l));
-                    painter.setBrush(linearGrad);
-                    painter.drawRect(x,y1,colwidth[c],1);
-                    hue1+=inchue;
-                    if(hue1>359) hue1-=359;
-                    if(hue1<0) hue1+=359;
-                    hue2+=inchue;
-                    if(hue2>359) hue2-=359;
-                    if(hue2<0) hue2+=359;
-                }
-            } else {
-                inchue=(float)(bendVertBot*HUE_NOTES)/(float)rowheight[r];
-                //qDebug() << "bendVertBot inchue " << inchue;
-                for(int y1=y;y1<=y+rowheight[r];y1++) {
-                    //qDebug() << "hue 1 " << hue1 << " hue2 " << hue2;
-                    linearGrad.setColorAt(0, QColor::fromHsl(hue1,s,l));
-                    linearGrad.setColorAt(1, QColor::fromHsl(hue2,s,l));
-                    painter.setBrush(linearGrad);
-                    painter.drawRect(x,y1,colwidth[c],1);
-                    hue1+=inchue;
-                    if(hue1>359) hue1-=359;
-                    if(hue1<0) hue1+=359;
-                    hue2+=inchue;
-                    if(hue2>359) hue2-=359;
-                    if(hue2<0) hue2+=359;
-                }
-            }
-
-        }
-
-
-        painter.setPen(fgcolor );
-        painter.setBrush(Qt::NoBrush);
-        painter.drawRect(x,y,colwidth[c],rowheight[r]);
-        break;
-    }
-}
-
-void MWPlayArea::paintField(int r, int c)
-{
-    int x=r*colwidth[0];
-    int y=c*rowheight[0];
-    paintField(r,c,x,y);
-}
-
-void MWPlayArea::paintEvent(QPaintEvent *)
-{
-    int x,y=0;
-    for(int r=0;r<rows;r++) {
-        x=0;
-        for(int c=0;c<cols;c++) {
-            paintField(r,c,x,y);
-            x+=colwidth[c];
-        }
-        y+=rowheight[r];
-    }
-
-    QPainter painter(this);
-    painter.setPen(fgcolor);
-    painter.setBrush(fgcolor);
-
-    QFont font(font1);
-    font.setPixelSize(font1size/2);
-    painter.setFont(font);
-
-    for(int i=0;i<EVENT_STACK_SIZE;i++) {
-        eventStackElement * es = &eventStack[i];
-        if(es && es->eventId>0) {
-            int r = colwidth[0]/4;
-            //painter.drawRect(es->x-50,es->y-50,100,100);
-            painter.drawEllipse(es->x-r,es->y-r,2*r,2*r);
-            painter.drawText(es->x-r,es->y-2*r,4*r,5*r,0,QString("%1\n%2\n\n").arg(es->f).arg(es->voiceId));
-        }
-    }
-
-    painter.setPen(fgcolor);
-    // fill round space with fgcolor
-    painter.drawRect(x,0,width()-x,height());
-
-    int barHeight = (menuy2-menuy1)/7;
-    painter.drawRect(menux1,menuy1,menux2-menux1,barHeight);
-    painter.drawRect(menux1,menuy1+2*barHeight,menux2-menux1,barHeight);
-    painter.drawRect(menux1,menuy1+4*barHeight,menux2-menux1,barHeight);
-    painter.drawRect(menux1,menuy1+6*barHeight,menux2-menux1,barHeight);
-
-    painter.drawRect(presetsx1,presetsy1,presetsx2-presetsx1,barHeight);
-    painter.drawRect(presetsx1,presetsy1+2*barHeight,presetsx2-presetsx1,barHeight);
-    painter.drawRect(presetsx1,presetsy1+4*barHeight,presetsx2-presetsx1,barHeight);
-    painter.drawRect(presetsx1,presetsy1+6*barHeight,presetsx2-presetsx1,barHeight);
-}
-
-void MWPlayArea::resizeEvent(QResizeEvent *)
-{
-    calcGeo();
-}
-    */
 
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
 {
@@ -484,8 +220,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     es->y=e.y;
     int row=0;
 
-    if(playAreaHeight>0) row = e.y*rows/playAreaHeight;
-    int col=e.x*cols/playAreaWidth;
+    if(MisuWidget::playAreaHeight>0) row = e.y*rows/MisuWidget::playAreaHeight;
+    int col=e.x*cols/MisuWidget::playAreaWidth;
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
@@ -563,7 +299,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->row=row;
         es->col=col;
         es->f=freq;
-        es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
+        es->voiceId=out->noteOn(MisuWidget::channel,freq,midinote,pitch,velocity);
         pf->pressed++;
         break;
 
@@ -575,19 +311,19 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             out->noteOff(es->voiceId);
 
             es->midinote=midinote;
-            es->voiceId=out->noteOn(channel,freq,midinote,pitch,velocity);
+            es->voiceId=out->noteOn(MisuWidget::channel,freq,midinote,pitch,velocity);
 
             es->row=row;
             es->col=col;
             es->f=freq;
             pf->pressed++;
         } else if(freq!=es->f) {
-            out->pitch(channel,es->voiceId,freq,midinote,pitch);
+            out->pitch(MisuWidget::channel,es->voiceId,freq,midinote,pitch);
             es->f=freq;
         }
 
-        if(sendCC1) {
-            out->cc(channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
+        if(MisuWidget::sendCC1) {
+            out->cc(MisuWidget::channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;
 
@@ -606,15 +342,15 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
 void MWPlayArea::setRootNote(Pitch *p)
 {
-    Scale.rootNote=p->getRootNote();
+    MisuWidget::Scale.rootNote=p->getRootNote();
     config();
 }
 
 
 void MWPlayArea::setOctConf(int bottom, int top)
 {
-    Scale.baseoct=bottom;
-    Scale.topoct=top;
+    MisuWidget::Scale.baseoct=bottom;
+    MisuWidget::Scale.topoct=top;
     config();
 
 }
@@ -622,17 +358,17 @@ void MWPlayArea::setOctConf(int bottom, int top)
 void MWPlayArea::setBscale(int n, bool v)
 {
     //qDebug() << "MWPlayArea::setBscale " << n << " " << v;
-    Scale.bscale[n-1]=v;
+    MisuWidget::Scale.bscale[n-1]=v;
     config();
 }
 
 void MWPlayArea::setScale(MWScale * s)
 {
-    Scale.rootNote=s->rootNote;
-    Scale.size=2;
+    MisuWidget::Scale.rootNote=s->rootNote;
+    MisuWidget::Scale.size=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
-        Scale.bscale[i]=s->bscale[i];
-        if(Scale.bscale[i]) Scale.size+=Scale.topoct-Scale.baseoct;
+        MisuWidget::Scale.bscale[i]=s->bscale[i];
+        if(MisuWidget::Scale.bscale[i]) MisuWidget::Scale.size+=MisuWidget::Scale.topoct-MisuWidget::Scale.baseoct;
     }
     config();
 }
@@ -665,8 +401,8 @@ void MWPlayArea::setOut(ISender *value)
 void MWPlayArea::resize(int w, int h)
 {
     //qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
-    playAreaWidth=w;
-    playAreaHeight=h;
+    MisuWidget::playAreaWidth=w;
+    MisuWidget::playAreaHeight=h;
     calcGeo();
 }
 

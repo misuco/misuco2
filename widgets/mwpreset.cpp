@@ -21,7 +21,7 @@
 #include "mwpreset.h"
 #include <QDebug>
 
-MWPreset::MWPreset(QObject *parent): MisuWidget(parent)
+MWPreset::MWPreset(QObject *parent): QObject(parent)
 {
     PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
     PresetScale.baseoct=4;
@@ -38,7 +38,7 @@ MWPreset::MWPreset(QObject *parent): MisuWidget(parent)
     pressed=0;
 }
 
-MWPreset::MWPreset(int rootNote, bool bscale[], QObject *parent): MisuWidget(parent)
+MWPreset::MWPreset(int rootNote, bool bscale[], QObject *parent): QObject(parent)
 {
     PresetScale.rootNote=rootNote;
     PresetScale.size=2;
@@ -98,7 +98,7 @@ void MWPreset::onPressed()
 void MWPreset::onPressAndHold()
 {
     canceled = true;
-    overwritePreset = this;
+    MisuWidget::overwritePreset = this;
     emit editPreset();
 }
 
@@ -127,10 +127,10 @@ void MWPreset::playAreaChanged()
 
 bool MWPreset::isSelected()
 {
-    if(PresetScale.rootNote!=Scale.rootNote ) return false;
+    if(PresetScale.rootNote!=MisuWidget::Scale.rootNote ) return false;
 
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if( PresetScale.bscale[i]!=Scale.bscale[i] ) return false;
+        if( PresetScale.bscale[i]!=MisuWidget::Scale.bscale[i] ) return false;
     }
     return true;
 }

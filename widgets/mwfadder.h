@@ -23,7 +23,7 @@
 
 #include "misuwidget.h"
 
-class MWFadder : public MisuWidget
+class MWFadder : public QObject
 {
     Q_OBJECT
 

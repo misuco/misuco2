@@ -24,7 +24,7 @@
 #include "misuwidget.h"
 #include "conf/types.h"
 
-class MWMicrotunePreset : public MisuWidget
+class MWMicrotunePreset : public QObject
 {
     Q_OBJECT
 

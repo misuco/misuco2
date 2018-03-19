@@ -25,7 +25,7 @@
 #include "freqtriple.h"
 #include "comm/isender.h"
 
-class MWBScaleSwitch : public MisuWidget
+class MWBScaleSwitch : public QObject
 {
     Q_OBJECT
 

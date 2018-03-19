@@ -21,7 +21,7 @@
 #include "mwoctaveranger.h"
 #include <QDebug>
 
-MWOctaveRanger::MWOctaveRanger(QObject *parent) : MisuWidget(parent)
+MWOctaveRanger::MWOctaveRanger(QObject *parent) : QObject(parent)
 {
     //qDebug() << "MWOctaveRanger::MWOctaveRanger()";
     top=7;
@@ -31,9 +31,9 @@ MWOctaveRanger::MWOctaveRanger(QObject *parent) : MisuWidget(parent)
     grabedTop=false;
     grabedBot=false;
 
-    fgColor = fgcolor;
-    bgColor = bgcolor;
-    hlColor = highlightcolor;
+    fgColor = MisuWidget::fgcolor;
+    bgColor = MisuWidget::bgcolor;
+    hlColor = MisuWidget::highlightcolor;
 }
 
 MWOctaveRanger::~MWOctaveRanger()

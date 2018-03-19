@@ -25,7 +25,7 @@
 #include "comm/isender.h"
 #include "conf/freqtriple.h"
 
-class MWRootNoteSetter : public MisuWidget
+class MWRootNoteSetter : public QObject
 {
     Q_OBJECT
 

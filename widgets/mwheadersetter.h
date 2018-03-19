@@ -23,7 +23,7 @@
 
 #include "misuwidget.h"
 
-class MWHeaderSetter : public MisuWidget
+class MWHeaderSetter : public QObject
 {
     Q_OBJECT
 

@@ -22,7 +22,7 @@
 #include "comm/senderdebug.h"
 #include <QDebug>
 
-MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, QObject *parent) : MisuWidget(parent)
+MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, QObject *parent) : QObject(parent)
 {
     //qDebug() << "MWrootNoteSetter::MWrootNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
     _out=new SenderDebug();
@@ -93,9 +93,9 @@ void MWRootNoteSetter::onSymbolsChanged()
 
 void MWRootNoteSetter::calcText()
 {
-    _text1 = _freq->getRootNoteString(noteSymbols);
+    _text1 = _freq->getRootNoteString(MisuWidget::noteSymbols);
 
-    if(showFreqs) {
+    if(MisuWidget::showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
     } else {
         _text2="";
@@ -116,7 +116,7 @@ int MWRootNoteSetter::pitchId()
 
 void MWRootNoteSetter::onPressed()
 {
-    if(_out && _pressed == 0) _vId=_out->noteOn(channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    if(_out && _pressed == 0) _vId=_out->noteOn(MisuWidget::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
 }
 

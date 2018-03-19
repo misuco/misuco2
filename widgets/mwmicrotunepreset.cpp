@@ -21,14 +21,14 @@
 #include "mwmicrotunepreset.h"
 #include <QDebug>
 
-MWMicrotunePreset::MWMicrotunePreset(QObject *parent): MisuWidget(parent)
+MWMicrotunePreset::MWMicrotunePreset(QObject *parent): QObject(parent)
 {
     for(int i=0;i<12;i++) {
         PresetMicrotune.tuning[i]=rand()%200-100;
     }
 }
 
-MWMicrotunePreset::MWMicrotunePreset(int tuning[], QObject *parent): MisuWidget(parent)
+MWMicrotunePreset::MWMicrotunePreset(int tuning[], QObject *parent): QObject(parent)
 {
     for(int i=0;i<12;i++) {
         PresetMicrotune.tuning[i]=tuning[i];
@@ -41,7 +41,7 @@ void MWMicrotunePreset::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         if(1/*overwrite*/) {
             for(int i=0;i<12;i++) {
-                PresetMicrotune.tuning[i]=Microtune.tuning[i];
+                PresetMicrotune.tuning[i]=MisuWidget::Microtune.tuning[i];
             }
         }
         else {
@@ -53,38 +53,7 @@ void MWMicrotunePreset::processTouchEvent(misuTouchEvent e)
         pressed--;
         break;
     }
-    //update();
 }
-
-/*
-void MWMicrotunePreset::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-
-    int xr=width()/14;
-    int border=xr;
-    int h=height()-2*border;
-
-    if(isSelected()) {
-        painter.setBrush(highlightcolor);
-        painter.setPen(highlightcolor);
-    } else {
-        painter.setBrush(bgcolor);
-        painter.setPen(fgcolor);
-    }
-
-    for(int i=0;i<12;i++) {
-        int y=h/2 + h*PresetMicrotune.tuning[i]/100;
-        painter.drawRect(xr*(i+1),y,xr,xr);
-    }
-
-}
-
-void MWMicrotunePreset::resizeEvent(QResizeEvent *)
-{
-
-}
-*/
 
 void MWMicrotunePreset::initialSet()
 {
@@ -94,7 +63,7 @@ void MWMicrotunePreset::initialSet()
 bool MWMicrotunePreset::isSelected() {
     bool selected = true;
     for(int i=0;i<12;i++) {
-        if(PresetMicrotune.tuning[i]!=Microtune.tuning[i]) selected = false;
+        if(PresetMicrotune.tuning[i]!=MisuWidget::Microtune.tuning[i]) selected = false;
     }
     return selected;
 }
