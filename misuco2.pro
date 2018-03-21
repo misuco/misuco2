@@ -14,7 +14,7 @@
 #
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
-QT       += core network multimedia quick
+QT       += core network multimedia quick purchasing
 CONFIG   += c++11
 DEFINES  += QT_DEPRECATED_WARNINGS
 
@@ -31,7 +31,6 @@ INCLUDEPATH += mobilesynth/lib
 
 SOURCES += main.cpp\
     widgets/wlayout.cpp \
-    widgets/misuwidget.cpp \
     widgets/mwplayarea.cpp \
     conf/freqtriple.cpp \
     comm/libofqf/qoscclient.cpp \
@@ -74,10 +73,10 @@ SOURCES += main.cpp\
     widgets/mwmicrotunepreset.cpp \
     conf/mwplayfield.cpp \
     widgets/mwgame.cpp \
+    widgets/mglob.cpp
 
 HEADERS  += \
     widgets/wlayout.h \
-    widgets/misuwidget.h \
     widgets/mwplayarea.h \
     conf/types.h \
     conf/freqtriple.h \
@@ -127,7 +126,8 @@ HEADERS  += \
     comm/senderreaktor.h \
     widgets/mwmicrotunepreset.h \
     conf/mwplayfield.h \
-    widgets/mwgame.h
+    widgets/mwgame.h \
+    widgets/mglob.h
 
 CONFIG += mobility
 MOBILITY = 

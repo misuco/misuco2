@@ -32,65 +32,90 @@ Item {
                 wrapMode: Text.WordWrap
             }
 
-            Rectangle {
+            Row {
                 anchors {
                     top: mainText.bottom
-                    left: parent.left
-                    margins: buttonSize
-                }
-                width: portrait ? buttonSize*1.5 : buttonSize*2
-                height: buttonSize
-                radius: buttonRadius
-                color: bgColor
-                border.width: 1
-                border.color: fgColor
-
-                Text {
-                    anchors.fill: parent
-                    text: "Cancel"
-                    color: fgColor
-                    font.pixelSize: fontSize2
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
+                    topMargin: buttonSize
                 }
 
-                MultiPointTouchArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        layout.closeDialogPreset();
+                Rectangle {
+                    width: portrait ? buttonSize*1.5 : buttonSize*2
+                    height: buttonSize
+                    radius: buttonRadius
+                    color: bgColor
+                    border.width: 1
+                    border.color: fgColor
+
+                    Text {
+                        anchors.fill: parent
+                        text: "Cancel"
+                        color: fgColor
+                        font.pixelSize: fontSize2
+                        horizontalAlignment: Qt.AlignHCenter
+                        verticalAlignment: Qt.AlignVCenter
+                    }
+
+                    MultiPointTouchArea {
+                        anchors.fill: parent
+                        onPressed: {
+                            layout.closeDialogPreset();
+                        }
                     }
                 }
-            }
 
-            Rectangle {
-                anchors {
-                    top: mainText.bottom
-                    right: parent.right
-                    margins: buttonSize
-                }
-                width: portrait ? buttonSize*1.5 : buttonSize*2
-                height: buttonSize
-                radius: buttonRadius
-                color: bgColor
-                border.width: 1
-                border.color: fgColor
+                Rectangle {
+                    width: portrait ? buttonSize*1.5 : buttonSize*2
+                    height: buttonSize
+                    radius: buttonRadius
+                    color: bgColor
+                    border.width: 1
+                    border.color: fgColor
 
-                Text {
-                    anchors.fill: parent
-                    text: "Overwrite"
-                    color: fgColor
-                    font.pixelSize: fontSize2
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
-                }
+                    Text {
+                        anchors.fill: parent
+                        text: "Overwrite"
+                        color: fgColor
+                        font.pixelSize: fontSize2
+                        horizontalAlignment: Qt.AlignHCenter
+                        verticalAlignment: Qt.AlignVCenter
+                    }
 
-                MultiPointTouchArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        layout.overwritePreset();
+                    MultiPointTouchArea {
+                        anchors.fill: parent
+                        onPressed: {
+                            layout.overwritePreset();
+                        }
                     }
                 }
+
+                Rectangle {
+                    width: portrait ? buttonSize*1.5 : buttonSize*2
+                    height: buttonSize
+                    radius: buttonRadius
+                    color: bgColor
+                    border.width: 1
+                    border.color: fgColor
+
+                    Text {
+                        anchors.fill: parent
+                        text: "Buy\nmanager"
+                        color: fgColor
+                        font.pixelSize: fontSize2
+                        horizontalAlignment: Qt.AlignHCenter
+                        verticalAlignment: Qt.AlignVCenter
+                    }
+
+                    MultiPointTouchArea {
+                        anchors.fill: parent
+                        onPressed: {
+                            layout.overwritePreset();
+                        }
+                    }
+                }
+
             }
+
+
         }
     }
 }
