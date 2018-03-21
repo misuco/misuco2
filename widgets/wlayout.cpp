@@ -21,6 +21,7 @@
 #include "wlayout.h"
 #include <QDebug>
 #include <QStandardPaths>
+#include <QDir>
 
 wlayout::wlayout(QObject *parent) : QObject(parent)
 {
@@ -41,7 +42,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     MGlob::Scale.baseoct = 6;
     MGlob::Scale.topoct = 7;
 
-    //qDebug() << QSysInfo::productType();
+    qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if(QSysInfo::productType() == "ios") {
         _configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
         //configPath=QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
@@ -52,6 +53,12 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
         //configPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     } else if(QSysInfo::productType() == "ubuntu") {
         _configPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    } else if(QSysInfo::productType() == "osx") {
+       _configPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.misuco2";
+       QDir dir(_configPath);
+       if (!dir.exists()) {
+           dir.mkpath(".");
+       }
     } else {
         _configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     }
