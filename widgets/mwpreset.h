@@ -21,7 +21,7 @@
 #ifndef MWPRESET_H
 #define MWPRESET_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 #include "conf/types.h"
 
 class MWPreset : public QObject

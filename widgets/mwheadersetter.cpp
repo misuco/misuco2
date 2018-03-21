@@ -181,8 +181,8 @@ void MWHeaderSetter::onPressed(int id)
             emit toggleMenu();
             break;
         case 11:
-            MisuWidget::bwmode=!MisuWidget::bwmode;
-            _state=MisuWidget::bwmode;
+            MGlob::bwmode=!MGlob::bwmode;
+            _state=MGlob::bwmode;
             emit toggleBW();
             break;
         case 12:
@@ -190,11 +190,11 @@ void MWHeaderSetter::onPressed(int id)
             break;
         case 13:
             link ="http://scales.misuco.org/";
-            link.append(midi2TextUrl(MisuWidget::Scale.rootNote));
+            link.append(midi2TextUrl(MGlob::Scale.rootNote));
             link.append("-");
             for(int i=0;i<11;i++) {
-                if(MisuWidget::Scale.bscale[i]) {
-                    int currnote=MisuWidget::Scale.rootNote+i+1;
+                if(MGlob::Scale.bscale[i]) {
+                    int currnote=MGlob::Scale.rootNote+i+1;
                     link.append(midi2TextUrl(currnote%12));
                     link.append("-");
                 }
@@ -203,13 +203,13 @@ void MWHeaderSetter::onPressed(int id)
             QDesktopServices::openUrl(QUrl(link));
             break;
         case 14:
-            MisuWidget::noteSymbols++;
-            if(MisuWidget::noteSymbols>3) MisuWidget::noteSymbols=0;
+            MGlob::noteSymbols++;
+            if(MGlob::noteSymbols>3) MGlob::noteSymbols=0;
             emit scaleupdate();
             break;
         case 16:
-            MisuWidget::sendCC1 = ! MisuWidget::sendCC1;
-            _state = MisuWidget::sendCC1;
+            MGlob::sendCC1 = ! MGlob::sendCC1;
+            _state = MGlob::sendCC1;
             break;
         case 17:
         case 18:
@@ -226,8 +226,8 @@ void MWHeaderSetter::onPressed(int id)
             */
             break;
         case 22:
-            MisuWidget::showFreqs=!MisuWidget::showFreqs;
-            _state = MisuWidget::showFreqs;
+            MGlob::showFreqs=!MGlob::showFreqs;
+            _state = MGlob::showFreqs;
             emit toggleShowFreqs();
             break;
         case 23:

@@ -93,9 +93,9 @@ void MWRootNoteSetter::onSymbolsChanged()
 
 void MWRootNoteSetter::calcText()
 {
-    _text1 = _freq->getRootNoteString(MisuWidget::noteSymbols);
+    _text1 = _freq->getRootNoteString(MGlob::noteSymbols);
 
-    if(MisuWidget::showFreqs) {
+    if(MGlob::showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
     } else {
         _text2="";
@@ -116,7 +116,7 @@ int MWRootNoteSetter::pitchId()
 
 void MWRootNoteSetter::onPressed()
 {
-    if(_out && _pressed == 0) _vId=_out->noteOn(MisuWidget::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    if(_out && _pressed == 0) _vId=_out->noteOn(MGlob::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
 }
 

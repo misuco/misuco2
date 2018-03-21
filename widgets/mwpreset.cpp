@@ -76,11 +76,11 @@ int MWPreset::rootnote()
 
 void MWPreset::overwrite()
 {
-    PresetScale.rootNote = MisuWidget::Scale.rootNote;
+    PresetScale.rootNote = MGlob::Scale.rootNote;
     PresetScale.size = 2;
 
     for(int i=0;i<BSCALE_SIZE;i++) {
-        PresetScale.bscale[i]=MisuWidget::Scale.bscale[i];
+        PresetScale.bscale[i]=MGlob::Scale.bscale[i];
         if(PresetScale.bscale[i]) {
             PresetScale.size+=1;
         }
@@ -98,7 +98,7 @@ void MWPreset::onPressed()
 void MWPreset::onPressAndHold()
 {
     canceled = true;
-    MisuWidget::overwritePreset = this;
+    MGlob::overwritePreset = this;
     emit editPreset();
 }
 
@@ -127,10 +127,10 @@ void MWPreset::playAreaChanged()
 
 bool MWPreset::isSelected()
 {
-    if(PresetScale.rootNote!=MisuWidget::Scale.rootNote ) return false;
+    if(PresetScale.rootNote!=MGlob::Scale.rootNote ) return false;
 
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if( PresetScale.bscale[i]!=MisuWidget::Scale.bscale[i] ) return false;
+        if( PresetScale.bscale[i]!=MGlob::Scale.bscale[i] ) return false;
     }
     return true;
 }

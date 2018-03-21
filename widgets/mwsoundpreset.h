@@ -21,7 +21,7 @@
 #ifndef MWSound_H
 #define MWSound_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 #include "conf/types.h"
 
 class MWSoundPreset : public QObject

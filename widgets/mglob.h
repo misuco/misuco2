@@ -18,19 +18,19 @@
  *
  */
 
-#ifndef MISUWIDGET_H
-#define MISUWIDGET_H
+#ifndef MGLOB_H
+#define MGLOB_H
 
 #include "conf/types.h"
 #include "conf/pitch.h"
 
-class MisuWidget : public QObject
+class MGlob : public QObject
 {    
     Q_OBJECT
 
 public:
-    explicit MisuWidget(QObject *parent = 0);
-    ~MisuWidget();
+    explicit MGlob(QObject *parent = 0);
+    ~MGlob();
 
     static QString font1;
     static int font1size;
@@ -70,4 +70,4 @@ public:
 
 };
 
-#endif // MISUWIDGET_H
+#endif // MGLOB_H

@@ -52,8 +52,8 @@ MWPlayArea::MWPlayArea(QObject *parent) : QObject(parent),
 
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
-            fields[r][c].f1=new FreqTriple(MisuWidget::MWPitch[c%(BSCALE_SIZE+1)],this);
-            fields[r][c].f2=new FreqTriple(MisuWidget::MWPitch[c%(BSCALE_SIZE+1)],this);
+            fields[r][c].f1=new FreqTriple(MGlob::MWPitch[c%(BSCALE_SIZE+1)],this);
+            fields[r][c].f2=new FreqTriple(MGlob::MWPitch[c%(BSCALE_SIZE+1)],this);
         }
     }
 
@@ -88,8 +88,8 @@ void MWPlayArea::config()
     */
 
     cols=0;
-    for(int oct=MisuWidget::Scale.baseoct;oct<MisuWidget::Scale.topoct;oct++) {
-        setColumn(cols,MisuWidget::Scale.rootNote+oct*12,MisuWidget::Scale.rootNote);
+    for(int oct=MGlob::Scale.baseoct;oct<MGlob::Scale.topoct;oct++) {
+        setColumn(cols,MGlob::Scale.rootNote+oct*12,MGlob::Scale.rootNote);
         if(bendHoriz) {
             cols+=2;
         } else {
@@ -97,8 +97,8 @@ void MWPlayArea::config()
         }
         for(int note=0;note<BSCALE_SIZE;note++) {
             //qDebug() << "MWPlayArea::config " << note;
-            if(MisuWidget::Scale.bscale[note]) {
-                setColumn(cols,MisuWidget::Scale.rootNote+oct*12+note+1,(MisuWidget::Scale.rootNote+note+1)%(BSCALE_SIZE+1));
+            if(MGlob::Scale.bscale[note]) {
+                setColumn(cols,MGlob::Scale.rootNote+oct*12+note+1,(MGlob::Scale.rootNote+note+1)%(BSCALE_SIZE+1));
                 //qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
@@ -108,9 +108,9 @@ void MWPlayArea::config()
             }
         }
     }
-    int topnote=MisuWidget::Scale.rootNote+(MisuWidget::Scale.topoct)*12;
+    int topnote=MGlob::Scale.rootNote+(MGlob::Scale.topoct)*12;
     //qDebug() << "rootNote: " << Scale.rootNote << "topnote: " << topnote;
-    setColumn(cols,topnote,MisuWidget::Scale.rootNote);
+    setColumn(cols,topnote,MGlob::Scale.rootNote);
     cols++;
 
     /*
@@ -135,18 +135,18 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
     float huePerNote = 1.0/12.0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
+        fields[rows][col].f1->setMidinote(midinote,MGlob::MWPitch[rootNote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertTop;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MisuWidget::MWPitch[fields[rows][col-2].f1->getRootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MGlob::MWPitch[fields[rows][col-2].f1->getRootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
+            fields[rows][col-1].f2->setMidinote(midinote,MGlob::MWPitch[rootNote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -155,30 +155,30 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
+    fields[rows][col].f1->setMidinote(midinote,MGlob::MWPitch[rootNote]);
     //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MisuWidget::MWPitch[fields[rows][col-2].f1->getRootNote()]);
-        fields[rows][col-1].f2->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MGlob::MWPitch[fields[rows][col-2].f1->getRootNote()]);
+        fields[rows][col-1].f2->setMidinote(midinote,MGlob::MWPitch[rootNote]);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
+        fields[rows][col].f1->setMidinote(midinote,MGlob::MWPitch[rootNote]);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertBot;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MisuWidget::MWPitch[fields[rows][col-2].f1->getRootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MGlob::MWPitch[fields[rows][col-2].f1->getRootNote()]);
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MisuWidget::MWPitch[rootNote]);
+            fields[rows][col-1].f2->setMidinote(midinote,MGlob::MWPitch[rootNote]);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -190,13 +190,13 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
 
 void MWPlayArea::calcGeo()
 {
-    MisuWidget::playFieldWidth=MisuWidget::playAreaWidth/cols;
-    MisuWidget::playFieldHeight=MisuWidget::playAreaHeight/rows;
+    MGlob::playFieldWidth=MGlob::playAreaWidth/cols;
+    MGlob::playFieldHeight=MGlob::playAreaHeight/rows;
     for(int i=0;i<cols;i++) {
-        colwidth[i]=MisuWidget::playFieldWidth;
+        colwidth[i]=MGlob::playFieldWidth;
     }
     for(int i=0;i<rows;i++) {
-        rowheight[i]=MisuWidget::playFieldHeight;
+        rowheight[i]=MGlob::playFieldHeight;
     }
 }
 
@@ -220,8 +220,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     es->y=e.y;
     int row=0;
 
-    if(MisuWidget::playAreaHeight>0) row = e.y*rows/MisuWidget::playAreaHeight;
-    int col=e.x*cols/MisuWidget::playAreaWidth;
+    if(MGlob::playAreaHeight>0) row = e.y*rows/MGlob::playAreaHeight;
+    int col=e.x*cols/MGlob::playAreaWidth;
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
@@ -299,7 +299,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->row=row;
         es->col=col;
         es->f=freq;
-        es->voiceId=out->noteOn(MisuWidget::channel,freq,midinote,pitch,velocity);
+        es->voiceId=out->noteOn(MGlob::channel,freq,midinote,pitch,velocity);
         pf->pressed++;
         break;
 
@@ -311,19 +311,19 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             out->noteOff(es->voiceId);
 
             es->midinote=midinote;
-            es->voiceId=out->noteOn(MisuWidget::channel,freq,midinote,pitch,velocity);
+            es->voiceId=out->noteOn(MGlob::channel,freq,midinote,pitch,velocity);
 
             es->row=row;
             es->col=col;
             es->f=freq;
             pf->pressed++;
         } else if(freq!=es->f) {
-            out->pitch(MisuWidget::channel,es->voiceId,freq,midinote,pitch);
+            out->pitch(MGlob::channel,es->voiceId,freq,midinote,pitch);
             es->f=freq;
         }
 
-        if(MisuWidget::sendCC1) {
-            out->cc(MisuWidget::channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
+        if(MGlob::sendCC1) {
+            out->cc(MGlob::channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;
 
@@ -342,15 +342,15 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
 void MWPlayArea::setRootNote(Pitch *p)
 {
-    MisuWidget::Scale.rootNote=p->getRootNote();
+    MGlob::Scale.rootNote=p->getRootNote();
     config();
 }
 
 
 void MWPlayArea::setOctConf(int bottom, int top)
 {
-    MisuWidget::Scale.baseoct=bottom;
-    MisuWidget::Scale.topoct=top;
+    MGlob::Scale.baseoct=bottom;
+    MGlob::Scale.topoct=top;
     config();
 
 }
@@ -358,17 +358,17 @@ void MWPlayArea::setOctConf(int bottom, int top)
 void MWPlayArea::setBscale(int n, bool v)
 {
     //qDebug() << "MWPlayArea::setBscale " << n << " " << v;
-    MisuWidget::Scale.bscale[n-1]=v;
+    MGlob::Scale.bscale[n-1]=v;
     config();
 }
 
 void MWPlayArea::setScale(MWScale * s)
 {
-    MisuWidget::Scale.rootNote=s->rootNote;
-    MisuWidget::Scale.size=2;
+    MGlob::Scale.rootNote=s->rootNote;
+    MGlob::Scale.size=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
-        MisuWidget::Scale.bscale[i]=s->bscale[i];
-        if(MisuWidget::Scale.bscale[i]) MisuWidget::Scale.size+=MisuWidget::Scale.topoct-MisuWidget::Scale.baseoct;
+        MGlob::Scale.bscale[i]=s->bscale[i];
+        if(MGlob::Scale.bscale[i]) MGlob::Scale.size+=MGlob::Scale.topoct-MGlob::Scale.baseoct;
     }
     config();
 }
@@ -401,8 +401,8 @@ void MWPlayArea::setOut(ISender *value)
 void MWPlayArea::resize(int w, int h)
 {
     //qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
-    MisuWidget::playAreaWidth=w;
-    MisuWidget::playAreaHeight=h;
+    MGlob::playAreaWidth=w;
+    MGlob::playAreaHeight=h;
     calcGeo();
 }
 

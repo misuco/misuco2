@@ -21,7 +21,7 @@
 #ifndef MWHEADERSETTER_H
 #define MWHEADERSETTER_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 
 class MWHeaderSetter : public QObject
 {

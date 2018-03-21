@@ -21,7 +21,7 @@
 #ifndef MWPLAYAREA_H
 #define MWPLAYAREA_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 #include "conf/types.h"
 #include "comm/isender.h"
 #include "pitch.h"

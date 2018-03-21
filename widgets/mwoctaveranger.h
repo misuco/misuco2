@@ -21,7 +21,7 @@
 #ifndef MWOCTAVERANGER_H
 #define MWOCTAVERANGER_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 
 class MWOctaveRanger : public QObject
 {

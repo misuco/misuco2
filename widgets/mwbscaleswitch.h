@@ -21,7 +21,7 @@
 #ifndef MWBSCALESWITCH_H
 #define MWBSCALESWITCH_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 #include "freqtriple.h"
 #include "comm/isender.h"
 

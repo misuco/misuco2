@@ -31,9 +31,9 @@ MWOctaveRanger::MWOctaveRanger(QObject *parent) : QObject(parent)
     grabedTop=false;
     grabedBot=false;
 
-    fgColor = MisuWidget::fgcolor;
-    bgColor = MisuWidget::bgcolor;
-    hlColor = MisuWidget::highlightcolor;
+    fgColor = MGlob::fgcolor;
+    bgColor = MGlob::bgcolor;
+    hlColor = MGlob::highlightcolor;
 }
 
 MWOctaveRanger::~MWOctaveRanger()

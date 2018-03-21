@@ -101,16 +101,16 @@ float MWSoundPreset::volume()
 
 void MWSoundPreset::overwrite()
 {
-    PresetSound.volume=MisuWidget::Sound.volume;
-    PresetSound.wave_type=MisuWidget::Sound.wave_type;
-    PresetSound.attack=MisuWidget::Sound.attack;
-    PresetSound.decay=MisuWidget::Sound.decay;
-    PresetSound.sustain=MisuWidget::Sound.sustain;
-    PresetSound.release=MisuWidget::Sound.release;
-    PresetSound.filter_cutoff=MisuWidget::Sound.filter_cutoff;
-    PresetSound.filter_resonance=MisuWidget::Sound.filter_resonance;
-    PresetSound.mod_filter_cutoff=MisuWidget::Sound.mod_filter_cutoff;
-    PresetSound.mod_filter_resonance=MisuWidget::Sound.mod_filter_resonance;
+    PresetSound.volume=MGlob::Sound.volume;
+    PresetSound.wave_type=MGlob::Sound.wave_type;
+    PresetSound.attack=MGlob::Sound.attack;
+    PresetSound.decay=MGlob::Sound.decay;
+    PresetSound.sustain=MGlob::Sound.sustain;
+    PresetSound.release=MGlob::Sound.release;
+    PresetSound.filter_cutoff=MGlob::Sound.filter_cutoff;
+    PresetSound.filter_resonance=MGlob::Sound.filter_resonance;
+    PresetSound.mod_filter_cutoff=MGlob::Sound.mod_filter_cutoff;
+    PresetSound.mod_filter_resonance=MGlob::Sound.mod_filter_resonance;
 
     emit presetChanged();
     emit selectedChanged();
@@ -126,7 +126,7 @@ void MWSoundPreset::onPressed()
 void MWSoundPreset::onPressAndHold()
 {
     //qDebug() << "MWSoundPreset::onPressAndHold";
-    MisuWidget::overwritePreset = this;
+    MGlob::overwritePreset = this;
     canceled = true;
     emit editPreset();
 }
@@ -157,16 +157,16 @@ void MWSoundPreset::onSoundChanged()
 }
 
 bool MWSoundPreset::isSelected() {
-    if( PresetSound.volume==MisuWidget::Sound.volume &&
-        PresetSound.wave_type==MisuWidget::Sound.wave_type &&
-        PresetSound.attack==MisuWidget::Sound.attack &&
-        PresetSound.decay==MisuWidget::Sound.decay &&
-        PresetSound.sustain==MisuWidget::Sound.sustain &&
-        PresetSound.release==MisuWidget::Sound.release &&
-        PresetSound.filter_cutoff==MisuWidget::Sound.filter_cutoff &&
-        PresetSound.filter_resonance==MisuWidget::Sound.filter_resonance &&
-        PresetSound.mod_filter_cutoff==MisuWidget::Sound.mod_filter_cutoff &&
-        PresetSound.mod_filter_resonance==MisuWidget::Sound.mod_filter_resonance
+    if( PresetSound.volume==MGlob::Sound.volume &&
+        PresetSound.wave_type==MGlob::Sound.wave_type &&
+        PresetSound.attack==MGlob::Sound.attack &&
+        PresetSound.decay==MGlob::Sound.decay &&
+        PresetSound.sustain==MGlob::Sound.sustain &&
+        PresetSound.release==MGlob::Sound.release &&
+        PresetSound.filter_cutoff==MGlob::Sound.filter_cutoff &&
+        PresetSound.filter_resonance==MGlob::Sound.filter_resonance &&
+        PresetSound.mod_filter_cutoff==MGlob::Sound.mod_filter_cutoff &&
+        PresetSound.mod_filter_resonance==MGlob::Sound.mod_filter_resonance
     ) return true;
     return false;
 }

@@ -20,7 +20,7 @@
 
 #include <QDebug>
 #include "pitch.h"
-#include "widgets/misuwidget.h"
+#include "widgets/mglob.h"
 
 Pitch::Pitch(int rootNote, QObject *parent) : QObject(parent), _rootNote(rootNote), _pitch(0)
 {
@@ -56,17 +56,17 @@ void Pitch::calcColor()
     if(_color>1) _color -=1;
     if(_color<0) _color +=1;
 
-    if(MisuWidget::bwmode) {
+    if(MGlob::bwmode) {
         if(getBW()) {
-            _color0 = MisuWidget::wkeycolor;
-            _color1 = MisuWidget::hlwkeycolor;
+            _color0 = MGlob::wkeycolor;
+            _color1 = MGlob::hlwkeycolor;
         } else {
-            _color0 = MisuWidget::bkeycolor;
-            _color1 = MisuWidget::hlbkeycolor;
+            _color0 = MGlob::bkeycolor;
+            _color1 = MGlob::hlbkeycolor;
         }
     } else {
-        _color0 = QColor::fromHslF(_color,MisuWidget::sOff,MisuWidget::lOff);
-        _color1 = QColor::fromHslF(_color,MisuWidget::sOn,MisuWidget::lOn);
+        _color0 = QColor::fromHslF(_color,MGlob::sOff,MGlob::lOff);
+        _color1 = QColor::fromHslF(_color,MGlob::sOn,MGlob::lOn);
     }
 
     emit colorChanged();

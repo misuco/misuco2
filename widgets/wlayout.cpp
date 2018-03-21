@@ -38,8 +38,8 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
 
     _botOct=6;
     _topOct=7;
-    MisuWidget::Scale.baseoct = 6;
-    MisuWidget::Scale.topoct = 7;
+    MGlob::Scale.baseoct = 6;
+    MGlob::Scale.topoct = 7;
 
     //qDebug() << QSysInfo::productType();
     if(QSysInfo::productType() == "ios") {
@@ -60,7 +60,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     //out->cc(0,0,105,1,1);
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MisuWidget::MWPitch[i]=new Pitch(i,this);
+        MGlob::MWPitch[i]=new Pitch(i,this);
     }    
 
     _PlayArea = new MWPlayArea(this);
@@ -71,10 +71,10 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWFaderPitch * fader = new MWFaderPitch(this,MisuWidget::MWPitch[i]);
+        MWFaderPitch * fader = new MWFaderPitch(this,MGlob::MWPitch[i]);
         fader->setOut(out);
-        connect (fader,SIGNAL(valueChange(int)),MisuWidget::MWPitch[i],SLOT(setPitch(int)));
-        connect( MisuWidget::MWPitch[i], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
+        connect (fader,SIGNAL(valueChange(int)),MGlob::MWPitch[i],SLOT(setPitch(int)));
+        connect( MGlob::MWPitch[i], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),fader,SLOT(setOctMid(int)));
         _faderMicrotune.append(fader);
     }
@@ -120,12 +120,12 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     connect(faderChannel,SIGNAL(valueChange(int)),this,SLOT(onChannelChange(int)));
 
     enableCc1 = new MWHeaderSetter(16,1,this);
-    MisuWidget::sendCC1 = true;
+    MGlob::sendCC1 = true;
 
     bwMode = new MWHeaderSetter(11,this);
     connect(bwMode,SIGNAL(toggleBW()),_PlayArea,SLOT(onToggleBW()));
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        connect(bwMode,SIGNAL(toggleBW()),MisuWidget::MWPitch[i],SLOT(bwModeChanged()));
+        connect(bwMode,SIGNAL(toggleBW()),MGlob::MWPitch[i],SLOT(bwModeChanged()));
     }
 
     enableMobilesynth = new MWHeaderSetter(17,1,this);
@@ -155,14 +155,14 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     holdMode = new MWHeaderSetter(21,this);
 
     for(int i=0;i<12;i++) {
-        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MisuWidget::MWPitch[i],this);
+        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],this);
         rootNoteSetter->setOut(out);
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
         connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
         connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
-        connect(MisuWidget::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
+        connect(MGlob::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
     }
 
@@ -258,7 +258,7 @@ QList<QObject *> wlayout::pitches()
 {
     QList<QObject*> p;
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        p.append(MisuWidget::MWPitch[i]);
+        p.append(MGlob::MWPitch[i]);
     }
     return p;
 }
@@ -279,17 +279,17 @@ void wlayout::closeDialogPreset()
 
 void wlayout::overwritePreset()
 {
-    auto soundPreset = qobject_cast<MWSoundPreset *>(MisuWidget::overwritePreset);
+    auto soundPreset = qobject_cast<MWSoundPreset *>(MGlob::overwritePreset);
     if(soundPreset) {
         soundPreset->overwrite();
-        MisuWidget::overwritePreset = nullptr;
+        MGlob::overwritePreset = nullptr;
         writeXml("synth.xml");
     }
 
-    auto scalePreset = qobject_cast<MWPreset *>(MisuWidget::overwritePreset);
+    auto scalePreset = qobject_cast<MWPreset *>(MGlob::overwritePreset);
     if(scalePreset) {
         scalePreset->overwrite();
-        MisuWidget::overwritePreset = nullptr;
+        MGlob::overwritePreset = nullptr;
         writeXml("scales.xml");
     }
 
@@ -473,8 +473,8 @@ void wlayout::setSound(MWSound *s)
 void wlayout::setMicrotune(MWMicrotune * m)
 {
     for(int i=0;i<12;i++) {
-        MisuWidget::Microtune.tuning[i] = m->tuning[i];
-        MisuWidget::MWPitch[i]->setPitch(m->tuning[i]);
+        MGlob::Microtune.tuning[i] = m->tuning[i];
+        MGlob::MWPitch[i]->setPitch(m->tuning[i]);
         auto p = qobject_cast<MWFaderPitch*>(_faderMicrotune[i]);
         if(p) p->setValue(m->tuning[i]);
     }
@@ -482,7 +482,7 @@ void wlayout::setMicrotune(MWMicrotune * m)
 
 void wlayout::onChannelChange(int v)
 {
-    MisuWidget::channel = v;
+    MGlob::channel = v;
 }
 
 void wlayout::onToggleSender(int v)
@@ -494,7 +494,7 @@ void wlayout::onToggleSender(int v)
 
 void wlayout::onSymbolsChange(int v)
 {
-    MisuWidget::noteSymbols = v;
+    MGlob::noteSymbols = v;
     emit symbolsChanged();
     writeXml("conf.xml");
 }
@@ -605,10 +605,10 @@ void wlayout::decodeConfigRecord() {
 
         faderChannel->setValue(xmlr.attributes().value("channel").toString().toInt());
 
-        MisuWidget::sendCC1 = xmlr.attributes().value("pitchHorizontal").toString().toInt();
+        MGlob::sendCC1 = xmlr.attributes().value("pitchHorizontal").toString().toInt();
         enableCc1->setState(16,xmlr.attributes().value("sendCC1").toString().toInt());
 
-        MisuWidget::bwmode = xmlr.attributes().value("bwmode").toString().toInt();
+        MGlob::bwmode = xmlr.attributes().value("bwmode").toString().toInt();
         bwMode->setState(11,xmlr.attributes().value("bwmode").toString().toInt());
 
         out->senderEnabled[0] = xmlr.attributes().value("mobileSynth").toString().toInt();
@@ -625,7 +625,7 @@ void wlayout::decodeConfigRecord() {
 
         faderSymbols->setValue(xmlr.attributes().value("noteSymbols").toString().toInt());
 
-        MisuWidget::showFreqs = xmlr.attributes().value("showFreqs").toString().toInt();
+        MGlob::showFreqs = xmlr.attributes().value("showFreqs").toString().toInt();
         showFreqs->setState(22,xmlr.attributes().value("showFreqs").toString().toInt());
     }
 }
@@ -767,11 +767,11 @@ void wlayout::writeXml(QString filename)
             xml.writeAttribute("pitchBottomRange",att);
             att.sprintf("%d",pitchHorizontal->getState());
             xml.writeAttribute("pitchHorizontal",att);
-            att.sprintf("%d",MisuWidget::channel);
+            att.sprintf("%d",MGlob::channel);
             xml.writeAttribute("channel",att);
-            att.sprintf("%d",MisuWidget::sendCC1);
+            att.sprintf("%d",MGlob::sendCC1);
             xml.writeAttribute("sendCC1",att);
-            att.sprintf("%d",MisuWidget::bwmode);
+            att.sprintf("%d",MGlob::bwmode);
             xml.writeAttribute("bwmode",att);
             att.sprintf("%d",out->senderEnabled[0]);
             xml.writeAttribute("mobileSynth",att);
@@ -781,9 +781,9 @@ void wlayout::writeXml(QString filename)
             xml.writeAttribute("reaktor",att);
             att.sprintf("%d",out->senderEnabled[3]);
             xml.writeAttribute("superCollider",att);
-            att.sprintf("%d",MisuWidget::noteSymbols);
+            att.sprintf("%d",MGlob::noteSymbols);
             xml.writeAttribute("noteSymbols",att);
-            att.sprintf("%d",MisuWidget::showFreqs);
+            att.sprintf("%d",MGlob::showFreqs);
             xml.writeAttribute("showFreqs",att);
 
             att.sprintf("%d",_presetsVisible);

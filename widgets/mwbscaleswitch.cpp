@@ -25,7 +25,7 @@
 MWBScaleSwitch::MWBScaleSwitch(int i)
 {
     //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
-    _freq=new FreqTriple(MisuWidget::MWPitch[i],this);
+    _freq=new FreqTriple(MGlob::MWPitch[i],this);
     _value=false;
     _pressed=0;
     _bscaleId=i;
@@ -43,9 +43,9 @@ MWBScaleSwitch::~MWBScaleSwitch()
 
 void MWBScaleSwitch::calcText()
 {
-    _text1=_freq->getRootNoteString(MisuWidget::noteSymbols);
+    _text1=_freq->getRootNoteString(MGlob::noteSymbols);
 
-    if(MisuWidget::showFreqs) {
+    if(MGlob::showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
     } else {
         _text2="";
@@ -72,7 +72,7 @@ bool MWBScaleSwitch::selected()
 
 void MWBScaleSwitch::onPressed()
 {
-    if(_out && _pressed == 0) _vid=_out->noteOn(MisuWidget::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    if(_out && _pressed == 0) _vid=_out->noteOn(MGlob::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
     emit selectedChanged();
 }
@@ -105,7 +105,7 @@ void MWBScaleSwitch::setRootNote(int rootNote)
 
     //if(newrootNote != _freq->getPitch()) {
         _freq->setOct(_oct+_higherOct);
-        _freq->setRootNote(MisuWidget::MWPitch[newrootNote]);
+        _freq->setRootNote(MGlob::MWPitch[newrootNote]);
         emit pitchIdChanged();
         calcText();
     //}

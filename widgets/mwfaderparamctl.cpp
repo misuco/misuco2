@@ -195,41 +195,41 @@ void MWFaderParamCtl::propagateValueChange() {
 
     switch(cc) {
     case 3:
-        MisuWidget::channel=getValue();
+        MGlob::channel=getValue();
         break;
     case 102:
-        MisuWidget::Sound.wave_type=getValue();
+        MGlob::Sound.wave_type=getValue();
         break;
     case 103:
-        MisuWidget::Sound.attack=getValue();
+        MGlob::Sound.attack=getValue();
         break;
     case 104:
-        MisuWidget::Sound.decay=getValue();
+        MGlob::Sound.decay=getValue();
         break;
     case 105:
-        MisuWidget::Sound.sustain=getValue();
+        MGlob::Sound.sustain=getValue();
         break;
     case 106:
-        MisuWidget::Sound.release=getValue();
+        MGlob::Sound.release=getValue();
         break;
     case 107:
-        MisuWidget::Sound.filter_cutoff=getValue();
+        MGlob::Sound.filter_cutoff=getValue();
         break;
     case 108:
-        MisuWidget::Sound.filter_resonance=getValue();
+        MGlob::Sound.filter_resonance=getValue();
         break;
     case 109:
-        MisuWidget::Sound.mod_filter_cutoff=getValue();
+        MGlob::Sound.mod_filter_cutoff=getValue();
         break;
     case 110:
-        MisuWidget::Sound.mod_filter_resonance=getValue();
+        MGlob::Sound.mod_filter_resonance=getValue();
         break;
     case 111:
-        MisuWidget::Sound.volume=getValue();
+        MGlob::Sound.volume=getValue();
         break;
     }
 
-    out->cc(MisuWidget::channel,0,cc,getValue(),getValue());
+    out->cc(MGlob::channel,0,cc,getValue(),getValue());
 }
 
 void MWFaderParamCtl::onPressedPitch(int id)
@@ -245,7 +245,7 @@ void MWFaderParamCtl::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        out->cc(MisuWidget::channel,0,cc,getValue(),getValue());
+        out->cc(MGlob::channel,0,cc,getValue(),getValue());
         propagateValueChange();
     }
 }

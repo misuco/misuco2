@@ -1,5 +1,5 @@
 #include "mwplayfield.h"
-#include "widgets/misuwidget.h"
+#include "widgets/mglob.h"
 #include <QDebug>
 
 MWPlayfield::MWPlayfield(QObject *parent) : QObject(parent)
@@ -12,11 +12,11 @@ void MWPlayfield::calcColor()
 
     //qDebug() << "MWPlayfield::calcColor " << pressed << " " << this;
 
-    float l=MisuWidget::lOff;
-    float s=MisuWidget::sOff;
+    float l=MGlob::lOff;
+    float s=MGlob::sOff;
     if(pressed>0) {
-        l=MisuWidget::lOn;
-        s=MisuWidget::sOn;
+        l=MGlob::lOn;
+        s=MGlob::sOn;
     }
 
     colorF1 = QColor::fromHslF(f1->getHue(),s,l);
@@ -24,55 +24,55 @@ void MWPlayfield::calcColor()
     colorF2 = QColor::fromHslF(f2->getHue(),s,l);
     colorF2b = QColor::fromHslF(hue2bent,s,l);
 
-    if(MisuWidget::bwmode) {
+    if(MGlob::bwmode) {
         if(f1->getBW()) {
             if(pressed>0) {
-                colorF1 = MisuWidget::hlwkeycolor;
-                colorF1b = MisuWidget::hlbkeycolor;
+                colorF1 = MGlob::hlwkeycolor;
+                colorF1b = MGlob::hlbkeycolor;
             } else {
-                colorF1 = MisuWidget::wkeycolor;
-                colorF1b = MisuWidget::bkeycolor;
+                colorF1 = MGlob::wkeycolor;
+                colorF1b = MGlob::bkeycolor;
             }
         } else {
             if(pressed>0) {
-                colorF1 = MisuWidget::hlbkeycolor;
-                colorF1b =MisuWidget:: hlwkeycolor;
+                colorF1 = MGlob::hlbkeycolor;
+                colorF1b =MGlob:: hlwkeycolor;
             } else {
-                colorF1 = MisuWidget::bkeycolor;
-                colorF1b = MisuWidget::wkeycolor;
+                colorF1 = MGlob::bkeycolor;
+                colorF1b = MGlob::wkeycolor;
             }
         }
         if(f2->getBW()) {
             if(pressed>0) {
-                colorF2 = MisuWidget::hlwkeycolor;
-                colorF2b = MisuWidget::hlbkeycolor;
+                colorF2 = MGlob::hlwkeycolor;
+                colorF2b = MGlob::hlbkeycolor;
             } else {
-                colorF2 = MisuWidget::wkeycolor;
-                colorF2b = MisuWidget::bkeycolor;
+                colorF2 = MGlob::wkeycolor;
+                colorF2b = MGlob::bkeycolor;
             }
         } else {
             if(pressed>0) {
-                colorF2 = MisuWidget::hlbkeycolor;
-                colorF2b = MisuWidget::hlwkeycolor;
+                colorF2 = MGlob::hlbkeycolor;
+                colorF2b = MGlob::hlwkeycolor;
             } else {
-                colorF2 = MisuWidget::bkeycolor;
-                colorF2b = MisuWidget::wkeycolor;
+                colorF2 = MGlob::bkeycolor;
+                colorF2b = MGlob::wkeycolor;
             }
         }
     }
 
     if(pressed>0) {
-        fontColor=MisuWidget::highlightcolor;
+        fontColor=MGlob::highlightcolor;
     } else {
-        fontColor=MisuWidget::fgcolor;
+        fontColor=MGlob::fgcolor;
     }
     emit colorChanged();
 
     text1="";
-    text2=f1->getRootNoteString(MisuWidget::noteSymbols);
+    text2=f1->getRootNoteString(MGlob::noteSymbols);
     if(type==0) text3.sprintf("%d",f1->getOct());
     else text3="";
-    if(MisuWidget::showFreqs) {
+    if(MGlob::showFreqs) {
         text1.sprintf("%4.1f",f1->getFreq());
         if(type==1 || type==2) {
             text1.sprintf("%4.1f",f1->getFreq());

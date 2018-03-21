@@ -21,7 +21,7 @@
 #ifndef MWFADDER_H
 #define MWFADDER_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 
 class MWFadder : public QObject
 {

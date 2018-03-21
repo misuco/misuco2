@@ -21,7 +21,7 @@
 #ifndef MWMicrotunePreset_H
 #define MWMicrotunePreset_H
 
-#include "misuwidget.h"
+#include "mglob.h"
 #include "conf/types.h"
 
 class MWMicrotunePreset : public QObject

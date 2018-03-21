@@ -41,7 +41,7 @@ void MWMicrotunePreset::processTouchEvent(misuTouchEvent e)
     case Qt::TouchPointPressed:
         if(1/*overwrite*/) {
             for(int i=0;i<12;i++) {
-                PresetMicrotune.tuning[i]=MisuWidget::Microtune.tuning[i];
+                PresetMicrotune.tuning[i]=MGlob::Microtune.tuning[i];
             }
         }
         else {
@@ -63,7 +63,7 @@ void MWMicrotunePreset::initialSet()
 bool MWMicrotunePreset::isSelected() {
     bool selected = true;
     for(int i=0;i<12;i++) {
-        if(PresetMicrotune.tuning[i]!=MisuWidget::Microtune.tuning[i]) selected = false;
+        if(PresetMicrotune.tuning[i]!=MGlob::Microtune.tuning[i]) selected = false;
     }
     return selected;
 }
