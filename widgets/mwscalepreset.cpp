@@ -18,10 +18,10 @@
  *
  */
 
-#include "mwpreset.h"
+#include "mwscalepreset.h"
 #include <QDebug>
 
-MWPreset::MWPreset(QObject *parent): QObject(parent)
+MWScalePreset::MWScalePreset(QObject *parent): QObject(parent)
 {
     PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
     PresetScale.baseoct=4;
@@ -38,7 +38,7 @@ MWPreset::MWPreset(QObject *parent): QObject(parent)
     pressed=0;
 }
 
-MWPreset::MWPreset(int rootNote, bool bscale[], QObject *parent): QObject(parent)
+MWScalePreset::MWScalePreset(int rootNote, bool bscale[], QObject *parent): QObject(parent)
 {
     PresetScale.rootNote=rootNote;
     PresetScale.size=2;
@@ -53,7 +53,7 @@ MWPreset::MWPreset(int rootNote, bool bscale[], QObject *parent): QObject(parent
     pressed=0;
 }
 
-QStringList MWPreset::bscale()
+QStringList MWScalePreset::bscale()
 {
     QStringList l;
     l.append("1");
@@ -64,17 +64,17 @@ QStringList MWPreset::bscale()
     return l;
 }
 
-int MWPreset::bscalesize()
+int MWScalePreset::bscalesize()
 {
     return PresetScale.size;
 }
 
-int MWPreset::rootnote()
+int MWScalePreset::rootnote()
 {
     return PresetScale.rootNote;
 }
 
-void MWPreset::overwrite()
+void MWScalePreset::overwrite()
 {
     PresetScale.rootNote = MGlob::Scale.rootNote;
     PresetScale.size = 2;
@@ -89,25 +89,25 @@ void MWPreset::overwrite()
     emit setScale(&PresetScale);
 }
 
-void MWPreset::onPressed()
+void MWScalePreset::onPressed()
 {
     pressed++;
     canceled = false;
 }
 
-void MWPreset::onPressAndHold()
+void MWScalePreset::onPressAndHold()
 {
     canceled = true;
     MGlob::overwritePreset = this;
     emit editPreset();
 }
 
-void MWPreset::onCanceled()
+void MWScalePreset::onCanceled()
 {
     canceled = true;
 }
 
-void MWPreset::onReleased()
+void MWScalePreset::onReleased()
 {
     if(!canceled) {
         emit setScale(&PresetScale);
@@ -115,17 +115,17 @@ void MWPreset::onReleased()
     pressed--;
 }
 
-void MWPreset::initialSet()
+void MWScalePreset::initialSet()
 {
     emit setScale(&PresetScale);
 }
 
-void MWPreset::playAreaChanged()
+void MWScalePreset::playAreaChanged()
 {
     emit presetChanged();
 }
 
-bool MWPreset::isSelected()
+bool MWScalePreset::isSelected()
 {
     if(PresetScale.rootNote!=MGlob::Scale.rootNote ) return false;
 

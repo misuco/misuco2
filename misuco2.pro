@@ -60,7 +60,6 @@ SOURCES += main.cpp\
     widgets/mwheadersetter.cpp \
     widgets/mwfadder.cpp \
     conf/pitch.cpp \
-    widgets/mwpreset.cpp \
     widgets/mwfaderpitch.cpp \
     widgets/mwfaderparamctl.cpp \
     widgets/mwsoundpreset.cpp \
@@ -73,7 +72,8 @@ SOURCES += main.cpp\
     widgets/mwmicrotunepreset.cpp \
     conf/mwplayfield.cpp \
     widgets/mwgame.cpp \
-    widgets/mglob.cpp
+    widgets/mglob.cpp \
+    widgets/mwscalepreset.cpp
 
 HEADERS  += \
     widgets/wlayout.h \
@@ -114,7 +114,6 @@ HEADERS  += \
     widgets/mwheadersetter.h \
     widgets/mwfadder.h \
     conf/pitch.h \
-    widgets/mwpreset.h \
     widgets/mwfaderpitch.h \
     widgets/mwfaderparamctl.h \
     widgets/mwsoundpreset.h \
@@ -127,7 +126,8 @@ HEADERS  += \
     widgets/mwmicrotunepreset.h \
     conf/mwplayfield.h \
     widgets/mwgame.h \
-    widgets/mglob.h
+    widgets/mglob.h \
+    widgets/mwscalepreset.h
 
 CONFIG += mobility
 MOBILITY = 

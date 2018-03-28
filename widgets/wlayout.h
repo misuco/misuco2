@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QInAppStore>
 #include "widgets/mwplayarea.h"
 #include "widgets/mwrootnotesetter.h"
 #include "comm/sendermobilesynth.h"
@@ -35,7 +36,7 @@
 #include "mwheadersetter.h"
 #include "comm/sendermulti.h"
 #include "mwfaderpitch.h"
-#include "mwpreset.h"
+#include "mwscalepreset.h"
 #include "mwsoundpreset.h"
 #include "mwmicrotunepreset.h"
 #include "mwgame.h"
@@ -114,6 +115,7 @@ public:
 
     Q_INVOKABLE void closeDialogPreset();
     Q_INVOKABLE void overwritePreset();
+    Q_INVOKABLE void buyPresetManager();
 
 signals:
     void setRootNote(Pitch * p);
@@ -146,11 +148,18 @@ private slots:
     void onEditPreset();
     void setOctConf(int bot, int top);
 
+    void onProductRegistered(QInAppProduct* product);
+    void onProductUnknown(QInAppProduct::ProductType type, QString name);
+    void onTransactionReady(QInAppTransaction* transaction);
+
 private:
     SenderMulti * out;
 
     QXmlStreamWriter xml;
     QXmlStreamReader xmlr;
+
+    QInAppStore *   _inAppStore;
+    QInAppProduct * _productPresetManager;
 
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _BScaleSwitch;
@@ -222,6 +231,8 @@ private:
     void decodeScaleRecord();
     void decodeSynthRecord();
     void decodeTuneRecord();
+
+    void initInAppStore();
 };
 
 #endif // WLAYOUT_H

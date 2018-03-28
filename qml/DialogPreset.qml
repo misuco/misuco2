@@ -108,14 +108,12 @@ Item {
                     MultiPointTouchArea {
                         anchors.fill: parent
                         onPressed: {
-                            layout.overwritePreset();
+                            layout.buyPresetManager();
                         }
                     }
                 }
 
             }
-
-
         }
     }
 }

@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDir>
+#include <QInAppTransaction>
 
 wlayout::wlayout(QObject *parent) : QObject(parent)
 {
@@ -41,6 +42,8 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     _topOct=7;
     MGlob::Scale.baseoct = 6;
     MGlob::Scale.topoct = 7;
+
+    initInAppStore();
 
     qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if(QSysInfo::productType() == "ios") {
@@ -174,7 +177,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     }
 
     for(int i=1;i<12;i++) {
-        MWBScaleSwitch * bs =new MWBScaleSwitch(i);
+        MWBScaleSwitch * bs = new MWBScaleSwitch(i);
         bs->setOut(out);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
@@ -293,7 +296,7 @@ void wlayout::overwritePreset()
         writeXml("synth.xml");
     }
 
-    auto scalePreset = qobject_cast<MWPreset *>(MGlob::overwritePreset);
+    auto scalePreset = qobject_cast<MWScalePreset *>(MGlob::overwritePreset);
     if(scalePreset) {
         scalePreset->overwrite();
         MGlob::overwritePreset = nullptr;
@@ -302,6 +305,16 @@ void wlayout::overwritePreset()
 
     _dialogPresetsVisible=false;
     emit layoutChange();
+}
+
+void wlayout::buyPresetManager()
+{
+    qDebug() << "wlayout::buyPresetManager";
+    _productPresetManager = _inAppStore->registeredProduct(QStringLiteral("PresetManager"));
+    if(_productPresetManager) {
+        qDebug() << "_productPresetManager->purchase";
+        _productPresetManager->purchase();
+    }
 }
 
 void wlayout::updateMenuButtonState() {
@@ -547,6 +560,36 @@ void wlayout::setOctConf(int bot, int top)
     emit octConfChanged();
 }
 
+void wlayout::onProductRegistered(QInAppProduct *product)
+{
+    qDebug() << "wlayout::onProductRegistered " << product;
+}
+
+void wlayout::onProductUnknown(QInAppProduct::ProductType type, QString name)
+{
+    qDebug() << "wlayout::onProductUnknown " << type << " id " << name;
+}
+
+void wlayout::onTransactionReady(QInAppTransaction *transaction)
+{
+    if (transaction->status() == QInAppTransaction::PurchaseApproved
+        && transaction->product()->identifier() == QStringLiteral("PresetManager")) {
+        /*
+        if (!hasAlreadyStoredTransaction(transaction->orderId()) {
+            ++m_healthPotions;
+            if (!addHealthPotionToPersistentStorage(transaction->orderId())
+                popupErrorDialog(tr("Unable to write to persistent storage. Please make sure there is sufficient space and restart."))
+            else
+                transaction->finalize();
+        }
+        */
+    } else if (transaction->status() == QInAppTransaction::PurchaseFailed) {
+        qDebug() << "Purchase not completed.";
+        //transaction->finalize();
+    }
+    transaction->finalize();
+}
+
 void wlayout::readXml(QString filetype)
 {
     QString filename = _configPath+"/"+filetype;
@@ -645,7 +688,7 @@ void wlayout::decodeScaleRecord() {
             attId.sprintf("b%d",i);
             bscaleRead[i] = xmlr.attributes().value(attId).toInt();
         }
-        MWPreset * p = new MWPreset(xmlr.attributes().value("rootNote").toString().toInt(),
+        MWScalePreset * p = new MWScalePreset(xmlr.attributes().value("rootNote").toString().toInt(),
                                          bscaleRead,
                                          this);
         connect(((MWPlayArea *)_PlayArea),SIGNAL(playRowsChanged()),p,SLOT(playAreaChanged()));
@@ -690,6 +733,24 @@ void wlayout::decodeTuneRecord() {
     }
 }
 
+void wlayout::initInAppStore()
+{
+    _inAppStore = new QInAppStore(this);
+
+    connect(_inAppStore, SIGNAL(productRegistered(QInAppProduct*)),
+            this, SLOT(onProductRegistered(QInAppProduct*)));
+
+    connect(_inAppStore, SIGNAL(productUnknown(QInAppProduct::ProductType,QString)),
+            this, SLOT(onProductUnknown(QInAppProduct::ProductType,QString)));
+
+    connect(_inAppStore, SIGNAL(transactionReady(QInAppTransaction*)),
+            this, SLOT(onTransactionReady(QInAppTransaction*)));
+
+    _inAppStore->registerProduct(QInAppProduct::Unlockable,
+                               QStringLiteral("PresetManager"));
+
+}
+
 void wlayout::writeXml(QString filename)
 {
     //qDebug() << "wlayout::writeXml";
@@ -708,7 +769,7 @@ void wlayout::writeXml(QString filename)
 
             for(auto widgetQ:_scalePresets) {
 
-                auto widget = qobject_cast<MWPreset*>(widgetQ);
+                auto widget = qobject_cast<MWScalePreset*>(widgetQ);
                 if(widget) {
                     xml.writeStartElement("scale");
                     att.sprintf("%d",widget->PresetScale.rootNote);
