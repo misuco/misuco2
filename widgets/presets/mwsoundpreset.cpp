@@ -19,6 +19,7 @@
  */
 
 #include "mwsoundpreset.h"
+#include "presetcollection.h"
 #include <QDebug>
 
 MWSoundPreset::MWSoundPreset(QObject *parent): QObject(parent)
@@ -125,8 +126,8 @@ void MWSoundPreset::onPressed()
 
 void MWSoundPreset::onPressAndHold()
 {
-    //qDebug() << "MWSoundPreset::onPressAndHold";
-    MGlob::overwritePreset = this;
+    qDebug() << "MWSoundPreset::onPressAndHold";
+    PresetCollection::dialogContext = this;
     canceled = true;
     emit editPreset();
 }

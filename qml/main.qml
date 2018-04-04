@@ -177,7 +177,6 @@ Window {
         source: "Button.qml"
     }
 
-
     Loader {
         id: octUp
         visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9 && !layout.game.visible
@@ -195,7 +194,7 @@ Window {
 
     DialogPreset {
         id: presetDialog
-        visible: layout.dialogPresetsVisible
+        visible: layout.scalePresets.dialogVisible || layout.synthPresets.dialogVisible
         anchors.fill: parent
     }
 

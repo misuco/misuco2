@@ -3,7 +3,7 @@ import "icons"
 
 Item {
     GridView {
-        model: layout.synthPresets
+        model: layout.synthPresets.items
 
         anchors.fill: parent
         cellWidth: portrait ? buttonSize : columnWidth

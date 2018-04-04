@@ -62,18 +62,20 @@ SOURCES += main.cpp\
     conf/pitch.cpp \
     widgets/mwfaderpitch.cpp \
     widgets/mwfaderparamctl.cpp \
-    widgets/mwsoundpreset.cpp \
+    widgets/presets/mwsoundpreset.cpp \
     comm/sendermulti.cpp \
     comm/senderoscmidigeneric.cpp \
     comm/senderoscpuredata.cpp \
     comm/senderoscxy.cpp \
     comm/senderreaktor.cpp \
     comm/sendersupercollider.cpp \
-    widgets/mwmicrotunepreset.cpp \
+    widgets/presets/mwmicrotunepreset.cpp \
     conf/mwplayfield.cpp \
     widgets/mwgame.cpp \
-    widgets/mglob.cpp \
-    widgets/mwscalepreset.cpp
+    conf/mglob.cpp \
+    widgets/presets/mwscalepreset.cpp \
+    widgets/presets/presetcollection.cpp \
+    conf/purchases.cpp
 
 HEADERS  += \
     widgets/wlayout.h \
@@ -116,18 +118,20 @@ HEADERS  += \
     conf/pitch.h \
     widgets/mwfaderpitch.h \
     widgets/mwfaderparamctl.h \
-    widgets/mwsoundpreset.h \
+    widgets/presets/mwsoundpreset.h \
     comm/sendermulti.h \
     comm/senderoscmidigeneric.h \
     comm/senderoscpuredata.h \
     comm/senderoscxy.h \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
-    widgets/mwmicrotunepreset.h \
+    widgets/presets/mwmicrotunepreset.h \
     conf/mwplayfield.h \
     widgets/mwgame.h \
-    widgets/mglob.h \
-    widgets/mwscalepreset.h
+    conf/mglob.h \
+    widgets/presets/mwscalepreset.h \
+    widgets/presets/presetcollection.h \
+    conf/purchases.h
 
 CONFIG += mobility
 MOBILITY = 

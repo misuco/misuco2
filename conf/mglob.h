@@ -60,8 +60,6 @@ public:
 
     static bool sendCC1;
 
-    static QObject * overwritePreset;
-
     // that game knows where to touch
     static int playAreaWidth;
     static int playAreaHeight;

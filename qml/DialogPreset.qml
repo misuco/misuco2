@@ -58,7 +58,7 @@ Item {
                     MultiPointTouchArea {
                         anchors.fill: parent
                         onPressed: {
-                            layout.closeDialogPreset();
+                            layout.scalePresets.closeDialogPreset();
                         }
                     }
                 }
@@ -83,7 +83,7 @@ Item {
                     MultiPointTouchArea {
                         anchors.fill: parent
                         onPressed: {
-                            layout.overwritePreset();
+                            layout.scalePresets.overwritePreset();
                         }
                     }
                 }
@@ -108,7 +108,7 @@ Item {
                     MultiPointTouchArea {
                         anchors.fill: parent
                         onPressed: {
-                            layout.buyPresetManager();
+                            layout.scalePresets.buyPresetManager();
                         }
                     }
                 }

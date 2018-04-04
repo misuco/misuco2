@@ -1,5 +1,5 @@
 #include "mwplayfield.h"
-#include "widgets/mglob.h"
+#include "conf/mglob.h"
 #include <QDebug>
 
 MWPlayfield::MWPlayfield(QObject *parent) : QObject(parent)

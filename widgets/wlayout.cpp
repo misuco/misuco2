@@ -22,7 +22,6 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDir>
-#include <QInAppTransaction>
 
 wlayout::wlayout(QObject *parent) : QObject(parent)
 {
@@ -36,14 +35,15 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     _scalePresetsVisible=false;
     _synthPresetsVisible=false;
     _tunePresetsVisible=false;
-    _dialogPresetsVisible=false;
+
+    _scalePresets = new PresetCollection(this);
+    _synthPresets = new PresetCollection(this);
+    _tunePresets = new PresetCollection(this);
 
     _botOct=6;
     _topOct=7;
     MGlob::Scale.baseoct = 6;
     MGlob::Scale.topoct = 7;
-
-    initInAppStore();
 
     qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if(QSysInfo::productType() == "ios") {
@@ -54,16 +54,15 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
         //configPath=QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
         //configPath=QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
         //configPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    } else if(QSysInfo::productType() == "ubuntu") {
-        _configPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        //_configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        //_configPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    //} else if(QSysInfo::productType() == "ubuntu") {
     } else if(QSysInfo::productType() == "osx") {
        _configPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.misuco2";
        QDir dir(_configPath);
        if (!dir.exists()) {
            dir.mkpath(".");
        }
-    } else {
-        _configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     }
 
     out=new SenderMulti();
@@ -230,7 +229,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     readXml("synth.xml");
     readXml("tune.xml");
 
-    for(auto presetButton:_scalePresets) {
+    for(auto presetButton:_scalePresets->getItems()) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
         connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[0],SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
@@ -239,14 +238,14 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
         }
     }
 
-    if(_scalePresets.size()>0) {
-        connect(this,SIGNAL(initialSet()),_scalePresets[0],SLOT(initialSet()));
+    if(_scalePresets->getItemCount()>0) {
+        connect(this,SIGNAL(initialSet()),_scalePresets->getItem(0),SLOT(initialSet()));
     }
-    if(_synthPresets.size()>0) {
-        connect(this,SIGNAL(initialSet()),_synthPresets[0],SLOT(initialSet()));
+    if(_synthPresets->getItemCount()>0) {
+        connect(this,SIGNAL(initialSet()),_synthPresets->getItem(0),SLOT(initialSet()));
     }
-    if(_tunePresets.size()>0) {
-        connect(this,SIGNAL(initialSet()),_tunePresets[0],SLOT(initialSet()));
+    if(_tunePresets->getItemCount()>0) {
+        connect(this,SIGNAL(initialSet()),_tunePresets->getItem(0),SLOT(initialSet()));
     }
     emit initialSet();
 
@@ -279,42 +278,6 @@ QList<QObject *> wlayout::confPitchFaders()
     p.append(faderPitchTopRange);
     p.append(faderPitchBottomRange);
     return p;
-}
-
-void wlayout::closeDialogPreset()
-{
-    _dialogPresetsVisible=false;
-    emit layoutChange();
-}
-
-void wlayout::overwritePreset()
-{
-    auto soundPreset = qobject_cast<MWSoundPreset *>(MGlob::overwritePreset);
-    if(soundPreset) {
-        soundPreset->overwrite();
-        MGlob::overwritePreset = nullptr;
-        writeXml("synth.xml");
-    }
-
-    auto scalePreset = qobject_cast<MWScalePreset *>(MGlob::overwritePreset);
-    if(scalePreset) {
-        scalePreset->overwrite();
-        MGlob::overwritePreset = nullptr;
-        writeXml("scales.xml");
-    }
-
-    _dialogPresetsVisible=false;
-    emit layoutChange();
-}
-
-void wlayout::buyPresetManager()
-{
-    qDebug() << "wlayout::buyPresetManager";
-    _productPresetManager = _inAppStore->registeredProduct(QStringLiteral("PresetManager"));
-    if(_productPresetManager) {
-        qDebug() << "_productPresetManager->purchase";
-        _productPresetManager->purchase();
-    }
 }
 
 void wlayout::updateMenuButtonState() {
@@ -547,47 +510,11 @@ void wlayout::onGameStarted()
     emit layoutChange();
 }
 
-void wlayout::onEditPreset()
-{
-    _dialogPresetsVisible = true;
-    emit layoutChange();
-}
-
 void wlayout::setOctConf(int bot, int top)
 {
     _botOct = bot;
     _topOct = top;
     emit octConfChanged();
-}
-
-void wlayout::onProductRegistered(QInAppProduct *product)
-{
-    qDebug() << "wlayout::onProductRegistered " << product;
-}
-
-void wlayout::onProductUnknown(QInAppProduct::ProductType type, QString name)
-{
-    qDebug() << "wlayout::onProductUnknown " << type << " id " << name;
-}
-
-void wlayout::onTransactionReady(QInAppTransaction *transaction)
-{
-    if (transaction->status() == QInAppTransaction::PurchaseApproved
-        && transaction->product()->identifier() == QStringLiteral("PresetManager")) {
-        /*
-        if (!hasAlreadyStoredTransaction(transaction->orderId()) {
-            ++m_healthPotions;
-            if (!addHealthPotionToPersistentStorage(transaction->orderId())
-                popupErrorDialog(tr("Unable to write to persistent storage. Please make sure there is sufficient space and restart."))
-            else
-                transaction->finalize();
-        }
-        */
-    } else if (transaction->status() == QInAppTransaction::PurchaseFailed) {
-        qDebug() << "Purchase not completed.";
-        //transaction->finalize();
-    }
-    transaction->finalize();
 }
 
 void wlayout::readXml(QString filetype)
@@ -645,7 +572,6 @@ void wlayout::decodeConfigRecord() {
         _scalePresetsVisible=xmlr.attributes().value("scalePresetsVisible").toInt();
         _synthPresetsVisible=xmlr.attributes().value("synthPresetsVisible").toInt();
         _tunePresetsVisible=xmlr.attributes().value("tunePresetsVisible").toInt();
-        _dialogPresetsVisible=xmlr.attributes().value("dialogPresetsVisible").toInt();
 
         faderPitchTopRange->setValue(xmlr.attributes().value("pitchTopRange").toString().toInt());
         faderPitchBottomRange->setValue(xmlr.attributes().value("pitchBottomRange").toString().toInt());
@@ -692,8 +618,8 @@ void wlayout::decodeScaleRecord() {
                                          bscaleRead,
                                          this);
         connect(((MWPlayArea *)_PlayArea),SIGNAL(playRowsChanged()),p,SLOT(playAreaChanged()));
-        connect(p,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
-        _scalePresets.append(p);
+        connect(p,SIGNAL(editPreset()),_scalePresets,SLOT(onEditPreset()));
+        _scalePresets->append(p);
     }
 }
 
@@ -712,9 +638,9 @@ void wlayout::decodeSynthRecord() {
                     xmlr.attributes().value("mod_resonance").toString().toFloat(),
                     this);
         connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
-        connect(soundPreset,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
+        connect(soundPreset,SIGNAL(editPreset()),_scalePresets,SLOT(onEditPreset()));
         connect(this, SIGNAL(soundChanged()), soundPreset, SLOT(onSoundChanged()));
-        _synthPresets.append(soundPreset);
+        _synthPresets->append(soundPreset);
     }
 }
 
@@ -728,27 +654,9 @@ void wlayout::decodeTuneRecord() {
         }
         MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,this);
         connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
-        connect(microtunePreset,SIGNAL(editPreset()),this,SLOT(onEditPreset()));
-        _tunePresets.append(microtunePreset);
+        connect(microtunePreset,SIGNAL(editPreset()),_scalePresets,SLOT(onEditPreset()));
+        _tunePresets->append(microtunePreset);
     }
-}
-
-void wlayout::initInAppStore()
-{
-    _inAppStore = new QInAppStore(this);
-
-    connect(_inAppStore, SIGNAL(productRegistered(QInAppProduct*)),
-            this, SLOT(onProductRegistered(QInAppProduct*)));
-
-    connect(_inAppStore, SIGNAL(productUnknown(QInAppProduct::ProductType,QString)),
-            this, SLOT(onProductUnknown(QInAppProduct::ProductType,QString)));
-
-    connect(_inAppStore, SIGNAL(transactionReady(QInAppTransaction*)),
-            this, SLOT(onTransactionReady(QInAppTransaction*)));
-
-    _inAppStore->registerProduct(QInAppProduct::Unlockable,
-                               QStringLiteral("PresetManager"));
-
 }
 
 void wlayout::writeXml(QString filename)
@@ -767,7 +675,7 @@ void wlayout::writeXml(QString filename)
 
         if(filename == "scales.xml") {
 
-            for(auto widgetQ:_scalePresets) {
+            for(auto widgetQ:_scalePresets->getItems()) {
 
                 auto widget = qobject_cast<MWScalePreset*>(widgetQ);
                 if(widget) {
@@ -787,7 +695,7 @@ void wlayout::writeXml(QString filename)
                 }
             }
         } else if(filename == "synth.xml") {
-            for(auto o:_synthPresets) {
+            for(auto o:_synthPresets->getItems()) {
                 auto widget = qobject_cast<MWSoundPreset *>(o);
                 if(widget) {
                     xml.writeStartElement("sound");
@@ -816,7 +724,7 @@ void wlayout::writeXml(QString filename)
             }
         } else if(filename == "tune.xml") {
 
-            for(auto o:_tunePresets) {
+            for(auto o:_tunePresets->getItems()) {
                 auto widget = qobject_cast<MWMicrotunePreset *>(o);
                 xml.writeStartElement("microtune");
                 for(int i=0;i<12;i++) {
@@ -881,8 +789,6 @@ void wlayout::writeXml(QString filename)
             xml.writeAttribute("synthPresetsVisible",att);
             att.sprintf("%d",_tunePresetsVisible);
             xml.writeAttribute("tunePresetsVisible",att);
-            att.sprintf("%d",_dialogPresetsVisible);
-            xml.writeAttribute("dialogPresetsVisible",att);
 
             xml.writeEndElement();
 
@@ -894,7 +800,6 @@ void wlayout::writeXml(QString filename)
 
     } else {
         qDebug() << "cannot write " << filename;
-
     }
 
 }

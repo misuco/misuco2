@@ -21,7 +21,7 @@
 #ifndef MWrootNoteSETTER_H
 #define MWrootNoteSETTER_H
 
-#include "mglob.h"
+#include "conf/mglob.h"
 #include "comm/isender.h"
 #include "conf/freqtriple.h"
 

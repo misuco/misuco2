@@ -18,53 +18,32 @@
  *
  */
 
-#ifndef MWPRESET_H
-#define MWPRESET_H
+#ifndef MWMicrotunePreset_H
+#define MWMicrotunePreset_H
 
-#include "mglob.h"
+#include "conf/mglob.h"
 #include "conf/types.h"
 
-class MWScalePreset : public QObject
+class MWMicrotunePreset : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int rootNote READ rootnote NOTIFY presetChanged)
-    Q_PROPERTY(QStringList bScale READ bscale NOTIFY presetChanged)
-    Q_PROPERTY(int bScaleSize READ bscalesize NOTIFY presetChanged)
-    Q_PROPERTY(bool selected READ isSelected NOTIFY presetChanged)
-
 public:
-    MWScalePreset(QObject *parent);
-    MWScalePreset(int rootNote, bool bscale[BSCALE_SIZE], QObject *parent);
-
-    MWScale PresetScale;
-
-    QStringList bscale();
-    int bscalesize();
-    int rootnote();
-
-    void overwrite();
-
-    Q_INVOKABLE void onPressed();
-    Q_INVOKABLE void onPressAndHold();
-    Q_INVOKABLE void onCanceled();
-    Q_INVOKABLE void onReleased();
+    MWMicrotunePreset(QObject *parent);
+    MWMicrotunePreset(int tuning[], QObject *parent);
+    virtual void processTouchEvent(misuTouchEvent e);
+    MWMicrotune PresetMicrotune;
 
 public slots:
     void initialSet();
-    void playAreaChanged();
 
 signals:
-    void setScale(MWScale *);
+    void setMicrotune(MWMicrotune * m);
     void editPreset();
 
-    // QML
-    void presetChanged();
-
 private:
-    int pressed;
+    int pressed=0;
     bool isSelected();
-    bool canceled;
 };
 
-#endif // MWPRESET_H
+#endif // MWMicrotunePreset_H

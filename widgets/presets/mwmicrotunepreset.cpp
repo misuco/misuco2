@@ -67,3 +67,4 @@ bool MWMicrotunePreset::isSelected() {
     }
     return selected;
 }
+

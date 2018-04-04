@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     GridView {
-        model: layout.scalePresets
+        model: layout.scalePresets.items
 
         anchors.fill: parent
         cellWidth: portrait ? buttonSize : columnWidth

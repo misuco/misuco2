@@ -20,7 +20,7 @@
 
 #include <QDebug>
 #include "pitch.h"
-#include "widgets/mglob.h"
+#include "conf/mglob.h"
 
 Pitch::Pitch(int rootNote, QObject *parent) : QObject(parent), _rootNote(rootNote), _pitch(0)
 {

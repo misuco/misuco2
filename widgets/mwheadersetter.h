@@ -21,7 +21,7 @@
 #ifndef MWHEADERSETTER_H
 #define MWHEADERSETTER_H
 
-#include "mglob.h"
+#include "conf/mglob.h"
 
 class MWHeaderSetter : public QObject
 {

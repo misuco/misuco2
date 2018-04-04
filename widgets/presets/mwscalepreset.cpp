@@ -19,6 +19,7 @@
  */
 
 #include "mwscalepreset.h"
+#include "presetcollection.h"
 #include <QDebug>
 
 MWScalePreset::MWScalePreset(QObject *parent): QObject(parent)
@@ -98,7 +99,7 @@ void MWScalePreset::onPressed()
 void MWScalePreset::onPressAndHold()
 {
     canceled = true;
-    MGlob::overwritePreset = this;
+    PresetCollection::dialogContext = this;
     emit editPreset();
 }
 

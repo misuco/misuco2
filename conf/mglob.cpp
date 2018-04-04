@@ -53,7 +53,6 @@ bool MGlob::showFreqs = false;
 int MGlob::channel = 0;
 
 bool MGlob::sendCC1 = true;
-QObject * MGlob::overwritePreset = 0;
 
 int MGlob::playAreaWidth = 0;
 int MGlob::playAreaHeight = 0;

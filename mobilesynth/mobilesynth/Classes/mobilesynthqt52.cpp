@@ -33,7 +33,7 @@ mobileSynthQT52::mobileSynthQT52()
     writeBehindReadPointer = false;
     DataSampleRateHz  = 44100;
     //DataSampleRateHz  = 48000;
-    //BufferSize        = 4096;
+    //BufferSize        = 1024;
     BufferSize        = 16384;
 
     qDebug() << "mobileSynthQT52::size " << size();

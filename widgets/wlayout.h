@@ -24,7 +24,6 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include <QInAppStore>
 #include "widgets/mwplayarea.h"
 #include "widgets/mwrootnotesetter.h"
 #include "comm/sendermobilesynth.h"
@@ -36,10 +35,12 @@
 #include "mwheadersetter.h"
 #include "comm/sendermulti.h"
 #include "mwfaderpitch.h"
-#include "mwscalepreset.h"
-#include "mwsoundpreset.h"
-#include "mwmicrotunepreset.h"
+#include "presets/mwscalepreset.h"
+#include "presets/mwsoundpreset.h"
+#include "presets/mwmicrotunepreset.h"
+#include "presets/presetcollection.h"
 #include "mwgame.h"
+#include "conf/purchases.h"
 
 class wlayout : public QObject
 {
@@ -62,13 +63,13 @@ class wlayout : public QObject
     Q_PROPERTY(QList<QObject*> tuneArea MEMBER _faderMicrotune CONSTANT)
     Q_PROPERTY(bool tuneAreaVisible MEMBER _tuneAreaVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> scalePresets MEMBER _scalePresets CONSTANT)
+    Q_PROPERTY(QObject* scalePresets MEMBER _scalePresets CONSTANT)
     Q_PROPERTY(bool scalePresetsVisible MEMBER _scalePresetsVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> synthPresets MEMBER _synthPresets CONSTANT)
+    Q_PROPERTY(QObject* synthPresets MEMBER _synthPresets CONSTANT)
     Q_PROPERTY(bool synthPresetsVisible MEMBER _synthPresetsVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> tunePresets MEMBER _tunePresets CONSTANT)
+    Q_PROPERTY(QObject* tunePresets MEMBER _tunePresets CONSTANT)
     Q_PROPERTY(bool tunePresetsVisible MEMBER _tunePresetsVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> synthArea MEMBER _faderParamCtl CONSTANT)
@@ -100,7 +101,6 @@ class wlayout : public QObject
     Q_PROPERTY(int botOct MEMBER _botOct NOTIFY octConfChanged)
 
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
-    Q_PROPERTY(bool dialogPresetsVisible MEMBER _dialogPresetsVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
 
@@ -112,10 +112,6 @@ public:
 
     QList<QObject*> pitches();
     QList<QObject*> confPitchFaders();
-
-    Q_INVOKABLE void closeDialogPreset();
-    Q_INVOKABLE void overwritePreset();
-    Q_INVOKABLE void buyPresetManager();
 
 signals:
     void setRootNote(Pitch * p);
@@ -145,21 +141,13 @@ private slots:
     void onSoundChanged(int);
     void onGameStarted();
 
-    void onEditPreset();
     void setOctConf(int bot, int top);
-
-    void onProductRegistered(QInAppProduct* product);
-    void onProductUnknown(QInAppProduct::ProductType type, QString name);
-    void onTransactionReady(QInAppTransaction* transaction);
 
 private:
     SenderMulti * out;
 
     QXmlStreamWriter xml;
     QXmlStreamReader xmlr;
-
-    QInAppStore *   _inAppStore;
-    QInAppProduct * _productPresetManager;
 
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _BScaleSwitch;
@@ -177,9 +165,9 @@ private:
     QList<QObject *> _menu;
 
     // preset buttons
-    QList<QObject * > _scalePresets;
-    QList<QObject * > _synthPresets;
-    QList<QObject * > _tunePresets;
+    PresetCollection * _scalePresets;
+    PresetCollection * _synthPresets;
+    PresetCollection * _tunePresets;
 
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;
@@ -216,8 +204,6 @@ private:
     bool _synthPresetsVisible;
     bool _tunePresetsVisible;
 
-    bool _dialogPresetsVisible;
-
     int _botOct;
     int _topOct;
 
@@ -232,7 +218,6 @@ private:
     void decodeSynthRecord();
     void decodeTuneRecord();
 
-    void initInAppStore();
 };
 
 #endif // WLAYOUT_H
