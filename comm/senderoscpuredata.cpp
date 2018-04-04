@@ -17,7 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #include "senderoscpuredata.h"
-#include "../comm/libofqf/qoscclient.h"
+#include "comm/libofqf/qoscclient.h"
+#include "conf/mglob.h"
 
 SenderOscPuredata::SenderOscPuredata()
 {
@@ -41,37 +42,37 @@ SenderOscPuredata::~SenderOscPuredata()
     delete(oscout);
 }
 
-void SenderOscPuredata::noteOn(int chan, int, float, int midinote, int pitch, int, int)
+void SenderOscPuredata::noteOn(int, float, int midinote, int pitch, int, int)
 {
     //int f = midinote;
     //int vid=voiceId%1024;
     //notestate[vid]=f;
     QVariantList v;
-    v.append(chan);
+    v.append(MGlob::channel);
     v.append(midinote);
     v.append(127);
     sendOsc("/note",v);
 
     v.clear();
-    v.append(chan);
+    v.append(MGlob::channel);
     v.append(pitch);
     sendOsc("/pitch",v);
 }
 
-void SenderOscPuredata::noteOff(int chan, int, int midinote)
+void SenderOscPuredata::noteOff(int, int midinote)
 {
     QVariantList v;
-    v.append(chan);
+    v.append(MGlob::channel);
     //v.append(notestate[voiceId%1024]);
     v.append(midinote);
     v.append(0);
     sendOsc("/note",v);
 }
 
-void SenderOscPuredata::pitch(int chan, int, float, int, int pitch, int)
+void SenderOscPuredata::pitch(int, float, int, int pitch, int)
 {
     QVariantList v;
-    v.append(chan);
+    v.append(MGlob::channel);
     v.append(pitch);
     sendOsc("/pitch",v);
 }
@@ -92,15 +93,15 @@ void SenderOscPuredata::reconnect()
     oscout->setAddress(adr,port);
 }
 
-void SenderOscPuredata::pc(int chan, int v1)
+void SenderOscPuredata::pc(int v1)
 {
     QVariantList v;
-    v.append(chan);
+    v.append(MGlob::channel);
     v.append(v1);
     sendOsc("/pc",v);
 }
 
-void SenderOscPuredata::cc(int chan, int, int cc, float, float v1avg)
+void SenderOscPuredata::cc(int, int cc, float, float v1avg)
 {
     //qDebug() <<  "SenderOscPuredata::cc " << cc << " v1 " << v1;
 
@@ -111,7 +112,7 @@ void SenderOscPuredata::cc(int chan, int, int cc, float, float v1avg)
     if(v1mid!=ccstate[cc]) {
         ccstate[cc]=v1mid;
         QVariantList v;
-        v.append(chan);
+        v.append(MGlob::channel);
         v.append(cc);
         v.append(v1mid);
         sendOsc("/cc",v);

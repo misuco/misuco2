@@ -66,7 +66,6 @@ SOURCES += main.cpp\
     comm/sendermulti.cpp \
     comm/senderoscmidigeneric.cpp \
     comm/senderoscpuredata.cpp \
-    comm/senderoscxy.cpp \
     comm/senderreaktor.cpp \
     comm/sendersupercollider.cpp \
     widgets/presets/mwmicrotunepreset.cpp \
@@ -122,7 +121,6 @@ HEADERS  += \
     comm/sendermulti.h \
     comm/senderoscmidigeneric.h \
     comm/senderoscpuredata.h \
-    comm/senderoscxy.h \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
     widgets/presets/mwmicrotunepreset.h \

@@ -116,7 +116,7 @@ int MWRootNoteSetter::pitchId()
 
 void MWRootNoteSetter::onPressed()
 {
-    if(_out && _pressed == 0) _vId=_out->noteOn(MGlob::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    if(_out && _pressed == 0) _vId=_out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
 }
 
@@ -134,4 +134,3 @@ QObject *MWRootNoteSetter::pitch()
 {
     return _pitch;
 }
-

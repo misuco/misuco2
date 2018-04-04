@@ -23,12 +23,12 @@ class ISender
 {
 public:
     virtual ~ISender() {}
-    virtual void cc(int chan, int voiceId, int cc, float v1, float v1avg)=0;
-    virtual void pc(int chan, int v1)=0;
-    virtual int noteOn(int chan, float f, int midinote, int pitch, int v)=0;
-    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v)=0;
+    virtual void cc(int voiceId, int cc, float v1, float v1avg)=0;
+    virtual void pc(int v1)=0;
+    virtual int noteOn(float f, int midinote, int pitch, int v)=0;
+    virtual void noteOn(int voiceId, float f, int midinote, int pitch, int v)=0;
     virtual void noteOff(int voiceId)=0;
-    virtual void pitch(int chan, int voiceId, float f, int midinote, int pitch)=0;
+    virtual void pitch(int voiceId, float f, int midinote, int pitch)=0;
     virtual void setDestination(char * adr, int port)=0;
     virtual void reconnect()=0;
 };

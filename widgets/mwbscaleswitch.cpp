@@ -72,7 +72,7 @@ bool MWBScaleSwitch::selected()
 
 void MWBScaleSwitch::onPressed()
 {
-    if(_out && _pressed == 0) _vid=_out->noteOn(MGlob::channel,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+    if(_out && _pressed == 0) _vid=_out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
     emit selectedChanged();
 }

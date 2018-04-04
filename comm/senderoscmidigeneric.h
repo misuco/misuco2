@@ -21,19 +21,19 @@
 #define SENDEROSCMIDIGENERIC_H
 
 #include "isender.h"
-#include "../comm/libofqf/qoscclientinterface.h"
+#include "comm/libofqf/qoscclientinterface.h"
 
 class SenderOscMidiGeneric : public ISender
 {
 public:
     SenderOscMidiGeneric();
     ~SenderOscMidiGeneric();
-    virtual void cc(int chan, int voiceId, int cc, float, float v1avg);
-    virtual void pc(int chan, int v1);
-    virtual int noteOn(int chan, float f, int midinote, int pitch, int val);
-    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int val);
+    virtual void cc(int voiceId, int cc, float, float v1avg);
+    virtual void pc(int v1);
+    virtual int noteOn(float f, int midinote, int pitch, int val);
+    virtual void noteOn(int voiceId, float f, int midinote, int pitch, int val);
     virtual void noteOff(int nextVoiceId);
-    virtual void pitch(int chan, int voiceId, float f, int midinote, int pitch);
+    virtual void pitch(int voiceId, float f, int midinote, int pitch);
     virtual void setDestination(char * a,int p);
     virtual void reconnect();
     virtual int getPort() {return port;}

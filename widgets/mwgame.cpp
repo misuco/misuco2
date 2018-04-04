@@ -51,12 +51,12 @@ void MWGame::start()
     }
 }
 
-int MWGame::noteOn(int, float, int, int, int)
+int MWGame::noteOn(float, int, int, int)
 {
     return 0;
 }
 
-void MWGame::noteOn(int, int, float, int midinote, int, int)
+void MWGame::noteOn(int, float, int midinote, int, int)
 {
     if(_status == listen) {
         if(_playArea->getMidinoteAtField(_played[_hearIndex]) != midinote) {

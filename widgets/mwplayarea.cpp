@@ -299,7 +299,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         es->row=row;
         es->col=col;
         es->f=freq;
-        es->voiceId=out->noteOn(MGlob::channel,freq,midinote,pitch,velocity);
+        es->voiceId=out->noteOn(freq,midinote,pitch,velocity);
         pf->pressed++;
         break;
 
@@ -311,19 +311,19 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             out->noteOff(es->voiceId);
 
             es->midinote=midinote;
-            es->voiceId=out->noteOn(MGlob::channel,freq,midinote,pitch,velocity);
+            es->voiceId=out->noteOn(freq,midinote,pitch,velocity);
 
             es->row=row;
             es->col=col;
             es->f=freq;
             pf->pressed++;
         } else if(freq!=es->f) {
-            out->pitch(MGlob::channel,es->voiceId,freq,midinote,pitch);
+            out->pitch(es->voiceId,freq,midinote,pitch);
             es->f=freq;
         }
 
         if(MGlob::sendCC1) {
-            out->cc(MGlob::channel,es->voiceId,1,1.0f-yrel,1.0f-yrel);
+            out->cc(es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;
 

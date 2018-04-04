@@ -36,7 +36,7 @@ SenderSuperCollider::~SenderSuperCollider()
     delete(oscout);
 }
 
-void SenderSuperCollider::cc(int, int voiceId, int cc, float v1, float)
+void SenderSuperCollider::cc(int voiceId, int cc, float v1, float)
 {
     QVariantList v;
     QString p;
@@ -47,7 +47,7 @@ void SenderSuperCollider::cc(int, int voiceId, int cc, float v1, float)
     sendOsc("/n_set",v);
 }
 
-void SenderSuperCollider::pc(int, int v1)
+void SenderSuperCollider::pc(int v1)
 {
     sy.sprintf("m%d",v1);
 }
@@ -68,12 +68,12 @@ void SenderSuperCollider::reconnect()
     oscout->setAddress(adr,port);
 }
 
-int SenderSuperCollider::noteOn(int, float, int, int, int)
+int SenderSuperCollider::noteOn(float, int, int, int)
 {
     return 0;
 }
 
-void SenderSuperCollider::noteOn(int, int voiceId, float f, int, int, int vel)
+void SenderSuperCollider::noteOn(int voiceId, float f, int, int, int vel)
 {
     //qDebug() << "noteOn vid:" << voiceId << " f " << f << " vel " << vel;
     QVariantList v;
@@ -88,7 +88,7 @@ void SenderSuperCollider::noteOn(int, int voiceId, float f, int, int, int vel)
     sendOsc("/s_new",v);
 }
 
-void SenderSuperCollider::pitch(int, int voiceId, float f, int, int)
+void SenderSuperCollider::pitch(int voiceId, float f, int, int)
 {
     //qDebug() << "pitch vid:" << voiceId << " f " << f;
     QVariantList v;

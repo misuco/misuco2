@@ -102,7 +102,7 @@ SenderMobileSynth::~SenderMobileSynth()
     delete(sy);
 }
 
-void SenderMobileSynth::cc(int, int voiceId, int cc, float v1, float)
+void SenderMobileSynth::cc(int voiceId, int cc, float v1, float)
 {
     if(cc==1) {
         sy->getSyctl()->set_modulation(voiceId,v1);
@@ -129,14 +129,14 @@ void SenderMobileSynth::cc(int, int voiceId, int cc, float v1, float)
     }
 }
 
-void SenderMobileSynth::pc(int, int) {}
+void SenderMobileSynth::pc(int) {}
 
-int SenderMobileSynth::noteOn(int, float, int, int, int)
+int SenderMobileSynth::noteOn(float, int, int, int)
 {
     return 0;
 }
 
-void SenderMobileSynth::noteOn(int, int voiceId, float f, int, int, int)
+void SenderMobileSynth::noteOn(int voiceId, float f, int, int, int)
 {
     //qDebug() << "SenderMobileSynth::noteOn " << voiceId << " f: " << f;
     sy->noteOn(voiceId, (float)f);
@@ -148,7 +148,7 @@ void SenderMobileSynth::noteOff(int voiceId)
     sy->noteOff(voiceId);
 }
 
-void SenderMobileSynth::pitch(int, int voiceId, float f, int, int) {
+void SenderMobileSynth::pitch(int voiceId, float f, int, int) {
     sy->noteOn(voiceId, (float)f);
 }
 

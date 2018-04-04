@@ -23,12 +23,12 @@ public:
 
     void start();
 
-    virtual void cc(int, int, int, float, float) {}
-    virtual void pc(int, int) {}
-    virtual int noteOn(int chan, float f, int midinote, int pitch, int vel);
-    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v);
+    virtual void cc(int, int, float, float) {}
+    virtual void pc(int) {}
+    virtual int noteOn(float f, int midinote, int pitch, int vel);
+    virtual void noteOn(int voiceId, float f, int midinote, int pitch, int v);
     virtual void noteOff(int) {}
-    virtual void pitch(int, int, float, int, int ) {}
+    virtual void pitch(int, float, int, int ) {}
 
     virtual void setDestination(char *,int) {}
     virtual void reconnect() {}

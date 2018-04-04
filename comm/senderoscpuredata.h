@@ -20,18 +20,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SENDEROSCPUREDATA_H
 
 #include "isender.h"
-#include "../comm/libofqf/qoscclientinterface.h"
+#include "comm/libofqf/qoscclientinterface.h"
 
 class SenderOscPuredata : public ISender
 {
 public:
     SenderOscPuredata();
     ~SenderOscPuredata();
-    virtual void cc(int chan, int voiceId, int cc, float, float v1avg);
-    virtual void pc(int chan, int v1);
-    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int scalenote, int vel);
-    virtual void noteOff(int chan, int voiceId, int midinote);
-    virtual void pitch(int chan, int, float fr, int, int pitch, int scalenote);
+    virtual void cc(int voiceId, int cc, float, float v1avg);
+    virtual void pc(int v1);
+    virtual void noteOn(int voiceId, float f, int midinote, int pitch, int scalenote, int vel);
+    virtual void noteOff(int voiceId, int midinote);
+    virtual void pitch(int, float fr, int, int pitch, int scalenote);
     virtual void setDestination(char * a,int p);
     virtual void reconnect();
     virtual int getPort() {return port;}

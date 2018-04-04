@@ -57,29 +57,29 @@ SenderMulti::~SenderMulti()
     //delAll();
 }
 
-void SenderMulti::cc(int chan, int voiceId, int cc, float v1, float v1avg)
+void SenderMulti::cc(int voiceId, int cc, float v1, float v1avg)
 {
     //qDebug() << "SenderMulti::cc(" << chan << "," << voiceId << "," << cc << "," << v1 << "," << v1avg << ")";
     for(int i=0;i<senders.count();i++) {
-        if(senderEnabled[i]) senders.at(i)->cc(chan,voiceId,cc,v1,v1avg);
+        if(senderEnabled[i]) senders.at(i)->cc(voiceId,cc,v1,v1avg);
     }
 }
 
-void SenderMulti::pc(int chan, int v1)
+void SenderMulti::pc(int v1)
 {
     for(int i=0;i<senders.count();i++) {
-        if(senderEnabled[i]) senders.at(i)->pc(chan,v1);
+        if(senderEnabled[i]) senders.at(i)->pc(v1);
     }
 }
 
-int SenderMulti::noteOn(int chan, float f, int midinote, int pitch, int v)
+int SenderMulti::noteOn(float f, int midinote, int pitch, int v)
 {
     int vid=nextVoiceId++;
     if(nextVoiceId>1023)  nextVoiceId=1;
     //notestate[vid]=midinote;
     for(int i=0;i<senders.count();i++) {
         if(senderEnabled[i]) {
-            senders.at(i)->noteOn(chan,vid,f,midinote,pitch,v);
+            senders.at(i)->noteOn(vid,f,midinote,pitch,v);
             //qDebug() << "SenderMulti::noteOn(sender:" << i << ",chan:" << chan << ",vid:" << vid << ",f:" << f << ",midinote:" << midinote << "," << pitch << "," << v << ")";
         }
     }
@@ -89,7 +89,7 @@ int SenderMulti::noteOn(int chan, float f, int midinote, int pitch, int v)
     return vid;
 }
 
-void SenderMulti::noteOn(int, int, float, int, int, int)
+void SenderMulti::noteOn(int, float, int, int, int)
 {
 
 }
@@ -109,11 +109,11 @@ void SenderMulti::noteOff(int voiceId)
     onCnt--;
 }
 
-void SenderMulti::pitch(int chan, int voiceId, float f, int midinote, int pitch)
+void SenderMulti::pitch(int voiceId, float f, int midinote, int pitch)
 {
     //qDebug() << "SenderMulti::pitch(" << chan << "," << voiceId << "," << f << "," << midinote << "," << pitch << ")";
     for(int i=0;i<senders.count();i++) {
-        if(senderEnabled[i]) senders.at(i)->pitch(chan,voiceId,f,midinote,pitch);
+        if(senderEnabled[i]) senders.at(i)->pitch(voiceId,f,midinote,pitch);
     }
 }
 

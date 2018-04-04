@@ -17,7 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #include "senderreaktor.h"
-#include "../comm/libofqf/qoscclient.h"
+#include "comm/libofqf/qoscclient.h"
+#include "conf/mglob.h"
 
 SenderReaktor::SenderReaktor()
 {
@@ -43,24 +44,24 @@ SenderReaktor::~SenderReaktor()
     delete(oscout);
 }
 
-int SenderReaktor::noteOn(int, float, int, int, int)
+int SenderReaktor::noteOn(float, int, int, int)
 {
     return 0;
 }
 
-void SenderReaktor::noteOn(int chan, int voiceId, float, int midinote, int pitch, int vel)
+void SenderReaktor::noteOn(int voiceId, float, int midinote, int pitch, int vel)
 {
     QVariantList v;
     v.append(midinote);
     v.append(vel);
     QString path;
-    path.sprintf("/note/%d",chan);
+    path.sprintf("/note/%d",MGlob::channel);
     sendOsc(path,v);
     v.clear();
     v.append(pitch);
-    path.sprintf("/pitch/%d",chan);
+    path.sprintf("/pitch/%d",MGlob::channel);
     sendOsc(path,v);
-    notechan[voiceId%1024]=chan;
+    notechan[voiceId%1024]=MGlob::channel;
     notestate[voiceId%1024]=midinote;
 }
 
@@ -74,13 +75,13 @@ void SenderReaktor::noteOff(int voiceId)
     sendOsc(path,v);
 }
 
-void SenderReaktor::pitch(int chan, int, float, int, int pitch)
+void SenderReaktor::pitch(int, float, int, int pitch)
 {
     QVariantList v;
     QString path;
 
     v.append(pitch*64);
-    path.sprintf("/pitch/%d",chan);
+    path.sprintf("/pitch/%d",MGlob::channel);
     sendOsc(path,v);
 }
 
@@ -100,16 +101,16 @@ void SenderReaktor::reconnect()
     oscout->setAddress(adr,port);
 }
 
-void SenderReaktor::pc(int chan, int v1)
+void SenderReaktor::pc(int v1)
 {
     QVariantList v;
     QString path;
     v.append(v1);
-    path.sprintf("/pc/%d",chan);
+    path.sprintf("/pc/%d",MGlob::channel);
     sendOsc(path,v);
 }
 
-void SenderReaktor::cc(int chan, int, int cc, float, float v1avg)
+void SenderReaktor::cc(int, int cc, float, float v1avg)
 {
     //qDebug() <<  "SenderOscPuredata::cc " << cc << " v1 " << v1;
 
@@ -122,7 +123,7 @@ void SenderReaktor::cc(int chan, int, int cc, float, float v1avg)
         QVariantList v;
         QString path;
         v.append(v1mid);
-        path.sprintf("/cc/%d/%d",chan,cc);
+        path.sprintf("/cc/%d/%d",MGlob::channel,cc);
         sendOsc(path,v);
     }
 }

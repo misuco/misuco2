@@ -17,7 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #include "senderoscmidigeneric.h"
-#include "../comm/libofqf/qoscclient.h"
+#include "comm/libofqf/qoscclient.h"
+#include "conf/mglob.h"
 
 SenderOscMidiGeneric::SenderOscMidiGeneric()
 {
@@ -39,26 +40,26 @@ SenderOscMidiGeneric::~SenderOscMidiGeneric()
     delete(oscout);
 }
 
-int SenderOscMidiGeneric::noteOn(int, float, int, int, int)
+int SenderOscMidiGeneric::noteOn(float, int, int, int)
 {
     //qDebug() << "SenderOscMidiGeneric::noteOn " << chan << " " << voiceId << " " << midinote << " " << pitch;
     return 0;
 }
 
-void SenderOscMidiGeneric::noteOn(int chan, int, float, int midinote, int pitch, int val)
+void SenderOscMidiGeneric::noteOn(int, float, int midinote, int pitch, int val)
 {
     QVariantList v;
     v.append(midinote);
     v.append(val);
-    v.append(chan);
+    v.append(MGlob::channel);
     QString path;
-    path.sprintf("/note/%d",chan);
+    path.sprintf("/note/%d",MGlob::channel);
     sendOsc(path,v);
 
     v.clear();
     v.append(pitch);
-    v.append(chan);
-    path.sprintf("/pitch/%d",chan);
+    v.append(MGlob::channel);
+    path.sprintf("/pitch/%d",MGlob::channel);
     sendOsc(path,v);
 }
 
@@ -75,14 +76,14 @@ void SenderOscMidiGeneric::noteOff(int)
     sendOsc(path,v);
 }
 
-void SenderOscMidiGeneric::pitch(int chan, int, float, int, int pitch)
+void SenderOscMidiGeneric::pitch(int, float, int, int pitch)
 {
     //qDebug() << "SenderOscMidiGeneric::pitch " << chan << " " << voiceId << " " << midinote << " " << pitch;
     QVariantList v;
     QString path;
     v.append(pitch);
-    v.append(chan);
-    path.sprintf("/pitch/%d",chan);
+    v.append(MGlob::channel);
+    path.sprintf("/pitch/%d",MGlob::channel);
     sendOsc(path,v);
 }
 
@@ -102,17 +103,17 @@ void SenderOscMidiGeneric::reconnect()
     oscout->setAddress(adr,port);
 }
 
-void SenderOscMidiGeneric::pc(int chan, int v1)
+void SenderOscMidiGeneric::pc(int v1)
 {
     QVariantList v;
     QString path;
     v.append(v1);
-    v.append(chan);
-    path.sprintf("/pc/%d",chan);
+    v.append(MGlob::channel);
+    path.sprintf("/pc/%d",MGlob::channel);
     sendOsc(path,v);
 }
 
-void SenderOscMidiGeneric::cc(int chan, int, int cc, float, float v1avg)
+void SenderOscMidiGeneric::cc(int, int cc, float, float v1avg)
 {
     //qDebug() <<  "SenderOscPuredata::cc " << cc << " v1 " << v1;
 
@@ -126,8 +127,8 @@ void SenderOscMidiGeneric::cc(int chan, int, int cc, float, float v1avg)
         QString path;
         v.append(v1mid);
         v.append(cc);
-        v.append(chan);
-        path.sprintf("/cc/%d/%d",chan,cc);
+        v.append(MGlob::channel);
+        path.sprintf("/cc/%d/%d",MGlob::channel,cc);
         sendOsc(path,v);
     }
 }

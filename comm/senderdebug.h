@@ -25,12 +25,12 @@ class SenderDebug : public ISender
 {
 public:
     SenderDebug();
-    virtual void cc(int chan, int voiceId, int cc, float v1, float v1avg);
-    virtual void pc(int chan, int v1);
-    virtual int noteOn(int chan, float f, int midinote, int pitch, int v);
-    virtual void noteOn(int chan, int voiceId, float f, int midinote, int pitch, int v);
+    virtual void cc(int voiceId, int cc, float v1, float v1avg);
+    virtual void pc(int v1);
+    virtual int noteOn(float f, int midinote, int pitch, int v);
+    virtual void noteOn(int voiceId, float f, int midinote, int pitch, int v);
     virtual void noteOff(int voiceId);
-    virtual void pitch(int chan, int voiceId, float f, int midinote, int pitch);
+    virtual void pitch(int voiceId, float f, int midinote, int pitch);
     virtual void setDestination(char *,int) {}
     virtual void reconnect() {}
 

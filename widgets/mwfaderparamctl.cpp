@@ -229,7 +229,7 @@ void MWFaderParamCtl::propagateValueChange() {
         break;
     }
 
-    out->cc(MGlob::channel,0,cc,getValue(),getValue());
+    out->cc(0,cc,getValue(),getValue());
 }
 
 void MWFaderParamCtl::onPressedPitch(int id)
@@ -245,7 +245,7 @@ void MWFaderParamCtl::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        out->cc(MGlob::channel,0,cc,getValue(),getValue());
+        out->cc(0,cc,getValue(),getValue());
         propagateValueChange();
     }
 }
