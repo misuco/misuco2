@@ -18,7 +18,7 @@
  *
  */
 
-#include "widgets/wlayout.h"
+#include "app/misuco2.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    QObject * layout=new wlayout();
+    QObject * layout=new Misuco2();
 
     QQmlApplicationEngine engine;
     QQmlContext* ctx = engine.rootContext();

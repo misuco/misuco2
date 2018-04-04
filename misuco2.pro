@@ -30,7 +30,7 @@ INCLUDEPATH += mobilesynth/lib
 
 
 SOURCES += main.cpp\
-    widgets/wlayout.cpp \
+    app/misuco2.cpp \
     widgets/mwplayarea.cpp \
     conf/freqtriple.cpp \
     comm/libofqf/qoscclient.cpp \
@@ -77,7 +77,7 @@ SOURCES += main.cpp\
     conf/purchases.cpp
 
 HEADERS  += \
-    widgets/wlayout.h \
+    app/misuco2.h \
     widgets/mwplayarea.h \
     conf/types.h \
     conf/freqtriple.h \

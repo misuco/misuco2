@@ -30,19 +30,19 @@
 #include "comm/senderdebug.h"
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
-#include "mwfaderparamctl.h"
-#include "mwbscaleswitch.h"
-#include "mwheadersetter.h"
+#include "widgets/mwfaderparamctl.h"
+#include "widgets/mwbscaleswitch.h"
+#include "widgets/mwheadersetter.h"
 #include "comm/sendermulti.h"
-#include "mwfaderpitch.h"
-#include "presets/mwscalepreset.h"
-#include "presets/mwsoundpreset.h"
-#include "presets/mwmicrotunepreset.h"
-#include "presets/presetcollection.h"
-#include "mwgame.h"
+#include "widgets/mwfaderpitch.h"
+#include "widgets/presets/mwscalepreset.h"
+#include "widgets/presets/mwsoundpreset.h"
+#include "widgets/presets/mwmicrotunepreset.h"
+#include "widgets/presets/presetcollection.h"
+#include "widgets/mwgame.h"
 #include "conf/purchases.h"
 
-class wlayout : public QObject
+class Misuco2 : public QObject
 {
     Q_OBJECT
 
@@ -107,8 +107,8 @@ class wlayout : public QObject
     Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
 
 public:
-    explicit wlayout(QObject *parent = 0);
-    ~wlayout();
+    explicit Misuco2(QObject *parent = 0);
+    ~Misuco2();
 
     QList<QObject*> pitches();
     QList<QObject*> confPitchFaders();

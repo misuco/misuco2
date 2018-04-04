@@ -18,12 +18,12 @@
  *
  */
 
-#include "wlayout.h"
+#include "misuco2.h"
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDir>
 
-wlayout::wlayout(QObject *parent) : QObject(parent)
+Misuco2::Misuco2(QObject *parent) : QObject(parent)
 {
     _presetsVisible=true;
     _menuVisible=false;
@@ -255,7 +255,7 @@ wlayout::wlayout(QObject *parent) : QObject(parent)
     _game->start();
 }
 
-wlayout::~wlayout()
+Misuco2::~Misuco2()
 {
     writeXml("conf.xml");
     writeXml("scales.xml");
@@ -263,7 +263,7 @@ wlayout::~wlayout()
     writeXml("tune.xml");
 }
 
-QList<QObject *> wlayout::pitches()
+QList<QObject *> Misuco2::pitches()
 {
     QList<QObject*> p;
     for(int i=0;i<BSCALE_SIZE+1;i++) {
@@ -272,7 +272,7 @@ QList<QObject *> wlayout::pitches()
     return p;
 }
 
-QList<QObject *> wlayout::confPitchFaders()
+QList<QObject *> Misuco2::confPitchFaders()
 {
     QList<QObject*> p;
     p.append(faderPitchTopRange);
@@ -280,7 +280,7 @@ QList<QObject *> wlayout::confPitchFaders()
     return p;
 }
 
-void wlayout::updateMenuButtonState() {
+void Misuco2::updateMenuButtonState() {
 
     MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
     MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
@@ -300,7 +300,7 @@ void wlayout::updateMenuButtonState() {
 
 }
 
-void wlayout::currentHeader(int id)
+void Misuco2::currentHeader(int id)
 {
     switch(id) {
     case 0:
@@ -320,7 +320,7 @@ void wlayout::currentHeader(int id)
 
 }
 
-void wlayout::currentMainView(int id)
+void Misuco2::currentMainView(int id)
 {    
     if(id==0 && _playAreaVisible) {
         _game->start();
@@ -374,7 +374,7 @@ void wlayout::currentMainView(int id)
     writeXml("conf.xml");
 }
 
-void wlayout::togglePresets()
+void Misuco2::togglePresets()
 {    
     _presetsVisible=!_presetsVisible;
     if(_presetsVisible) {
@@ -396,19 +396,19 @@ void wlayout::togglePresets()
     writeXml("conf.xml");
 }
 
-void wlayout::toggleMenu()
+void Misuco2::toggleMenu()
 {
     _menuVisible=!_menuVisible;
     emit layoutChange();
     writeXml("conf.xml");
 }
 
-void wlayout::onSetRootNote(Pitch *p)
+void Misuco2::onSetRootNote(Pitch *p)
 {
     emit setRootNote(p);
 }
 
-void wlayout::setSound(MWSound *s)
+void Misuco2::setSound(MWSound *s)
 {
     int i=0;
     for(auto o:_faderParamCtl) {
@@ -453,7 +453,7 @@ void wlayout::setSound(MWSound *s)
     emit soundChanged();
 }
 
-void wlayout::setMicrotune(MWMicrotune * m)
+void Misuco2::setMicrotune(MWMicrotune * m)
 {
     for(int i=0;i<12;i++) {
         MGlob::Microtune.tuning[i] = m->tuning[i];
@@ -463,37 +463,37 @@ void wlayout::setMicrotune(MWMicrotune * m)
     }
 }
 
-void wlayout::onChannelChange(int v)
+void Misuco2::onChannelChange(int v)
 {
     MGlob::channel = v;
 }
 
-void wlayout::onToggleSender(int v)
+void Misuco2::onToggleSender(int v)
 {
     if(out->senderEnabled[v]) out->senderEnabled[v]=false;
     else out->senderEnabled[v]=true;
     writeXml("conf.xml");
 }
 
-void wlayout::onSymbolsChange(int v)
+void Misuco2::onSymbolsChange(int v)
 {
     MGlob::noteSymbols = v;
     emit symbolsChanged();
     writeXml("conf.xml");
 }
 
-void wlayout::onShowFreqsChange()
+void Misuco2::onShowFreqsChange()
 {
     emit symbolsChanged();
     writeXml("conf.xml");
 }
 
-void wlayout::onSoundChanged(int)
+void Misuco2::onSoundChanged(int)
 {
     emit soundChanged();
 }
 
-void wlayout::onGameStarted()
+void Misuco2::onGameStarted()
 {
     _presetsVisible = false;
     _scalePresetsVisible=false;
@@ -510,14 +510,14 @@ void wlayout::onGameStarted()
     emit layoutChange();
 }
 
-void wlayout::setOctConf(int bot, int top)
+void Misuco2::setOctConf(int bot, int top)
 {
     _botOct = bot;
     _topOct = top;
     emit octConfChanged();
 }
 
-void wlayout::readXml(QString filetype)
+void Misuco2::readXml(QString filetype)
 {
     QString filename = _configPath+"/"+filetype;
     QFile file(filename);
@@ -555,7 +555,7 @@ void wlayout::readXml(QString filetype)
     file.close();
 }
 
-void wlayout::decodeConfigRecord() {
+void Misuco2::decodeConfigRecord() {
     if (xmlr.name() == "setup") {
         _presetsVisible=xmlr.attributes().value("presetsVisible").toInt();
         _menuVisible=xmlr.attributes().value("menuVisible").toInt();
@@ -606,7 +606,7 @@ void wlayout::decodeConfigRecord() {
     }
 }
 
-void wlayout::decodeScaleRecord() {
+void Misuco2::decodeScaleRecord() {
     if (xmlr.name() == "scale") {
         bool bscaleRead[BSCALE_SIZE];
         for(int i=0;i<BSCALE_SIZE;i++) {
@@ -623,7 +623,7 @@ void wlayout::decodeScaleRecord() {
     }
 }
 
-void wlayout::decodeSynthRecord() {
+void Misuco2::decodeSynthRecord() {
     if (xmlr.name() == "sound") {
         MWSoundPreset * soundPreset = new MWSoundPreset(
                     xmlr.attributes().value("volume").toString().toFloat(),
@@ -644,7 +644,7 @@ void wlayout::decodeSynthRecord() {
     }
 }
 
-void wlayout::decodeTuneRecord() {
+void Misuco2::decodeTuneRecord() {
     if (xmlr.name() == "microtune") {
         int microtune[12];
         for(int i=0;i<12;i++) {
@@ -659,7 +659,7 @@ void wlayout::decodeTuneRecord() {
     }
 }
 
-void wlayout::writeXml(QString filename)
+void Misuco2::writeXml(QString filename)
 {
     //qDebug() << "wlayout::writeXml";
     QFile file(_configPath+"/"+filename);
