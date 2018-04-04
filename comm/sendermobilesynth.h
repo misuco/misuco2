@@ -23,10 +23,10 @@
 #include <QtGlobal>
 #include "isender.h"
 #ifdef Q_OS_IOS
-#include "../mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp"
-#include "../mobilesynth/mobilesynth/Classes/synth/controller.h"
+#include "mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp"
+#include "mobilesynth/mobilesynth/Classes/synth/controller.h"
 #else
-#include "../mobilesynthqt52.h"
+#include "mobilesynth/mobilesynthqt52.h"
 #endif
 
 class SenderMobileSynth : public ISender

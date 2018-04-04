@@ -24,7 +24,7 @@ TEMPLATE = app
 INCLUDEPATH += conf
 INCLUDEPATH += comm
 INCLUDEPATH += comm/libofqf
-INCLUDEPATH += mobilesynth/mobilesynth/Classes/synth
+INCLUDEPATH += mobilesynth/synth
 INCLUDEPATH += mobilesynth/mobilesynth/Classes
 INCLUDEPATH += mobilesynth/lib
 
@@ -43,17 +43,17 @@ SOURCES += main.cpp\
     comm/libofqf/qoscproxy.cpp \
     comm/libofqf/qoscmsgparser.cpp \
     comm/senderdebug.cpp \
-    mobilesynth/mobilesynth/Classes/synth/arpeggio.cpp \
-    mobilesynth/mobilesynth/Classes/synth/controller.cpp \
-    mobilesynth/mobilesynth/Classes/synth/envelope.cpp \
-    mobilesynth/mobilesynth/Classes/synth/filter.cpp \
-    mobilesynth/mobilesynth/Classes/synth/key_stack.cpp \
-    mobilesynth/mobilesynth/Classes/synth/lag_processor.cpp \
-    mobilesynth/mobilesynth/Classes/synth/modulation.cpp \
-    mobilesynth/mobilesynth/Classes/synth/oscillator.cpp \
-    mobilesynth/mobilesynth/Classes/synth/parameter.cpp \
+    mobilesynth/synth/arpeggio.cpp \
+    mobilesynth/synth/controller.cpp \
+    mobilesynth/synth/envelope.cpp \
+    mobilesynth/synth/filter.cpp \
+    mobilesynth/synth/key_stack.cpp \
+    mobilesynth/synth/lag_processor.cpp \
+    mobilesynth/synth/modulation.cpp \
+    mobilesynth/synth/oscillator.cpp \
+    mobilesynth/synth/parameter.cpp \
     comm/sendermobilesynth.cpp \
-    mobilesynth/mobilesynth/Classes/mobilesynthqt52.cpp \
+    mobilesynth/mobilesynthqt52.cpp \
     widgets/mwrootnotesetter.cpp \
     widgets/mwoctaveranger.cpp \
     widgets/mwbscaleswitch.cpp \
@@ -94,21 +94,21 @@ HEADERS  += \
     comm/libofqf/qoscclientinterface.h \
     comm/senderdebug.h \
     comm/isender.h \
-    mobilesynth/mobilesynth/Classes/AudioOutput.h \
-    mobilesynth/mobilesynth/Classes/mobilesynthViewControllerRc1.h \
-    mobilesynth/mobilesynth/Classes/synth/arpeggio.h \
-    mobilesynth/mobilesynth/Classes/synth/controller.h \
-    mobilesynth/mobilesynth/Classes/synth/envelope.h \
-    mobilesynth/mobilesynth/Classes/synth/filter.h \
-    mobilesynth/mobilesynth/Classes/synth/key_stack.h \
-    mobilesynth/mobilesynth/Classes/synth/lag_processor.h \
-    mobilesynth/mobilesynth/Classes/synth/modulation.h \
-    mobilesynth/mobilesynth/Classes/synth/oscillator.h \
-    mobilesynth/mobilesynth/Classes/synth/parameter.h \
-    mobilesynth/mobilesynth/Classes/synth/test_util.h \
+    mobilesynth/AudioOutput.h \
+    mobilesynth/mobilesynthViewControllerRc1.h \
+    mobilesynth/synth/arpeggio.h \
+    mobilesynth/synth/controller.h \
+    mobilesynth/synth/envelope.h \
+    mobilesynth/synth/filter.h \
+    mobilesynth/synth/key_stack.h \
+    mobilesynth/synth/lag_processor.h \
+    mobilesynth/synth/modulation.h \
+    mobilesynth/synth/oscillator.h \
+    mobilesynth/synth/parameter.h \
+    mobilesynth/synth/test_util.h \
     comm/sendermobilesynth.h \
-    mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp \
-    mobilesynth/mobilesynth/Classes/mobilesynthqt52.h \
+    mobilesynth/mobilesynthviewcontrollerrc1.hpp \
+    mobilesynth/mobilesynthqt52.h \
     widgets/mwrootnotesetter.h \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
@@ -170,8 +170,8 @@ DISTFILES += \
     ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png \
 
 OBJECTIVE_SOURCES += \
-    mobilesynth/mobilesynth/Classes/mobilesynthViewControllerRc1.mm \
-    mobilesynth/mobilesynth/Classes/AudioOutput.m \
+    mobilesynth/mobilesynthViewControllerRc1.mm \
+    mobilesynth/AudioOutput.m \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
