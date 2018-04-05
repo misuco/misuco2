@@ -38,13 +38,14 @@ public:
     void setDestination(char * a,int p);
     void reconnect();
 
-    bool senderEnabled[5];
-
     void setDestination(int i, char * a,int p);
     void addSender(ISender * s);
+    void setSenderEnabled(int i, bool value);
+    bool isSenderEnabled(int i);
 
 private:
     QList<ISender *> senders;
+    QList<bool> senderEnabled;
 
     int nextVoiceId;
 

@@ -18,27 +18,10 @@
  */
 
 #include "mastersender.h"
-#include "senderoscmidigeneric.h"
-#include "sendersupercollider.h"
-#include "senderreaktor.h"
-#include "senderdebug.h"
-#include "sendermobilesynth.h"
-#include "qoscclient.h"
+//#include "qoscclient.h"
 
 MasterSender::MasterSender()
 {
-    senders.append(new SenderMobileSynth());
-    //senders.append(new SenderDebug());
-    senders.append(new SenderOscMidiGeneric());
-    senders.append(new SenderReaktor());
-    senders.append(new SenderSuperCollider());
-
-    senderEnabled[0] = true;
-    senderEnabled[1] = false;
-    senderEnabled[2] = true;
-    senderEnabled[3] = false;
-    senderEnabled[4] = true;
-
     nextVoiceId=1;
 
     onCnt=0;
@@ -122,6 +105,21 @@ void MasterSender::setDestination(int i, char * a,int p) {
 void MasterSender::addSender(ISender *s)
 {
     senders.append(s);
+    senderEnabled.append(true);
+}
+
+void MasterSender::setSenderEnabled(int i, bool value)
+{
+    if(i<senderEnabled.size()) {
+        senderEnabled[i] = value;
+    }
+}
+
+bool MasterSender::isSenderEnabled(int i)
+{
+    if(i<senderEnabled.size()) {
+        return senderEnabled.at(i);
+    } else return false;
 }
 
 void MasterSender::reconnect() {

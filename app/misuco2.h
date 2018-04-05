@@ -26,8 +26,6 @@
 #include <QXmlStreamWriter>
 #include "widgets/mwplayarea.h"
 #include "widgets/mwrootnotesetter.h"
-#include "comm/sendermobilesynth.h"
-#include "comm/senderdebug.h"
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
 #include "widgets/mwfaderparamctl.h"

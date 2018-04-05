@@ -22,6 +22,11 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDir>
+#include "senderoscmidigeneric.h"
+#include "sendersupercollider.h"
+#include "senderreaktor.h"
+#include "senderdebug.h"
+#include "sendermobilesynth.h"
 
 Misuco2::Misuco2(QObject *parent) : QObject(parent)
 {
@@ -66,7 +71,13 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     }
 
     out=new MasterSender();
-    //out->cc(0,0,105,1,1);
+    out->addSender(new SenderMobileSynth());
+    out->addSender(new SenderOscMidiGeneric());
+    out->addSender(new SenderReaktor());
+    out->addSender(new SenderSuperCollider());
+
+    out->setSenderEnabled(1,false);
+    out->setSenderEnabled(3,false);
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MGlob::MWPitch[i]=new Pitch(i,this);
@@ -461,8 +472,8 @@ void Misuco2::onChannelChange(int v)
 
 void Misuco2::onToggleSender(int v)
 {
-    if(out->senderEnabled[v]) out->senderEnabled[v]=false;
-    else out->senderEnabled[v]=true;
+    if(out->isSenderEnabled(v)) out->setSenderEnabled(v,false);
+    else out->setSenderEnabled(v,true);
     writeXml("conf.xml");
 }
 
@@ -578,16 +589,16 @@ void Misuco2::decodeConfigRecord() {
         MGlob::bwmode = xmlr.attributes().value("bwmode").toString().toInt();
         bwMode->setState(11,xmlr.attributes().value("bwmode").toString().toInt());
 
-        out->senderEnabled[0] = xmlr.attributes().value("mobileSynth").toString().toInt();
+        out->setSenderEnabled(0,xmlr.attributes().value("mobileSynth").toString().toInt());
         enableMobilesynth->setState(17,xmlr.attributes().value("mobileSynth").toString().toInt());
 
-        out->senderEnabled[1] = xmlr.attributes().value("pureData").toString().toInt();
+        out->setSenderEnabled(1,xmlr.attributes().value("pureData").toString().toInt());
         enablePuredata->setState(18,xmlr.attributes().value("pureData").toString().toInt());
 
-        out->senderEnabled[2] = xmlr.attributes().value("reaktor").toString().toInt();
+        out->setSenderEnabled(2,xmlr.attributes().value("reaktor").toString().toInt());
         enableReaktor->setState(19,xmlr.attributes().value("reaktor").toString().toInt());
 
-        out->senderEnabled[3] = xmlr.attributes().value("superCollider").toString().toInt();
+        out->setSenderEnabled(3,xmlr.attributes().value("superCollider").toString().toInt());
         enableSupercollider->setState(20,xmlr.attributes().value("superCollider").toString().toInt());
 
         faderSymbols->setValue(xmlr.attributes().value("noteSymbols").toString().toInt());
@@ -740,13 +751,13 @@ void Misuco2::writeXml(QString filename)
             xml.writeAttribute("sendCC1",att);
             att.sprintf("%d",MGlob::bwmode);
             xml.writeAttribute("bwmode",att);
-            att.sprintf("%d",out->senderEnabled[0]);
+            att.sprintf("%d",out->isSenderEnabled(0));
             xml.writeAttribute("mobileSynth",att);
-            att.sprintf("%d",out->senderEnabled[1]);
+            att.sprintf("%d",out->isSenderEnabled(1));
             xml.writeAttribute("pureData",att);
-            att.sprintf("%d",out->senderEnabled[2]);
+            att.sprintf("%d",out->isSenderEnabled(2));
             xml.writeAttribute("reaktor",att);
-            att.sprintf("%d",out->senderEnabled[3]);
+            att.sprintf("%d",out->isSenderEnabled(3));
             xml.writeAttribute("superCollider",att);
             att.sprintf("%d",MGlob::noteSymbols);
             xml.writeAttribute("noteSymbols",att);
