@@ -27,7 +27,7 @@ SenderOscPuredata::SenderOscPuredata()
     port=3334;
     oscout=new QOscClient();
     oscout->setAddress(adr,port);
-    //notestate=new quint8[1024];
+    notestate=new quint8[1024];
     ccstate=new int[1024];
     for(int i=0;i<1024;i++) {
         //notestate[i]=0;
@@ -42,11 +42,8 @@ SenderOscPuredata::~SenderOscPuredata()
     delete(oscout);
 }
 
-void SenderOscPuredata::noteOn(int, float, int midinote, int pitch, int, int)
+void SenderOscPuredata::noteOn(int voiceId, float, int midinote, int pitch, int)
 {
-    //int f = midinote;
-    //int vid=voiceId%1024;
-    //notestate[vid]=f;
     QVariantList v;
     v.append(MGlob::channel);
     v.append(midinote);
@@ -57,19 +54,21 @@ void SenderOscPuredata::noteOn(int, float, int midinote, int pitch, int, int)
     v.append(MGlob::channel);
     v.append(pitch);
     sendOsc("/pitch",v);
+
+    notestate[voiceId%1024]=midinote;
+
 }
 
-void SenderOscPuredata::noteOff(int, int midinote)
+void SenderOscPuredata::noteOff(int voiceId)
 {
     QVariantList v;
     v.append(MGlob::channel);
-    //v.append(notestate[voiceId%1024]);
-    v.append(midinote);
+    v.append(notestate[voiceId%1024]);
     v.append(0);
     sendOsc("/note",v);
 }
 
-void SenderOscPuredata::pitch(int, float, int, int pitch, int)
+void SenderOscPuredata::pitch(int, float, int, int pitch)
 {
     QVariantList v;
     v.append(MGlob::channel);

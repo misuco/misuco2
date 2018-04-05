@@ -42,7 +42,6 @@ public:
 private:
     QOscClientInterface* oscout;
     QString sy;
-    int nextVoiceId;
     char * adr;
     int port;    
     void sendOsc(QString path, QVariant list);
