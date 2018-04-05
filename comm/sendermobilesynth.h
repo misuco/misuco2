@@ -23,8 +23,8 @@
 #include <QtGlobal>
 #include "isender.h"
 #ifdef Q_OS_IOS
-#include "mobilesynth/mobilesynth/Classes/mobilesynthviewcontrollerrc1.hpp"
-#include "mobilesynth/mobilesynth/Classes/synth/controller.h"
+#include "../mobilesynth/mobilesynthviewcontrollerrc1.hpp"
+#include "../mobilesynth/synth/controller.h"
 #else
 #include "mobilesynth/mobilesynthqt52.h"
 #endif
@@ -36,7 +36,6 @@ public:
     ~SenderMobileSynth();
     virtual void cc(int voiceId, int cc, float v1, float);
     virtual void pc(int);
-    virtual int noteOn(float f, int, int, int);
     virtual void noteOn(int voiceId, float f, int midinote, int pitch, int v);
     virtual void noteOff(int voiceId);
     virtual void pitch(int voiceId, float f, int, int);

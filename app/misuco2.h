@@ -33,7 +33,7 @@
 #include "widgets/mwfaderparamctl.h"
 #include "widgets/mwbscaleswitch.h"
 #include "widgets/mwheadersetter.h"
-#include "comm/sendermulti.h"
+#include "comm/mastersender.h"
 #include "widgets/mwfaderpitch.h"
 #include "widgets/presets/mwscalepreset.h"
 #include "widgets/presets/mwsoundpreset.h"
@@ -144,7 +144,7 @@ private slots:
     void setOctConf(int bot, int top);
 
 private:
-    SenderMulti * out;
+    MasterSender * out;
 
     QXmlStreamWriter xml;
     QXmlStreamReader xmlr;

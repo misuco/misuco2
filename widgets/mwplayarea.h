@@ -23,7 +23,7 @@
 
 #include "conf/mglob.h"
 #include "conf/types.h"
-#include "comm/isender.h"
+#include "comm/mastersender.h"
 #include "pitch.h"
 #include "mwplayfield.h"
 
@@ -54,11 +54,9 @@ public:
         float f;
     };
 
-    MWPlayArea(QObject *parent);
+    MWPlayArea(MasterSender * ms, QObject *parent);
     ~MWPlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
-
-    void setOut(ISender *value);
 
     Q_INVOKABLE void resize(int w, int h);
     Q_INVOKABLE void onPressed(int id, int x, int y);
@@ -89,7 +87,7 @@ private:
     //QLinearGradient linearGrad;
     QString cap;
     // - networking
-    ISender * out;
+    MasterSender * out;
     // - processing
     Pitch pcalc;
     FreqTriple fcalc;

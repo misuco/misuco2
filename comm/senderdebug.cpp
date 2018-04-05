@@ -34,13 +34,6 @@ void SenderDebug::pc(int v1)
     qDebug() << "SenderDebug::pc(" << v1 << ")";
 }
 
-int SenderDebug::noteOn(float v1, int midinote, int pitch, int v2)
-{
-    int voiceId=nextVid++;
-    qDebug() << "SenderDebug::noteOn(" << voiceId << "," << v1 << "," << v2 << "," << midinote << "," << pitch << ")";
-    return voiceId;
-}
-
 void SenderDebug::noteOn(int voiceId, float f, int midinote, int pitch, int v)
 {
     qDebug() << "SenderDebug::noteOn(" << voiceId << "," << f << "," << v << "," << midinote << "," << pitch << ")";

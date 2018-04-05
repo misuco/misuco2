@@ -17,7 +17,7 @@
  
  */
 
-#include "sendermulti.h"
+#include "mastersender.h"
 #include "senderoscmidigeneric.h"
 #include "sendersupercollider.h"
 #include "senderreaktor.h"
@@ -25,7 +25,7 @@
 #include "sendermobilesynth.h"
 #include "qoscclient.h"
 
-SenderMulti::SenderMulti()
+MasterSender::MasterSender()
 {
     senders.append(new SenderMobileSynth());
     //senders.append(new SenderDebug());
@@ -52,12 +52,12 @@ SenderMulti::SenderMulti()
 
 }
 
-SenderMulti::~SenderMulti()
+MasterSender::~MasterSender()
 {
     //delAll();
 }
 
-void SenderMulti::cc(int voiceId, int cc, float v1, float v1avg)
+void MasterSender::cc(int voiceId, int cc, float v1, float v1avg)
 {
     //qDebug() << "SenderMulti::cc(" << chan << "," << voiceId << "," << cc << "," << v1 << "," << v1avg << ")";
     for(int i=0;i<senders.count();i++) {
@@ -65,18 +65,17 @@ void SenderMulti::cc(int voiceId, int cc, float v1, float v1avg)
     }
 }
 
-void SenderMulti::pc(int v1)
+void MasterSender::pc(int v1)
 {
     for(int i=0;i<senders.count();i++) {
         if(senderEnabled[i]) senders.at(i)->pc(v1);
     }
 }
 
-int SenderMulti::noteOn(float f, int midinote, int pitch, int v)
+int MasterSender::noteOn(float f, int midinote, int pitch, int v)
 {
     int vid=nextVoiceId++;
     if(nextVoiceId>1023)  nextVoiceId=1;
-    //notestate[vid]=midinote;
     for(int i=0;i<senders.count();i++) {
         if(senderEnabled[i]) {
             senders.at(i)->noteOn(vid,f,midinote,pitch,v);
@@ -84,32 +83,22 @@ int SenderMulti::noteOn(float f, int midinote, int pitch, int v)
         }
     }
     onCnt++;
-    //midiOn[midinote]=true;
 
     return vid;
 }
 
-void SenderMulti::noteOn(int, float, int, int, int)
+void MasterSender::noteOff(int voiceId)
 {
-
-}
-
-void SenderMulti::noteOff(int voiceId)
-{
-    //int vid=voiceId%1024;
-    //int midinote=notestate[vid];
     for(int i=0;i<senders.count();i++) {
         if(senderEnabled[i]) {
             senders.at(i)->noteOff(voiceId);
             //qDebug() << "SenderMulti::noteOff(" <<  voiceId  << ")";
         }
     }
-    //createOTR(chan, voiceId, midinote);
-    //midiOn[midinote]=false;
     onCnt--;
 }
 
-void SenderMulti::pitch(int voiceId, float f, int midinote, int pitch)
+void MasterSender::pitch(int voiceId, float f, int midinote, int pitch)
 {
     //qDebug() << "SenderMulti::pitch(" << chan << "," << voiceId << "," << f << "," << midinote << "," << pitch << ")";
     for(int i=0;i<senders.count();i++) {
@@ -117,26 +106,25 @@ void SenderMulti::pitch(int voiceId, float f, int midinote, int pitch)
     }
 }
 
-void SenderMulti::setDestination(char * a, int p)
+void MasterSender::setDestination(char * a, int p)
 {
     for(int i=0;i<senders.count();i++) {
         senders.at(i)->setDestination(a,p);
     }
-    //syncout->setAddress(a,3333);
 }
 
-void SenderMulti::setDestination(int i, char * a,int p) {
+void MasterSender::setDestination(int i, char * a,int p) {
     if(i<senders.count()) {
         senders.at(i)->setDestination(a,p);
     }
 }
 
-void SenderMulti::addSender(ISender *s)
+void MasterSender::addSender(ISender *s)
 {
     senders.append(s);
 }
 
-void SenderMulti::reconnect() {
+void MasterSender::reconnect() {
     for(int i=0;i<senders.count();i++) {
         senders.at(i)->reconnect();
         //qDebug() << "reconnect " << i;

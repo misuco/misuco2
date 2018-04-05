@@ -30,9 +30,8 @@ public:
     ~SenderOscMidiGeneric();
     virtual void cc(int voiceId, int cc, float, float v1avg);
     virtual void pc(int v1);
-    virtual int noteOn(float f, int midinote, int pitch, int val);
     virtual void noteOn(int voiceId, float f, int midinote, int pitch, int val);
-    virtual void noteOff(int nextVoiceId);
+    virtual void noteOff(int voiceId);
     virtual void pitch(int voiceId, float f, int midinote, int pitch);
     virtual void setDestination(char * a,int p);
     virtual void reconnect();
@@ -43,9 +42,9 @@ private:
     QOscClientInterface* oscout;
     char * adr;
     int port;
-    int prog;              // current program
-    //quint8 * notestate;   // currently played notes
-    int * ccstate;       // current ccval;
+    int prog;           // current program
+    int * notestate;    // currently played notes
+    int * ccstate;      // current ccval;
     void sendOsc(QString path, QVariant list);
 };
 

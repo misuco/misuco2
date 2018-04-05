@@ -65,23 +65,21 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
        }
     }
 
-    out=new SenderMulti();
+    out=new MasterSender();
     //out->cc(0,0,105,1,1);
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MGlob::MWPitch[i]=new Pitch(i,this);
     }    
 
-    _PlayArea = new MWPlayArea(this);
-    ((MWPlayArea *)_PlayArea)->setOut(out);
+    _PlayArea = new MWPlayArea(out, this);
 
     _OctaveRanger = new MWOctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWFaderPitch * fader = new MWFaderPitch(this,MGlob::MWPitch[i]);
-        fader->setOut(out);
+        MWFaderPitch * fader = new MWFaderPitch(MGlob::MWPitch[i],out,this);
         connect (fader,SIGNAL(valueChange(int)),MGlob::MWPitch[i],SLOT(setPitch(int)));
         connect( MGlob::MWPitch[i], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),fader,SLOT(setOctMid(int)));
@@ -89,8 +87,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     }
 
     for(int i=0;i<10;i++) {
-        MWFaderParamCtl * fader = new MWFaderParamCtl(this,i+102);
-        fader->setOut(out);
+        MWFaderParamCtl * fader = new MWFaderParamCtl(i+102,out,this);
         fader->setMinValue(0);
         if(i==0) {
             fader->setMaxValue(4);
@@ -105,14 +102,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     }
 
-    faderPitchTopRange = new MWFaderParamCtl(this,1);
-    faderPitchTopRange->setOut(out);
+    faderPitchTopRange = new MWFaderParamCtl(1,out,this);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
     connect(faderPitchTopRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertTop(int)));
 
-    faderPitchBottomRange = new MWFaderParamCtl(this,2);
-    faderPitchBottomRange->setOut(out);
+    faderPitchBottomRange = new MWFaderParamCtl(2,out,this);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
     connect(faderPitchBottomRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertBot(int)));
@@ -121,8 +116,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     connect(pitchHorizontal,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
     connect(this,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
 
-    faderChannel = new MWFaderParamCtl(this,3);
-    faderChannel->setOut(out);
+    faderChannel = new MWFaderParamCtl(3,out,this);
     faderChannel->setMinValue(1);
     faderChannel->setMaxValue(16);
     faderChannel->setInverted(true);
@@ -164,8 +158,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     holdMode = new MWHeaderSetter(21,this);
 
     for(int i=0;i<12;i++) {
-        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],this);
-        rootNoteSetter->setOut(out);
+        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
         connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
@@ -176,8 +169,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     }
 
     for(int i=1;i<12;i++) {
-        MWBScaleSwitch * bs = new MWBScaleSwitch(i);
-        bs->setOut(out);
+        MWBScaleSwitch * bs = new MWBScaleSwitch(i,out,this);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
@@ -189,8 +181,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     openArchive = new MWHeaderSetter(13,1,this);
 
-    faderSymbols = new MWFaderParamCtl(this,4);
-    faderSymbols->setOut(out);
+    faderSymbols = new MWFaderParamCtl(4,out,this);
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);

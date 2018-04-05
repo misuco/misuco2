@@ -23,10 +23,10 @@
 #include <QLinearGradient>
 #include <QTouchEvent>
 #include <QDateTime>
-#include "comm/senderdebug.h"
-#include "comm/sendermobilesynth.h"
+#include "comm/mastersender.h"
 
-MWPlayArea::MWPlayArea(QObject *parent) : QObject(parent),
+MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
+    out(ms),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
@@ -57,7 +57,6 @@ MWPlayArea::MWPlayArea(QObject *parent) : QObject(parent),
         }
     }
 
-    out = new SenderDebug();
     config();
 }
 
@@ -389,13 +388,6 @@ void MWPlayArea::setBendVertBot(int b)
 {
     bendVertBot=b;
     config();
-}
-
-void MWPlayArea::setOut(ISender *value)
-{
-    delete(out);
-    out = value;
-    //qDebug() << "MWPlayArea::setOut:" << out;
 }
 
 void MWPlayArea::resize(int w, int h)

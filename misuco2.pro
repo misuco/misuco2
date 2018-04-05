@@ -63,7 +63,6 @@ SOURCES += main.cpp\
     widgets/mwfaderpitch.cpp \
     widgets/mwfaderparamctl.cpp \
     widgets/presets/mwsoundpreset.cpp \
-    comm/sendermulti.cpp \
     comm/senderoscmidigeneric.cpp \
     comm/senderoscpuredata.cpp \
     comm/senderreaktor.cpp \
@@ -74,7 +73,8 @@ SOURCES += main.cpp\
     conf/mglob.cpp \
     widgets/presets/mwscalepreset.cpp \
     widgets/presets/presetcollection.cpp \
-    conf/purchases.cpp
+    conf/purchases.cpp \
+    comm/mastersender.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -118,7 +118,6 @@ HEADERS  += \
     widgets/mwfaderpitch.h \
     widgets/mwfaderparamctl.h \
     widgets/presets/mwsoundpreset.h \
-    comm/sendermulti.h \
     comm/senderoscmidigeneric.h \
     comm/senderoscpuredata.h \
     comm/sendersupercollider.h \
@@ -129,7 +128,8 @@ HEADERS  += \
     conf/mglob.h \
     widgets/presets/mwscalepreset.h \
     widgets/presets/presetcollection.h \
-    conf/purchases.h
+    conf/purchases.h \
+    comm/mastersender.h
 
 CONFIG += mobility
 MOBILITY = 

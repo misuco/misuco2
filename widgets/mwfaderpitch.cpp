@@ -21,7 +21,8 @@
 #include "mwfaderpitch.h"
 #include <QDebug>
 
-MWFaderPitch::MWFaderPitch(QObject *parent, Pitch *p) : MWFadder(parent)
+MWFaderPitch::MWFaderPitch(Pitch *p, MasterSender *ms, QObject *parent) : MWFadder(parent),
+    _out(ms)
 {
     _freq = new FreqTriple(p);
     _freq->setOct(4);
@@ -30,11 +31,6 @@ MWFaderPitch::MWFaderPitch(QObject *parent, Pitch *p) : MWFadder(parent)
 MWFaderPitch::~MWFaderPitch()
 {
     _freq->deleteLater();
-}
-
-void MWFaderPitch::setOut(ISender *value)
-{
-    out = value;
 }
 
 int MWFaderPitch::pitchId()
@@ -52,7 +48,7 @@ void MWFaderPitch::onPressedPitch(int id)
     //qDebug() << "MWFaderPitch::onPressedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(pressed < 2) {
         eventId=id;
-        vId=out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
+        vId=_out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
         emit selectedChanged();
     }
 }
@@ -62,7 +58,7 @@ void MWFaderPitch::onUpdatedPitch(int id)
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
         MGlob::Microtune.tuning[_freq->getRootNote()] = getValue();
-        out->pitch(vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
+        _out->pitch(vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
     }
 }
 
@@ -70,7 +66,7 @@ void MWFaderPitch::onReleasedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onReleasedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        out->noteOff(vId);
+        _out->noteOff(vId);
         emit selectedChanged();
     }
 }

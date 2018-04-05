@@ -27,6 +27,7 @@ SenderOscMidiGeneric::SenderOscMidiGeneric()
     port=3150;
     oscout=new QOscClient();
     oscout->setAddress(adr,port);
+    notestate=new int[1024];
     ccstate=new int[1024];
     for(int i=0;i<1024;i++) {
         ccstate[i]=0;
@@ -40,13 +41,7 @@ SenderOscMidiGeneric::~SenderOscMidiGeneric()
     delete(oscout);
 }
 
-int SenderOscMidiGeneric::noteOn(float, int, int, int)
-{
-    //qDebug() << "SenderOscMidiGeneric::noteOn " << chan << " " << voiceId << " " << midinote << " " << pitch;
-    return 0;
-}
-
-void SenderOscMidiGeneric::noteOn(int, float, int midinote, int pitch, int val)
+void SenderOscMidiGeneric::noteOn(int voiceId, float, int midinote, int pitch, int val)
 {
     QVariantList v;
     v.append(midinote);
@@ -61,18 +56,16 @@ void SenderOscMidiGeneric::noteOn(int, float, int midinote, int pitch, int val)
     v.append(MGlob::channel);
     path.sprintf("/pitch/%d",MGlob::channel);
     sendOsc(path,v);
+
+    notestate[voiceId%1024] = midinote;
 }
 
-void SenderOscMidiGeneric::noteOff(int)
+void SenderOscMidiGeneric::noteOff(int voiceId)
 {
     QVariantList v;
     QString path;
-    //v.append(notestate[voiceId%1024]);
-
-    //v.append(midinote);
-    //v.append(0);
-    //v.append(chan);
-    //path.sprintf("/note/%d",chan);
+    v.append(notestate[voiceId%1024]);
+    path.sprintf("/note/%d",MGlob::channel);
     sendOsc(path,v);
 }
 

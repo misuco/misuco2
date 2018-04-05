@@ -22,11 +22,11 @@
 #include "comm/senderdebug.h"
 #include <QDebug>
 
-MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, QObject *parent) : QObject(parent)
+MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, MasterSender *ms, QObject *parent) : QObject(parent),
+    _out(ms),
+    _pitch(pitch)
 {
     //qDebug() << "MWrootNoteSetter::MWrootNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
-    _out=new SenderDebug();
-    _pitch=pitch;
     _freq=new FreqTriple(_pitch);
     _freq->setOct(6);
     _freq->setRootNote(_pitch);
@@ -102,11 +102,6 @@ void MWRootNoteSetter::calcText()
     }
 
     emit textChanged();
-}
-
-void MWRootNoteSetter::setOut(ISender *value)
-{
-    _out = value;
 }
 
 int MWRootNoteSetter::pitchId()

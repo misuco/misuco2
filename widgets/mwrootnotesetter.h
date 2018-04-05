@@ -22,7 +22,7 @@
 #define MWrootNoteSETTER_H
 
 #include "conf/mglob.h"
-#include "comm/isender.h"
+#include "comm/mastersender.h"
 #include "conf/freqtriple.h"
 
 class MWRootNoteSetter : public QObject
@@ -35,9 +35,8 @@ class MWRootNoteSetter : public QObject
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
-    MWRootNoteSetter(Pitch *pitch, QObject *parent);
+    MWRootNoteSetter(Pitch *pitch, MasterSender *ms, QObject *parent);
     ~MWRootNoteSetter();
-    void setOut(ISender *value);
 
     int pitchId();
 
@@ -61,7 +60,7 @@ signals:
     void textChanged();
 
 private:
-    ISender *       _out;
+    MasterSender *  _out;
     Pitch *         _pitch;
     FreqTriple *    _freq;
     int             _vId;

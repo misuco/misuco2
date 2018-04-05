@@ -21,7 +21,9 @@
 #include "mwfaderparamctl.h"
 #include <QDebug>
 
-MWFaderParamCtl::MWFaderParamCtl(QObject *parent, int cc) : MWFadder(parent), cc(cc)
+MWFaderParamCtl::MWFaderParamCtl(int cc, MasterSender *ms, QObject *parent) : MWFadder(parent),
+    _out(ms),
+    _cc(cc)
 {
     switch(cc) {
     case 1:
@@ -71,11 +73,6 @@ MWFaderParamCtl::MWFaderParamCtl(QObject *parent, int cc) : MWFadder(parent), cc
 
 MWFaderParamCtl::~MWFaderParamCtl()
 {
-}
-
-void MWFaderParamCtl::setOut(ISender *value)
-{
-    out = value;
 }
 
 void MWFaderParamCtl::setValue(int v)
@@ -193,7 +190,7 @@ void MWFaderParamCtl::paintEvent(QPaintEvent *E)
 
 void MWFaderParamCtl::propagateValueChange() {
 
-    switch(cc) {
+    switch(_cc) {
     case 3:
         MGlob::channel=getValue();
         break;
@@ -229,14 +226,14 @@ void MWFaderParamCtl::propagateValueChange() {
         break;
     }
 
-    out->cc(0,cc,getValue(),getValue());
+    _out->cc(0,_cc,getValue(),getValue());
 }
 
 void MWFaderParamCtl::onPressedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onPressedPitch " << id << " pressed " << pressed << " eventId " << eventId;
-    if(pressed < 2) {
-        eventId=id;
+    if(_pressed < 2) {
+        _eventId=id;
         propagateValueChange();
     }
 }
@@ -244,8 +241,8 @@ void MWFaderParamCtl::onPressedPitch(int id)
 void MWFaderParamCtl::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
-    if(id == eventId) {
-        out->cc(0,cc,getValue(),getValue());
+    if(id == _eventId) {
+        _out->cc(0,_cc,getValue(),getValue());
         propagateValueChange();
     }
 }

@@ -23,7 +23,7 @@
 
 #include "conf/mglob.h"
 #include "freqtriple.h"
-#include "comm/isender.h"
+#include "comm/mastersender.h"
 
 class MWBScaleSwitch : public QObject
 {
@@ -35,9 +35,8 @@ class MWBScaleSwitch : public QObject
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
-    MWBScaleSwitch(int i);
+    MWBScaleSwitch(int i, MasterSender * ms, QObject *parent);
     ~MWBScaleSwitch();
-    void setOut(ISender *_value);
 
     int pitchId();
     bool selected();
@@ -60,7 +59,7 @@ public slots:
     void onSymbolsChanged();
 
 private:
-    ISender * _out;
+    MasterSender * _out;
     FreqTriple * _freq;
     int _bscaleId;
     int _vid;

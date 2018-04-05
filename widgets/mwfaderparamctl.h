@@ -24,17 +24,16 @@
 #include <QObject>
 #include <widgets/mwfadder.h>
 #include <conf/freqtriple.h>
-#include "comm/isender.h"
+#include "comm/mastersender.h"
 
 class MWFaderParamCtl : public MWFadder
 {
     Q_OBJECT
 
 public:
-    MWFaderParamCtl(QObject *parent, int cc);
+    MWFaderParamCtl(int cc, MasterSender * ms, QObject *parent);
     ~MWFaderParamCtl();
 
-    void setOut(ISender *value);
     void setValue(int v);
 
     Q_INVOKABLE void onPressedPitch(int id);
@@ -42,11 +41,12 @@ public:
     Q_INVOKABLE void onReleasedPitch(int id);
 
 private:
-    ISender * out;
+    MasterSender * _out;
 
-    int cc;
-    int pressed;
-    int eventId;
+    int _cc;
+    int _pressed;
+    int _eventId;
+
     void propagateValueChange();
 };
 

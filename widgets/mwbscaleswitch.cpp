@@ -22,7 +22,8 @@
 #include "comm/senderdebug.h"
 #include <QDebug>
 
-MWBScaleSwitch::MWBScaleSwitch(int i)
+MWBScaleSwitch::MWBScaleSwitch(int i, MasterSender *ms, QObject * parent) : QObject(parent),
+    _out(ms)
 {
     //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
     _freq=new FreqTriple(MGlob::MWPitch[i],this);
@@ -30,7 +31,6 @@ MWBScaleSwitch::MWBScaleSwitch(int i)
     _pressed=0;
     _bscaleId=i;
     _freq->setOct(4);
-    _out=nullptr;
     _vid=0;
     _oct=6;
     _higherOct=0;
@@ -52,11 +52,6 @@ void MWBScaleSwitch::calcText()
     }
 
     emit textChanged();
-}
-
-void MWBScaleSwitch::setOut(ISender *value)
-{
-    _out = value;
 }
 
 int MWBScaleSwitch::pitchId()

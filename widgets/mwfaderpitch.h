@@ -24,7 +24,7 @@
 #include <QObject>
 #include <widgets/mwfadder.h>
 #include <conf/freqtriple.h>
-#include "comm/isender.h"
+#include "comm/mastersender.h"
 
 class MWFaderPitch : public MWFadder
 {
@@ -34,10 +34,8 @@ class MWFaderPitch : public MWFadder
     Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
 
 public:
-    MWFaderPitch(QObject *parent, Pitch * p);
+    MWFaderPitch(Pitch * p, MasterSender * ms, QObject *parent);
     ~MWFaderPitch();
-
-    void setOut(ISender *value);
 
     int pitchId();
     bool selected();
@@ -55,7 +53,7 @@ public slots:
     void pitchChange();    
 
 private:
-    ISender * out;
+    MasterSender * _out;
     FreqTriple * _freq;
 
     int vId;

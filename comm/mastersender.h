@@ -21,24 +21,22 @@
 #define SENDERMULTI_H
 
 #include <QList>
-#include "isender.h"
 #include "comm/libofqf/qoscclient.h"
 #include "sendermobilesynth.h"
 
-class SenderMulti : public ISender
+class MasterSender
 {
 public:
-    SenderMulti();
-    ~SenderMulti();
-    virtual void cc(int nextVoiceId, int cc, float v1, float v1avg);
-    virtual void pc(int v1);
-    virtual int noteOn(float f, int midinote, int pitch, int v);
-    virtual void noteOn(int voiceId, float f, int midinote, int pitch, int v);
-    virtual void noteOff(int voiceId);
-    virtual void pitch(int voiceId, float f, int midinote, int pitch);
+    MasterSender();
+    ~MasterSender();
+    void cc(int nextVoiceId, int cc, float v1, float v1avg);
+    void pc(int v1);
+    int noteOn(float f, int midinote, int pitch, int v);
+    void noteOff(int voiceId);
+    void pitch(int voiceId, float f, int midinote, int pitch);
 
-    virtual void setDestination(char * a,int p);
-    virtual void reconnect();
+    void setDestination(char * a,int p);
+    void reconnect();
 
     bool senderEnabled[5];
 
