@@ -1,11 +1,11 @@
 // oscillator.cpp
 // Author: Allen Porter <allen@thebends.org>
 
-#include "synth/oscillator.h"
+#include "oscillator.h"
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
-#include "synth/parameter.h"
+#include "parameter.h"
 #include <QDebug>
 
 namespace synth {

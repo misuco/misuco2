@@ -1,7 +1,7 @@
 // filter.cpp
 // Author: Allen Porter <allen@thebends.org>
 
-#include "synth/filter.h"
+#include "filter.h"
 #include <math.h>
 #include <stddef.h>
 

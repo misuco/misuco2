@@ -3,7 +3,7 @@
 // Redesign: Claudio Zopfi <z@x21.ch>
 
 #include <qdebug.h>
-#include "synth/envelope.h"
+#include "envelope.h"
 
 //#include <algorithm>
 //#include <cmath>

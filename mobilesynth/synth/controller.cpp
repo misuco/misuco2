@@ -1,14 +1,14 @@
 // controller.cpp
 // Author: Allen Porter <allen@thebends.org>
 
-#include "synth/controller.h"
+#include "controller.h"
 
 #include <math.h>
 #include <assert.h>
-#include "synth/envelope.h"
-#include "synth/filter.h"
-#include "synth/modulation.h"
-#include "synth/oscillator.h"
+#include "envelope.h"
+#include "filter.h"
+#include "modulation.h"
+#include "oscillator.h"
 
 #include <QDebug>
 #include <qendian.h>
