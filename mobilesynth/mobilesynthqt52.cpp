@@ -17,6 +17,9 @@
  
  */
 
+#include <QtGlobal>
+#ifndef Q_OS_IOS
+
 #include <QAudioDeviceInfo>
 #include <QAudioOutput>
 #include <QDebug>
@@ -43,8 +46,6 @@ mobileSynthQT52::mobileSynthQT52()
     }
 
     syctl = new synth::Controller();
-    syctl->set_osc1_wave_type_int(0);
-    syctl->set_sample_rate(DataSampleRateHz);
 
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
     m_format=info.preferredFormat();
@@ -66,7 +67,14 @@ mobileSynthQT52::mobileSynthQT52()
 
     qDebug() << "used format is sr " << m_format.sampleRate() << " sn " << m_format.sampleSize() << " ch " << m_format.channelCount();
 
-    syctl->setFormat(&m_format);
+    syctl->set_sample_rate(m_format.sampleRate());
+
+    int channelBytes = m_format.sampleSize()/8;
+    int channelCount = m_format.channelCount();
+    int sampleType = m_format.sampleType() == QAudioFormat::UnSignedInt ? 0 : 1;
+    bool sampleLittleEndian = m_format.byteOrder() == QAudioFormat::LittleEndian ? true : false;
+
+    syctl->setFormat(sampleType,channelCount,channelBytes,sampleLittleEndian);
 
     m_audioOutput = new QAudioOutput(m_device, m_format, this);
     m_audioOutput->setBufferSize(BufferSize);
@@ -178,3 +186,4 @@ void mobileSynthQT52::sampleTimerEvent()
     }
 }
 
+#endif

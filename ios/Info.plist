@@ -24,8 +24,6 @@
 	<true/>
 	<key>NOTE</key>
 	<string>This file was created by misuco.org.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>multimedia access required for audio output. camera and mic are not used.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UISupportedInterfaceOrientations</key>

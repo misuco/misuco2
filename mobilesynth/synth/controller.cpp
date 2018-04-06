@@ -18,9 +18,8 @@ namespace synth {
     Controller::Controller()
     {
         key_stack_.setADSR(0, 1000, 1000, 0.8, 20000);
-        //key_stack_.setADSR(1, 0,   0,   1, 1000);
-        format=0;
-        volume_=0.1;
+        channelBytes=0;
+        volume_=0.6;
     }
 
     void Controller::set_volume(float volume)
@@ -109,27 +108,28 @@ namespace synth {
 
     void Controller::GetCharSamples(char* buffer, int size) {
         
-        if(format!=0) {
-            Q_UNUSED(sampleBytes) // suppress warning in release builds
+        if(channelBytes>0) {
             unsigned char *ptr = reinterpret_cast<unsigned char *>(buffer);
+            //int sampleBytes = channelCount * channelBytes;
+
             while (size>0) {
                 qreal x=GetSample();
-                for (int i=0; i<format->channelCount(); ++i) {
-                    if (format->sampleSize() == 8 && format->sampleType() == QAudioFormat::UnSignedInt) {
+                for (int i=0; i<channelCount; ++i) {
+                    if (channelBytes == 1 && sampleType == 0 /* QAudioFormat::UnSignedInt */) {
                         const quint8 value = static_cast<quint8>((1.0 + x) / 2 * 255);
                         *reinterpret_cast<quint8*>(ptr) = value;
-                    } else if (format->sampleSize() == 8 && format->sampleType() == QAudioFormat::SignedInt) {
+                    } else if (channelBytes == 1  && sampleType == 1 /* QAudioFormat::SignedInt */) {
                         const qint8 value = static_cast<qint8>(x * 127);
                         *reinterpret_cast<quint8*>(ptr) = value;
-                    } else if (format->sampleSize() == 16 && format->sampleType() == QAudioFormat::UnSignedInt) {
+                    } else if (channelBytes == 2 && sampleType == 0 /* QAudioFormat::UnSignedInt */) {
                         quint16 value = static_cast<quint16>((1.0 + x) / 2 * 65535);
-                        if (format->byteOrder() == QAudioFormat::LittleEndian)
+                        if (sampleLittleEndian)
                             qToLittleEndian<quint16>(value, ptr);
                         else
                             qToBigEndian<quint16>(value, ptr);
-                    } else if (format->sampleSize() == 16 && format->sampleType() == QAudioFormat::SignedInt) {
+                    } else if (channelBytes == 2 && sampleType == 1 /* QAudioFormat::SignedInt */) {
                         qint16 value = static_cast<qint16>(x * 32767);
-                        if (format->byteOrder() == QAudioFormat::LittleEndian)
+                        if (sampleLittleEndian)
                             qToLittleEndian<qint16>(value, ptr);
                         else
                             qToBigEndian<qint16>(value, ptr);
@@ -149,11 +149,12 @@ namespace synth {
         }
     }
     
-    void Controller::setFormat(QAudioFormat *f)
+    void Controller::setFormat(int type, int channelCount, int channelBytes, bool littleEndian )
     {
-        format=f;
-        channelBytes = format->sampleSize() / 8;
-        sampleBytes = format->channelCount() * channelBytes;
+        this->sampleType = type;
+        this->channelCount = channelCount;
+        this->channelBytes = channelBytes;
+        this->sampleLittleEndian = littleEndian;
     }
     
     float Controller::GetSample() {

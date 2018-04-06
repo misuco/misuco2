@@ -43,7 +43,6 @@ SOURCES += main.cpp\
     comm/libofqf/qoscproxy.cpp \
     comm/libofqf/qoscmsgparser.cpp \
     comm/senderdebug.cpp \
-    mobilesynth/synth/arpeggio.cpp \
     mobilesynth/synth/controller.cpp \
     mobilesynth/synth/envelope.cpp \
     mobilesynth/synth/filter.cpp \
@@ -96,7 +95,6 @@ HEADERS  += \
     comm/isender.h \
     mobilesynth/AudioOutput.h \
     mobilesynth/mobilesynthViewControllerRc1.h \
-    mobilesynth/synth/arpeggio.h \
     mobilesynth/synth/controller.h \
     mobilesynth/synth/envelope.h \
     mobilesynth/synth/filter.h \
@@ -176,8 +174,10 @@ OBJECTIVE_SOURCES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 ios {
+    QT               = core network quick purchasing
     QMAKE_INFO_PLIST = ios/Info.plist
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets
+
 }
 
 SUBDIRS += \

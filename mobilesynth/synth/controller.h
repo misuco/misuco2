@@ -7,9 +7,6 @@
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
 
-#include <QAudioFormat>
-
-#include "arpeggio.h"
 #include "envelope.h"
 #include "filter.h"
 #include "lag_processor.h"
@@ -71,7 +68,7 @@ namespace synth {
         void GetCharSamples(char *buffer, int size);
         void GetInt32Sapmles(int *buffer, int size);
 
-        void setFormat(QAudioFormat * f);
+        void setFormat(int type, int channelCount, int channelBytes, bool littleEndian);
         
         void setAttack(int n, long a);
         void setDecay(int n, long d);
@@ -89,9 +86,14 @@ namespace synth {
         KeyStack key_stack_;
         bool osc_sync_;
         float sample_rate_;
-        QAudioFormat * format;
+
         int channelBytes;
-        int sampleBytes;
+        int channelCount;
+        int sampleType;
+        bool sampleLittleEndian;
+
+        //calculated
+        //int sampleBytes;
 
         float volume_;
 

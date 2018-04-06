@@ -26,7 +26,7 @@
 #include "../mobilesynth/mobilesynthviewcontrollerrc1.hpp"
 #include "../mobilesynth/synth/controller.h"
 #else
-#include "mobilesynth/mobilesynthqt52.h"
+#include "../mobilesynth/mobilesynthqt52.h"
 #endif
 
 class SenderMobileSynth : public ISender

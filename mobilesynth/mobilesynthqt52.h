@@ -17,6 +17,9 @@
  
  */
 
+#include <QtGlobal>
+#ifndef Q_OS_IOS
+
 #ifndef MOBILESYNTHQT52_H
 #define MOBILESYNTHQT52_H
 
@@ -72,3 +75,4 @@ private:
 };
 
 #endif // MOBILESYNTHQT52_H
+#endif // Q_OS_IOS
