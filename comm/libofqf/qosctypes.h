@@ -37,7 +37,6 @@ class QUdpSocket;
 class QOscBase : public QObject
 {
 	Q_OBJECT
-        friend class QOscProxy;
         protected:
                 QOscBase( QObject* );
                 QOscBase( QObject*, bool );

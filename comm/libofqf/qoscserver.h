@@ -39,8 +39,6 @@ class QOscServer :  public QOscBase, public QOscServerInterface
 {
 	Q_OBJECT
         friend class PathObject;
-        friend class QOscProxyInterface;
-        friend class QOscProxy;
         public:
 		/**
 		 * Creates an OSC-server that listens on all interfaces on the specified

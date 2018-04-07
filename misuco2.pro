@@ -39,8 +39,6 @@ SOURCES += main.cpp\
     comm/libofqf/qosctcpserver.cpp \
     comm/libofqf/qosctcpclient.cpp \
     comm/libofqf/qoscserver.cpp \
-    comm/libofqf/qoscproxyinterface.cpp \
-    comm/libofqf/qoscproxy.cpp \
     comm/libofqf/qoscmsgparser.cpp \
     comm/senderdebug.cpp \
     mobilesynth/synth/controller.cpp \
@@ -87,8 +85,6 @@ HEADERS  += \
     comm/libofqf/qosctcpclient.h \
     comm/libofqf/qoscserverinterface.h \
     comm/libofqf/qoscserver.h \
-    comm/libofqf/qoscproxyinterface.h \
-    comm/libofqf/qoscproxy.h \
     comm/libofqf/qoscmsgparser.h \
     comm/libofqf/qoscclientinterface.h \
     comm/senderdebug.h \
