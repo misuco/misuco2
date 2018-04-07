@@ -17,7 +17,6 @@ namespace synth {
     
     Controller::Controller()
     {
-        key_stack_.setADSR(0, 1000, 1000, 0.8, 20000);
         channelBytes=0;
         volume_=0.6;
     }
@@ -50,6 +49,7 @@ namespace synth {
     }
 
     void Controller::set_filter_cutoff(float frequency) {
+        qDebug() << "Cutoff " << frequency;
         key_stack_.setFilterCutoff(frequency);
     }
 
@@ -77,18 +77,22 @@ namespace synth {
     }
 
     void Controller::setAttack(int n, long a) {
+        qDebug() << "Attack " << a;
         key_stack_.setAttack(n,a);
     }
 
     void Controller::setDecay(int n, long d) {
+        qDebug() << "Decay " << d;
         key_stack_.setDecay(n,d);
     }
 
     void Controller::setSustain(int n, float s) {
+        qDebug() << "Sustain " << s;
         key_stack_.setSustain(n,s);
     }
 
     void Controller::setRelease(int n, int r) {
+        qDebug() << "Release " << r;
         key_stack_.setRelease(n,r);
     }
 

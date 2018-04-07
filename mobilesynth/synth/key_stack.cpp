@@ -4,15 +4,18 @@
 #include "key_stack.h"
 #include <math.h>
 #include <assert.h>
-#include <QDebug>
 
 using namespace std;
 
 namespace synth {
     
     KeyStack::KeyStack() : size_(0) {
-        //qDebug() << "setup keystack";
         kMaxSize=10;
+
+        setADSR(0, 120, 7379, 0.345, 59156);
+        mod_amt_init_=0;
+        osc_pw=0.5;
+        osc_wave=2;
 
         for(int i=0;i<kMaxSize+1;i++) {
             for(int j=0;j<kNumEnv;j++) {
@@ -29,18 +32,10 @@ namespace synth {
             filters[i]->set_resonance(0);
 
         }
-        for(int j=0;j<kNumEnv;j++) {
-            env_a[j]=1000;
-            env_d[j]=1000;
-            env_s[j]=0.3;
-            env_r[j]=100000;
-        }
 
-        mod_amt_init_=0;
-        osc_pw=0.5;
-        filter_res_=0;
-        filter_cutoff_=0.5f;
-        //qDebug() << "setup keystack done ";
+        setFilterCutoff(0.112f);
+        setFilterRes(0);
+
     }
     
     KeyStack::~KeyStack() {
@@ -260,5 +255,13 @@ namespace synth {
             }
         }
         osc_pw=pw;
+    }
+
+    void KeyStack::setADSR(int n, long a, long d, float s, long r)
+    {
+        env_a[n]=a;
+        env_d[n]=d;
+        env_s[n]=s;
+        env_r[n]=r;
     }
 }  // namespace synth
