@@ -21,19 +21,8 @@
 #include <QtCore/QByteArray>
 #include <QtNetwork/QUdpSocket>
 
-QOscClient::QOscClient()
-: QOscBase() {}
-
 QOscClient::QOscClient( QObject * p)
 : QOscBase(p) {}
-
-QOscClient::QOscClient( const QHostAddress& address, quint16 port)
-        : QOscBase()
-        , _address( address )
-        , _port( port )
-{
-        //qDebug() << "QOscClient::QOscClient(" << address << "," << port << "," << p << ")";
-}
 
 QOscClient::QOscClient( const QHostAddress& address, quint16 port, QObject* p )
         : QOscBase( p )

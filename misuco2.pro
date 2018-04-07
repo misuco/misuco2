@@ -35,8 +35,6 @@ SOURCES += main.cpp\
     conf/freqtriple.cpp \
     comm/libofqf/qoscclient.cpp \
     comm/libofqf/qosctypes.cpp \
-    comm/libofqf/qosctcpserverthread.cpp \
-    comm/libofqf/qosctcpserver.cpp \
     comm/libofqf/qosctcpclient.cpp \
     comm/libofqf/qoscserver.cpp \
     comm/libofqf/qoscmsgparser.cpp \
@@ -80,8 +78,6 @@ HEADERS  += \
     conf/freqtriple.h \
     comm/libofqf/qoscclient.h \
     comm/libofqf/qosctypes.h \
-    comm/libofqf/qosctcpserverthread.h \
-    comm/libofqf/qosctcpserver.h \
     comm/libofqf/qosctcpclient.h \
     comm/libofqf/qoscserverinterface.h \
     comm/libofqf/qoscserver.h \

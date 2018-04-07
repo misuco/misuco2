@@ -41,12 +41,9 @@ class QOscClient : public QOscBase, public QOscClientInterface
 		 * This creates a new OSC-connection to the specified host/port. Later
 		 * the servers host/port can be changed via setAddress();
 		 */
-        QOscClient();
-        QOscClient(QObject*);
-        QOscClient(const QHostAddress&, quint16 port);
-        QOscClient(const QHostAddress&, quint16 port, QObject* );
-        QOscClient(const QHostAddress&, quint16 source_port, quint16 dst_port, QObject* );
-        QOscClient(const QHostAddress&, quint16 source_port, quint16 dst_port);
+        QOscClient(QObject* = nullptr );
+        QOscClient(const QHostAddress&, quint16 port, QObject* = nullptr);
+        QOscClient(const QHostAddress&, quint16 source_port, quint16 dst_port, QObject* = nullptr);
         ~QOscClient();
 
 		/**

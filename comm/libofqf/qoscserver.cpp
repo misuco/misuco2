@@ -18,7 +18,6 @@
 
 #include "qoscserver.h"
 
-//#include <QtCore/QDebug>
 #include <QtCore/QRegExp>
 #include <QtNetwork/QUdpSocket>
 
@@ -29,6 +28,7 @@ QOscServer::QOscServer( quint16 port, QObject* p )
         socket()->bind( QHostAddress::Any, port , QUdpSocket::ShareAddress);
         connect( socket(), SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 }
+
 QOscServer::QOscServer( QHostAddress address, quint16 port, QObject* p )
 	: QOscBase( p )
 {

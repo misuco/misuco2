@@ -40,19 +40,20 @@ class QOscServer :  public QOscBase, public QOscServerInterface
 	Q_OBJECT
         friend class PathObject;
         public:
-		/**
+
+        /**
 		 * Creates an OSC-server that listens on all interfaces on the specified
 		 * port for incoming datagrams.
 		 */
 		QOscServer( quint16 port, QObject* p );
-                /**
+
+         /**
 		 * Creates an OSC-server that listens on the specified address and port
 		 * for incoming datagrams.
 		 */
 		QOscServer( QHostAddress address, quint16 port, QObject* p );
-                QOscServer() {qDebug() << "QOscServer::QOscServer()";}
-                /// destructor
-                ~QOscServer();
+
+        ~QOscServer();
 
 		/**
 		 * @brief Don't allow changing the socket.

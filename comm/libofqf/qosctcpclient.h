@@ -9,15 +9,15 @@ class QOscTcpClient : public QOscBase, public QOscClientInterface, public QOscSe
 {
     Q_OBJECT
 public:
-    explicit QOscTcpClient(QObject *parent = 0);
+    explicit QOscTcpClient(QObject *parent = nullptr );
     /**
      * @brief An OSC-connection to a specific host/port.
      *
      * This creates a new OSC-connection to the specified host/port. Later
      * the servers host/port can be changed via setAddress();
      */
-    QOscTcpClient( const QHostAddress&, quint16 port, QObject* );
-    QOscTcpClient( const QHostAddress&, quint16 source_port, quint16 dst_port, QObject* );
+    QOscTcpClient( const QHostAddress&, quint16 port, QObject* = nullptr );
+    QOscTcpClient( const QHostAddress&, quint16 source_port, quint16 dst_port, QObject* = nullptr );
     QOscTcpClient() {
 //        qDebug() << "QOscTcpClient::QOscTcpClient()";
     }
