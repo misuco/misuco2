@@ -23,9 +23,6 @@
 #include <QtNetwork/QUdpSocket>
 
 #include "qosctypes.h"
-#include "qoscserver.h"
-#include "qoscclient.h"
-
 
 QOscBase::QOscBase( QObject* p )
         : QObject( p )

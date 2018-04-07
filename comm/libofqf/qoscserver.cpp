@@ -28,7 +28,6 @@ QOscServer::QOscServer( quint16 port, QObject* p )
         socket()->bind( QHostAddress::Any, port , QUdpSocket::ShareAddress);
         connect( socket(), SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 }
-
 QOscServer::QOscServer( QHostAddress address, quint16 port, QObject* p )
 	: QOscBase( p )
 {
@@ -130,6 +129,9 @@ void QOscServer::readyRead() {
                     foreach( PathObject* obj, paths ) {
                         obj->signalData( path, list, src_adr, *src_port );
                     }
+
+                    emit oscData(path,list);
+
                     decodeState=0;
                     list.clear();
                 }

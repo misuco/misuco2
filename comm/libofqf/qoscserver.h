@@ -19,7 +19,7 @@
 #ifndef QOSCSERVER_H
 #define QOSCSERVER_H
 
-#include <qosctypes.h>
+#include "qosctypes.h"
 #include "qoscserverinterface.h"
 
 /*
@@ -63,7 +63,7 @@ class QOscServer :  public QOscBase, public QOscServerInterface
                 void unregisterPathObject( PathObject* );
 
         signals:
-                void data( QString path, QVariant data );
+                void oscData( QString path, QVariant data );
 
 	private slots:
 		void readyRead();

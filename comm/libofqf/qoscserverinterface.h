@@ -11,7 +11,7 @@ public:
     virtual void unregisterPathObject( PathObject* ) = 0;
 
 signals:
-    virtual void data( QString, QVariant ) = 0;
+    virtual void oscData( QString, QVariant ) = 0;
 
 };
 
