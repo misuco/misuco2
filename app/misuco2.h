@@ -39,6 +39,7 @@
 #include "widgets/presets/presetcollection.h"
 #include "widgets/mwgame.h"
 #include "conf/purchases.h"
+#include "heartbeat.h"
 
 class Misuco2 : public QObject
 {
@@ -187,6 +188,8 @@ private:
     MWHeaderSetter * octDown;
 
     MWGame * _game;
+
+    Heartbeat * _heartbeat;
 
     // layout
     bool _menuVisible;

@@ -56,7 +56,7 @@ void QOscServer::readyRead() {
 
     while ( socket()->hasPendingDatagrams() ) {
             QByteArray data( BUFFERSIZE, char( 0 ) );
-            int size = socket()->readDatagram( data.data(), BUFFERSIZE, src_adr, src_port );
+            qint64 size = socket()->readDatagram( data.data(), BUFFERSIZE, src_adr, src_port );
             //qDebug() << " read" << size << "(" << data.size() << ") bytes:" << data;
 
             int i=0;

@@ -1,0 +1,76 @@
+#include <QTimerEvent>
+#include "heartbeat.h"
+#include "conf/mglob.h"
+
+Heartbeat::Heartbeat(QObject *parent) : QObject(parent),
+    _beatNo(1),
+    _scaleNo(1),
+    _scaleChangePropagated(1)
+{
+    _out = new QOscClient(QHostAddress::Broadcast,3150,this);
+    _timerId = startTimer(100);
+}
+
+void Heartbeat::timerEvent(QTimerEvent * event)
+{
+    // on scale change increase frequency of heartbeat
+    // for the next ten heartbeats
+    // to make sure, the scale switch arrives
+    // even if some udp packets are lost
+    if(_scaleChangePropagated<10) {
+        _scaleChangePropagated++;
+    } else if(_scaleChangePropagated == 10) {
+        _scaleChangePropagated++;
+        killTimer(event->timerId());
+        startTimer(5000);
+    }
+
+    QList<QVariant> list;
+    list.append(_beatNo);
+    list.append(_scaleNo);
+    list.append(MGlob::Scale.rootNote);
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        if(MGlob::Scale.bscale[i]) {
+            list.append(i);
+        }
+    }
+    _out->sendData("/hb",list);
+    _beatNo++;
+}
+
+void Heartbeat::onSetRootNote(Pitch *p)
+{
+    _scale.rootNote = p->getRootNote();
+    _scaleChangePropagated = 0;
+    _scaleNo++;
+    killTimer(_timerId);
+    _timerId = startTimer(100);
+    propagateScale();
+}
+
+
+void Heartbeat::onSetBscale(int n, bool v)
+{
+    _scale.bscale[n-1]=v;
+    propagateScale();
+}
+
+void Heartbeat::onScaleSet(MWScale * scale)
+{
+    _scale.baseoct=scale->baseoct;
+    _scale.topoct=scale->topoct;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        _scale.bscale[i]=scale->bscale[i];
+    }
+    _scale.rootNote=scale->rootNote;
+    _scale.size=scale->size;
+    propagateScale();
+}
+
+void Heartbeat::propagateScale()
+{
+    _scaleChangePropagated = 0;
+    _scaleNo++;
+    killTimer(_timerId);
+    _timerId = startTimer(100);
+}

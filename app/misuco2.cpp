@@ -46,9 +46,11 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     _tunePresets = new PresetCollection(this);
 
     _botOct=6;
-    _topOct=7;
+    _topOct=7;    
     MGlob::Scale.baseoct = 6;
     MGlob::Scale.topoct = 7;
+
+    _heartbeat = new Heartbeat(this);
 
     qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if(QSysInfo::productType() == "ios") {
@@ -168,9 +170,10 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     holdMode = new MWHeaderSetter(21,this);
 
-    for(int i=0;i<12;i++) {
+    for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_heartbeat,SLOT(onSetRootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
         connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
         connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
@@ -179,9 +182,10 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         _rootNoteSetter.append(rootNoteSetter);
     }
 
-    for(int i=1;i<12;i++) {
+    for(int i=1;i<BSCALE_SIZE+1;i++) {
         MWBScaleSwitch * bs = new MWBScaleSwitch(i,out,this);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
+        connect(bs,SIGNAL(setBscale(int,bool)),_heartbeat,SLOT(onSetBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
         for(int j=0;j<12;j++) {
@@ -234,6 +238,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     for(auto presetButton:_scalePresets->getItems()) {
         connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
         connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[0],SLOT(onScaleSet(MWScale*)));
+        connect(presetButton,SIGNAL(setScale(MWScale*)),_heartbeat,SLOT(onScaleSet(MWScale*)));
         for(int j=1;j<12;j++) {
             connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[j],SLOT(onScaleSet(MWScale*)));
             connect(presetButton,SIGNAL(setScale(MWScale*)),_BScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));

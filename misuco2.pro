@@ -69,7 +69,8 @@ SOURCES += main.cpp\
     widgets/presets/mwscalepreset.cpp \
     widgets/presets/presetcollection.cpp \
     conf/purchases.cpp \
-    comm/mastersender.cpp
+    comm/mastersender.cpp \
+    app/heartbeat.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -119,7 +120,8 @@ HEADERS  += \
     widgets/presets/mwscalepreset.h \
     widgets/presets/presetcollection.h \
     conf/purchases.h \
-    comm/mastersender.h
+    comm/mastersender.h \
+    app/heartbeat.h
 
 CONFIG += mobility
 MOBILITY = 

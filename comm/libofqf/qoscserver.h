@@ -63,7 +63,7 @@ class QOscServer :  public QOscBase, public QOscServerInterface
                 void unregisterPathObject( PathObject* );
 
         signals:
-                void oscData( QString path, QVariant data );
+                void oscData( QString path, QList<QVariant> data );
 
 	private slots:
 		void readyRead();
