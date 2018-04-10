@@ -30,7 +30,7 @@ class MWScalePreset : public QObject
 
     Q_PROPERTY(int rootNote READ rootnote NOTIFY presetChanged)
     Q_PROPERTY(QStringList bScale READ bscale NOTIFY presetChanged)
-    Q_PROPERTY(int bScaleSize READ bscalesize NOTIFY presetChanged)
+    Q_PROPERTY(int bScaleSize MEMBER scaleSize NOTIFY presetChanged)
     Q_PROPERTY(bool selected READ isSelected NOTIFY presetChanged)
 
 public:
@@ -40,7 +40,6 @@ public:
     MWScale PresetScale;
 
     QStringList bscale();
-    int bscalesize();
     int rootnote();
 
     void overwrite();
@@ -63,6 +62,7 @@ signals:
 
 private:
     int pressed;
+    int scaleSize;
     bool isSelected();
     bool canceled;
 };

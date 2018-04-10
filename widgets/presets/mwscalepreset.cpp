@@ -27,11 +27,11 @@ MWScalePreset::MWScalePreset(QObject *parent): QObject(parent)
     PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
     PresetScale.baseoct=4;
     PresetScale.topoct=5;
-    PresetScale.size=2;
+    scaleSize=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
         if(qrand() % 2) {
             PresetScale.bscale[i]=true;
-            PresetScale.size+=1;
+            scaleSize+=1;
         } else {
             PresetScale.bscale[i]=false;
         }
@@ -42,11 +42,11 @@ MWScalePreset::MWScalePreset(QObject *parent): QObject(parent)
 MWScalePreset::MWScalePreset(int rootNote, bool bscale[], QObject *parent): QObject(parent)
 {
     PresetScale.rootNote=rootNote;
-    PresetScale.size=2;
+    scaleSize=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
         if(bscale[i]) {
             PresetScale.bscale[i]=true;
-            PresetScale.size+=1;
+            scaleSize+=1;
         } else {
             PresetScale.bscale[i]=false;
         }
@@ -65,11 +65,6 @@ QStringList MWScalePreset::bscale()
     return l;
 }
 
-int MWScalePreset::bscalesize()
-{
-    return PresetScale.size;
-}
-
 int MWScalePreset::rootnote()
 {
     return PresetScale.rootNote;
@@ -78,12 +73,12 @@ int MWScalePreset::rootnote()
 void MWScalePreset::overwrite()
 {
     PresetScale.rootNote = MGlob::Scale.rootNote;
-    PresetScale.size = 2;
+    scaleSize = 2;
 
     for(int i=0;i<BSCALE_SIZE;i++) {
         PresetScale.bscale[i]=MGlob::Scale.bscale[i];
         if(PresetScale.bscale[i]) {
-            PresetScale.size+=1;
+            scaleSize+=1;
         }
     }
 

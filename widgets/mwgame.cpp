@@ -115,7 +115,12 @@ void MWGame::timerEvent(QTimerEvent *) {
 
 void MWGame::addRandNote()
 {
-    int note = (float)MGlob::Scale.size * (float)qrand()/(float)RAND_MAX;
+    int scaleNNotes=2;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        if(MGlob::Scale.bscale[i]) scaleNNotes++;
+    }
+    float maxNoteValue = (MGlob::Scale.topoct-MGlob::Scale.baseoct) * scaleNNotes;
+    int note = maxNoteValue * (float)qrand()/(float)RAND_MAX;
     _played.append(note);
 }
 

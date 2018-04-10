@@ -364,10 +364,8 @@ void MWPlayArea::setBscale(int n, bool v)
 void MWPlayArea::setScale(MWScale * s)
 {
     MGlob::Scale.rootNote=s->rootNote;
-    MGlob::Scale.size=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
         MGlob::Scale.bscale[i]=s->bscale[i];
-        if(MGlob::Scale.bscale[i]) MGlob::Scale.size+=MGlob::Scale.topoct-MGlob::Scale.baseoct;
     }
     config();
 }

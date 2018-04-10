@@ -37,7 +37,6 @@ struct MWScale {
     int baseoct;
     int topoct;
     bool bscale[BSCALE_SIZE];
-    int size;
 };
 
 struct MWMicrotune {
