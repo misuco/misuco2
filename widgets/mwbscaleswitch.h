@@ -53,7 +53,7 @@ signals:
     void textChanged();
 
 public slots:
-    void setRootNote(Pitch * p);
+    void onSetRootNote(int p);
     void setOctMid(int o);
     void onScaleSet(MWScale*);
     void onSymbolsChanged();
@@ -73,7 +73,6 @@ private:
     QString         _text2;
 
     void calcText();
-    void setRootNote(int rootNote);
 };
 
 #endif // MWBSCALESWITCH_H

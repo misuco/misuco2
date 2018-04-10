@@ -317,9 +317,9 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     pf->calcColor();
 }
 
-void MWPlayArea::setRootNote(Pitch *p)
+void MWPlayArea::onSetRootNote(int p)
 {
-    _rootNote=p->getRootNote();
+    _rootNote=p;
     config();
 }
 

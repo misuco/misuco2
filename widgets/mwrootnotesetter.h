@@ -53,7 +53,7 @@ public slots:
     void onSymbolsChanged();
 
 signals:
-    void setRootNote(Pitch *);
+    void setRootNote(int);
 
     // QML
     void selectedChanged();

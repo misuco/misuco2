@@ -5,7 +5,6 @@
 
 #include "buttonbase.h"
 #include "conf/types.h"
-#include "conf/pitch.h"
 
 class OpenArchive : public ButtonBase
 {
@@ -15,7 +14,7 @@ public:
     OpenArchive(QString text, int state, QObject *parent = nullptr);
 
 public slots:
-    void onSetRootNote(Pitch * p);
+    void onSetRootNote(int p);
     void onSetBscale(int n, bool v);
 
 protected:

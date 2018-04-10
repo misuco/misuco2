@@ -67,7 +67,7 @@ public:
     int getMidinoteAtField(int i);
 
 public slots:
-    void setRootNote(Pitch * p);
+    void onSetRootNote(int p);
     void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
     void setScale(MWScale *s);

@@ -6,9 +6,9 @@
 OpenArchive::OpenArchive(QString text, int state, QObject * parent) : ButtonBase(text,state,parent)
 {}
 
-void OpenArchive::onSetRootNote(Pitch *p)
+void OpenArchive::onSetRootNote(int p)
 {
-    _rootNote = p->getRootNote();
+    _rootNote = p;
 }
 
 void OpenArchive::onSetBscale(int n, bool v)

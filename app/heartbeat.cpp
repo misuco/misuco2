@@ -37,9 +37,9 @@ void Heartbeat::timerEvent(QTimerEvent * event)
     _beatNo++;
 }
 
-void Heartbeat::onSetRootNote(Pitch *p)
+void Heartbeat::onSetRootNote(int p)
 {
-    _scale.rootNote = p->getRootNote();
+    _scale.rootNote = p;
     _scaleChangePropagated = 0;
     _scaleNo++;
     killTimer(_timerId);

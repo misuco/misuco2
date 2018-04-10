@@ -114,7 +114,7 @@ public:
     QList<QObject*> confPitchFaders();
 
 signals:
-    void setRootNote(Pitch * p);
+    void setRootNote(int p);
     void initialSet();
     void scaleupdate();
     void setMenuItemState(int id, int s);
@@ -131,7 +131,7 @@ private slots:
     void currentMainView(int id);
     void togglePresets();
     void toggleMenu();
-    void onSetRootNote(Pitch * p);
+    //void onsetRootNote(int p);
     void setSound(MWSound * s);
     void setMicrotune(MWMicrotune*m);
     void onChannelChange(int v);

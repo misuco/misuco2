@@ -172,11 +172,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],out,this);
-        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
-        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_heartbeat,SLOT(onSetRootNote(Pitch *)));
-        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_openArchive,SLOT(onSetRootNote(Pitch *)));
-        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
-        connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(int)),_PlayArea,SLOT(onSetRootNote(int)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(int)),_heartbeat,SLOT(onSetRootNote(int)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(int)),_openArchive,SLOT(onSetRootNote(int)));
+        //connect(rootNoteSetter,SIGNAL(setRootNote(int)),this,SLOT(onSetRootNote(int)));
+        //connect(this,SIGNAL(setRootNote(int)),rootNoteSetter,SLOT(onSetRootNote(int)));
+
         connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
         connect(MGlob::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
@@ -192,7 +193,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
         for(int j=0;j<12;j++) {
-            connect(_rootNoteSetter[j],SIGNAL(setRootNote(Pitch *)),bs,SLOT(setRootNote(Pitch *)));
+            connect(_rootNoteSetter[j],SIGNAL(setRootNote(int)),bs,SLOT(onSetRootNote(int)));
         }
         _BScaleSwitch.append(bs);
     }
@@ -411,10 +412,12 @@ void Misuco2::toggleMenu()
     writeXml("conf.xml");
 }
 
+/*
 void Misuco2::onSetRootNote(Pitch *p)
 {
     emit setRootNote(p);
 }
+*/
 
 void Misuco2::setSound(MWSound *s)
 {

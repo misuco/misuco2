@@ -83,12 +83,7 @@ void MWBScaleSwitch::onReleased()
     emit selectedChanged();
 }
 
-void MWBScaleSwitch::setRootNote(Pitch *p)
-{
-    setRootNote(p->getRootNote());
-}
-
-void MWBScaleSwitch::setRootNote(int rootNote)
+void MWBScaleSwitch::onSetRootNote(int rootNote)
 {
     int newrootNote=rootNote+_bscaleId;
     if(newrootNote>11) {
@@ -128,7 +123,7 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
             emit selectedChanged();
         }
     }
-    setRootNote(scale->rootNote);
+    onSetRootNote(scale->rootNote);
 }
 
 void MWBScaleSwitch::onSymbolsChanged()

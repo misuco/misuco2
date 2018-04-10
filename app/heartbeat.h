@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "conf/types.h"
-#include "conf/pitch.h"
 #include "comm/libofqf/qoscclient.h"
 
 class Heartbeat : public QObject
@@ -18,7 +17,7 @@ protected:
 signals:
 
 public slots:    
-    void onSetRootNote(Pitch * p);
+    void onSetRootNote(int p);
     void onSetBscale(int n, bool v);
     void onScaleSet(MWScale*scale);
 

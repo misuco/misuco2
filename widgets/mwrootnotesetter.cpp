@@ -119,7 +119,7 @@ void MWRootNoteSetter::onReleased()
 {
     if(_out && _pressed == 1) {
         _out->noteOff(_vId);
-        emit setRootNote(_pitch);
+        emit setRootNote(_pitch->getRootNote());
         emit selectedChanged();
     }
     _pressed--;
