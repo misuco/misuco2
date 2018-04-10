@@ -18,61 +18,45 @@
  *
  */
 
-#ifndef MWHEADERSETTER_H
-#define MWHEADERSETTER_H
+#ifndef ButtonBase_H
+#define ButtonBase_H
 
-#include "conf/mglob.h"
+#include <QObject>
 
-class MWHeaderSetter : public QObject
+class ButtonBase : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int functionId MEMBER _functionId CONSTANT)
-    Q_PROPERTY(int pressed MEMBER _pressed NOTIFY selectedChanged)
-    Q_PROPERTY(int state MEMBER _state NOTIFY selectedChanged)
     Q_PROPERTY(QString text MEMBER _text CONSTANT)
     Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
 
 public:
-    MWHeaderSetter(int functionId, QObject *parent);
-    MWHeaderSetter(int functionId, int state, QObject *parent);
+    ButtonBase(QString text, QObject *parent = nullptr);
+    ButtonBase(QString text, int state, QObject *parent = nullptr);
 
     int getState();
 
     bool selected();
 
-    Q_INVOKABLE void onPressed(int id);
-    Q_INVOKABLE void onReleased(int id);
+    Q_INVOKABLE void onPressed();
+    Q_INVOKABLE void onReleased();
 
 signals:
-    void currentHeader(int i);
-    void currentMainView(int i);
-    void setBendHori(bool b);
-    void setBendVertTop(int b);
-    void setBendVertBot(int b);
-    void togglePresets();
-    void toggleMenu();
-    void toggleBW();
-    void scaleupdate();
-    void toggleSender(int i);
-    void toggleShowFreqs();
-    void octUp();
-    void octDown();
-
-    // QML
     void selectedChanged();
 
 public slots:
-    void setState(int id, int s);
+    void setState(int s);
+
+protected:
+    virtual void pressAction();
+    virtual void releaseAction();
 
 private:
-    int _functionId;
     int _pressed;
     int _pressedTouchId;
     int _state;
     QString _text;
 
-    void setText();
 };
 
-#endif // MWHEADERSETTER_H
+#endif // ButtonBase_H

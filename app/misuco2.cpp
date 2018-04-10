@@ -168,10 +168,13 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     holdMode = new MWHeaderSetter(21,this);
 
+    _openArchive = new OpenArchive("archive",0,this);
+
     for(int i=0;i<BSCALE_SIZE+1;i++) {
         MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_PlayArea,SLOT(setRootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_heartbeat,SLOT(onSetRootNote(Pitch *)));
+        connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),_openArchive,SLOT(onSetRootNote(Pitch *)));
         connect(rootNoteSetter,SIGNAL(setRootNote(Pitch *)),this,SLOT(onSetRootNote(Pitch *)));
         connect(this,SIGNAL(setRootNote(Pitch*)),rootNoteSetter,SLOT(onSetRootNote(Pitch*)));
         connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
@@ -180,10 +183,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         _rootNoteSetter.append(rootNoteSetter);
     }
 
+
     for(int i=1;i<BSCALE_SIZE+1;i++) {
         MWBScaleSwitch * bs = new MWBScaleSwitch(i,out,this);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(bs,SIGNAL(setBscale(int,bool)),_heartbeat,SLOT(onSetBscale(int,bool)));
+        connect(bs,SIGNAL(setBscale(int,bool)),_openArchive,SLOT(onSetBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
         for(int j=0;j<12;j++) {
@@ -191,8 +196,6 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         }
         _BScaleSwitch.append(bs);
     }
-
-    openArchive = new MWHeaderSetter(13,1,this);
 
     faderSymbols = new MWFaderParamCtl(4,out,this);
     faderSymbols->setMinValue(0);

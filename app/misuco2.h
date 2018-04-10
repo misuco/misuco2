@@ -37,6 +37,7 @@
 #include "widgets/presets/mwsoundpreset.h"
 #include "widgets/presets/mwmicrotunepreset.h"
 #include "widgets/presets/presetcollection.h"
+#include "widgets/buttons/openarchive.h"
 #include "widgets/mwgame.h"
 #include "conf/purchases.h"
 #include "heartbeat.h"
@@ -88,7 +89,7 @@ class Misuco2 : public QObject
 
     Q_PROPERTY(QObject* confChannelFader MEMBER faderChannel CONSTANT)
 
-    Q_PROPERTY(QObject* openArchive MEMBER openArchive  CONSTANT)
+    Q_PROPERTY(QObject* openArchive MEMBER _openArchive  CONSTANT)
 
     Q_PROPERTY(QObject* showPresets MEMBER showPresets CONSTANT)
     Q_PROPERTY(QObject* showMenu MEMBER showMenu CONSTANT)
@@ -179,7 +180,7 @@ private:
     MWHeaderSetter * enablePuredata;
     MWHeaderSetter * enableSupercollider;
     MWFaderParamCtl * faderSymbols;
-    MWHeaderSetter * openArchive;
+    QObject * _openArchive;
     MWHeaderSetter * holdMode;
     MWHeaderSetter * showFreqs;
     MWHeaderSetter * showPresets;

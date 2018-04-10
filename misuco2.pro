@@ -70,7 +70,9 @@ SOURCES += main.cpp\
     widgets/presets/presetcollection.cpp \
     conf/purchases.cpp \
     comm/mastersender.cpp \
-    app/heartbeat.cpp
+    app/heartbeat.cpp \
+    widgets/buttons/buttonbase.cpp \
+    widgets/buttons/openarchive.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -121,7 +123,9 @@ HEADERS  += \
     widgets/presets/presetcollection.h \
     conf/purchases.h \
     comm/mastersender.h \
-    app/heartbeat.h
+    app/heartbeat.h \
+    widgets/buttons/buttonbase.h \
+    widgets/buttons/openarchive.h
 
 CONFIG += mobility
 MOBILITY = 

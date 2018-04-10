@@ -188,20 +188,6 @@ void MWHeaderSetter::onPressed(int id)
         case 12:
             emit togglePresets();
             break;
-        case 13:
-            link ="http://scales.misuco.org/";
-            link.append(midi2TextUrl(MGlob::Scale.rootNote));
-            link.append("-");
-            for(int i=0;i<11;i++) {
-                if(MGlob::Scale.bscale[i]) {
-                    int currnote=MGlob::Scale.rootNote+i+1;
-                    link.append(midi2TextUrl(currnote%12));
-                    link.append("-");
-                }
-            }
-            link.chop(1);
-            QDesktopServices::openUrl(QUrl(link));
-            break;
         case 14:
             MGlob::noteSymbols++;
             if(MGlob::noteSymbols>3) MGlob::noteSymbols=0;
@@ -258,50 +244,4 @@ void MWHeaderSetter::setState(int id, int s)
         _state = s;
         emit selectedChanged();
     }
-}
-
-QString MWHeaderSetter::midi2TextUrl(int midinote) {
-    QString t;
-    switch(midinote) {
-    case 0:
-        t="c";
-        break;
-    case 1:
-        t="cs";
-        break;
-    case 2:
-        t="d";
-        break;
-    case 3:
-        t="ds";
-        break;
-    case 4:
-        t="e";
-        break;
-    case 5:
-        t="f";
-        break;
-    case 6:
-        t="fs";
-        break;
-    case 7:
-        t="g";
-        break;
-    case 8:
-        t="gs";
-        break;
-    case 9:
-        t="a";
-        break;
-    case 10:
-        t="as";
-        break;
-    case 11:
-        t="b";
-        break;
-    default:
-        t="";
-        break;
-    }
-    return t;
 }
