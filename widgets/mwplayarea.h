@@ -83,6 +83,13 @@ signals:
 
 private:
     // INFRASTRUCTURE
+
+    // - scale model
+    int _baseOct;
+    int _topOct;
+    int _rootNote;
+    bool _bscale[BSCALE_SIZE];
+
     // - painting
     //QLinearGradient linearGrad;
     QString cap;

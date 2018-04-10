@@ -30,18 +30,16 @@ MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     pcalc(0,this),
     fcalc(&pcalc,this)
 {
-    /*
-    Scale.rootNote=0;
-    Scale.baseoct=3;
-    Scale.topoct=4;
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        Scale.bscale[i]=false;
-    }
-    */
-
     bendHoriz=false;
     bendVertTop=0;
     bendVertBot=0;
+
+    _baseOct = 6;
+    _topOct = 7;
+    _rootNote = 0;
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        _bscale[i]=false;
+    }
 
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
         eventStack[i].eventId=-1;
@@ -76,19 +74,9 @@ void MWPlayArea::config()
      *  |.|.||.|.|.| |
      */
 
-    /*
-    for(int r=0;r<MAX_ROWS;r++) {
-        for(int c=0;c<MAX_COLS;c++) {
-            if(fields[r][c].hold) {
-                out->noteOff(fields[r][c].voiceId);
-            }
-        }
-    }
-    */
-
     cols=0;
-    for(int oct=MGlob::Scale.baseoct;oct<MGlob::Scale.topoct;oct++) {
-        setColumn(cols,MGlob::Scale.rootNote+oct*12,MGlob::Scale.rootNote);
+    for(int oct=_baseOct;oct<_topOct;oct++) {
+        setColumn(cols,_rootNote+oct*12,_rootNote);
         if(bendHoriz) {
             cols+=2;
         } else {
@@ -96,8 +84,8 @@ void MWPlayArea::config()
         }
         for(int note=0;note<BSCALE_SIZE;note++) {
             //qDebug() << "MWPlayArea::config " << note;
-            if(MGlob::Scale.bscale[note]) {
-                setColumn(cols,MGlob::Scale.rootNote+oct*12+note+1,(MGlob::Scale.rootNote+note+1)%(BSCALE_SIZE+1));
+            if(_bscale[note]) {
+                setColumn(cols,_rootNote+oct*12+note+1,(_rootNote+note+1)%(BSCALE_SIZE+1));
                 //qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
@@ -107,20 +95,10 @@ void MWPlayArea::config()
             }
         }
     }
-    int topnote=MGlob::Scale.rootNote+(MGlob::Scale.topoct)*12;
+    int topnote=_rootNote+(_topOct)*12;
     //qDebug() << "rootNote: " << Scale.rootNote << "topnote: " << topnote;
-    setColumn(cols,topnote,MGlob::Scale.rootNote);
+    setColumn(cols,topnote,_rootNote);
     cols++;
-
-    /*
-    for(int r=0;r<rows;r++) {
-        for(int c=0;c<cols;c++) {
-            if(fields[r][c].hold) {
-                fields[r][c].voiceId=out->noteOn(channel,fields[r][c].f1->getFreq(),fields[r][c].f1->getMidinote(),fields[r][c].f1->getPitch(),127);
-            }
-        }
-    }
-    */
 
     calcGeo();
 
@@ -341,15 +319,15 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
 void MWPlayArea::setRootNote(Pitch *p)
 {
-    MGlob::Scale.rootNote=p->getRootNote();
+    _rootNote=p->getRootNote();
     config();
 }
 
 
 void MWPlayArea::setOctConf(int bottom, int top)
 {
-    MGlob::Scale.baseoct=bottom;
-    MGlob::Scale.topoct=top;
+    _baseOct=bottom;
+    _topOct=top;
     config();
 
 }
@@ -357,15 +335,15 @@ void MWPlayArea::setOctConf(int bottom, int top)
 void MWPlayArea::setBscale(int n, bool v)
 {
     //qDebug() << "MWPlayArea::setBscale " << n << " " << v;
-    MGlob::Scale.bscale[n-1]=v;
+    _bscale[n-1]=v;
     config();
 }
 
 void MWPlayArea::setScale(MWScale * s)
 {
-    MGlob::Scale.rootNote=s->rootNote;
+    _rootNote=s->rootNote;
     for(int i=0;i<BSCALE_SIZE;i++) {
-        MGlob::Scale.bscale[i]=s->bscale[i];
+        _bscale[i]=s->bscale[i];
     }
     config();
 }

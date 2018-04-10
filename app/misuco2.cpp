@@ -47,8 +47,6 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     _botOct=6;
     _topOct=7;    
-    MGlob::Scale.baseoct = 6;
-    MGlob::Scale.topoct = 7;
 
     _heartbeat = new Heartbeat(this);
 
