@@ -1,6 +1,5 @@
 #include <QTimerEvent>
 #include "heartbeat.h"
-#include "conf/mglob.h"
 
 Heartbeat::Heartbeat(QObject *parent) : QObject(parent),
     _beatNo(1),
@@ -28,9 +27,9 @@ void Heartbeat::timerEvent(QTimerEvent * event)
     QList<QVariant> list;
     list.append(_beatNo);
     list.append(_scaleNo);
-    list.append(MGlob::Scale.rootNote);
+    list.append(_scale.rootNote);
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if(MGlob::Scale.bscale[i]) {
+        if(_scale.bscale[i]) {
             list.append(i);
         }
     }
@@ -63,7 +62,6 @@ void Heartbeat::onScaleSet(MWScale * scale)
         _scale.bscale[i]=scale->bscale[i];
     }
     _scale.rootNote=scale->rootNote;
-    _scale.size=scale->size;
     propagateScale();
 }
 
