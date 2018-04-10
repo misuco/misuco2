@@ -38,7 +38,7 @@ MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     _topOct = 7;
     _rootNote = 0;
     for(int i=0;i<BSCALE_SIZE;i++) {
-        _bscale[i]=false;
+        _bscale.append(false);
     }
 
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
@@ -180,6 +180,11 @@ void MWPlayArea::calcGeo()
 int MWPlayArea::getMidinoteAtField(int i)
 {
     return fields[0][i].f1->getMidinote();
+}
+
+int MWPlayArea::getColumnCount()
+{
+    return cols;
 }
 
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
@@ -339,12 +344,10 @@ void MWPlayArea::setBscale(int n, bool v)
     config();
 }
 
-void MWPlayArea::setScale(MWScale * s)
+void MWPlayArea::onSetScale(int rootNote, QList<bool> scale)
 {
-    _rootNote=s->rootNote;
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        _bscale[i]=s->bscale[i];
-    }
+    _rootNote=rootNote;
+    _bscale=scale;
     config();
 }
 

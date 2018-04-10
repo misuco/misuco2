@@ -8,6 +8,9 @@ Heartbeat::Heartbeat(QObject *parent) : QObject(parent),
 {
     _out = new QOscClient(QHostAddress::Broadcast,3150,this);
     _timerId = startTimer(100);
+    for(int i=0;i<BSCALE_SIZE;i++) {
+        _scale.append(false);
+    }
 }
 
 void Heartbeat::timerEvent(QTimerEvent * event)
@@ -27,11 +30,13 @@ void Heartbeat::timerEvent(QTimerEvent * event)
     QList<QVariant> list;
     list.append(_beatNo);
     list.append(_scaleNo);
-    list.append(_scale.rootNote);
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        if(_scale.bscale[i]) {
+    list.append(_rootNote);
+    int i=0;
+    for(auto scaleItem:_scale) {
+        if(scaleItem) {
             list.append(i);
         }
+        i++;
     }
     _out->sendData("/hb",list);
     _beatNo++;
@@ -39,7 +44,7 @@ void Heartbeat::timerEvent(QTimerEvent * event)
 
 void Heartbeat::onSetRootNote(int p)
 {
-    _scale.rootNote = p;
+    _rootNote = p;
     _scaleChangePropagated = 0;
     _scaleNo++;
     killTimer(_timerId);
@@ -50,18 +55,14 @@ void Heartbeat::onSetRootNote(int p)
 
 void Heartbeat::onSetBscale(int n, bool v)
 {
-    _scale.bscale[n-1]=v;
+    _scale[n-1]=v;
     propagateScale();
 }
 
-void Heartbeat::onScaleSet(MWScale * scale)
+void Heartbeat::onSetScale(int rootNote, QList<bool> scale)
 {
-    _scale.baseoct=scale->baseoct;
-    _scale.topoct=scale->topoct;
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        _scale.bscale[i]=scale->bscale[i];
-    }
-    _scale.rootNote=scale->rootNote;
+    _scale=scale;
+    _rootNote=rootNote;
     propagateScale();
 }
 

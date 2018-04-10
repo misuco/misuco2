@@ -175,15 +175,17 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_PlayArea,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_heartbeat,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_openArchive,SLOT(onSetRootNote(int)));
-        //connect(rootNoteSetter,SIGNAL(setRootNote(int)),this,SLOT(onSetRootNote(int)));
-        //connect(this,SIGNAL(setRootNote(int)),rootNoteSetter,SLOT(onSetRootNote(int)));
-
         connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
         connect(MGlob::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
     }
 
+    for(auto rootNoteSetter:_rootNoteSetter) {
+        for(auto rootNoteSetter2:_rootNoteSetter) {
+            connect(rootNoteSetter,SIGNAL(setRootNote(int)),rootNoteSetter2,SLOT(onSetRootNote(int)));
+        }
+    }
 
     for(int i=1;i<BSCALE_SIZE+1;i++) {
         MWBScaleSwitch * bs = new MWBScaleSwitch(i,out,this);
@@ -238,12 +240,21 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     readXml("tune.xml");
 
     for(auto presetButton:_scalePresets->getItems()) {
-        connect(presetButton,SIGNAL(setScale(MWScale*)),(MWPlayArea *)_PlayArea,SLOT(setScale(MWScale*)));
-        connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[0],SLOT(onScaleSet(MWScale*)));
-        connect(presetButton,SIGNAL(setScale(MWScale*)),_heartbeat,SLOT(onScaleSet(MWScale*)));
-        for(int j=1;j<12;j++) {
-            connect(presetButton,SIGNAL(setScale(MWScale*)),_rootNoteSetter[j],SLOT(onScaleSet(MWScale*)));
-            connect(presetButton,SIGNAL(setScale(MWScale*)),_BScaleSwitch[j-1],SLOT(onScaleSet(MWScale*)));
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(MWPlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_heartbeat,SLOT(onSetScale(int,QList<bool>)));
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[0],SLOT(onSetScale(int,QList<bool>)));
+        for(int j=1;j<BSCALE_SIZE+1;j++) {
+            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[j],SLOT(onSetScale(int,QList<bool>)));
+            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_BScaleSwitch[j-1],SLOT(onSetScale(int,QList<bool>)));
+        }
+        for(auto rootNoteSetter:_rootNoteSetter) {
+            connect(rootNoteSetter,SIGNAL(setRootNote(int)),presetButton,SLOT(onSetRootNote(int)));
+        }
+        for(auto bscaleSwitch:_BScaleSwitch) {
+            connect(bscaleSwitch,SIGNAL(setBscale(int,bool)),presetButton,SLOT(onSetBscale(int,bool)));
+        }
+        for(auto presetButton2:_scalePresets->getItems()) {
+            connect(presetButton2,SIGNAL(setScale(int,QList<bool>)),presetButton,SLOT(onSetScale(int,QList<bool>)));
         }
     }
 
@@ -411,13 +422,6 @@ void Misuco2::toggleMenu()
     emit layoutChange();
     writeXml("conf.xml");
 }
-
-/*
-void Misuco2::onSetRootNote(Pitch *p)
-{
-    emit setRootNote(p);
-}
-*/
 
 void Misuco2::setSound(MWSound *s)
 {
@@ -619,16 +623,15 @@ void Misuco2::decodeConfigRecord() {
 
 void Misuco2::decodeScaleRecord() {
     if (xmlr.name() == "scale") {
-        bool bscaleRead[BSCALE_SIZE];
+        QList<bool> bscaleRead;
         for(int i=0;i<BSCALE_SIZE;i++) {
             QString attId;
             attId.sprintf("b%d",i);
-            bscaleRead[i] = xmlr.attributes().value(attId).toInt();
+            bscaleRead.append(xmlr.attributes().value(attId).toInt());
         }
         MWScalePreset * p = new MWScalePreset(xmlr.attributes().value("rootNote").toString().toInt(),
                                          bscaleRead,
                                          this);
-        connect(((MWPlayArea *)_PlayArea),SIGNAL(playRowsChanged()),p,SLOT(playAreaChanged()));
         connect(p,SIGNAL(editPreset()),_scalePresets,SLOT(onEditPreset()));
         _scalePresets->append(p);
     }
@@ -691,14 +694,10 @@ void Misuco2::writeXml(QString filename)
                 auto widget = qobject_cast<MWScalePreset*>(widgetQ);
                 if(widget) {
                     xml.writeStartElement("scale");
-                    att.sprintf("%d",widget->PresetScale.rootNote);
+                    att.sprintf("%d",widget->getRootNote());
                     xml.writeAttribute("rootNote",att);
-                    att.sprintf("%d",widget->PresetScale.baseoct);
-                    xml.writeAttribute("baseoct",att);
-                    att.sprintf("%d",widget->PresetScale.topoct);
-                    xml.writeAttribute("topoct",att);
                     for(int i=0;i<BSCALE_SIZE;i++) {
-                        att.sprintf("%d",widget->PresetScale.bscale[i]);
+                        att.sprintf("%d",widget->getScale(i));
                         attId.sprintf("b%d",i);
                         xml.writeAttribute(attId,att);
                     }
@@ -734,7 +733,6 @@ void Misuco2::writeXml(QString filename)
                 }
             }
         } else if(filename == "tune.xml") {
-
             for(auto o:_tunePresets->getItems()) {
                 auto widget = qobject_cast<MWMicrotunePreset *>(o);
                 xml.writeStartElement("microtune");

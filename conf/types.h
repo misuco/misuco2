@@ -32,13 +32,6 @@ enum MWPlayfieldType {
     BEND_VERT_HORIZ
 };
 
-struct MWScale {
-    int rootNote;
-    int baseoct;
-    int topoct;
-    bool bscale[BSCALE_SIZE];
-};
-
 struct MWMicrotune {
     int tuning[BSCALE_SIZE+1];
 };

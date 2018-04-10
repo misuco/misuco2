@@ -19,10 +19,11 @@ signals:
 public slots:    
     void onSetRootNote(int p);
     void onSetBscale(int n, bool v);
-    void onScaleSet(MWScale*scale);
+    void onSetScale(int rootNote, QList<bool>);
 
 private:
-    MWScale _scale;
+    int _rootNote;
+    QList<bool> _scale;
     QOscClient * _out;
     int _beatNo;
     int _scaleNo;

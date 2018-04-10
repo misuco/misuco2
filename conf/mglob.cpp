@@ -42,7 +42,6 @@ float MGlob::sOff = 0.8;
 float MGlob::sOn = 0.8;
 
 Pitch * MGlob::MWPitch[BSCALE_SIZE+1];
-MWScale MGlob::Scale;
 
 MWSound MGlob::Sound;
 MWMicrotune MGlob::Microtune;

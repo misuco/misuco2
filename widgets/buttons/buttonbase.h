@@ -53,7 +53,6 @@ protected:
 
 private:
     int _pressed;
-    int _pressedTouchId;
     int _state;
     QString _text;
 

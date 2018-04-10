@@ -21,26 +21,25 @@
 #ifndef MWPRESET_H
 #define MWPRESET_H
 
-#include "conf/mglob.h"
+#include <QObject>
 #include "conf/types.h"
 
 class MWScalePreset : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int rootNote READ rootnote NOTIFY presetChanged)
+    Q_PROPERTY(int rootNote MEMBER _presetRootNote NOTIFY presetChanged)
     Q_PROPERTY(QStringList bScale READ bscale NOTIFY presetChanged)
-    Q_PROPERTY(int bScaleSize MEMBER scaleSize NOTIFY presetChanged)
-    Q_PROPERTY(bool selected READ isSelected NOTIFY presetChanged)
+    Q_PROPERTY(int bScaleSize MEMBER _scaleSize NOTIFY presetChanged)
+    Q_PROPERTY(bool selected READ isSelected NOTIFY selectedChanged)
 
 public:
     MWScalePreset(QObject *parent);
-    MWScalePreset(int rootNote, bool bscale[BSCALE_SIZE], QObject *parent);
-
-    MWScale PresetScale;
+    MWScalePreset(int rootNote, QList<bool> bscale, QObject *parent);
 
     QStringList bscale();
-    int rootnote();
+    int getRootNote();
+    bool getScale(int i);
 
     void overwrite();
 
@@ -50,21 +49,32 @@ public:
     Q_INVOKABLE void onReleased();
 
 public slots:
+    void onSetRootNote(int p);
+    void onSetBscale(int n, bool v);
+    void onSetScale(int rootNote, QList<bool> scale);
     void initialSet();
-    void playAreaChanged();
 
 signals:
-    void setScale(MWScale *);
+    void setScale(int rootNote, QList<bool> scale);
     void editPreset();
 
     // QML
     void presetChanged();
+    void selectedChanged();
 
 private:
-    int pressed;
-    int scaleSize;
+    int _currentRootNote;
+    QList<bool> _currentScale;
+
+    int _presetRootNote;
+    QList<bool> _presetScale;
+
+    int _pressed;
+    int _scaleSize;
+    bool _canceled;
+
     bool isSelected();
-    bool canceled;
+
 };
 
 #endif // MWPRESET_H

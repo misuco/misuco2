@@ -48,8 +48,8 @@ public:
 public slots:
     void setOctMid(int o);
     void pitchChange();
-    void onSetRootNote(Pitch *pitch);
-    void onScaleSet(MWScale*scale);
+    void onSetRootNote(int rootNote);
+    void onSetScale(int rootNote, QList<bool>);
     void onSymbolsChanged();
 
 signals:

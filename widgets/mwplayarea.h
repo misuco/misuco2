@@ -31,7 +31,6 @@
 #define MAX_ROWS 3
 #define EVENT_STACK_SIZE 64
 
-
 class MWPlayArea : public QObject
 {
     Q_OBJECT
@@ -65,12 +64,13 @@ public:
 
     // game helper
     int getMidinoteAtField(int i);
+    int getColumnCount();
 
 public slots:
     void onSetRootNote(int p);
-    void setOctConf(int bottom, int top);
     void setBscale(int n, bool v);
-    void setScale(MWScale *s);
+    void onSetScale(int rootNote, QList<bool> scale);
+    void setOctConf(int bottom, int top);
     void setBendHori(bool b);
     void setBendVertTop(int b);
     void setBendVertBot(int b);
@@ -88,7 +88,7 @@ private:
     int _baseOct;
     int _topOct;
     int _rootNote;
-    bool _bscale[BSCALE_SIZE];
+    QList<bool> _bscale;
 
     // - painting
     //QLinearGradient linearGrad;

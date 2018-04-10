@@ -24,34 +24,24 @@
 
 MWScalePreset::MWScalePreset(QObject *parent): QObject(parent)
 {
-    PresetScale.rootNote=qrand() % (BSCALE_SIZE+1);
-    PresetScale.baseoct=4;
-    PresetScale.topoct=5;
-    scaleSize=2;
+    _presetRootNote=0;
+    _scaleSize=2;
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if(qrand() % 2) {
-            PresetScale.bscale[i]=true;
-            scaleSize+=1;
-        } else {
-            PresetScale.bscale[i]=false;
-        }
+        _presetScale.append(false);
+        _currentScale.append(false);
     }
-    pressed=0;
+    _pressed=0;
 }
 
-MWScalePreset::MWScalePreset(int rootNote, bool bscale[], QObject *parent): QObject(parent)
+MWScalePreset::MWScalePreset(int rootNote, QList<bool> bscale, QObject *parent): QObject(parent)
 {
-    PresetScale.rootNote=rootNote;
-    scaleSize=2;
+    _presetRootNote=rootNote;
+    _presetScale = bscale;
+    _scaleSize = 2 + _presetScale.count(true);
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if(bscale[i]) {
-            PresetScale.bscale[i]=true;
-            scaleSize+=1;
-        } else {
-            PresetScale.bscale[i]=false;
-        }
+        _currentScale.append(false);
     }
-    pressed=0;
+    _pressed=0;
 }
 
 QStringList MWScalePreset::bscale()
@@ -59,74 +49,89 @@ QStringList MWScalePreset::bscale()
     QStringList l;
     l.append("1");
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if(PresetScale.bscale[i]) l.append("1");
+        if(_presetScale[i]) l.append("1");
         else l.append("0");
     }
     return l;
 }
 
-int MWScalePreset::rootnote()
+int MWScalePreset::getRootNote()
 {
-    return PresetScale.rootNote;
+    return _presetRootNote;
+}
+
+bool MWScalePreset::getScale(int i)
+{
+    return _presetScale[i];
 }
 
 void MWScalePreset::overwrite()
 {
-    PresetScale.rootNote = MGlob::Scale.rootNote;
-    scaleSize = 2;
-
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        PresetScale.bscale[i]=MGlob::Scale.bscale[i];
-        if(PresetScale.bscale[i]) {
-            scaleSize+=1;
-        }
-    }
-
-    emit setScale(&PresetScale);
+    _presetRootNote = _currentRootNote;
+    _presetScale = _currentScale;
+    _scaleSize = 2 + _presetScale.count(true);
+    emit presetChanged();
 }
 
 void MWScalePreset::onPressed()
 {
-    pressed++;
-    canceled = false;
+    _pressed++;
+    _canceled = false;
 }
 
 void MWScalePreset::onPressAndHold()
 {
-    canceled = true;
+    _canceled = true;
     PresetCollection::dialogContext = this;
     emit editPreset();
 }
 
 void MWScalePreset::onCanceled()
 {
-    canceled = true;
+    _canceled = true;
 }
 
 void MWScalePreset::onReleased()
 {
-    if(!canceled) {
-        emit setScale(&PresetScale);
+    if(!_canceled) {
+        emit setScale(_presetRootNote,_presetScale);
     }
-    pressed--;
+    _pressed--;
+}
+
+void MWScalePreset::onSetRootNote(int p)
+{
+    _currentRootNote = p;
+    emit selectedChanged();
+}
+
+void MWScalePreset::onSetBscale(int n, bool v)
+{
+    _currentScale[n-1] = v;
+    emit selectedChanged();
+}
+
+void MWScalePreset::onSetScale(int rootNote, QList<bool> scale)
+{
+    _currentScale=scale;
+    _currentRootNote=rootNote;
+    emit selectedChanged();
 }
 
 void MWScalePreset::initialSet()
 {
-    emit setScale(&PresetScale);
-}
-
-void MWScalePreset::playAreaChanged()
-{
-    emit presetChanged();
+    emit setScale(_presetRootNote,_presetScale);
 }
 
 bool MWScalePreset::isSelected()
 {
-    if(PresetScale.rootNote!=MGlob::Scale.rootNote ) return false;
+    if(_presetRootNote!=_currentRootNote ) return false;
+
+    if(_presetScale.size()<BSCALE_SIZE) return false;
+    if(_currentScale.size()<BSCALE_SIZE) return false;
 
     for(int i=0;i<BSCALE_SIZE;i++) {
-        if( PresetScale.bscale[i]!=MGlob::Scale.bscale[i] ) return false;
+        if( _presetScale[i] != _currentScale[i] ) return false;
     }
     return true;
 }

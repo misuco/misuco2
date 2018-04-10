@@ -55,7 +55,7 @@ signals:
 public slots:
     void onSetRootNote(int p);
     void setOctMid(int o);
-    void onScaleSet(MWScale*);
+    void onSetScale(int rootNote, QList<bool> scale);
     void onSymbolsChanged();
 
 private:

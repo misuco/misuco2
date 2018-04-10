@@ -50,7 +50,6 @@ public:
     static float sOn;
 
     static Pitch * MWPitch[];
-    static MWScale Scale;
     static MWSound Sound;
     static MWMicrotune Microtune;
     static int noteSymbols;

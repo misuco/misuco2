@@ -55,9 +55,9 @@ void MWRootNoteSetter::pitchChange()
     calcText();
 }
 
-void MWRootNoteSetter::onSetRootNote(Pitch * pitch)
+void MWRootNoteSetter::onSetRootNote(int rootNote)
 {
-    if(pitch == _pitch) {
+    if(rootNote == _pitch->getRootNote()) {
         if(!_selected) {
             _selected = true;
             emit selectedChanged();
@@ -70,20 +70,9 @@ void MWRootNoteSetter::onSetRootNote(Pitch * pitch)
     }
 }
 
-void MWRootNoteSetter::onScaleSet(MWScale * scale)
+void MWRootNoteSetter::onSetScale(int rootNote, QList<bool>)
 {
-    //qDebug() << "MWrootNoteSetter::onScaleSet " << scale->basenote << " " << p->basenote;
-    if(scale->rootNote==_pitch->getRootNote()) {
-        if(!_selected) {
-            _selected = true;
-            emit selectedChanged();
-        }
-    } else {
-        if(_selected) {
-            _selected = false;
-            emit selectedChanged();
-        }
-    }
+    onSetRootNote(rootNote);
 }
 
 void MWRootNoteSetter::onSymbolsChanged()

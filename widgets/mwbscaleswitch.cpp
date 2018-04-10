@@ -109,10 +109,10 @@ void MWBScaleSwitch::setOctMid(int o)
     _freq->setOct(_oct + _higherOct);
 }
 
-void MWBScaleSwitch::onScaleSet(MWScale * scale)
+void MWBScaleSwitch::onSetScale(int rootNote, QList<bool> scale)
 {
-    //qDebug() << "MWBScaleSwitch::onScaleSet" << bscaleId;
-    if(scale->bscale[_bscaleId-1]) {
+    //qDebug() << "MWBScaleSwitch::onSetScale" << bscaleId;
+    if(scale[_bscaleId-1]) {
         if(!_value) {
             _value=true;
             emit selectedChanged();
@@ -123,7 +123,7 @@ void MWBScaleSwitch::onScaleSet(MWScale * scale)
             emit selectedChanged();
         }
     }
-    onSetRootNote(scale->rootNote);
+    onSetRootNote(rootNote);
 }
 
 void MWBScaleSwitch::onSymbolsChanged()
