@@ -26,7 +26,8 @@ Item {
                         width:  modelData == "1" ? presetNoteWidth : 0
                         height: buttonSize
                         radius: buttonRadius
-                        color: presetSelected ? layout.pitches[pitchIndex].color1 : layout.pitches[pitchIndex].color0
+                        color: presetSelected ? layout.pitchColors[pitchIndex].colorOn
+                                              : layout.pitchColors[pitchIndex].colorOff
                     }
                 }
             }

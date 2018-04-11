@@ -30,14 +30,13 @@ class MWFaderPitch : public MWFadder
 {
     Q_OBJECT
 
-    Q_PROPERTY(int pitchId READ pitchId CONSTANT)
+    Q_PROPERTY(QObject * freq MEMBER _freq CONSTANT)
     Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
 
 public:
-    MWFaderPitch(Pitch * p, MasterSender * ms, QObject *parent);
+    MWFaderPitch(int rootNote, MasterSender * ms, QObject *parent);
     ~MWFaderPitch();
 
-    int pitchId();
     bool selected();
 
     Q_INVOKABLE void onPressedPitch(int id);
@@ -45,12 +44,16 @@ public:
     Q_INVOKABLE void onReleasedPitch(int id);
 
 signals:
+    void pitchChange(int rootNote, int pitch);
     // QML
     void selectedChanged();
 
 public slots:
     void setOctMid(int o);
-    void pitchChange();    
+    void onPitchChange(int rootNote, int value);
+
+protected:
+    void valueChange() override;
 
 private:
     MasterSender * _out;

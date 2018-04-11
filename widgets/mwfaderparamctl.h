@@ -40,6 +40,12 @@ public:
     Q_INVOKABLE void onUpdatedPitch(int id);
     Q_INVOKABLE void onReleasedPitch(int id);
 
+signals:
+    void controlValueChange(int value);
+
+protected:
+    void valueChange() override;
+
 private:
     MasterSender * _out;
 

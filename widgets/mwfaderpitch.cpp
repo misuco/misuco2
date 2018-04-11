@@ -21,10 +21,10 @@
 #include "mwfaderpitch.h"
 #include <QDebug>
 
-MWFaderPitch::MWFaderPitch(Pitch *p, MasterSender *ms, QObject *parent) : MWFadder(parent),
+MWFaderPitch::MWFaderPitch(int rootNote, MasterSender *ms, QObject *parent) : MWFadder(parent),
     _out(ms)
 {
-    _freq = new FreqTriple(p);
+    _freq = new FreqTriple(rootNote,this);
     _freq->setOct(4);
 }
 
@@ -33,10 +33,12 @@ MWFaderPitch::~MWFaderPitch()
     _freq->deleteLater();
 }
 
+/*
 int MWFaderPitch::pitchId()
 {
     return _freq->getRootNote();
 }
+*/
 
 bool MWFaderPitch::selected()
 {
@@ -76,8 +78,13 @@ void MWFaderPitch::setOctMid(int o)
     _freq->setOct(o);
 }
 
-void MWFaderPitch::pitchChange()
+void MWFaderPitch::onPitchChange(int rootNote, int value)
 {
-    _freq->pitchChange();
+    _freq->onPitchChange(rootNote, value);
+}
+
+void MWFaderPitch::valueChange()
+{
+    emit pitchChange(_freq->getRootNote(),_valueDisplay);
 }
 

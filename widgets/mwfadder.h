@@ -54,9 +54,11 @@ public:
     int getValue();
 
 protected:
-    int valueDisplay;
+    virtual void valueChange();
+
+    int _valueDisplay;
     float _faderY;
-    int knobSize;
+    int _knobSize;
 
     QString _text1;
     QString _text2;
@@ -64,8 +66,6 @@ protected:
     int pressed;
 
 signals:
-    void valueChange(int v);
-
     // QML
     void geoChanged();
 

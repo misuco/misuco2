@@ -29,13 +29,13 @@ class MWBScaleSwitch : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int pitchId READ pitchId NOTIFY pitchIdChanged)
+    Q_PROPERTY(int rootNote MEMBER _rootNote NOTIFY rootNoteChanged)
     Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
     Q_PROPERTY(QString text1 MEMBER _text1 NOTIFY textChanged)
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
-    MWBScaleSwitch(int i, MasterSender * ms, QObject *parent);
+    MWBScaleSwitch(int rootNote, MasterSender * ms, QObject *parent);
     ~MWBScaleSwitch();
 
     int pitchId();
@@ -48,12 +48,13 @@ signals:
     void setBscale(int,bool);
 
     // QML
-    void pitchIdChanged();
+    void rootNoteChanged();
     void selectedChanged();
     void textChanged();
 
 public slots:
     void onSetRootNote(int p);
+    void onPitchChange(int rootNote, int pitch);
     void setOctMid(int o);
     void onSetScale(int rootNote, QList<bool> scale);
     void onSymbolsChanged();
@@ -61,10 +62,14 @@ public slots:
 private:
     MasterSender * _out;
     FreqTriple * _freq;
+    int _rootNote;
     int _bscaleId;
     int _vid;
     int _pressed;
     bool _value;
+
+    int _noteSymbols;
+    bool _showFreqs;
 
     int _oct;
     int _higherOct;

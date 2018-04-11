@@ -24,7 +24,6 @@
 #include "conf/mglob.h"
 #include "conf/types.h"
 #include "comm/mastersender.h"
-#include "pitch.h"
 #include "mwplayfield.h"
 
 #define MAX_COLS 255
@@ -70,12 +69,12 @@ public slots:
     void onSetRootNote(int p);
     void setBscale(int n, bool v);
     void onSetScale(int rootNote, QList<bool> scale);
+    void onPitchChange(int rootNote, int pitch);
+
     void setOctConf(int bottom, int top);
     void setBendHori(bool b);
     void setBendVertTop(int b);
     void setBendVertBot(int b);
-    void onToggleBW();
-    void onSymbolsChanged();
 
 signals:
     // QML
@@ -93,10 +92,11 @@ private:
     // - painting
     //QLinearGradient linearGrad;
     QString cap;
+    int _noteSymbols;
+
     // - networking
     MasterSender * out;
     // - processing
-    Pitch pcalc;
     FreqTriple fcalc;
 
     // WORKING MEMORY
@@ -119,7 +119,7 @@ private:
 
     // helper functions
     void config();
-    void setColumn(int col, int midinote, int rootNote);
+    void setColumn(int col, int midinote, int pitch);
     void calcGeo();
 
     // QML

@@ -27,6 +27,7 @@
 #include "senderreaktor.h"
 #include "senderdebug.h"
 #include "sendermobilesynth.h"
+#include "pitchcolor.h"
 
 Misuco2::Misuco2(QObject *parent) : QObject(parent)
 {
@@ -79,8 +80,8 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     out->setSenderEnabled(1,false);
     out->setSenderEnabled(3,false);
 
-    for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MGlob::MWPitch[i]=new Pitch(i,this);
+    for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
+        _pitchColors.append(new PitchColor(rootNote,this));
     }    
 
     _PlayArea = new MWPlayArea(out, this);
@@ -89,10 +90,23 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
-    for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWFaderPitch * fader = new MWFaderPitch(MGlob::MWPitch[i],out,this);
-        connect (fader,SIGNAL(valueChange(int)),MGlob::MWPitch[i],SLOT(setPitch(int)));
-        connect( MGlob::MWPitch[i], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
+    for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
+        MWFaderPitch * fader = new MWFaderPitch(rootNote,out,this);
+        //connect (fader,SIGNAL(valueChange(int)),MGlob::MWPitch[rootNote],SLOT(setPitch(int)));
+        //connect( MGlob::MWPitch[rootNote], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
+        connect(fader,SIGNAL(pitchChange(int,int)),_PlayArea,SLOT(onPitchChange(int,int)));
+        for(auto rootNoteSetter:_rootNoteSetter) {
+            connect(fader,SIGNAL(pitchChange(int,int)),rootNoteSetter,SLOT(onPitchChange(int,int)));
+        }
+        for(auto rootNoteSetter:_rootNoteSetter) {
+            connect(fader,SIGNAL(pitchChange(int,int)),rootNoteSetter,SLOT(onPitchChange(int,int)));
+        }
+        for(auto bscaleSwitch:_BScaleSwitch) {
+            connect(fader,SIGNAL(pitchChange(int,int)),bscaleSwitch,SLOT(onPitchChange(int,int)));
+        }
+        for(auto pitchColor:_pitchColors) {
+            connect(fader,SIGNAL(pitchChange(int,int)),pitchColor,SLOT(onPitchChange(int,int)));
+        }
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),fader,SLOT(setOctMid(int)));
         _faderMicrotune.append(fader);
     }
@@ -107,7 +121,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         }
         fader->setInverted(true);
 
-        connect(fader,SIGNAL(valueChange(int)),this,SLOT(onSoundChanged(int)));
+        connect(fader,SIGNAL(controlValueChange(int)),this,SLOT(onSoundChanged(int)));
 
         _faderParamCtl.append(fader);
 
@@ -116,12 +130,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     faderPitchTopRange = new MWFaderParamCtl(1,out,this);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
-    connect(faderPitchTopRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertTop(int)));
+    connect(faderPitchTopRange,SIGNAL(controlValueChange(int)),_PlayArea,SLOT(setBendVertTop(int)));
 
     faderPitchBottomRange = new MWFaderParamCtl(2,out,this);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
-    connect(faderPitchBottomRange,SIGNAL(valueChange(int)),_PlayArea,SLOT(setBendVertBot(int)));
+    connect(faderPitchBottomRange,SIGNAL(controlValueChange(int)),_PlayArea,SLOT(setBendVertBot(int)));
 
     pitchHorizontal = new MWHeaderSetter(15,this);
     connect(pitchHorizontal,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
@@ -131,15 +145,14 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     faderChannel->setMinValue(1);
     faderChannel->setMaxValue(16);
     faderChannel->setInverted(true);
-    connect(faderChannel,SIGNAL(valueChange(int)),this,SLOT(onChannelChange(int)));
+    connect(faderChannel,SIGNAL(controlValueChange(int)),this,SLOT(onChannelChange(int)));
 
     enableCc1 = new MWHeaderSetter(16,1,this);
     MGlob::sendCC1 = true;
 
     bwMode = new MWHeaderSetter(11,this);
-    connect(bwMode,SIGNAL(toggleBW()),_PlayArea,SLOT(onToggleBW()));
-    for(int i=0;i<BSCALE_SIZE+1;i++) {
-        connect(bwMode,SIGNAL(toggleBW()),MGlob::MWPitch[i],SLOT(bwModeChanged()));
+    for(auto pitchColor:_pitchColors) {
+        connect(bwMode,SIGNAL(toggleBW(bool)),pitchColor,SLOT(onBwModeChange(bool)));
     }
 
     enableMobilesynth = new MWHeaderSetter(17,1,this);
@@ -170,14 +183,13 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
     _openArchive = new OpenArchive("archive",0,this);
 
-    for(int i=0;i<BSCALE_SIZE+1;i++) {
-        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(MGlob::MWPitch[i],out,this);
+    for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
+        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(rootNote,out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_PlayArea,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_heartbeat,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_openArchive,SLOT(onSetRootNote(int)));
-        connect(this,SIGNAL(symbolsChanged()),rootNoteSetter,SLOT(onSymbolsChanged()));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
-        connect(MGlob::MWPitch[i], SIGNAL(pitchChanged()) ,rootNoteSetter, SLOT(pitchChange()));
+        //connect(MGlob::MWPitch[rootNote], SIGNAL(pitchChanged()), rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
     }
 
@@ -194,7 +206,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
         connect(bs,SIGNAL(setBscale(int,bool)),_openArchive,SLOT(onSetBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
-        for(int j=0;j<12;j++) {
+        for(int j=0;j<BSCALE_SIZE+1;j++) {
             connect(_rootNoteSetter[j],SIGNAL(setRootNote(int)),bs,SLOT(onSetRootNote(int)));
         }
         _BScaleSwitch.append(bs);
@@ -204,8 +216,9 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);
-    connect(faderSymbols,SIGNAL(valueChange(int)),this,SLOT(onSymbolsChange(int)));
-    connect(this,SIGNAL(symbolsChanged()),_PlayArea,SLOT(onSymbolsChanged()));
+    for(auto rootNoteSetter:_rootNoteSetter) {
+        connect(faderSymbols,SIGNAL(controlValueChange(int)),rootNoteSetter,SLOT(onSymbolsChanged(int)));
+    }
 
     for(int i=0;i<7;i++) {
         int fctId=i;
@@ -232,7 +245,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     }
 
     showFreqs = new MWHeaderSetter(22,this);
-    connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
+    //connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
 
     readXml("conf.xml");
     readXml("scales.xml");
@@ -283,6 +296,7 @@ Misuco2::~Misuco2()
     writeXml("tune.xml");
 }
 
+/*
 QList<QObject *> Misuco2::pitches()
 {
     QList<QObject*> p;
@@ -291,6 +305,7 @@ QList<QObject *> Misuco2::pitches()
     }
     return p;
 }
+*/
 
 QList<QObject *> Misuco2::confPitchFaders()
 {
@@ -470,11 +485,11 @@ void Misuco2::setSound(MWSound *s)
 
 void Misuco2::setMicrotune(MWMicrotune * m)
 {
-    for(int i=0;i<12;i++) {
-        MGlob::Microtune.tuning[i] = m->tuning[i];
-        MGlob::MWPitch[i]->setPitch(m->tuning[i]);
-        auto p = qobject_cast<MWFaderPitch*>(_faderMicrotune[i]);
-        if(p) p->setValue(m->tuning[i]);
+    for(int rootNote=0;rootNote<12;rootNote++) {
+        MGlob::Microtune.tuning[rootNote] = m->tuning[rootNote];
+        //emit setPitch(rootNote,m->tuning[rootNote]);
+        auto p = qobject_cast<MWFaderPitch*>(_faderMicrotune[rootNote]);
+        if(p) p->setValue(m->tuning[rootNote]);
     }
 }
 
@@ -487,19 +502,6 @@ void Misuco2::onToggleSender(int v)
 {
     if(out->isSenderEnabled(v)) out->setSenderEnabled(v,false);
     else out->setSenderEnabled(v,true);
-    writeXml("conf.xml");
-}
-
-void Misuco2::onSymbolsChange(int v)
-{
-    MGlob::noteSymbols = v;
-    emit symbolsChanged();
-    writeXml("conf.xml");
-}
-
-void Misuco2::onShowFreqsChange()
-{
-    emit symbolsChanged();
     writeXml("conf.xml");
 }
 
@@ -599,8 +601,8 @@ void Misuco2::decodeConfigRecord() {
         MGlob::sendCC1 = xmlr.attributes().value("pitchHorizontal").toString().toInt();
         enableCc1->setState(16,xmlr.attributes().value("sendCC1").toString().toInt());
 
-        MGlob::bwmode = xmlr.attributes().value("bwmode").toString().toInt();
-        bwMode->setState(11,xmlr.attributes().value("bwmode").toString().toInt());
+        //MGlob::bwmode = xmlr.attributes().value("bwmode").toString().toInt();
+        //bwMode->setState(11,xmlr.attributes().value("bwmode").toString().toInt());
 
         out->setSenderEnabled(0,xmlr.attributes().value("mobileSynth").toString().toInt());
         enableMobilesynth->setState(17,xmlr.attributes().value("mobileSynth").toString().toInt());
@@ -616,8 +618,8 @@ void Misuco2::decodeConfigRecord() {
 
         faderSymbols->setValue(xmlr.attributes().value("noteSymbols").toString().toInt());
 
-        MGlob::showFreqs = xmlr.attributes().value("showFreqs").toString().toInt();
-        showFreqs->setState(22,xmlr.attributes().value("showFreqs").toString().toInt());
+        //MGlob::showFreqs = xmlr.attributes().value("showFreqs").toString().toInt();
+        //showFreqs->setState(22,xmlr.attributes().value("showFreqs").toString().toInt());
     }
 }
 
@@ -756,8 +758,8 @@ void Misuco2::writeXml(QString filename)
             xml.writeAttribute("channel",att);
             att.sprintf("%d",MGlob::sendCC1);
             xml.writeAttribute("sendCC1",att);
-            att.sprintf("%d",MGlob::bwmode);
-            xml.writeAttribute("bwmode",att);
+            //att.sprintf("%d",);
+            //xml.writeAttribute("bwmode",att);
             att.sprintf("%d",out->isSenderEnabled(0));
             xml.writeAttribute("mobileSynth",att);
             att.sprintf("%d",out->isSenderEnabled(1));
@@ -766,10 +768,10 @@ void Misuco2::writeXml(QString filename)
             xml.writeAttribute("reaktor",att);
             att.sprintf("%d",out->isSenderEnabled(3));
             xml.writeAttribute("superCollider",att);
-            att.sprintf("%d",MGlob::noteSymbols);
-            xml.writeAttribute("noteSymbols",att);
-            att.sprintf("%d",MGlob::showFreqs);
-            xml.writeAttribute("showFreqs",att);
+            //att.sprintf("%d",MGlob::noteSymbols);
+            //xml.writeAttribute("noteSymbols",att);
+            //att.sprintf("%d",MGlob::showFreqs);
+            //xml.writeAttribute("showFreqs",att);
 
             att.sprintf("%d",_presetsVisible);
             xml.writeAttribute("presetsVisible",att);

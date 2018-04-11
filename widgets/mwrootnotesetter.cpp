@@ -19,18 +19,16 @@
  */
 
 #include "mwrootnotesetter.h"
-#include "comm/senderdebug.h"
 #include <QDebug>
 
-MWRootNoteSetter::MWRootNoteSetter(Pitch * pitch, MasterSender *ms, QObject *parent) : QObject(parent),
+MWRootNoteSetter::MWRootNoteSetter(int rootNote, MasterSender *ms, QObject *parent) : QObject(parent),
     _out(ms),
-    _pitch(pitch)
+    _rootNote(rootNote),
+    _noteSymbols(0),
+    _showFreqs(false)
 {
     //qDebug() << "MWrootNoteSetter::MWrootNoteSetter " << pitch->pitch << " pitch basenote " << pitch->basenote;
-    _freq=new FreqTriple(_pitch);
-    _freq->setOct(6);
-    _freq->setRootNote(_pitch);
-    //qDebug() << "f: " << f->getFreq() << " " << f->getPitch() << " " << f->getHue();
+    _freq=new FreqTriple(rootNote,this);
     _vId=0;
     _pressed=0;
     _selected=false;
@@ -48,16 +46,18 @@ void MWRootNoteSetter::setOctMid(int o)
     calcText();
 }
 
-void MWRootNoteSetter::pitchChange()
+void MWRootNoteSetter::onPitchChange(int rootNote, int pitch)
 {
     //qDebug() << "MWrootNoteSetter::pitchChange "  << f->getPitch();
-    _freq->pitchChange();
-    calcText();
+    if(rootNote == _rootNote) {
+        _freq->onPitchChange(rootNote,pitch);
+        calcText();
+    }
 }
 
 void MWRootNoteSetter::onSetRootNote(int rootNote)
 {
-    if(rootNote == _pitch->getRootNote()) {
+    if(rootNote == _rootNote) {
         if(!_selected) {
             _selected = true;
             emit selectedChanged();
@@ -75,27 +75,28 @@ void MWRootNoteSetter::onSetScale(int rootNote, QList<bool>)
     onSetRootNote(rootNote);
 }
 
-void MWRootNoteSetter::onSymbolsChanged()
+void MWRootNoteSetter::onSymbolsChanged(int noteSymbols)
 {
+    _noteSymbols = noteSymbols;
     calcText();
+}
+
+void MWRootNoteSetter::onShowFreqsChanged(bool showFreqs)
+{
+    _showFreqs = showFreqs;
 }
 
 void MWRootNoteSetter::calcText()
 {
-    _text1 = _freq->getRootNoteString(MGlob::noteSymbols);
+    _text1 = _freq->getRootNoteString(_noteSymbols);
 
-    if(MGlob::showFreqs) {
+    if(_showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
     } else {
         _text2="";
     }
 
     emit textChanged();
-}
-
-int MWRootNoteSetter::pitchId()
-{
-    return _pitch->getRootNote();
 }
 
 void MWRootNoteSetter::onPressed()
@@ -108,13 +109,9 @@ void MWRootNoteSetter::onReleased()
 {
     if(_out && _pressed == 1) {
         _out->noteOff(_vId);
-        emit setRootNote(_pitch->getRootNote());
+        emit setRootNote(_rootNote);
         emit selectedChanged();
     }
     _pressed--;
 }
 
-QObject *MWRootNoteSetter::pitch()
-{
-    return _pitch;
-}

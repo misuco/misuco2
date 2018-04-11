@@ -250,3 +250,8 @@ void MWFaderParamCtl::onUpdatedPitch(int id)
 void MWFaderParamCtl::onReleasedPitch(int)
 {
 }
+
+void MWFaderParamCtl::valueChange()
+{
+    emit controlValueChange(_valueDisplay);
+}

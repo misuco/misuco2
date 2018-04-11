@@ -11,7 +11,8 @@ Item {
         flow: GridView.FlowTopToBottom
 
         delegate: Rectangle {
-            color: modelData.selected ? layout.pitches[modelData.pitchId].color1 : layout.pitches[modelData.pitchId].color0
+            color: modelData.selected ? layout.pitchColors[modelData.rootNote].colorOn
+                                      : layout.pitchColors[modelData.rootNote].colorOff
             width: buttonSize
             height: buttonSize
             radius: buttonRadius

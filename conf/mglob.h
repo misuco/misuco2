@@ -21,8 +21,8 @@
 #ifndef MGLOB_H
 #define MGLOB_H
 
+#include <QObject>
 #include "conf/types.h"
-#include "conf/pitch.h"
 
 class MGlob : public QObject
 {    
@@ -34,11 +34,14 @@ public:
 
     static QString font1;
     static int font1size;
+
+    /*
     static QColor fgcolor;
     static QColor bgcolor;
     static QColor highlightcolor;
 
     static bool bwmode;
+
     static QColor bkeycolor;
     static QColor wkeycolor;
     static QColor hlbkeycolor;
@@ -50,10 +53,13 @@ public:
     static float sOn;
 
     static Pitch * MWPitch[];
-    static MWSound Sound;
-    static MWMicrotune Microtune;
+
     static int noteSymbols;
     static bool showFreqs;
+    */
+
+    static MWSound Sound;
+    static MWMicrotune Microtune;
 
     static int channel;
 

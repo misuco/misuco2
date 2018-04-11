@@ -54,7 +54,6 @@ SOURCES += main.cpp\
     widgets/mwbscaleswitch.cpp \
     widgets/mwheadersetter.cpp \
     widgets/mwfadder.cpp \
-    conf/pitch.cpp \
     widgets/mwfaderpitch.cpp \
     widgets/mwfaderparamctl.cpp \
     widgets/presets/mwsoundpreset.cpp \
@@ -72,7 +71,8 @@ SOURCES += main.cpp\
     comm/mastersender.cpp \
     app/heartbeat.cpp \
     widgets/buttons/buttonbase.cpp \
-    widgets/buttons/openarchive.cpp
+    widgets/buttons/openarchive.cpp \
+    conf/pitchcolor.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -107,7 +107,6 @@ HEADERS  += \
     widgets/mwbscaleswitch.h \
     widgets/mwheadersetter.h \
     widgets/mwfadder.h \
-    conf/pitch.h \
     widgets/mwfaderpitch.h \
     widgets/mwfaderparamctl.h \
     widgets/presets/mwsoundpreset.h \
@@ -125,7 +124,9 @@ HEADERS  += \
     comm/mastersender.h \
     app/heartbeat.h \
     widgets/buttons/buttonbase.h \
-    widgets/buttons/openarchive.h
+    widgets/buttons/openarchive.h \
+    conf/pitchcolor.h \
+    conf/colormacros.h
 
 CONFIG += mobility
 MOBILITY = 

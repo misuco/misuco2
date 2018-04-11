@@ -21,7 +21,7 @@
 #ifndef MWOCTAVERANGER_H
 #define MWOCTAVERANGER_H
 
-#include "conf/mglob.h"
+#include <QObject>
 
 class MWOctaveRanger : public QObject
 {
@@ -30,9 +30,6 @@ class MWOctaveRanger : public QObject
     Q_PROPERTY(int bottom MEMBER bottom NOTIFY bottomChanged)
     Q_PROPERTY(int top MEMBER top NOTIFY topChanged)
     Q_PROPERTY(int nOctaves MEMBER noct CONSTANT)
-    Q_PROPERTY(QColor fgColor MEMBER fgColor CONSTANT)
-    Q_PROPERTY(QColor bgColor MEMBER bgColor CONSTANT)
-    Q_PROPERTY(QColor hlColor MEMBER hlColor CONSTANT)
 
 public:
     MWOctaveRanger(QObject *parent);
@@ -62,10 +59,6 @@ private:
     int grabedTopTouchId;
     bool grabedBot;
     int grabedBotTouchId;
-
-    QColor bgColor;
-    QColor fgColor;
-    QColor hlColor;
 };
 
 #endif // MWOCTAVERANGER_H

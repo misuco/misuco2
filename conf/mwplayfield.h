@@ -32,6 +32,9 @@ public:
 
     void calcColor();
 
+public slots:
+    void onBwModeChanged(bool bwMode);
+
 signals:
     void colorChanged();
     void textChanged();
@@ -45,6 +48,10 @@ private:
     QString text1;
     QString text2;
     QString text3;
+
+    bool _bwmode;
+    int _noteSymbols;
+    bool _showFreqs;
 };
 
 #endif // MWPLAYFIELD_H

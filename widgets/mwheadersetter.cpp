@@ -181,18 +181,19 @@ void MWHeaderSetter::onPressed(int id)
             emit toggleMenu();
             break;
         case 11:
-            MGlob::bwmode=!MGlob::bwmode;
-            _state=MGlob::bwmode;
-            emit toggleBW();
+            _state=!_state;
+            emit toggleBW(_state);
             break;
         case 12:
             emit togglePresets();
             break;
+            /*
         case 14:
             MGlob::noteSymbols++;
             if(MGlob::noteSymbols>3) MGlob::noteSymbols=0;
             emit scaleupdate();
             break;
+            */
         case 16:
             MGlob::sendCC1 = ! MGlob::sendCC1;
             _state = MGlob::sendCC1;
@@ -212,9 +213,8 @@ void MWHeaderSetter::onPressed(int id)
             */
             break;
         case 22:
-            MGlob::showFreqs=!MGlob::showFreqs;
-            _state = MGlob::showFreqs;
-            emit toggleShowFreqs();
+            _state = !_state;
+            emit toggleShowFreqs(_state);
             break;
         case 23:
             emit octUp();

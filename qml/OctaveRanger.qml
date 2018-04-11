@@ -10,7 +10,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: controller.bgColor
+        color: bgColor
         radius: buttonRadius
         border.width: borderWidth
         border.color: borderColor
@@ -18,7 +18,7 @@ Item {
         Rectangle {
             x: controller.bottom * segWidth
             y: 0
-            color: controller.hlColor
+            color: hlColor
             width: (controller.top - controller.bottom + 1) * segWidth
             height: parent.height
             radius: buttonRadius
@@ -37,7 +37,7 @@ Item {
                     Text {
                         anchors.fill: parent
                         text: index
-                        color: controller.fgColor;
+                        color: fgColor
                         font.pixelSize: fontSize1
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignTop

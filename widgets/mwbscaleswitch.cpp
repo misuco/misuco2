@@ -22,14 +22,18 @@
 #include "comm/senderdebug.h"
 #include <QDebug>
 
-MWBScaleSwitch::MWBScaleSwitch(int i, MasterSender *ms, QObject * parent) : QObject(parent),
-    _out(ms)
+MWBScaleSwitch::MWBScaleSwitch(int bscaleId, MasterSender *ms, QObject * parent) : QObject(parent),
+    _out(ms),
+    _rootNote(0),
+    _value(false),
+    _noteSymbols(0),
+    _showFreqs(false)
 {
     //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
-    _freq=new FreqTriple(MGlob::MWPitch[i],this);
+    _freq=new FreqTriple(bscaleId,this);
     _value=false;
     _pressed=0;
-    _bscaleId=i;
+    _bscaleId=bscaleId;
     _freq->setOct(4);
     _vid=0;
     _oct=6;
@@ -43,9 +47,9 @@ MWBScaleSwitch::~MWBScaleSwitch()
 
 void MWBScaleSwitch::calcText()
 {
-    _text1=_freq->getRootNoteString(MGlob::noteSymbols);
+    _text1=_freq->getRootNoteString(_noteSymbols);
 
-    if(MGlob::showFreqs) {
+    if(_showFreqs) {
         _text2.sprintf("%5.1f",_freq->getFreq());
     } else {
         _text2="";
@@ -85,22 +89,24 @@ void MWBScaleSwitch::onReleased()
 
 void MWBScaleSwitch::onSetRootNote(int rootNote)
 {
-    int newrootNote=rootNote+_bscaleId;
-    if(newrootNote>11) {
-        newrootNote-=12;
+    _rootNote=rootNote+_bscaleId;
+    if(_rootNote>BSCALE_SIZE) {
+        _rootNote-=12;
         _higherOct=1;
     } else {
         _higherOct=0;
     }
 
-    //if(newrootNote != _freq->getPitch()) {
-        _freq->setOct(_oct+_higherOct);
-        _freq->setRootNote(MGlob::MWPitch[newrootNote]);
-        emit pitchIdChanged();
-        calcText();
-    //}
-
+    _freq->setOct(_oct+_higherOct);
+    _freq->setRootNote(_rootNote);
+    emit rootNoteChanged();
+    calcText();
     //qDebug() << "MWBScaleSwitch::setRootNote new: " << newrootNote << " bscaleId " << _bscaleId << " rootNote " << rootNote;
+}
+
+void MWBScaleSwitch::onPitchChange(int rootNote, int pitch)
+{
+    _freq->onPitchChange(rootNote,pitch);
 }
 
 void MWBScaleSwitch::setOctMid(int o)

@@ -19,21 +19,15 @@
  */
 
 #include "mwoctaveranger.h"
-#include <QDebug>
 
 MWOctaveRanger::MWOctaveRanger(QObject *parent) : QObject(parent)
 {
-    //qDebug() << "MWOctaveRanger::MWOctaveRanger()";
     top=7;
     mid=6;
     bottom=6;
     noct=10;
     grabedTop=false;
     grabedBot=false;
-
-    fgColor = MGlob::fgcolor;
-    bgColor = MGlob::bgcolor;
-    hlColor = MGlob::highlightcolor;
 }
 
 MWOctaveRanger::~MWOctaveRanger()

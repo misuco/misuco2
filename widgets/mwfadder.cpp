@@ -27,29 +27,29 @@ MWFadder::MWFadder(QObject *parent) : QObject(parent)
     orient=vertical;
     value=0;
     inverted=false;
-    valueDisplay=value;
+    _valueDisplay=value;
     pressed=0;
     setMinValue(-100);
     setMaxValue(100);
     fineness=5;
     height=500;
-    knobSize=height/8;
+    _knobSize=height/8;
     calcGeo();
 }
 
 void MWFadder::onPressed(int id, int x, int y, int h, int w)
 {
     height = h;
-    knobSize = w;
+    _knobSize = w;
     if(pressed<2) {
         pressedTouchId = id;
         xTouchBegin=x;
         yTouchBegin=y;
         valTouchBegin=value;
 
-        float yRelative1 = (float)(y-knobSize) / (float)(height-knobSize);
-        float yRelative2 = (float)(y) / (float)(height-knobSize);
-        bool fineModeAvailable = (float)valRange/(float)(height-knobSize) > 1.0/(float)fineness;
+        float yRelative1 = (float)(y-_knobSize) / (float)(height-_knobSize);
+        float yRelative2 = (float)(y) / (float)(height-_knobSize);
+        bool fineModeAvailable = (float)valRange/(float)(height-_knobSize) > 1.0/(float)fineness;
         if((_faderY >= yRelative1 && _faderY <= yRelative2) || !fineModeAvailable) {
             fadeMode=coarse;
             //qDebug() << "coarse fade";
@@ -57,7 +57,7 @@ void MWFadder::onPressed(int id, int x, int y, int h, int w)
             fadeMode=fine;
             //qDebug() << "fine fade";
         }
-        emit valueChange(valueDisplay);
+        valueChange();
     }
     pressed++;
 }
@@ -65,22 +65,22 @@ void MWFadder::onPressed(int id, int x, int y, int h, int w)
 void MWFadder::onUpdated(int id, int y, int h, int w)
 {
     height = h;
-    knobSize = w;
+    _knobSize = w;
     if(id==pressedTouchId) {
         if(vertical==orient) {
             if(coarse==fadeMode) {
-                value=valTouchBegin+(y-yTouchBegin)*valRange/(height-knobSize);
+                value=valTouchBegin+(y-yTouchBegin)*valRange/(height-_knobSize);
             } else {
                 value=valTouchBegin+(y-yTouchBegin)/fineness;
             }
             if(value>maxValue) value=maxValue;
             if(value<minValue) value=minValue;
             if(inverted) {
-                valueDisplay = maxValue - value;
+                _valueDisplay = maxValue - value;
             } else {
-                valueDisplay = value;
+                _valueDisplay = value;
             }
-            emit valueChange(valueDisplay);
+            valueChange();
             calcGeo();
         }
     }
@@ -99,13 +99,18 @@ void MWFadder::onResize(int h)
 
 int MWFadder::getValue()
 {
-    return valueDisplay;
+    return _valueDisplay;
+}
+
+void MWFadder::valueChange()
+{
+
 }
 
 void MWFadder::calcGeo()
 {
     _faderY=((float)value-(float)minValue)/(float)valRange;
-    _text1.sprintf("%d",valueDisplay);
+    _text1.sprintf("%d",_valueDisplay);
     emit geoChanged();
 }
 
@@ -129,13 +134,13 @@ void MWFadder::setValue(int v)
 {
     if(inverted) {
         value = maxValue - v;
-        valueDisplay = v;
+        _valueDisplay = v;
     } else {
-        valueDisplay = v;
+        _valueDisplay = v;
         value = v;
     }
     calcGeo();
-    emit valueChange(valueDisplay);
+    valueChange();
 }
 
 void MWFadder::setMinValue(int value)

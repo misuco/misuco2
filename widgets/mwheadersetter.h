@@ -52,10 +52,10 @@ signals:
     void setBendVertBot(int b);
     void togglePresets();
     void toggleMenu();
-    void toggleBW();
+    void toggleBW(bool);
     void scaleupdate();
     void toggleSender(int i);
-    void toggleShowFreqs();
+    void toggleShowFreqs(bool state);
     void octUp();
     void octDown();
 

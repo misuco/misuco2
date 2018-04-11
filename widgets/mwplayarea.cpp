@@ -27,8 +27,7 @@
 
 MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     out(ms),
-    pcalc(0,this),
-    fcalc(&pcalc,this)
+    fcalc(0,this)
 {
     bendHoriz=false;
     bendVertTop=0;
@@ -50,8 +49,8 @@ MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
 
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
-            fields[r][c].f1=new FreqTriple(MGlob::MWPitch[c%(BSCALE_SIZE+1)],this);
-            fields[r][c].f2=new FreqTriple(MGlob::MWPitch[c%(BSCALE_SIZE+1)],this);
+            fields[r][c].f1=new FreqTriple(c%(BSCALE_SIZE+1),this);
+            fields[r][c].f2=new FreqTriple(c%(BSCALE_SIZE+1),this);
         }
     }
 
@@ -105,25 +104,25 @@ void MWPlayArea::config()
     emit playRowsChanged();
 }
 
-void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
+void MWPlayArea::setColumn(int col, int midinote, int pitch) {
     //qDebug() << "setColumn " << col << " midinote " << midinote << " rootNote " << rootNote;
     rows=0;
 
     float huePerNote = 1.0/12.0;
     if(bendVertTop!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MGlob::MWPitch[rootNote]);
+        fields[rows][col].f1->setMidinote(midinote,pitch);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertTop;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MGlob::MWPitch[fields[rows][col-2].f1->getRootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),fields[rows][col-2].f1->getPitch());
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MGlob::MWPitch[rootNote]);
+            fields[rows][col-1].f2->setMidinote(midinote,pitch);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertTop;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -132,30 +131,30 @@ void MWPlayArea::setColumn(int col, int midinote, int rootNote) {
         rows++;
     }
     fields[rows][col].type=NORMAL;
-    fields[rows][col].f1->setMidinote(midinote,MGlob::MWPitch[rootNote]);
+    fields[rows][col].f1->setMidinote(midinote,pitch);
     //qDebug() << "set f1 " << midinote << " " << fields[rows][col].f1;
     fields[rows][col].pressed=0;
     if(col>1 && bendHoriz) {
         fields[rows][col-1].type=BEND_HORIZ;
-        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MGlob::MWPitch[fields[rows][col-2].f1->getRootNote()]);
-        fields[rows][col-1].f2->setMidinote(midinote,MGlob::MWPitch[rootNote]);
+        fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),fields[rows][col-2].f1->getPitch());
+        fields[rows][col-1].f2->setMidinote(midinote,pitch);
         fields[rows][col-1].pressed=0;
     }
     rows++;
     if(bendVertBot!=0) {
         fields[rows][col].type=BEND_VERT;
-        fields[rows][col].f1->setMidinote(midinote,MGlob::MWPitch[rootNote]);
+        fields[rows][col].f1->setMidinote(midinote,pitch);
         fields[rows][col].hue1bent=fields[rows][col].f1->getHue()+huePerNote*(float)bendVertBot;
         if(fields[rows][col].hue1bent>1) fields[rows][col].hue1bent-=1;
         if(fields[rows][col].hue1bent<0) fields[rows][col].hue1bent+=1;
         fields[rows][col].pressed=0;
         if(col>1 && bendHoriz) {
             fields[rows][col-1].type=BEND_VERT_HORIZ;
-            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),MGlob::MWPitch[fields[rows][col-2].f1->getRootNote()]);
+            fields[rows][col-1].f1->setMidinote(fields[rows][col-2].f1->getMidinote(),fields[rows][col-2].f1->getPitch());
             fields[rows][col-1].hue1bent=fields[rows][col-1].f1->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue1bent>1) fields[rows][col-1].hue1bent-=1;
             if(fields[rows][col-1].hue1bent<0) fields[rows][col-1].hue1bent+=1;
-            fields[rows][col-1].f2->setMidinote(midinote,MGlob::MWPitch[rootNote]);
+            fields[rows][col-1].f2->setMidinote(midinote,pitch);
             fields[rows][col-1].hue2bent=fields[rows][col-1].f2->getHue()+huePerNote*(float)bendVertBot;
             if(fields[rows][col-1].hue2bent>1) fields[rows][col-1].hue2bent-=1;
             if(fields[rows][col-1].hue2bent<0) fields[rows][col-1].hue2bent+=1;
@@ -245,8 +244,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             pitchdiff+=bendVertBot*100*yrel;
         }
         midinote=round(pitchdiff/100);
-        pcalc.setPitch(pitchdiff-midinote*100);
-        fcalc.setMidinote(midinote,&pcalc);
+        //pcalc.setPitch(pitchdiff-midinote*100);
+        fcalc.setMidinote(midinote,pitchdiff-midinote*100);
         freq=fcalc.getFreq();
         break;
 
@@ -261,8 +260,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
         pitchdiff+=pf->f1->getMidinote()*100;
         midinote=round(pitchdiff/100);
         pitch = pitchdiff-midinote*100;
-        pcalc.setPitch(pitch);
-        fcalc.setMidinote(midinote,&pcalc);
+        //pcalc.setPitch(pitch);
+        fcalc.setMidinote(midinote,pitch);
         freq=fcalc.getFreq();
         //qDebug() << "midinote " << midinote << " pitch " << pitch << " freq " << freq  << " bendVert " << bendVertTop << " " << bendVertBot << " pitchdiff " << pitchdiff;
         break;
@@ -349,6 +348,16 @@ void MWPlayArea::onSetScale(int rootNote, QList<bool> scale)
     _rootNote=rootNote;
     _bscale=scale;
     config();
+}
+
+void MWPlayArea::onPitchChange(int rootNote, int pitch)
+{
+    for(int col=0;col<MAX_COLS;col++) {
+        for(int row=0;row<MAX_ROWS;row++) {
+            fields[row][col].f1->onPitchChange(rootNote,pitch);
+            fields[row][col].f2->onPitchChange(rootNote,pitch);
+        }
+    }
 }
 
 void MWPlayArea::setBendHori(bool b)
@@ -441,15 +450,4 @@ QList<QObject *> MWPlayArea::row2()
         colsList.append(&fields[2][j]);
     }
     return colsList;
-}
-
-
-void MWPlayArea::onToggleBW()
-{
-    config();
-}
-
-void MWPlayArea::onSymbolsChanged()
-{
-    config();
 }

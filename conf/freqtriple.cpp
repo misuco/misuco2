@@ -19,12 +19,17 @@
  */
 
 #include "freqtriple.h"
+#include "types.h"
 #include <math.h>
-#include <QDebug>
 
-FreqTriple::FreqTriple(Pitch *p, QObject *parent) :QObject(parent)
+FreqTriple::FreqTriple(int rootNote, QObject *parent) :QObject(parent),
+    _rootNote(rootNote),
+    _pitch(0),
+    _oct(6)
 {
-    pitch=p;
+    for(int i=0;i<BSCALE_SIZE+1;i++) {
+        _pitchTable.append(0);
+    }
     initFreq();
 }
 
@@ -35,60 +40,62 @@ FreqTriple::~FreqTriple()
 
 float FreqTriple::getFreq() const
 {
-    return freq;
+    return _freq;
 }
 
 int FreqTriple::getMidinote() const
 {
-    return midinote;
+    return _midinote;
 }
 
-void FreqTriple::setMidinote(int m, Pitch * p)
+void FreqTriple::setMidinote(int midinote, int pitch)
 {
-    midinote = m;
-    pitch = p;
-    freq = calcFreq(midinote,pitch->getPitch());
-    oct = calcOctFromMidinote(midinote);
-    //qDebug() << "FreqTriple::setMidinote " << midinote << " freq " << freq << " hue " << hue;
+    _midinote = midinote;
+    _rootNote = calcRootNoteFromMidinote(midinote);
+    _pitch = pitch;
+    _freq = calcFreq(_midinote,pitch);
+    _oct = calcOctFromMidinote(_midinote);
+    calcColor();
 }
 
 void FreqTriple::initFreq() {
-    midinote = pitch->getRootNote();
-    freq = calcFreq(midinote,pitch->getPitch());
-    oct = calcOctFromMidinote(midinote);
+    _midinote = _rootNote + _oct * 12;
+    _freq = calcFreq(_midinote,_pitch);
+    //_oct = calcOctFromMidinote(_midinote);
+    calcColor();
 }
 
 int FreqTriple::getPitch() const
 {
-    return pitch->getPitch();
+    return _pitch;
 }
 
 void FreqTriple::setPitch(int value)
 {
-    pitch->setPitch(value);
-    initFreq();
+    _pitch=value;
+    _freq = calcFreq(_midinote,_pitch);
+    calcColor();
 }
 
 float FreqTriple::getHue() const
 {
-    return pitch->getHue();
+    return _hue;
 }
 
 bool FreqTriple::getBW() const
 {
-    return pitch->getBW();
+    return _pianoWhite;
 }
 
 int FreqTriple::getRootNote() const
 {
-    return pitch->getRootNote();
+    return _rootNote;
 }
-
 
 QString FreqTriple::getRootNoteString(int lang) const
 {
     if(lang==1) {
-        switch(pitch->getRootNote()) {
+        switch(_rootNote) {
                 case 0: return "सा";
                 break;
                 case 1: return "<u>रे</u>";
@@ -115,7 +122,7 @@ QString FreqTriple::getRootNoteString(int lang) const
                 break;
         }
     } else if(lang==2) {
-        switch(pitch->getRootNote()) {
+        switch(_rootNote) {
                 case 0: return "DO";
                 break;
                 case 1: return "<u>RE</u>";
@@ -142,7 +149,7 @@ QString FreqTriple::getRootNoteString(int lang) const
                 break;
         }
     } else if(lang==3) {
-        switch(pitch->getRootNote()) {
+        switch(_rootNote) {
                 case 0: return "SA";
                 break;
                 case 1: return "<u>RE</u>";
@@ -169,7 +176,7 @@ QString FreqTriple::getRootNoteString(int lang) const
                 break;
         }
     } else if(lang==0) {
-        switch(pitch->getRootNote()) {
+        switch(_rootNote) {
         case 0: return "C";
         break;
         case 1: return "<u>D</u>";
@@ -226,30 +233,35 @@ QString FreqTriple::getRootNoteString(int lang) const
     */
 }
 
-
-void FreqTriple::setRootNote(Pitch * p)
+void FreqTriple::setRootNote(int rootNote)
 {
-    pitch = p;
-    midinote = pitch->getRootNote()+oct*12;
-    freq = calcFreq(midinote,pitch->getPitch());
-    //qDebug() << "FreqTriple::setRootNote midinote: " << midinote << " freq: " << freq;
+    _pitch = _pitchTable.at(rootNote);
+    _rootNote = rootNote;
+    _midinote = rootNote+_oct*12;
+    _freq = calcFreq(_midinote,_pitch);
+    calcColor();
 }
 
 int FreqTriple::getOct() const
 {
-    return oct;
+    return _oct;
 }
 
 void FreqTriple::setOct(int value)
 {
-    oct = value;
-    midinote = pitch->getRootNote()+oct*12;
-    freq = calcFreq(midinote,pitch->getPitch());
+    _oct = value;
+    _midinote = _rootNote+_oct*12;
+    _freq = calcFreq(_midinote,_pitch);
 }
 
-void FreqTriple::pitchChange()
+void FreqTriple::onPitchChange(int rootNote, int value)
 {
-    freq=calcFreq(midinote,pitch->getPitch());
+    _pitchTable[rootNote] = value;
+    if(rootNote == _rootNote) {
+        _pitch=value;
+        _freq = calcFreq(_midinote,_pitch);
+        calcColor();
+    }
 }
 
 float FreqTriple::calcFreq(int midinote, int pitch) {
@@ -270,6 +282,34 @@ int FreqTriple::calcOctFromMidinote(int m) {
     return m/12;
 }
 
-int FreqTriple::calcrootNoteFromMidinote(int m) {
+int FreqTriple::calcRootNoteFromMidinote(int m) {
     return m%12;
+}
+
+void FreqTriple::calcColor()
+{
+    _pianoWhite = true;
+    int bn = _rootNote;
+    if(bn == 1 || bn == 3 || bn == 6 || bn == 8 || bn == 10 ) _pianoWhite = false;
+
+    _hue = (float)_rootNote / 12 + (float)_pitch / 2400;
+    if(_hue>1) _hue -=1;
+    if(_hue<0) _hue +=1;
+
+    /*
+    if(_bwMode) {
+        if(_bw) {
+            _color0 = MGlob::wkeycolor;
+            _color1 = MGlob::hlwkeycolor;
+        } else {
+            _color0 = MGlob::bkeycolor;
+            _color1 = MGlob::hlbkeycolor;
+        }
+    } else {
+        _color0 = QColor::fromHslF(_hue,MGlob::sOff,MGlob::lOff);
+        _color1 = QColor::fromHslF(_hue,MGlob::sOn,MGlob::lOn);
+    }
+    */
+
+    emit colorChanged();
 }

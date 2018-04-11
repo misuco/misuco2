@@ -102,7 +102,7 @@ class Misuco2 : public QObject
 
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> pitches READ pitches CONSTANT)
+    Q_PROPERTY(QList<QObject*> pitchColors MEMBER _pitchColors CONSTANT)
 
     Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
 
@@ -110,7 +110,6 @@ public:
     explicit Misuco2(QObject *parent = 0);
     ~Misuco2();
 
-    QList<QObject*> pitches();
     QList<QObject*> confPitchFaders();
 
 signals:
@@ -130,12 +129,10 @@ private slots:
     void currentMainView(int id);
     void togglePresets();
     void toggleMenu();
-    void setSound(MWSound * s);
-    void setMicrotune(MWMicrotune*m);
+    void setSound(MWSound* s);
+    void setMicrotune(MWMicrotune* m);
     void onChannelChange(int v);
     void onToggleSender(int v);
-    void onSymbolsChange(int v);
-    void onShowFreqsChange();
     void onSoundChanged(int);
     void onGameStarted();
 
@@ -147,6 +144,7 @@ private:
     QXmlStreamWriter xml;
     QXmlStreamReader xmlr;
 
+    QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _BScaleSwitch;
     MWOctaveRanger * _OctaveRanger;

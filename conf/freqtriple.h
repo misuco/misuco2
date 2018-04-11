@@ -21,23 +21,24 @@
 #ifndef FREQTRIPLE_H
 #define FREQTRIPLE_H
 
-#include "pitch.h"
-//#include "color.h"
+#include <QObject>
+#include <QColor>
 
 class FreqTriple: public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject * pitch MEMBER pitch CONSTANT)
+    Q_PROPERTY(float hue MEMBER _hue NOTIFY colorChanged)
+    Q_PROPERTY(bool pianoWhite MEMBER _pianoWhite NOTIFY colorChanged)
 
 public:
-    explicit FreqTriple(Pitch *p, QObject *parent = 0);
+    explicit FreqTriple(int rootNote, QObject *parent = 0);
     ~FreqTriple();
 
     float getFreq() const;
 
     int getMidinote() const;
-    void setMidinote(int m, Pitch *p);
+    void setMidinote(int midinote, int pitch);
 
     int getPitch() const;
     void setPitch(int value);
@@ -46,7 +47,7 @@ public:
     bool getBW() const;
 
     int getRootNote() const;
-    void setRootNote(Pitch *p);
+    void setRootNote(int rootNote);
 
     int getOct() const;
     void setOct(int value);
@@ -54,25 +55,35 @@ public:
     QString getRootNoteString(int lang) const;
 
 signals:
-    void hueChanged();
+    void colorChanged();
 
 public slots:
-    void pitchChange();
+    void onPitchChange(int rootNote, int value);
 
 private:
-    const float freq_a=440;
+    // calculation base
+    float _freq_a=440;
 
-    float freq;
-    int midinote;
-    Pitch * pitch;
-    int oct;
+    // frequency determining parameters
+    float       _freq;
+    int         _midinote;
+    int         _rootNote;
+    int         _pitch;
+    int         _oct;
+    QList<int>  _pitchTable;
 
-    float calcFreq(int midinote, int pitch);
-    float calcMidi2Fequal(int x);
+    // color parameters
+    float _hue;
+    bool _pianoWhite;
+
+    float calcFreq(int _midinote, int _pitch);
+    float calcMidi2Fequal(int x);    
+
     double Log2(double n);
     int calcOctFromMidinote(int m);
-    int calcrootNoteFromMidinote(int m);
+    int calcRootNoteFromMidinote(int m);
     void initFreq();
+    void calcColor();
 };
 
 #endif // FREQTRIPLE_H

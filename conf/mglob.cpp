@@ -24,13 +24,16 @@
 #include <QDateTime>
 #include <QDebug>
 
-QColor MGlob::fgcolor(QColor::fromRgb(200,200,200));
-QColor MGlob::bgcolor(QColor::fromRgb(25,25,25));
-QColor MGlob::highlightcolor("Red");
 QString MGlob::font1("Sans");
 int MGlob::font1size(10);
 
+/*
 bool MGlob::bwmode = false;
+
+QColor MGlob::fgcolor(QColor::fromRgb(200,200,200));
+QColor MGlob::bgcolor(QColor::fromRgb(25,25,25));
+QColor MGlob::highlightcolor("Red");
+
 QColor MGlob::bkeycolor("Black");
 QColor MGlob::wkeycolor("White");
 QColor MGlob::hlbkeycolor(QColor::fromHsl(1,200,20));
@@ -43,11 +46,14 @@ float MGlob::sOn = 0.8;
 
 Pitch * MGlob::MWPitch[BSCALE_SIZE+1];
 
+int MGlob::noteSymbols = 0;
+bool MGlob::showFreqs = false;
+
+*/
+
 MWSound MGlob::Sound;
 MWMicrotune MGlob::Microtune;
 
-int MGlob::noteSymbols = 0;
-bool MGlob::showFreqs = false;
 
 int MGlob::channel = 0;
 
