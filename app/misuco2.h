@@ -21,9 +21,6 @@
 #ifndef WLAYOUT_H
 #define WLAYOUT_H
 
-#include <QFile>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
 #include "widgets/mwplayarea.h"
 #include "widgets/mwrootnotesetter.h"
 #include "widgets/mwoctaveranger.h"
@@ -41,9 +38,12 @@
 #include "widgets/mwgame.h"
 #include "conf/purchases.h"
 #include "heartbeat.h"
+#include "xmlloader.h"
 
 class Misuco2 : public QObject
 {
+    friend class XmlLoader;
+
     Q_OBJECT
 
     Q_PROPERTY(QList<QObject*> rootNoteSetter MEMBER _rootNoteSetter CONSTANT)
@@ -138,11 +138,10 @@ private slots:
 
     void setOctConf(int bot, int top);
 
+protected:
+
 private:
     MasterSender * out;
-
-    QXmlStreamWriter xml;
-    QXmlStreamReader xmlr;
 
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
@@ -155,7 +154,7 @@ private:
     QList<QObject*> _faderMicrotune;
 
     // main area widgets
-    QObject * M[4];
+    //QObject * M[4];
 
     // right menu
     QList<QObject *> _menu;
@@ -205,16 +204,8 @@ private:
     int _botOct;
     int _topOct;
 
-    QString _configPath;
-
     void recalcMainView();
-    void readXml(QString filetype);
-    void writeXml(QString filetype);
     void updateMenuButtonState();
-    void decodeConfigRecord();
-    void decodeScaleRecord();
-    void decodeSynthRecord();
-    void decodeTuneRecord();
 
 };
 
