@@ -17,8 +17,8 @@ Item {
             Loader {
                 width: buttonSize
                 height: parent.height
-                property var faderColor: modelData.selected ? layout.pitchColors[modelData.pitchId].colorOn
-                                                            : layout.pitchColors[modelData.pitchId].colorOff
+                property var faderColor: modelData.selected ? layout.pitchColors[modelData.rootNote].colorOn
+                                                            : layout.pitchColors[modelData.rootNote].colorOff
                 source: "Fader.qml"
             }
         }

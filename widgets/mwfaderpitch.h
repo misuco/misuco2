@@ -30,7 +30,7 @@ class MWFaderPitch : public MWFadder
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject * freq MEMBER _freq CONSTANT)
+    Q_PROPERTY(int rootNote MEMBER _rootNote CONSTANT)
     Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
 
 public:
@@ -58,6 +58,7 @@ protected:
 private:
     MasterSender * _out;
     FreqTriple * _freq;
+    int _rootNote;
 
     int vId;
     int eventId;

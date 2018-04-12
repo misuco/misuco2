@@ -3,6 +3,7 @@
 
 PitchColor::PitchColor(int rootNote, QObject *parent) : QObject(parent),
     _rootNote(rootNote),
+    _bwMode(false),
     _pianoWhite(true)
 {
     if( _rootNote == 1 ||

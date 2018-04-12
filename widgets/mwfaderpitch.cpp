@@ -24,6 +24,7 @@
 MWFaderPitch::MWFaderPitch(int rootNote, MasterSender *ms, QObject *parent) : MWFadder(parent),
     _out(ms)
 {
+    _rootNote = rootNote;
     _freq = new FreqTriple(rootNote,this);
     _freq->setOct(4);
 }
@@ -32,13 +33,6 @@ MWFaderPitch::~MWFaderPitch()
 {
     _freq->deleteLater();
 }
-
-/*
-int MWFaderPitch::pitchId()
-{
-    return _freq->getRootNote();
-}
-*/
 
 bool MWFaderPitch::selected()
 {
@@ -59,7 +53,7 @@ void MWFaderPitch::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        MGlob::Microtune.tuning[_freq->getRootNote()] = getValue();
+        //MGlob::Microtune.tuning[_freq->getRootNote()] = getValue();
         _out->pitch(vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
     }
 }
@@ -85,6 +79,7 @@ void MWFaderPitch::onPitchChange(int rootNote, int value)
 
 void MWFaderPitch::valueChange()
 {
+    _freq->onPitchChange(_rootNote, _valueDisplay);
     emit pitchChange(_freq->getRootNote(),_valueDisplay);
 }
 
