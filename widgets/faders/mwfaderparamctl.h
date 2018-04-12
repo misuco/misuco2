@@ -18,50 +18,41 @@
  *
  */
 
-#ifndef MWFADERPITCH_H
-#define MWFADERPITCH_H
+#ifndef MWFaderParamCtl_H
+#define MWFaderParamCtl_H
 
 #include <QObject>
-#include <widgets/mwfadder.h>
-#include <conf/freqtriple.h>
+#include "mwfader.h"
 #include "comm/mastersender.h"
 
-class MWFaderPitch : public MWFadder
+class MWFaderParamCtl : public MWFader
 {
     Q_OBJECT
 
-    Q_PROPERTY(int rootNote MEMBER _rootNote CONSTANT)
-    Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
-
 public:
-    MWFaderPitch(int rootNote, MasterSender * ms, QObject *parent);
-    ~MWFaderPitch();
+    MWFaderParamCtl(int cc, MasterSender * ms, QObject *parent);
+    ~MWFaderParamCtl();
 
-    bool selected();
+    void setValue(int v);
 
     Q_INVOKABLE void onPressedPitch(int id);
     Q_INVOKABLE void onUpdatedPitch(int id);
     Q_INVOKABLE void onReleasedPitch(int id);
 
 signals:
-    void pitchChange(int rootNote, int pitch);
-    // QML
-    void selectedChanged();
-
-public slots:
-    void setOctMid(int o);
-    void onPitchChange(int rootNote, int value);
+    void controlValueChange(int value);
 
 protected:
     void valueChange() override;
 
 private:
     MasterSender * _out;
-    FreqTriple * _freq;
-    int _rootNote;
 
-    int vId;
-    int eventId;
+    int _cc;
+    int _pressed;
+    int _eventId;
+
+    void propagateValueChange();
 };
 
-#endif // MWFADERPITCH_H
+#endif // MWFaderParamCtl_H

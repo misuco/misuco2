@@ -21,7 +21,7 @@
 #include "mwfaderpitch.h"
 #include <QDebug>
 
-MWFaderPitch::MWFaderPitch(int rootNote, MasterSender *ms, QObject *parent) : MWFadder(parent),
+MWFaderPitch::MWFaderPitch(int rootNote, MasterSender *ms, QObject *parent) : MWFader(parent),
     _out(ms)
 {
     _rootNote = rootNote;
@@ -53,7 +53,6 @@ void MWFaderPitch::onUpdatedPitch(int id)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
     if(id == eventId) {
-        //MGlob::Microtune.tuning[_freq->getRootNote()] = getValue();
         _out->pitch(vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
     }
 }

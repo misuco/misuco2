@@ -53,9 +53,8 @@ SOURCES += main.cpp\
     widgets/mwoctaveranger.cpp \
     widgets/mwbscaleswitch.cpp \
     widgets/mwheadersetter.cpp \
-    widgets/mwfadder.cpp \
-    widgets/mwfaderpitch.cpp \
-    widgets/mwfaderparamctl.cpp \
+    widgets/faders/mwfaderpitch.cpp \
+    widgets/faders/mwfaderparamctl.cpp \
     widgets/presets/mwsoundpreset.cpp \
     comm/senderoscmidigeneric.cpp \
     comm/senderoscpuredata.cpp \
@@ -72,7 +71,8 @@ SOURCES += main.cpp\
     app/heartbeat.cpp \
     widgets/buttons/buttonbase.cpp \
     widgets/buttons/openarchive.cpp \
-    conf/pitchcolor.cpp
+    conf/pitchcolor.cpp \
+    widgets/faders/mwfader.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -106,9 +106,8 @@ HEADERS  += \
     widgets/mwoctaveranger.h \
     widgets/mwbscaleswitch.h \
     widgets/mwheadersetter.h \
-    widgets/mwfadder.h \
-    widgets/mwfaderpitch.h \
-    widgets/mwfaderparamctl.h \
+    widgets/faders/mwfaderpitch.h \
+    widgets/faders/mwfaderparamctl.h \
     widgets/presets/mwsoundpreset.h \
     comm/senderoscmidigeneric.h \
     comm/senderoscpuredata.h \
@@ -126,7 +125,8 @@ HEADERS  += \
     widgets/buttons/buttonbase.h \
     widgets/buttons/openarchive.h \
     conf/pitchcolor.h \
-    conf/colormacros.h
+    conf/colormacros.h \
+    widgets/faders/mwfader.h
 
 CONFIG += mobility
 MOBILITY = 

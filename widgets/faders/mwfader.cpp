@@ -18,26 +18,12 @@
  *
  */
 
-#include "mwfadder.h"
+#include "mwfader.h"
 #include <QDebug>
 
-MWFadder::MWFadder(QObject *parent) : QObject(parent)
-{
-    //qDebug() << "MWFadder::MWFadder";
-    orient=vertical;
-    value=0;
-    inverted=false;
-    _valueDisplay=value;
-    pressed=0;
-    setMinValue(-100);
-    setMaxValue(100);
-    fineness=5;
-    height=500;
-    _knobSize=height/8;
-    calcGeo();
-}
 
-void MWFadder::onPressed(int id, int x, int y, int h, int w)
+
+void MWFader::onPressed(int id, int x, int y, int h, int w)
 {
     height = h;
     _knobSize = w;
@@ -62,7 +48,7 @@ void MWFadder::onPressed(int id, int x, int y, int h, int w)
     pressed++;
 }
 
-void MWFadder::onUpdated(int id, int y, int h, int w)
+void MWFader::onUpdated(int id, int y, int h, int w)
 {
     height = h;
     _knobSize = w;
@@ -86,42 +72,42 @@ void MWFadder::onUpdated(int id, int y, int h, int w)
     }
 }
 
-void MWFadder::onReleased()
+void MWFader::onReleased()
 {
     pressed--;
 }
 
-void MWFadder::onResize(int h)
+void MWFader::onResize(int h)
 {
     height = h;
     calcGeo();
 }
 
-int MWFadder::getValue()
+int MWFader::getValue()
 {
     return _valueDisplay;
 }
 
-void MWFadder::valueChange()
+void MWFader::valueChange()
 {
 
 }
 
-void MWFadder::calcGeo()
+void MWFader::calcGeo()
 {
     _faderY=((float)value-(float)minValue)/(float)valRange;
     _text1.sprintf("%d",_valueDisplay);
     emit geoChanged();
 }
 
-void MWFadder::setMaxValue(int value)
+void MWFader::setMaxValue(int value)
 {
     maxValue = value;
     valRange=maxValue-minValue;
     calcGeo();
 }
 
-void MWFadder::setInverted(bool v)
+void MWFader::setInverted(bool v)
 {
     inverted = v;
     if(inverted) {
@@ -130,7 +116,7 @@ void MWFadder::setInverted(bool v)
     calcGeo();
 }
 
-void MWFadder::setValue(int v)
+void MWFader::setValue(int v)
 {
     if(inverted) {
         value = maxValue - v;
@@ -143,7 +129,7 @@ void MWFadder::setValue(int v)
     valueChange();
 }
 
-void MWFadder::setMinValue(int value)
+void MWFader::setMinValue(int value)
 {
     minValue = value;
     valRange=maxValue-minValue;

@@ -21,7 +21,7 @@
 #include "mwfaderparamctl.h"
 #include <QDebug>
 
-MWFaderParamCtl::MWFaderParamCtl(int cc, MasterSender *ms, QObject *parent) : MWFadder(parent),
+MWFaderParamCtl::MWFaderParamCtl(int cc, MasterSender *ms, QObject *parent) : MWFader(parent),
     _out(ms),
     _cc(cc)
 {
@@ -77,116 +77,10 @@ MWFaderParamCtl::~MWFaderParamCtl()
 
 void MWFaderParamCtl::setValue(int v)
 {
-    MWFadder::setValue(v);
+    MWFader::setValue(v);
     propagateValueChange();
     emit geoChanged();
 }
-
-/*
-void MWFaderParamCtl::paintEvent(QPaintEvent *E)
-{
-    MWFadder::paintEvent(E);
-
-    QPainter painter(this);
-    QString cap;
-
-    if(pressed>0) painter.setBrush(highlightcolor);
-    else painter.setBrush(bgcolor);
-
-    QPen pen1 = QPen(fgcolor);
-    QPen pen2 = QPen(highlightcolor);
-    pen2.setWidth(3);
-    painter.setPen(pen2);
-    QFont font(font1);
-    font.setPixelSize(font1size);
-    painter.setFont(font);
-
-    int sustainLineY = font1size + ((1000.0f - Sound.sustain) * (float)(height()-2*font1size) / 1000.0f);
-    int filterSpikeH = (Sound.filter_resonance) * (float)(height()-2*font1size) / 1000.0f;
-    int filterY1 =height()/2 - filterSpikeH / 2;
-    int filterY2 =filterY1 + filterSpikeH;
-
-    switch(cc) {
-    case 1:
-        _text2="bend\ntop");
-        break;
-    case 2:
-        _text2="bend\nbot");
-        break;
-    case 3:
-        _text2="channel");
-        break;
-    case 4:
-        _text2="symbols");
-        break;
-    case 102:
-        _text2="WAV");
-        for(int i=0;i<5;i++) {
-            switch(i) {
-            case 0:
-                _text2="SQR");
-                break;
-            case 1:
-                _text2="SAW");
-                break;
-            case 2:
-                _text2="SIN");
-                break;
-            case 3:
-                _text2="TRI");
-                break;
-            case 4:
-                _text2="RND");
-                break;
-            }
-            painter.drawText(0,height()*(4-i)/5,width(),height()/5,Qt::AlignCenter|Qt::AlignVCenter,cap);
-        }
-        break;
-    case 103:
-        _text2="ATT");
-        painter.drawLine(0,height()-font1size,width()-width()*valueDisplay/1000,height()-font1size);
-        painter.drawLine(width()-width()*valueDisplay/1000,height()-font1size,width(),font1size);
-        break;
-    case 104:
-        _text2="DEC");
-        painter.drawLine(0,font1size,width()*valueDisplay/1000,sustainLineY);
-        painter.drawLine(width()*valueDisplay/1000,sustainLineY,width(),sustainLineY);
-        break;
-    case 105:
-        _text2="SUST");
-        painter.drawLine(0,sustainLineY,width(),sustainLineY);
-        break;
-    case 106:
-        _text2="REL");
-        painter.drawLine(0,sustainLineY,width()*valueDisplay/1000,height()-font1size);
-        painter.drawLine(width()*valueDisplay/1000,height()-font1size,width(),height()-font1size);
-        break;
-    case 107:
-        _text2="FLTF");
-        painter.drawLine(0,filterY2,width()*valueDisplay/1000,filterY1);
-        painter.drawLine(width()*valueDisplay/1000,filterY1,width(),filterY2);
-        break;
-    case 108:
-        _text2="FLTR");
-        painter.drawLine(0,filterY2,width(),filterY2);
-        break;
-    case 109:
-        _text2="MODF");
-        break;
-    case 110:
-        _text2="MODR");
-        break;
-    case 111:
-        _text2="VOL");
-        break;
-
-    }
-    painter.setPen(pen1);
-    painter.drawText(0,0,width(),height(),Qt::AlignBottom|Qt::AlignLeft,cap);
-    //qDebug() << "MWFadder::paintEvent hue " << color->getHue() << " value " << value;
-}
-
-*/
 
 void MWFaderParamCtl::propagateValueChange() {
 

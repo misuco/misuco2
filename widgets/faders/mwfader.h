@@ -23,7 +23,7 @@
 
 #include "conf/mglob.h"
 
-class MWFadder : public QObject
+class MWFader : public QObject
 {
     Q_OBJECT
 
@@ -32,7 +32,21 @@ class MWFadder : public QObject
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY geoChanged)
 
 public:
-    MWFadder(QObject *parent);
+    MWFader(QObject *parent) : QObject(parent)
+    {
+        //qDebug() << "MWFadder::MWFadder";
+        orient=vertical;
+        value=0;
+        inverted=false;
+        _valueDisplay=value;
+        pressed=0;
+        setMinValue(-100);
+        setMaxValue(100);
+        fineness=5;
+        height=500;
+        _knobSize=height/8;
+        calcGeo();
+    }
     enum orientation {
         horizontal,
         vertical
