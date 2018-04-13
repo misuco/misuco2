@@ -20,8 +20,6 @@
 
 #include "misuco2.h"
 #include <QDebug>
-#include <QStandardPaths>
-#include <QDir>
 #include "senderoscmidigeneric.h"
 #include "sendersupercollider.h"
 #include "senderreaktor.h"
@@ -29,7 +27,8 @@
 #include "sendermobilesynth.h"
 #include "pitchcolor.h"
 
-Misuco2::Misuco2(QObject *parent) : QObject(parent)
+Misuco2::Misuco2(QObject *parent) : QObject(parent),
+    _xmlLoader(new XmlLoader(this,this))
 {
     _presetsVisible=true;
     _menuVisible=false;
@@ -117,7 +116,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     faderPitchBottomRange->setMaxValue(5);
     connect(faderPitchBottomRange,SIGNAL(controlValueChange(int)),_PlayArea,SLOT(setBendVertBot(int)));
 
-    pitchHorizontal = new MWHeaderSetter(15,this);
+    pitchHorizontal = new BendHorizontal("horizontal",3,this);
     connect(pitchHorizontal,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
     connect(this,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
 
@@ -127,8 +126,10 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     faderChannel->setInverted(true);
     connect(faderChannel,SIGNAL(controlValueChange(int)),this,SLOT(onChannelChange(int)));
 
-    enableCc1 = new MWHeaderSetter(16,1,this);
-    MGlob::sendCC1 = true;
+    enableCc1 = new MWHeaderSetter("CC1",0,this);
+    connect(enableCc1,SIGNAL(sendCc1(bool)),_PlayArea,SLOT(sendCc1(bool)));
+
+    //MGlob::sendCC1 = true;
 
     bwMode = new MWHeaderSetter(11,this);
     for(auto pitchColor:_pitchColors) {
@@ -227,10 +228,10 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
     showFreqs = new MWHeaderSetter(22,this);
     //connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
 
-    readXml("conf.xml");
-    readXml("scales.xml");
-    readXml("synth.xml");
-    readXml("tune.xml");
+    _xmlLoader->readXml("conf.xml");
+    _xmlLoader->readXml("scales.xml");
+    _xmlLoader->readXml("synth.xml");
+    _xmlLoader->readXml("tune.xml");
 
     for(auto presetButton:_scalePresets->getItems()) {
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(MWPlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
@@ -270,10 +271,10 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent)
 
 Misuco2::~Misuco2()
 {
-    writeXml("conf.xml");
-    writeXml("scales.xml");
-    writeXml("synth.xml");
-    writeXml("tune.xml");
+    _xmlLoader->writeXml("conf.xml");
+    _xmlLoader->writeXml("scales.xml");
+    _xmlLoader->writeXml("synth.xml");
+    _xmlLoader->writeXml("tune.xml");
 }
 
 QList<QObject *> Misuco2::confPitchFaders()
@@ -320,7 +321,7 @@ void Misuco2::currentHeader(int id)
 
     emit layoutChange();
     updateMenuButtonState();
-    writeXml("conf.xml");
+    _xmlLoader->writeXml("conf.xml");
 
 }
 
@@ -375,7 +376,7 @@ void Misuco2::currentMainView(int id)
 
     emit layoutChange();
     updateMenuButtonState();
-    writeXml("conf.xml");
+    _xmlLoader->writeXml("conf.xml");
 }
 
 void Misuco2::togglePresets()
@@ -397,14 +398,14 @@ void Misuco2::togglePresets()
         _tunePresetsVisible = false;
     }
     emit layoutChange();
-    writeXml("conf.xml");
+    _xmlLoader->writeXml("conf.xml");
 }
 
 void Misuco2::toggleMenu()
 {
     _menuVisible=!_menuVisible;
     emit layoutChange();
-    writeXml("conf.xml");
+    _xmlLoader->writeXml("conf.xml");
 }
 
 void Misuco2::setSound(MWSound *s)
@@ -471,7 +472,7 @@ void Misuco2::onToggleSender(int v)
 {
     if(out->isSenderEnabled(v)) out->setSenderEnabled(v,false);
     else out->setSenderEnabled(v,true);
-    writeXml("conf.xml");
+    _xmlLoader->writeXml("conf.xml");
 }
 
 void Misuco2::onSoundChanged(int)

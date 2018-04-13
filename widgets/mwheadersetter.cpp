@@ -51,9 +51,6 @@ void MWHeaderSetter::setText() {
     case 2:
         _text="octave";
         break;
-    case 3:
-        _text="horizontal";
-        break;
     case 4:
         _text="bend top";
         break;
@@ -88,12 +85,6 @@ void MWHeaderSetter::setText() {
         break;
     case 14:
         _text="symbols";
-        break;
-    case 15:
-        _text="horizontal";
-        break;
-    case 16:
-        _text="CC1";
         break;
     case 17:
         _text="mobile\nsynth";
@@ -138,22 +129,12 @@ bool MWHeaderSetter::selected()
 
 void MWHeaderSetter::onPressed(int id)
 {
-    QString link;
     if(_pressed == 0) {
         switch(_functionId) {
         case 0:
         case 1:
         case 2:
             emit currentHeader(_functionId);
-            break;
-        case 3:
-        case 15:
-            if(_state==0) {
-                _state=1;
-            } else {
-                _state=0;
-            }
-            emit setBendHori(_state);
             break;
         case 4:
             if(_state==0) {
@@ -186,17 +167,6 @@ void MWHeaderSetter::onPressed(int id)
             break;
         case 12:
             emit togglePresets();
-            break;
-            /*
-        case 14:
-            MGlob::noteSymbols++;
-            if(MGlob::noteSymbols>3) MGlob::noteSymbols=0;
-            emit scaleupdate();
-            break;
-            */
-        case 16:
-            MGlob::sendCC1 = ! MGlob::sendCC1;
-            _state = MGlob::sendCC1;
             break;
         case 17:
         case 18:

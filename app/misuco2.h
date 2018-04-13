@@ -35,10 +35,14 @@
 #include "widgets/presets/mwmicrotunepreset.h"
 #include "widgets/presets/presetcollection.h"
 #include "widgets/buttons/openarchive.h"
+#include "widgets/buttons/bendhorizontal.h"
+#include "widgets/buttons/sendCc1.h"
 #include "widgets/mwgame.h"
 #include "conf/purchases.h"
 #include "heartbeat.h"
 #include "xmlloader.h"
+
+class XmlLoader;
 
 class Misuco2 : public QObject
 {
@@ -111,6 +115,7 @@ public:
     ~Misuco2();
 
     QList<QObject*> confPitchFaders();
+    void updateMenuButtonState();
 
 signals:
     void initialSet();
@@ -139,8 +144,26 @@ private slots:
     void setOctConf(int bot, int top);
 
 protected:
+    bool _menuVisible;
+    bool _rootNoteSetterVisible;
+    bool _bScaleSwitchVisible;
+    bool _octaveRangerVisible;
+    bool _playAreaVisible;
+    bool _tuneAreaVisible;
+    bool _synthAreaVisible;
+    bool _confAreaVisible;
+    bool _presetsVisible;
+    bool _scalePresetsVisible;
+    bool _synthPresetsVisible;
+    bool _tunePresetsVisible;
+    MWFaderParamCtl * faderPitchTopRange;
+    MWFaderParamCtl * faderPitchBottomRange;
+    BendHorizontal  * pitchHorizontal;
+    MWFaderParamCtl * faderChannel;
+    SendCc1         * enableCc1;
 
 private:
+    XmlLoader    * _xmlLoader;
     MasterSender * out;
 
     QList<QObject*> _pitchColors;
@@ -164,18 +187,13 @@ private:
     PresetCollection * _synthPresets;
     PresetCollection * _tunePresets;
 
-    MWFaderParamCtl * faderPitchTopRange;
-    MWFaderParamCtl * faderPitchBottomRange;
-    MWFaderParamCtl * faderChannel;
-    MWHeaderSetter * pitchHorizontal;
     MWHeaderSetter * bwMode;
-    MWHeaderSetter * enableCc1;
     MWHeaderSetter * enableMobilesynth;
     MWHeaderSetter * enableReaktor;
     MWHeaderSetter * enablePuredata;
     MWHeaderSetter * enableSupercollider;
     MWFaderParamCtl * faderSymbols;
-    QObject * _openArchive;
+    OpenArchive * _openArchive;
     MWHeaderSetter * holdMode;
     MWHeaderSetter * showFreqs;
     MWHeaderSetter * showPresets;
@@ -188,24 +206,11 @@ private:
     Heartbeat * _heartbeat;
 
     // layout
-    bool _menuVisible;
-    bool _rootNoteSetterVisible;
-    bool _bScaleSwitchVisible;
-    bool _octaveRangerVisible;
-    bool _playAreaVisible;
-    bool _tuneAreaVisible;
-    bool _synthAreaVisible;
-    bool _confAreaVisible;
-    bool _presetsVisible;
-    bool _scalePresetsVisible;
-    bool _synthPresetsVisible;
-    bool _tunePresetsVisible;
 
     int _botOct;
     int _topOct;
 
     void recalcMainView();
-    void updateMenuButtonState();
 
 };
 

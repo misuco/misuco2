@@ -71,6 +71,8 @@ public slots:
     void onSetScale(int rootNote, QList<bool> scale);
     void onPitchChange(int rootNote, int pitch);
 
+    void onSendCc1(bool state);
+
     void setOctConf(int bottom, int top);
     void setBendHori(bool b);
     void setBendVertTop(int b);
@@ -112,6 +114,7 @@ private:
     bool bendHoriz;
     int bendVertTop;
     int bendVertBot;
+    bool _sendCc1;
 
     // - visual
     int colwidth[MAX_COLS];

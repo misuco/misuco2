@@ -73,7 +73,9 @@ SOURCES += main.cpp\
     widgets/buttons/openarchive.cpp \
     conf/pitchcolor.cpp \
     widgets/faders/mwfader.cpp \
-    app/xmlloader.cpp
+    app/xmlloader.cpp \
+    widgets/buttons/bendhorizontal.cpp \
+    widgets/buttons/sendcc1.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -128,7 +130,9 @@ HEADERS  += \
     conf/pitchcolor.h \
     conf/colormacros.h \
     widgets/faders/mwfader.h \
-    app/xmlloader.h
+    app/xmlloader.h \
+    widgets/buttons/bendhorizontal.h \
+    widgets/buttons/sendcc1.h
 
 CONFIG += mobility
 MOBILITY = 

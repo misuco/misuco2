@@ -57,7 +57,7 @@ void ButtonBase::onPressed()
 
 void ButtonBase::onReleased()
 {
-    _pressed--;
+    _pressed=0;
     emit selectedChanged();
     releaseAction();
 }
@@ -68,6 +68,11 @@ void ButtonBase::pressAction()
 }
 
 void ButtonBase::releaseAction()
+{
+
+}
+
+void ButtonBase::setAction()
 {
 
 }

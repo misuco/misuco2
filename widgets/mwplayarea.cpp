@@ -27,7 +27,8 @@
 
 MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     out(ms),
-    fcalc(0,this)
+    fcalc(0,this),
+    _sendCc1(false)
 {
     bendHoriz=false;
     bendVertTop=0;
@@ -303,7 +304,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
             es->f=freq;
         }
 
-        if(MGlob::sendCC1) {
+        if(_sendCc1) {
             out->cc(es->voiceId,1,1.0f-yrel,1.0f-yrel);
         }
         break;

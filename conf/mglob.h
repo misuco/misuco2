@@ -63,8 +63,6 @@ public:
 
     static int channel;
 
-    static bool sendCC1;
-
     // that game knows where to touch
     static int playAreaWidth;
     static int playAreaHeight;

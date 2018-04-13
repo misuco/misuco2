@@ -1,9 +1,11 @@
 #include "xmlloader.h"
+#include <QStandardPaths>
+#include <QDir>
 
 XmlLoader::XmlLoader(Misuco2 *misuco2, QObject *parent) : QObject(parent),
     _app(misuco2)
 {    
-    qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    //qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if(QSysInfo::productType() == "ios") {
         _configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
         //configPath=QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
@@ -39,14 +41,14 @@ void XmlLoader::readXml(QString filetype)
         file.setPermissions(QFileDevice::ReadOwner|QFileDevice::WriteOwner);
     }
     //qDebug() << " opened " << filename;
-    xmlr.setDevice(&file);
-    if (xmlr.readNextStartElement()) {
+    _xmlReader.setDevice(&file);
+    if (_xmlReader.readNextStartElement()) {
         //qDebug() << " xmlr.name() " << xmlr.name();
-        if (xmlr.name() == "misuco" ) {
-            while (xmlr.readNextStartElement()) {
+        if (_xmlReader.name() == "misuco" ) {
+            while (_xmlReader.readNextStartElement()) {
                 if(filetype=="conf.xml") {
                     decodeConfigRecord();
-                    updateMenuButtonState();
+                   _app->updateMenuButtonState();
                 } else if(filetype=="scales.xml") {
                     decodeScaleRecord();
                 } else if(filetype=="synth.xml") {
@@ -54,7 +56,7 @@ void XmlLoader::readXml(QString filetype)
                 } else if(filetype=="tune.xml") {
                     decodeTuneRecord();
                 }
-                xmlr.skipCurrentElement();
+                _xmlReader.skipCurrentElement();
             }
         } else {
             return;
@@ -64,50 +66,47 @@ void XmlLoader::readXml(QString filetype)
 }
 
 void XmlLoader::decodeConfigRecord() {
-    if (xmlr.name() == "setup") {
-        _presetsVisible=xmlr.attributes().value("presetsVisible").toInt();
-        _menuVisible=xmlr.attributes().value("menuVisible").toInt();
+    if (_xmlReader.name() == "setup") {
+        _app->_presetsVisible=_xmlReader.attributes().value("presetsVisible").toInt();
+        _app->_menuVisible=_xmlReader.attributes().value("menuVisible").toInt();
 
-        _rootNoteSetterVisible=xmlr.attributes().value("rootNoteSetterVisible").toInt();
-        _bScaleSwitchVisible=xmlr.attributes().value("bScaleSwitchVisible").toInt();
-        _octaveRangerVisible=xmlr.attributes().value("octaveRangerVisible").toInt();
+        _app->_rootNoteSetterVisible=_xmlReader.attributes().value("rootNoteSetterVisible").toInt();
+        _app->_bScaleSwitchVisible=_xmlReader.attributes().value("bScaleSwitchVisible").toInt();
+        _app->_octaveRangerVisible=_xmlReader.attributes().value("octaveRangerVisible").toInt();
 
-        _playAreaVisible=xmlr.attributes().value("playAreaVisible").toInt();
-        _tuneAreaVisible=xmlr.attributes().value("tuneAreaVisible").toInt();
-        _synthAreaVisible=xmlr.attributes().value("synthAreaVisible").toInt();
-        _confAreaVisible=xmlr.attributes().value("confAreaVisible").toInt();
+        _app->_playAreaVisible=_xmlReader.attributes().value("playAreaVisible").toInt();
+        _app->_tuneAreaVisible=_xmlReader.attributes().value("tuneAreaVisible").toInt();
+        _app->_synthAreaVisible=_xmlReader.attributes().value("synthAreaVisible").toInt();
+        _app->_confAreaVisible=_xmlReader.attributes().value("confAreaVisible").toInt();
 
-        _scalePresetsVisible=xmlr.attributes().value("scalePresetsVisible").toInt();
-        _synthPresetsVisible=xmlr.attributes().value("synthPresetsVisible").toInt();
-        _tunePresetsVisible=xmlr.attributes().value("tunePresetsVisible").toInt();
+        _app->_scalePresetsVisible=_xmlReader.attributes().value("scalePresetsVisible").toInt();
+        _app->_synthPresetsVisible=_xmlReader.attributes().value("synthPresetsVisible").toInt();
+        _app->_tunePresetsVisible=_xmlReader.attributes().value("tunePresetsVisible").toInt();
 
-        faderPitchTopRange->setValue(xmlr.attributes().value("pitchTopRange").toString().toInt());
-        faderPitchBottomRange->setValue(xmlr.attributes().value("pitchBottomRange").toString().toInt());
+        _app->faderPitchTopRange->setValue(_xmlReader.attributes().value("pitchTopRange").toString().toInt());
+        _app->faderPitchBottomRange->setValue(_xmlReader.attributes().value("pitchBottomRange").toString().toInt());
+        _app->pitchHorizontal->setState(_xmlReader.attributes().value("pitchHorizontal").toString().toInt());
 
-        pitchHorizontal->setState(15,xmlr.attributes().value("pitchHorizontal").toString().toInt());
-        emit setBendHori(xmlr.attributes().value("pitchHorizontal").toString().toInt());
+        _app->faderChannel->setValue(_xmlReader.attributes().value("channel").toString().toInt());
 
-        faderChannel->setValue(xmlr.attributes().value("channel").toString().toInt());
-
-        MGlob::sendCC1 = xmlr.attributes().value("pitchHorizontal").toString().toInt();
-        enableCc1->setState(16,xmlr.attributes().value("sendCC1").toString().toInt());
+        _app->enableCc1->setState(_xmlReader.attributes().value("pitchHorizontal").toString().toInt());
 
         //MGlob::bwmode = xmlr.attributes().value("bwmode").toString().toInt();
         //bwMode->setState(11,xmlr.attributes().value("bwmode").toString().toInt());
 
-        out->setSenderEnabled(0,xmlr.attributes().value("mobileSynth").toString().toInt());
-        enableMobilesynth->setState(17,xmlr.attributes().value("mobileSynth").toString().toInt());
+        out->setSenderEnabled(0,_xmlReader.attributes().value("mobileSynth").toString().toInt());
+        enableMobilesynth->setState(17,_xmlReader.attributes().value("mobileSynth").toString().toInt());
 
-        out->setSenderEnabled(1,xmlr.attributes().value("pureData").toString().toInt());
-        enablePuredata->setState(18,xmlr.attributes().value("pureData").toString().toInt());
+        out->setSenderEnabled(1,_xmlReader.attributes().value("pureData").toString().toInt());
+        enablePuredata->setState(18,_xmlReader.attributes().value("pureData").toString().toInt());
 
-        out->setSenderEnabled(2,xmlr.attributes().value("reaktor").toString().toInt());
-        enableReaktor->setState(19,xmlr.attributes().value("reaktor").toString().toInt());
+        out->setSenderEnabled(2,_xmlReader.attributes().value("reaktor").toString().toInt());
+        enableReaktor->setState(19,_xmlReader.attributes().value("reaktor").toString().toInt());
 
-        out->setSenderEnabled(3,xmlr.attributes().value("superCollider").toString().toInt());
-        enableSupercollider->setState(20,xmlr.attributes().value("superCollider").toString().toInt());
+        out->setSenderEnabled(3,_xmlReader.attributes().value("superCollider").toString().toInt());
+        enableSupercollider->setState(20,_xmlReader.attributes().value("superCollider").toString().toInt());
 
-        faderSymbols->setValue(xmlr.attributes().value("noteSymbols").toString().toInt());
+        faderSymbols->setValue(_xmlReader.attributes().value("noteSymbols").toString().toInt());
 
         //MGlob::showFreqs = xmlr.attributes().value("showFreqs").toString().toInt();
         //showFreqs->setState(22,xmlr.attributes().value("showFreqs").toString().toInt());
@@ -115,14 +114,14 @@ void XmlLoader::decodeConfigRecord() {
 }
 
 void XmlLoader::decodeScaleRecord() {
-    if (xmlr.name() == "scale") {
+    if (_xmlReader.name() == "scale") {
         QList<bool> bscaleRead;
         for(int i=0;i<BSCALE_SIZE;i++) {
             QString attId;
             attId.sprintf("b%d",i);
-            bscaleRead.append(xmlr.attributes().value(attId).toInt());
+            bscaleRead.append(_xmlReader.attributes().value(attId).toInt());
         }
-        MWScalePreset * p = new MWScalePreset(xmlr.attributes().value("rootNote").toString().toInt(),
+        MWScalePreset * p = new MWScalePreset(_xmlReader.attributes().value("rootNote").toString().toInt(),
                                          bscaleRead,
                                          this);
         connect(p,SIGNAL(editPreset()),_scalePresets,SLOT(onEditPreset()));
@@ -131,18 +130,18 @@ void XmlLoader::decodeScaleRecord() {
 }
 
 void XmlLoader::decodeSynthRecord() {
-    if (xmlr.name() == "sound") {
+    if (_xmlReader.name() == "sound") {
         MWSoundPreset * soundPreset = new MWSoundPreset(
-                    xmlr.attributes().value("volume").toString().toFloat(),
-                    xmlr.attributes().value("wave").toString().toInt(),
-                    xmlr.attributes().value("attack").toString().toInt(),
-                    xmlr.attributes().value("decay").toString().toInt(),
-                    xmlr.attributes().value("sustain").toString().toFloat(),
-                    xmlr.attributes().value("release").toString().toInt(),
-                    xmlr.attributes().value("cutoff").toString().toFloat(),
-                    xmlr.attributes().value("resonance").toString().toFloat(),
-                    xmlr.attributes().value("mod_cutoff").toString().toFloat(),
-                    xmlr.attributes().value("mod_resonance").toString().toFloat(),
+                    _xmlReader.attributes().value("volume").toString().toFloat(),
+                    _xmlReader.attributes().value("wave").toString().toInt(),
+                    _xmlReader.attributes().value("attack").toString().toInt(),
+                    _xmlReader.attributes().value("decay").toString().toInt(),
+                    _xmlReader.attributes().value("sustain").toString().toFloat(),
+                    _xmlReader.attributes().value("release").toString().toInt(),
+                    _xmlReader.attributes().value("cutoff").toString().toFloat(),
+                    _xmlReader.attributes().value("resonance").toString().toFloat(),
+                    _xmlReader.attributes().value("mod_cutoff").toString().toFloat(),
+                    _xmlReader.attributes().value("mod_resonance").toString().toFloat(),
                     this);
         connect(soundPreset,SIGNAL(setSound(MWSound*)),this,SLOT(setSound(MWSound*)));
         connect(soundPreset,SIGNAL(editPreset()),_scalePresets,SLOT(onEditPreset()));
@@ -152,12 +151,12 @@ void XmlLoader::decodeSynthRecord() {
 }
 
 void XmlLoader::decodeTuneRecord() {
-    if (xmlr.name() == "microtune") {
+    if (_xmlReader.name() == "microtune") {
         int microtune[12];
         for(int i=0;i<12;i++) {
             QString attId;
             attId.sprintf("t%d",i);
-            microtune[i]=xmlr.attributes().value(attId).toString().toInt();
+            microtune[i]=_xmlReader.attributes().value(attId).toString().toInt();
         }
         MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,this);
         connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),this,SLOT(setMicrotune(MWMicrotune*)));
@@ -171,14 +170,14 @@ void XmlLoader::writeXml(QString filename)
     //qDebug() << "wlayout::writeXml";
     QFile file(_configPath+"/"+filename);
     if(file.open(QIODevice::WriteOnly)) {
-        xml.setDevice(&file);
+        _xmlWriter.setDevice(&file);
         QString att;
         QString attId;
 
-        xml.writeStartDocument();
-        xml.writeDTD("<!DOCTYPE misuco>");
-        xml.writeStartElement("misuco");
-        xml.writeAttribute("version", "2.1");
+        _xmlWriter.writeStartDocument();
+        _xmlWriter.writeDTD("<!DOCTYPE misuco>");
+        _xmlWriter.writeStartElement("misuco");
+        _xmlWriter.writeAttribute("version", "2.1");
 
         if(filename == "scales.xml") {
 
@@ -186,117 +185,117 @@ void XmlLoader::writeXml(QString filename)
 
                 auto widget = qobject_cast<MWScalePreset*>(widgetQ);
                 if(widget) {
-                    xml.writeStartElement("scale");
+                    _xmlWriter.writeStartElement("scale");
                     att.sprintf("%d",widget->getRootNote());
-                    xml.writeAttribute("rootNote",att);
+                    _xmlWriter.writeAttribute("rootNote",att);
                     for(int i=0;i<BSCALE_SIZE;i++) {
                         att.sprintf("%d",widget->getScale(i));
                         attId.sprintf("b%d",i);
-                        xml.writeAttribute(attId,att);
+                        _xmlWriter.writeAttribute(attId,att);
                     }
-                    xml.writeEndElement();
+                    _xmlWriter.writeEndElement();
                 }
             }
         } else if(filename == "synth.xml") {
             for(auto o:_synthPresets->getItems()) {
                 auto widget = qobject_cast<MWSoundPreset *>(o);
                 if(widget) {
-                    xml.writeStartElement("sound");
+                    _xmlWriter.writeStartElement("sound");
                     att.sprintf("%d",widget->wave());
-                    xml.writeAttribute("wave",att);
+                    _xmlWriter.writeAttribute("wave",att);
                     att.sprintf("%d",widget->attack());
-                    xml.writeAttribute("attack",att);
+                    _xmlWriter.writeAttribute("attack",att);
                     att.sprintf("%d",widget->decay());
-                    xml.writeAttribute("decay",att);
+                    _xmlWriter.writeAttribute("decay",att);
                     att.sprintf("%f",widget->sustain());
-                    xml.writeAttribute("sustain",att);
+                    _xmlWriter.writeAttribute("sustain",att);
                     att.sprintf("%d",widget->release());
-                    xml.writeAttribute("release",att);
+                    _xmlWriter.writeAttribute("release",att);
                     att.sprintf("%f",widget->cutoff());
-                    xml.writeAttribute("cutoff",att);
+                    _xmlWriter.writeAttribute("cutoff",att);
                     att.sprintf("%f",widget->resonance());
-                    xml.writeAttribute("resonance",att);
+                    _xmlWriter.writeAttribute("resonance",att);
                     att.sprintf("%f",widget->mod_cutoff());
-                    xml.writeAttribute("mod_cutoff",att);
+                    _xmlWriter.writeAttribute("mod_cutoff",att);
                     att.sprintf("%f",widget->mod_resonance());
-                    xml.writeAttribute("mod_resonance",att);
+                    _xmlWriter.writeAttribute("mod_resonance",att);
                     att.sprintf("%f",widget->volume());
-                    xml.writeAttribute("volume",att);
-                    xml.writeEndElement();
+                    _xmlWriter.writeAttribute("volume",att);
+                    _xmlWriter.writeEndElement();
                 }
             }
         } else if(filename == "tune.xml") {
             for(auto o:_tunePresets->getItems()) {
                 auto widget = qobject_cast<MWMicrotunePreset *>(o);
-                xml.writeStartElement("microtune");
+                _xmlWriter.writeStartElement("microtune");
                 for(int i=0;i<12;i++) {
                     att.sprintf("%d",widget->PresetMicrotune.tuning[i]);
                     attId.sprintf("t%d",i);
-                    xml.writeAttribute(attId,att);
+                    _xmlWriter.writeAttribute(attId,att);
                 }
-                xml.writeEndElement();
+                _xmlWriter.writeEndElement();
             }
         } else if(filename == "conf.xml") {
-            xml.writeStartElement("setup");
+            _xmlWriter.writeStartElement("setup");
 
             att.sprintf("%d",faderPitchTopRange->getValue());
-            xml.writeAttribute("pitchTopRange",att);
+            _xmlWriter.writeAttribute("pitchTopRange",att);
             att.sprintf("%d",faderPitchBottomRange->getValue());
-            xml.writeAttribute("pitchBottomRange",att);
+            _xmlWriter.writeAttribute("pitchBottomRange",att);
             att.sprintf("%d",pitchHorizontal->getState());
-            xml.writeAttribute("pitchHorizontal",att);
+            _xmlWriter.writeAttribute("pitchHorizontal",att);
             att.sprintf("%d",MGlob::channel);
-            xml.writeAttribute("channel",att);
-            att.sprintf("%d",MGlob::sendCC1);
-            xml.writeAttribute("sendCC1",att);
+            _xmlWriter.writeAttribute("channel",att);
+            att.sprintf("%d",_app->enableCc1->getState());
+            _xmlWriter.writeAttribute("sendCC1",att);
             //att.sprintf("%d",);
             //xml.writeAttribute("bwmode",att);
             att.sprintf("%d",out->isSenderEnabled(0));
-            xml.writeAttribute("mobileSynth",att);
+            _xmlWriter.writeAttribute("mobileSynth",att);
             att.sprintf("%d",out->isSenderEnabled(1));
-            xml.writeAttribute("pureData",att);
+            _xmlWriter.writeAttribute("pureData",att);
             att.sprintf("%d",out->isSenderEnabled(2));
-            xml.writeAttribute("reaktor",att);
+            _xmlWriter.writeAttribute("reaktor",att);
             att.sprintf("%d",out->isSenderEnabled(3));
-            xml.writeAttribute("superCollider",att);
+            _xmlWriter.writeAttribute("superCollider",att);
             //att.sprintf("%d",MGlob::noteSymbols);
             //xml.writeAttribute("noteSymbols",att);
             //att.sprintf("%d",MGlob::showFreqs);
             //xml.writeAttribute("showFreqs",att);
 
             att.sprintf("%d",_presetsVisible);
-            xml.writeAttribute("presetsVisible",att);
+            _xmlWriter.writeAttribute("presetsVisible",att);
             att.sprintf("%d",_menuVisible);
-            xml.writeAttribute("menuVisible",att);
+            _xmlWriter.writeAttribute("menuVisible",att);
 
             att.sprintf("%d",_rootNoteSetterVisible);
-            xml.writeAttribute("rootNoteSetterVisible",att);
+            _xmlWriter.writeAttribute("rootNoteSetterVisible",att);
             att.sprintf("%d",_bScaleSwitchVisible);
-            xml.writeAttribute("bScaleSwitchVisible",att);
+            _xmlWriter.writeAttribute("bScaleSwitchVisible",att);
             att.sprintf("%d",_octaveRangerVisible);
-            xml.writeAttribute("octaveRangerVisible",att);
+            _xmlWriter.writeAttribute("octaveRangerVisible",att);
 
             att.sprintf("%d",_playAreaVisible);
-            xml.writeAttribute("playAreaVisible",att);
+            _xmlWriter.writeAttribute("playAreaVisible",att);
             att.sprintf("%d",_synthAreaVisible);
-            xml.writeAttribute("synthAreaVisible",att);
+            _xmlWriter.writeAttribute("synthAreaVisible",att);
             att.sprintf("%d",_confAreaVisible);
-            xml.writeAttribute("confAreaVisible",att);
+            _xmlWriter.writeAttribute("confAreaVisible",att);
             att.sprintf("%d",_tuneAreaVisible);
-            xml.writeAttribute("tuneAreaVisible",att);
+            _xmlWriter.writeAttribute("tuneAreaVisible",att);
 
             att.sprintf("%d",_scalePresetsVisible);
-            xml.writeAttribute("scalePresetsVisible",att);
+            _xmlWriter.writeAttribute("scalePresetsVisible",att);
             att.sprintf("%d",_synthPresetsVisible);
-            xml.writeAttribute("synthPresetsVisible",att);
+            _xmlWriter.writeAttribute("synthPresetsVisible",att);
             att.sprintf("%d",_tunePresetsVisible);
-            xml.writeAttribute("tunePresetsVisible",att);
+            _xmlWriter.writeAttribute("tunePresetsVisible",att);
 
-            xml.writeEndElement();
+            _xmlWriter.writeEndElement();
 
         }
 
-        xml.writeEndDocument();
+        _xmlWriter.writeEndDocument();
 
         file.close();
 

@@ -57,8 +57,6 @@ MWMicrotune MGlob::Microtune;
 
 int MGlob::channel = 0;
 
-bool MGlob::sendCC1 = true;
-
 int MGlob::playAreaWidth = 0;
 int MGlob::playAreaHeight = 0;
 int MGlob::playFieldWidth = 0;

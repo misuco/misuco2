@@ -50,6 +50,7 @@ public slots:
 protected:
     virtual void pressAction();
     virtual void releaseAction();
+    virtual void setAction();
 
 private:
     int _pressed;
