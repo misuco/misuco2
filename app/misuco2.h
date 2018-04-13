@@ -36,7 +36,10 @@
 #include "widgets/presets/presetcollection.h"
 #include "widgets/buttons/openarchive.h"
 #include "widgets/buttons/bendhorizontal.h"
-#include "widgets/buttons/sendCc1.h"
+#include "widgets/buttons/sendcc1.h"
+#include "widgets/buttons/togglesender.h"
+#include "widgets/buttons/togglebw.h"
+#include "widgets/buttons/showfreqs.h"
 #include "widgets/mwgame.h"
 #include "conf/purchases.h"
 #include "heartbeat.h"
@@ -83,13 +86,13 @@ class Misuco2 : public QObject
     Q_PROPERTY(QObject* confPitchHorizButton MEMBER pitchHorizontal CONSTANT)
 
     Q_PROPERTY(QObject* confSymbolFader MEMBER faderSymbols CONSTANT)
-    Q_PROPERTY(QObject* confBWModeButton MEMBER bwMode CONSTANT)
-    Q_PROPERTY(QObject* confShowFreqsButton MEMBER showFreqs CONSTANT)
-    Q_PROPERTY(QObject* confCC1Button MEMBER enableCc1 CONSTANT)
-    Q_PROPERTY(QObject* confSendMobile MEMBER enableMobilesynth CONSTANT)
-    Q_PROPERTY(QObject* confSendPuredata MEMBER enablePuredata CONSTANT)
-    Q_PROPERTY(QObject* confSendReaktor MEMBER enableReaktor CONSTANT)
-    Q_PROPERTY(QObject* confSendSupercollider MEMBER enableSupercollider CONSTANT)
+    Q_PROPERTY(QObject* confBWModeButton MEMBER _bwMode CONSTANT)
+    Q_PROPERTY(QObject* confShowFreqsButton MEMBER _showFreqs CONSTANT)
+    Q_PROPERTY(QObject* confCC1Button MEMBER _sendCc1 CONSTANT)
+    Q_PROPERTY(QObject* confSendMobile MEMBER _enableMobilesynth CONSTANT)
+    Q_PROPERTY(QObject* confSendPuredata MEMBER _enablePuredata CONSTANT)
+    Q_PROPERTY(QObject* confSendReaktor MEMBER _enableReaktor CONSTANT)
+    Q_PROPERTY(QObject* confSendSupercollider MEMBER _enableSupercollider CONSTANT)
 
     Q_PROPERTY(QObject* confChannelFader MEMBER faderChannel CONSTANT)
 
@@ -137,13 +140,13 @@ private slots:
     void setSound(MWSound* s);
     void setMicrotune(MWMicrotune* m);
     void onChannelChange(int v);
-    void onToggleSender(int v);
     void onSoundChanged(int);
     void onGameStarted();
 
     void setOctConf(int bot, int top);
 
 protected:
+    // widget visibility states
     bool _menuVisible;
     bool _rootNoteSetterVisible;
     bool _bScaleSwitchVisible;
@@ -156,20 +159,36 @@ protected:
     bool _scalePresetsVisible;
     bool _synthPresetsVisible;
     bool _tunePresetsVisible;
+
+    // faders
     MWFaderParamCtl * faderPitchTopRange;
     MWFaderParamCtl * faderPitchBottomRange;
     BendHorizontal  * pitchHorizontal;
     MWFaderParamCtl * faderChannel;
-    SendCc1         * enableCc1;
+    MWFaderParamCtl * faderSymbols;
+
+    // config buttons
+    SendCc1         * _sendCc1;
+    ToggleSender    * _enableMobilesynth;
+    ToggleSender    * _enableReaktor;
+    ToggleSender    * _enablePuredata;
+    ToggleSender    * _enableSupercollider;
+    ToggleBw        * _bwMode;
+    ShowFreqs       * _showFreqs;
+
+    // preset buttons
+    PresetCollection * _scalePresets;
+    PresetCollection * _synthPresets;
+    PresetCollection * _tunePresets;
 
 private:
     XmlLoader    * _xmlLoader;
-    MasterSender * out;
+    MasterSender * _out;
 
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _BScaleSwitch;
-    MWOctaveRanger * _OctaveRanger;
+    MWOctaveRanger* _OctaveRanger;
     QObject *       _PlayArea;
 
     // synth ctl faders
@@ -182,20 +201,7 @@ private:
     // right menu
     QList<QObject *> _menu;
 
-    // preset buttons
-    PresetCollection * _scalePresets;
-    PresetCollection * _synthPresets;
-    PresetCollection * _tunePresets;
-
-    MWHeaderSetter * bwMode;
-    MWHeaderSetter * enableMobilesynth;
-    MWHeaderSetter * enableReaktor;
-    MWHeaderSetter * enablePuredata;
-    MWHeaderSetter * enableSupercollider;
-    MWFaderParamCtl * faderSymbols;
     OpenArchive * _openArchive;
-    MWHeaderSetter * holdMode;
-    MWHeaderSetter * showFreqs;
     MWHeaderSetter * showPresets;
     MWHeaderSetter * showMenu;
     MWHeaderSetter * octUp;

@@ -23,35 +23,64 @@ class MWPlayfield : public QObject
 public:
     explicit MWPlayfield(QObject *parent = nullptr);
 
-    int type = NORMAL;
-    FreqTriple * f1;      // for type normal
-    FreqTriple * f2;      // for type vert/hoiz
-    float hue1bent;         // cache for vertical bent hue values
-    float hue2bent;
-    unsigned int pressed = 0;
-
     void calcColor();
+    void calcText();
 
-public slots:
-    void onBwModeChanged(bool bwMode);
+    void onPitchChange(int rootNote, int pitch);
+
+    void setType(int t);
+    int getType();
+
+    void setPressed(int v);
+    void incPressed();
+    void decPressed();
+    int getPressed();
+
+    void setF1rootNote(int r);
+    void setF1midiNote(int midiNote, int pitch);
+    float getF1freq();
+    int getF1midiNote();
+    int getF1pitch();
+    void setHue1Bent(float h);
+    float getF1Hue();
+
+    void setF2rootNote(int r);
+    void setF2midiNote(int midiNote, int pitch);
+    float getF2freq();
+    int getF2midiNote();
+    int getF2pitch();
+    void setHue2Bent(float h);
+    float getF2Hue();
+
+    void setBwMode(bool state);
+    void setNoteSymbols(int symbols);
+    void showFreqs(bool state);
 
 signals:
     void colorChanged();
     void textChanged();
 
 private:
-    QColor colorF1;
-    QColor colorF1b;
-    QColor colorF2;
-    QColor colorF2b;
-    QColor fontColor;
+    int type = NORMAL;
+    FreqTriple f1;      // for type normal
+    FreqTriple f2;      // for type vert/hoiz
+    float hue1bent;         // cache for vertical bent hue values
+    float hue2bent;
+    unsigned int pressed = 0;
+
+    QColor  colorF1;
+    QColor  colorF1b;
+    QColor  colorF2;
+    QColor  colorF2b;
+    QColor  fontColor;
     QString text1;
     QString text2;
     QString text3;
 
-    bool _bwmode;
-    int _noteSymbols;
-    bool _showFreqs;
+    bool    _bwmode;
+    int     _noteSymbols;
+    bool    _showFreqs;
+
 };
 
 #endif // MWPLAYFIELD_H

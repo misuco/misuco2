@@ -18,8 +18,8 @@
  *
  */
 
-#include "misuco2.h"
 #include <QDebug>
+#include "misuco2.h"
 #include "senderoscmidigeneric.h"
 #include "sendersupercollider.h"
 #include "senderreaktor.h"
@@ -50,27 +50,27 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     _heartbeat = new Heartbeat(this);
 
-    out=new MasterSender();
-    out->addSender(new SenderMobileSynth());
-    out->addSender(new SenderOscMidiGeneric());
-    out->addSender(new SenderReaktor());
-    out->addSender(new SenderSuperCollider());
+    _out=new MasterSender();
+    _out->addSender(new SenderMobileSynth());
+    _out->addSender(new SenderOscMidiGeneric());
+    _out->addSender(new SenderReaktor());
+    _out->addSender(new SenderSuperCollider());
 
-    out->setSenderEnabled(1,false);
-    out->setSenderEnabled(3,false);
+    _out->setSenderEnabled(1,false);
+    _out->setSenderEnabled(3,false);
 
     for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
         _pitchColors.append(new PitchColor(rootNote,this));
     }    
 
-    _PlayArea = new MWPlayArea(out, this);
+    _PlayArea = new MWPlayArea(_out, this);
 
     _OctaveRanger = new MWOctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
     for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
-        MWFaderPitch * fader = new MWFaderPitch(rootNote,out,this);
+        MWFaderPitch * fader = new MWFaderPitch(rootNote,_out,this);
         //connect (fader,SIGNAL(valueChange(int)),MGlob::MWPitch[rootNote],SLOT(setPitch(int)));
         //connect( MGlob::MWPitch[rootNote], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
         connect(fader,SIGNAL(pitchChange(int,int)),_PlayArea,SLOT(onPitchChange(int,int)));
@@ -91,7 +91,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     }
 
     for(int i=0;i<10;i++) {
-        MWFaderParamCtl * fader = new MWFaderParamCtl(i+102,out,this);
+        MWFaderParamCtl * fader = new MWFaderParamCtl(i+102,_out,this);
         fader->setMinValue(0);
         if(i==0) {
             fader->setMaxValue(4);
@@ -106,12 +106,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     }
 
-    faderPitchTopRange = new MWFaderParamCtl(1,out,this);
+    faderPitchTopRange = new MWFaderParamCtl(1,_out,this);
     faderPitchTopRange->setMinValue(-5);
     faderPitchTopRange->setMaxValue(5);
     connect(faderPitchTopRange,SIGNAL(controlValueChange(int)),_PlayArea,SLOT(setBendVertTop(int)));
 
-    faderPitchBottomRange = new MWFaderParamCtl(2,out,this);
+    faderPitchBottomRange = new MWFaderParamCtl(2,_out,this);
     faderPitchBottomRange->setMinValue(-5);
     faderPitchBottomRange->setMaxValue(5);
     connect(faderPitchBottomRange,SIGNAL(controlValueChange(int)),_PlayArea,SLOT(setBendVertBot(int)));
@@ -120,33 +120,31 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     connect(pitchHorizontal,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
     connect(this,SIGNAL(setBendHori(bool)),_PlayArea,SLOT(setBendHori(bool)));
 
-    faderChannel = new MWFaderParamCtl(3,out,this);
+    faderChannel = new MWFaderParamCtl(3,_out,this);
     faderChannel->setMinValue(1);
     faderChannel->setMaxValue(16);
     faderChannel->setInverted(true);
     connect(faderChannel,SIGNAL(controlValueChange(int)),this,SLOT(onChannelChange(int)));
 
-    enableCc1 = new MWHeaderSetter("CC1",0,this);
-    connect(enableCc1,SIGNAL(sendCc1(bool)),_PlayArea,SLOT(sendCc1(bool)));
+    _sendCc1 = new SendCc1("CC1",0,this);
+    connect(_sendCc1,SIGNAL(sendCc1(bool)),_PlayArea,SLOT(sendCc1(bool)));
 
-    //MGlob::sendCC1 = true;
-
-    bwMode = new MWHeaderSetter(11,this);
+    _bwMode = new ToggleBw("BW",0,this);
     for(auto pitchColor:_pitchColors) {
-        connect(bwMode,SIGNAL(toggleBW(bool)),pitchColor,SLOT(onBwModeChange(bool)));
+        connect(_bwMode,SIGNAL(toggleBW(bool)),pitchColor,SLOT(onBwModeChange(bool)));
     }
 
-    enableMobilesynth = new MWHeaderSetter(17,1,this);
-    connect(enableMobilesynth,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+    _enableMobilesynth = new ToggleSender("mobile\nsynth",0,1,this);
+    connect(_enableMobilesynth,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
 
-    enablePuredata = new MWHeaderSetter(18,this);
-    connect(enablePuredata,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+    _enablePuredata = new ToggleSender("puredata",1,0,this);
+    connect(_enablePuredata,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
 
-    enableReaktor = new MWHeaderSetter(19,1,this);
-    connect(enableReaktor,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+    _enableReaktor = new ToggleSender("reaktor",2,1,this);
+    connect(_enableReaktor,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
 
-    enableSupercollider = new MWHeaderSetter(20,this);
-    connect(enableSupercollider,SIGNAL(toggleSender(int)),this,SLOT(onToggleSender(int)));
+    _enableSupercollider = new ToggleSender("super\ncollider",3,0,this);
+    connect(_enableSupercollider,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
 
     showPresets = new MWHeaderSetter(12,this);
     connect(showPresets,SIGNAL(togglePresets()),this,SLOT(togglePresets()));
@@ -160,17 +158,14 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     octDown = new MWHeaderSetter(24,this);
     connect(octDown,SIGNAL(octDown()),_OctaveRanger,SLOT(octDown()));
 
-    holdMode = new MWHeaderSetter(21,this);
-
     _openArchive = new OpenArchive("archive",0,this);
 
     for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
-        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(rootNote,out,this);
+        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(rootNote,_out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_PlayArea,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_heartbeat,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_openArchive,SLOT(onSetRootNote(int)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),rootNoteSetter,SLOT(setOctMid(int)));
-        //connect(MGlob::MWPitch[rootNote], SIGNAL(pitchChanged()), rootNoteSetter, SLOT(pitchChange()));
         _rootNoteSetter.append(rootNoteSetter);
     }
 
@@ -181,7 +176,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     }
 
     for(int i=1;i<BSCALE_SIZE+1;i++) {
-        MWBScaleSwitch * bs = new MWBScaleSwitch(i,out,this);
+        MWBScaleSwitch * bs = new MWBScaleSwitch(i,_out,this);
         connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
         connect(bs,SIGNAL(setBscale(int,bool)),_heartbeat,SLOT(onSetBscale(int,bool)));
         connect(bs,SIGNAL(setBscale(int,bool)),_openArchive,SLOT(onSetBscale(int,bool)));
@@ -193,7 +188,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         _BScaleSwitch.append(bs);
     }
 
-    faderSymbols = new MWFaderParamCtl(4,out,this);
+    faderSymbols = new MWFaderParamCtl(4,_out,this);
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);
@@ -225,8 +220,8 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         _menu.append(hs);
     }
 
-    showFreqs = new MWHeaderSetter(22,this);
-    //connect(showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
+    _showFreqs = new ShowFreqs("freq",0,this);
+    connect(_showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
 
     _xmlLoader->readXml("conf.xml");
     _xmlLoader->readXml("scales.xml");
@@ -264,7 +259,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     emit initialSet();
 
     _game = new MWGame((MWPlayArea *)_PlayArea,this);
-    out->addSender(_game);
+    _out->addSender(_game);
     connect(_game,SIGNAL(gameStarted()),this,SLOT(onGameStarted()));
     _game->start();
 }
@@ -468,12 +463,14 @@ void Misuco2::onChannelChange(int v)
     MGlob::channel = v;
 }
 
+/*
 void Misuco2::onToggleSender(int v)
 {
     if(out->isSenderEnabled(v)) out->setSenderEnabled(v,false);
     else out->setSenderEnabled(v,true);
     _xmlLoader->writeXml("conf.xml");
 }
+*/
 
 void Misuco2::onSoundChanged(int)
 {

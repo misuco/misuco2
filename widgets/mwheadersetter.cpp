@@ -74,9 +74,6 @@ void MWHeaderSetter::setText() {
     case 10:
         _text="menu";
         break;
-    case 11:
-        _text="BW";
-        break;
     case 12:
         _text="memo";
         break;
@@ -85,24 +82,6 @@ void MWHeaderSetter::setText() {
         break;
     case 14:
         _text="symbols";
-        break;
-    case 17:
-        _text="mobile\nsynth";
-        break;
-    case 18:
-        _text="puredata";
-        break;
-    case 19:
-        _text="reaktor";
-        break;
-    case 20:
-        _text="super\ncollider";
-        break;
-    case 21:
-        _text="hold";
-        break;
-    case 22:
-        _text="freqs";
         break;
     case 23:
         _text="up";
@@ -161,30 +140,8 @@ void MWHeaderSetter::onPressed(int id)
         case 10:
             emit toggleMenu();
             break;
-        case 11:
-            _state=!_state;
-            emit toggleBW(_state);
-            break;
         case 12:
             emit togglePresets();
-            break;
-        case 17:
-        case 18:
-        case 19:
-        case 20:
-            emit(toggleSender(_functionId-17));
-            if(_state==0) _state = 1;
-            else _state = 0;
-            break;
-        case 21:
-            /*
-            holdMode=!holdMode;
-            _state = holdMode;
-            */
-            break;
-        case 22:
-            _state = !_state;
-            emit toggleShowFreqs(_state);
             break;
         case 23:
             emit octUp();

@@ -18,9 +18,8 @@
  */
 
 #include "mastersender.h"
-//#include "qoscclient.h"
 
-MasterSender::MasterSender()
+MasterSender::MasterSender(QObject *parent) : QObject(parent)
 {
     nextVoiceId=1;
 
@@ -28,7 +27,9 @@ MasterSender::MasterSender()
     for(int i=0;i<256;i++) {
         midiOn[i]=false;
     }
+
     notestate=new quint8[1024];
+
     for(int i=0;i<1024;i++) {
         notestate[i]=0;
     }
@@ -37,7 +38,6 @@ MasterSender::MasterSender()
 
 MasterSender::~MasterSender()
 {
-    //delAll();
 }
 
 void MasterSender::cc(int voiceId, int cc, float v1, float v1avg)
@@ -115,12 +115,14 @@ void MasterSender::setSenderEnabled(int i, bool value)
     }
 }
 
+/*
 bool MasterSender::isSenderEnabled(int i)
 {
     if(i<senderEnabled.size()) {
         return senderEnabled.at(i);
     } else return false;
 }
+*/
 
 void MasterSender::reconnect() {
     for(int i=0;i<senders.count();i++) {

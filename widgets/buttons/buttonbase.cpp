@@ -21,15 +21,15 @@
 #include "buttonbase.h"
 
 ButtonBase::ButtonBase(QString text, QObject *parent) : QObject(parent),
-    _pressed(0),
     _state(0),
+    _pressed(0),
     _text(text)
 {
 }
 
 ButtonBase::ButtonBase(QString text, int state, QObject *parent): QObject(parent),
-    _pressed(0),
     _state(state),
+    _pressed(0),
     _text(text)
 {
 }

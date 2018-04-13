@@ -51,10 +51,10 @@ protected:
     virtual void pressAction();
     virtual void releaseAction();
     virtual void setAction();
+    int _state;
 
 private:
     int _pressed;
-    int _state;
     QString _text;
 
 };

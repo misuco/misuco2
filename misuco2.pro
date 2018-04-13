@@ -75,7 +75,10 @@ SOURCES += main.cpp\
     widgets/faders/mwfader.cpp \
     app/xmlloader.cpp \
     widgets/buttons/bendhorizontal.cpp \
-    widgets/buttons/sendcc1.cpp
+    widgets/buttons/sendcc1.cpp \
+    widgets/buttons/togglesender.cpp \
+    widgets/buttons/togglebw.cpp \
+    widgets/buttons/showfreqs.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -132,7 +135,10 @@ HEADERS  += \
     widgets/faders/mwfader.h \
     app/xmlloader.h \
     widgets/buttons/bendhorizontal.h \
-    widgets/buttons/sendcc1.h
+    widgets/buttons/sendcc1.h \
+    widgets/buttons/togglesender.h \
+    widgets/buttons/togglebw.h \
+    widgets/buttons/showfreqs.h
 
 CONFIG += mobility
 MOBILITY = 

@@ -78,6 +78,9 @@ public slots:
     void setBendVertTop(int b);
     void setBendVertBot(int b);
 
+    void onSymbolsChanged(int noteSymbols);
+    void onShowFreqsChanged(bool showFreqs);
+
 signals:
     // QML
     void playRowsChanged();

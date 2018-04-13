@@ -20,14 +20,15 @@
 #ifndef SENDERMULTI_H
 #define SENDERMULTI_H
 
+#include <QObject>
 #include <QList>
 #include "comm/libofqf/qoscclient.h"
 #include "sendermobilesynth.h"
 
-class MasterSender
+class MasterSender : public QObject
 {
 public:
-    MasterSender();
+    explicit MasterSender(QObject * parent = nullptr);
     ~MasterSender();
     void cc(int nextVoiceId, int cc, float v1, float v1avg);
     void pc(int v1);
@@ -40,8 +41,10 @@ public:
 
     void setDestination(int i, char * a,int p);
     void addSender(ISender * s);
+
+public slots:
     void setSenderEnabled(int i, bool value);
-    bool isSenderEnabled(int i);
+    //bool isSenderEnabled(int i);
 
 private:
     QList<ISender *> senders;
