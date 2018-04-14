@@ -1,7 +1,7 @@
-#include "mwgame.h"
+#include "gamecontrol.h"
 #include <QDateTime>
 
-MWGame::MWGame(MWPlayArea * playArea, QObject *parent) : QObject(parent), _playArea(playArea)
+GameControl::GameControl(PlayArea * playArea, QObject *parent) : QObject(parent), _playArea(playArea)
 {
     _noteOn = false;
     _buttonsVisible = false;
@@ -9,7 +9,7 @@ MWGame::MWGame(MWPlayArea * playArea, QObject *parent) : QObject(parent), _playA
     _text = "";
 }
 
-void MWGame::yes()
+void GameControl::yes()
 {
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
     if(_status == intro ) {
@@ -29,7 +29,7 @@ void MWGame::yes()
     }
 }
 
-void MWGame::no()
+void GameControl::no()
 {
     _status = off;
     _gameVisible = false;
@@ -38,7 +38,7 @@ void MWGame::no()
     emit buttonsChanged();
 }
 
-void MWGame::start()
+void GameControl::start()
 {
     if(!_gameVisible) {
         _status = intro;
@@ -51,12 +51,12 @@ void MWGame::start()
     }
 }
 
-int MWGame::noteOn(float, int, int, int)
+int GameControl::noteOn(float, int, int, int)
 {
     return 0;
 }
 
-void MWGame::noteOn(int, float, int midinote, int, int)
+void GameControl::noteOn(int, float, int midinote, int, int)
 {
     if(_status == listen) {
         if(_playArea->getMidinoteAtField(_played[_hearIndex]) != midinote) {
@@ -76,7 +76,7 @@ void MWGame::noteOn(int, float, int midinote, int, int)
     }
 }
 
-void MWGame::timerEvent(QTimerEvent *) {
+void GameControl::timerEvent(QTimerEvent *) {
     // off, intro, play, listen, compare
     _statusDuration++;
     misuTouchEvent touchEvent;
@@ -114,13 +114,13 @@ void MWGame::timerEvent(QTimerEvent *) {
     }
 }
 
-void MWGame::addRandNote()
+void GameControl::addRandNote()
 {
     int note = (float)_playArea->getColumnCount() * (float)qrand()/(float)RAND_MAX;
     _played.append(note);
 }
 
-int MWGame::playedErrors()
+int GameControl::playedErrors()
 {
     int errors=0;
     for(int i=0;i<_played.size();i++) {

@@ -1,4 +1,4 @@
-#include "TogglePresets.h"
+#include "togglepresets.h"
 
 TogglePresets::TogglePresets(QString text, int state, QObject * parent) : ButtonBase(text,state,parent)
 {}

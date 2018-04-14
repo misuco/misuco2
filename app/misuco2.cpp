@@ -20,10 +20,10 @@
 
 #include <QDebug>
 #include "misuco2.h"
-#include "sendersupercollider.h"
-#include "senderdebug.h"
-#include "sendermobilesynth.h"
-#include "pitchcolor.h"
+#include "comm/sendersupercollider.h"
+#include "comm/senderdebug.h"
+#include "comm/sendermobilesynth.h"
+#include "conf/pitchcolor.h"
 
 Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader(new XmlLoader(this,this))
@@ -63,9 +63,9 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         _pitchColors.append(new PitchColor(rootNote,this));
     }    
 
-    _PlayArea = new MWPlayArea(_out, this);
+    _PlayArea = new PlayArea(_out, this);
 
-    _OctaveRanger = new MWOctaveRanger(this);
+    _OctaveRanger = new OctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
@@ -158,7 +158,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _openArchive = new OpenArchive("archive",0,this);
 
     for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
-        MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(rootNote,_out,this);
+        RootNoteSetter * rootNoteSetter = new RootNoteSetter(rootNote,_out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_PlayArea,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_heartbeat,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_openArchive,SLOT(onSetRootNote(int)));
@@ -234,7 +234,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader->readXml("tune.xml");
 
     for(auto presetButton:_scalePresets->getItems()) {
-        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(MWPlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(PlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_heartbeat,SLOT(onSetScale(int,QList<bool>)));
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[0],SLOT(onSetScale(int,QList<bool>)));
         for(int j=1;j<SCALE_SIZE+1;j++) {
@@ -263,7 +263,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     }
     emit initialSet();
 
-    _game = new MWGame((MWPlayArea *)_PlayArea,this);
+    _game = new GameControl((PlayArea *)_PlayArea,this);
     _out->addSender(_game);
     connect(_game,SIGNAL(gameStarted()),this,SLOT(onGameStarted()));
     _game->start();

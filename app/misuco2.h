@@ -21,12 +21,13 @@
 #ifndef WLAYOUT_H
 #define WLAYOUT_H
 
-#include "widgets/mwplayarea.h"
-#include "widgets/mwrootnotesetter.h"
-#include "widgets/mwoctaveranger.h"
+#include "widgets/core/playarea.h"
+#include "widgets/core/rootnotesetter.h"
+#include "widgets/core/octaveranger.h"
 #include "conf/types.h"
 #include "widgets/faders/mwfaderparamctl.h"
-#include "widgets/scaleswitch.h"
+#include "widgets/core/scaleswitch.h"
+#include "widgets/core/gamecontrol.h"
 #include "comm/mastersender.h"
 #include "comm/senderoscmidigeneric.h"
 #include "comm/senderreaktor.h"
@@ -46,7 +47,6 @@
 #include "widgets/buttons/togglemenu.h"
 #include "widgets/buttons/togglepresets.h"
 #include "widgets/buttons/octaveshift.h"
-#include "widgets/mwgame.h"
 #include "conf/purchases.h"
 #include "heartbeat.h"
 #include "xmlloader.h"
@@ -207,7 +207,7 @@ protected:
 
 private:
     XmlLoader*  _xmlLoader;
-    MWGame*     _game;
+    GameControl*     _game;
     Heartbeat*  _heartbeat;
 
     MasterSender*           _out;
@@ -218,8 +218,8 @@ private:
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _scaleSwitch;
-    MWOctaveRanger* _OctaveRanger;
-    MWPlayArea*     _PlayArea;    
+    OctaveRanger* _OctaveRanger;
+    PlayArea*     _PlayArea;
 
     OpenArchive*        _openArchive;
     TogglePresets*      _togglePresets;

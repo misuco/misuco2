@@ -1,4 +1,4 @@
-#include "OctaveShift.h"
+#include "octaveshift.h"
 
 OctaveShift::OctaveShift(QString text, bool up, QObject * parent) : ButtonBase(text,0,parent),
     _up(up)

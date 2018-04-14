@@ -19,8 +19,8 @@
 #ifndef QOSCCLIENT_H
 #define QOSCCLIENT_H
 
-#include <qosctypes.h>
-#include <qoscclientinterface.h>
+#include "qosctypes.h"
+#include "qoscclientinterface.h"
 
 /**
  * will contain the definitions/classes of osc clients

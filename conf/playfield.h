@@ -6,7 +6,7 @@
 #include "freqtriple.h"
 #include "types.h"
 
-class MWPlayfield : public QObject
+class Playfield : public QObject
 {
     Q_OBJECT
 
@@ -21,7 +21,7 @@ class MWPlayfield : public QObject
     Q_PROPERTY(QString text3 MEMBER text3 NOTIFY textChanged)
 
 public:
-    explicit MWPlayfield(QObject *parent = nullptr);
+    explicit Playfield(QObject *parent = nullptr);
 
     void calcColor();
     void calcText();

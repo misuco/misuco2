@@ -2,10 +2,10 @@
 #define MWGAME_H
 
 #include <QObject>
-#include "mwplayarea.h"
+#include "playarea.h"
 #include "comm/isender.h"
 
-class MWGame : public QObject, public ISender
+class GameControl : public QObject, public ISender
 {
     Q_OBJECT
 
@@ -14,8 +14,8 @@ class MWGame : public QObject, public ISender
     Q_PROPERTY(bool visible MEMBER _gameVisible  NOTIFY buttonsChanged)
 
 public:
-    MWGame(MWPlayArea *playArea, QObject *parent);
-    ~MWGame() {}
+    GameControl(PlayArea *playArea, QObject *parent);
+    ~GameControl() {}
 
     Q_INVOKABLE void yes();
     Q_INVOKABLE void no();
@@ -44,7 +44,7 @@ protected:
 
 private:
     enum Status { off, intro, play, listen, compare};
-    MWPlayArea * _playArea;
+    PlayArea * _playArea;
     Status _status;
     int _statusDuration;
     int _playIndex;

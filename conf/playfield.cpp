@@ -1,120 +1,120 @@
-#include "mwplayfield.h"
+#include "playfield.h"
 #include "conf/colormacros.h"
 #include <QDebug>
 
-MWPlayfield::MWPlayfield(QObject *parent) : QObject(parent),
+Playfield::Playfield(QObject *parent) : QObject(parent),
     f1(0,this),
     f2(0,this)
 {}
 
-void MWPlayfield::setF1rootNote(int r)
+void Playfield::setF1rootNote(int r)
 {
     f1.setRootNote(r);
 }
 
-void MWPlayfield::setF2rootNote(int r)
+void Playfield::setF2rootNote(int r)
 {
     f2.setRootNote(r);
 }
 
-void MWPlayfield::setF2midiNote(int midiNote, int pitch)
+void Playfield::setF2midiNote(int midiNote, int pitch)
 {
     f2.setMidinote(midiNote,pitch);
 }
 
-float MWPlayfield::getF2freq()
+float Playfield::getF2freq()
 {
     return f2.getFreq();
 }
 
-int MWPlayfield::getF2midiNote()
+int Playfield::getF2midiNote()
 {
     return f2.getMidinote();
 }
 
-int MWPlayfield::getF2pitch()
+int Playfield::getF2pitch()
 {
     return f2.getPitch();
 }
 
-void MWPlayfield::setHue2Bent(float h)
+void Playfield::setHue2Bent(float h)
 {
     if(h>1) h-=1;
     if(h<0) h+=1;
     hue2bent = h;
 }
 
-float MWPlayfield::getF2Hue()
+float Playfield::getF2Hue()
 {
     return f2.getHue();
 }
 
-void MWPlayfield::setType(int t)
+void Playfield::setType(int t)
 {
     type=t;
 }
 
-int MWPlayfield::getType()
+int Playfield::getType()
 {
     return type;
 }
 
-void MWPlayfield::setPressed(int v)
+void Playfield::setPressed(int v)
 {
     pressed = v;
     calcColor();
 }
 
-void MWPlayfield::incPressed()
+void Playfield::incPressed()
 {
     pressed++;
     calcColor();
 }
 
-void MWPlayfield::decPressed()
+void Playfield::decPressed()
 {
     pressed--;
     calcColor();
 }
 
-int MWPlayfield::getPressed()
+int Playfield::getPressed()
 {
     return pressed;
 }
 
-void MWPlayfield::setF1midiNote(int midiNote, int pitch)
+void Playfield::setF1midiNote(int midiNote, int pitch)
 {
     f1.setMidinote(midiNote,pitch);
 }
 
-float MWPlayfield::getF1freq()
+float Playfield::getF1freq()
 {
     return f1.getFreq();
 }
 
-int MWPlayfield::getF1midiNote()
+int Playfield::getF1midiNote()
 {
     return f1.getMidinote();
 }
 
-int MWPlayfield::getF1pitch()
+int Playfield::getF1pitch()
 {
     return f1.getPitch();
 }
 
-void MWPlayfield::setHue1Bent(float h)
+void Playfield::setHue1Bent(float h)
 {
     if(h>1) h-=1;
     if(h<0) h+=1;
     hue1bent = h;
 }
 
-float MWPlayfield::getF1Hue()
+float Playfield::getF1Hue()
 {
     return f1.getHue();
 }
 
-void MWPlayfield::calcColor()
+void Playfield::calcColor()
 {
     //qDebug() << "MWPlayfield::calcColor " << pressed << " " << this;
 
@@ -175,7 +175,7 @@ void MWPlayfield::calcColor()
     emit colorChanged();
 }
 
-void MWPlayfield::calcText()
+void Playfield::calcText()
 {
     text1="";
     text2=f1.getRootNoteString(_noteSymbols);
@@ -191,25 +191,25 @@ void MWPlayfield::calcText()
     emit textChanged();
 }
 
-void MWPlayfield::onPitchChange(int rootNote, int pitch)
+void Playfield::onPitchChange(int rootNote, int pitch)
 {
     f1.onPitchChange(rootNote,pitch);
     f2.onPitchChange(rootNote,pitch);
 }
 
-void MWPlayfield::setBwMode(bool state)
+void Playfield::setBwMode(bool state)
 {
     _bwmode = state;
     calcColor();
 }
 
-void MWPlayfield::setNoteSymbols(int symbols)
+void Playfield::setNoteSymbols(int symbols)
 {
     _noteSymbols = symbols;
     calcText();
 }
 
-void MWPlayfield::showFreqs(bool state)
+void Playfield::showFreqs(bool state)
 {
     _showFreqs = state;
     calcText();

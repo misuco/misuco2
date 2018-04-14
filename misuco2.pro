@@ -21,17 +21,8 @@ DEFINES  += QT_DEPRECATED_WARNINGS
 TARGET = misuco2
 TEMPLATE = app
 
-INCLUDEPATH += conf
-INCLUDEPATH += comm
-INCLUDEPATH += comm/libofqf
-INCLUDEPATH += mobilesynth/synth
-INCLUDEPATH += mobilesynth/mobilesynth/Classes
-INCLUDEPATH += mobilesynth/lib
-
-
 SOURCES += main.cpp\
     app/misuco2.cpp \
-    widgets/mwplayarea.cpp \
     conf/freqtriple.cpp \
     comm/libofqf/qoscclient.cpp \
     comm/libofqf/qosctypes.cpp \
@@ -49,8 +40,6 @@ SOURCES += main.cpp\
     mobilesynth/synth/parameter.cpp \
     comm/sendermobilesynth.cpp \
     mobilesynth/mobilesynthqt52.cpp \
-    widgets/mwrootnotesetter.cpp \
-    widgets/mwoctaveranger.cpp \
     widgets/faders/mwfaderpitch.cpp \
     widgets/faders/mwfaderparamctl.cpp \
     widgets/presets/mwsoundpreset.cpp \
@@ -59,8 +48,6 @@ SOURCES += main.cpp\
     comm/senderreaktor.cpp \
     comm/sendersupercollider.cpp \
     widgets/presets/mwmicrotunepreset.cpp \
-    conf/mwplayfield.cpp \
-    widgets/mwgame.cpp \
     widgets/presets/mwscalepreset.cpp \
     widgets/presets/presetcollection.cpp \
     conf/purchases.cpp \
@@ -76,16 +63,20 @@ SOURCES += main.cpp\
     widgets/buttons/togglesender.cpp \
     widgets/buttons/togglebw.cpp \
     widgets/buttons/showfreqs.cpp \
-    widgets/scaleswitch.cpp \
+    widgets/core/scaleswitch.cpp \
     widgets/buttons/toggleheader.cpp \
     widgets/buttons/setmainview.cpp \
     widgets/buttons/togglemenu.cpp \
     widgets/buttons/togglepresets.cpp \
-    widgets/buttons/octaveshift.cpp
+    widgets/buttons/octaveshift.cpp \
+    conf/playfield.cpp \
+    widgets/core/gamecontrol.cpp \
+    widgets/core/octaveranger.cpp \
+    widgets/core/rootnotesetter.cpp \
+    widgets/core/playarea.cpp
 
 HEADERS  += \
     app/misuco2.h \
-    widgets/mwplayarea.h \
     conf/types.h \
     conf/freqtriple.h \
     comm/libofqf/qoscclient.h \
@@ -111,8 +102,6 @@ HEADERS  += \
     comm/sendermobilesynth.h \
     mobilesynth/mobilesynthviewcontrollerrc1.hpp \
     mobilesynth/mobilesynthqt52.h \
-    widgets/mwrootnotesetter.h \
-    widgets/mwoctaveranger.h \
     widgets/faders/mwfaderpitch.h \
     widgets/faders/mwfaderparamctl.h \
     widgets/presets/mwsoundpreset.h \
@@ -121,8 +110,6 @@ HEADERS  += \
     comm/sendersupercollider.h \
     comm/senderreaktor.h \
     widgets/presets/mwmicrotunepreset.h \
-    conf/mwplayfield.h \
-    widgets/mwgame.h \
     widgets/presets/mwscalepreset.h \
     widgets/presets/presetcollection.h \
     conf/purchases.h \
@@ -139,12 +126,17 @@ HEADERS  += \
     widgets/buttons/togglesender.h \
     widgets/buttons/togglebw.h \
     widgets/buttons/showfreqs.h \
-    widgets/scaleswitch.h \
+    widgets/core/scaleswitch.h \
     widgets/buttons/toggleheader.h \
     widgets/buttons/setmainview.h \
     widgets/buttons/togglemenu.h \
     widgets/buttons/togglepresets.h \
-    widgets/buttons/octaveshift.h
+    widgets/buttons/octaveshift.h \
+    conf/playfield.h \
+    widgets/core/gamecontrol.h \
+    widgets/core/octaveranger.h \
+    widgets/core/rootnotesetter.h \
+    widgets/core/playarea.h
 
 CONFIG += mobility
 MOBILITY = 

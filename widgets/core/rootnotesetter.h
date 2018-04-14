@@ -24,7 +24,7 @@
 #include "comm/mastersender.h"
 #include "conf/freqtriple.h"
 
-class MWRootNoteSetter : public QObject
+class RootNoteSetter : public QObject
 {
     Q_OBJECT
 
@@ -34,8 +34,8 @@ class MWRootNoteSetter : public QObject
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
-    MWRootNoteSetter(int rootNote, MasterSender *ms, QObject *parent);
-    ~MWRootNoteSetter();
+    RootNoteSetter(int rootNote, MasterSender *ms, QObject *parent);
+    ~RootNoteSetter();
 
     Q_INVOKABLE void onPressed();
     Q_INVOKABLE void onReleased();

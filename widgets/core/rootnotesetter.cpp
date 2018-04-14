@@ -18,10 +18,10 @@
  *
  */
 
-#include "mwrootnotesetter.h"
+#include "rootnotesetter.h"
 #include <QDebug>
 
-MWRootNoteSetter::MWRootNoteSetter(int rootNote, MasterSender *ms, QObject *parent) : QObject(parent),
+RootNoteSetter::RootNoteSetter(int rootNote, MasterSender *ms, QObject *parent) : QObject(parent),
     _out(ms),
     _rootNote(rootNote),
     _noteSymbols(0),
@@ -35,18 +35,18 @@ MWRootNoteSetter::MWRootNoteSetter(int rootNote, MasterSender *ms, QObject *pare
     calcText();
 }
 
-MWRootNoteSetter::~MWRootNoteSetter()
+RootNoteSetter::~RootNoteSetter()
 {
     _freq->deleteLater();
 }
 
-void MWRootNoteSetter::setOctMid(int o)
+void RootNoteSetter::setOctMid(int o)
 {
     _freq->setOct(o);
     calcText();
 }
 
-void MWRootNoteSetter::onPitchChange(int rootNote, int pitch)
+void RootNoteSetter::onPitchChange(int rootNote, int pitch)
 {
     //qDebug() << "MWrootNoteSetter::pitchChange "  << f->getPitch();
     if(rootNote == _rootNote) {
@@ -55,7 +55,7 @@ void MWRootNoteSetter::onPitchChange(int rootNote, int pitch)
     }
 }
 
-void MWRootNoteSetter::onSetRootNote(int rootNote)
+void RootNoteSetter::onSetRootNote(int rootNote)
 {
     if(rootNote == _rootNote) {
         if(!_selected) {
@@ -70,23 +70,23 @@ void MWRootNoteSetter::onSetRootNote(int rootNote)
     }
 }
 
-void MWRootNoteSetter::onSetScale(int rootNote, QList<bool>)
+void RootNoteSetter::onSetScale(int rootNote, QList<bool>)
 {
     onSetRootNote(rootNote);
 }
 
-void MWRootNoteSetter::onSymbolsChange(int noteSymbols)
+void RootNoteSetter::onSymbolsChange(int noteSymbols)
 {
     _noteSymbols = noteSymbols;
     calcText();
 }
 
-void MWRootNoteSetter::onShowFreqsChange(bool showFreqs)
+void RootNoteSetter::onShowFreqsChange(bool showFreqs)
 {
     _showFreqs = showFreqs;
 }
 
-void MWRootNoteSetter::calcText()
+void RootNoteSetter::calcText()
 {
     _text1 = _freq->getRootNoteString(_noteSymbols);
 
@@ -99,13 +99,13 @@ void MWRootNoteSetter::calcText()
     emit textChanged();
 }
 
-void MWRootNoteSetter::onPressed()
+void RootNoteSetter::onPressed()
 {
     if(_out && _pressed == 0) _vId=_out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
 }
 
-void MWRootNoteSetter::onReleased()
+void RootNoteSetter::onReleased()
 {
     if(_out && _pressed == 1) {
         _out->noteOff(_vId);

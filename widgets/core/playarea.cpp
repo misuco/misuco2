@@ -18,14 +18,14 @@
  *
  */
 
-#include "mwplayarea.h"
+#include "playarea.h"
 #include <QDebug>
 #include <QLinearGradient>
 #include <QTouchEvent>
 #include <QDateTime>
 #include "comm/mastersender.h"
 
-MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
+PlayArea::PlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     out(ms),
     fcalc(0,this),
     _sendCc1(false)
@@ -58,11 +58,11 @@ MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     config();
 }
 
-MWPlayArea::~MWPlayArea()
+PlayArea::~PlayArea()
 {
 }
 
-void MWPlayArea::config()
+void PlayArea::config()
 {
     /*
      *  |.|.||.|.|.| |
@@ -99,7 +99,7 @@ void MWPlayArea::config()
     emit playRowsChanged();
 }
 
-void MWPlayArea::setColumn(int col, int midinote, int pitch) {
+void PlayArea::setColumn(int col, int midinote, int pitch) {
     //qDebug() << "setColumn " << col << " midinote " << midinote << " rootNote " << rootNote;
     rows=0;
 
@@ -159,7 +159,7 @@ void MWPlayArea::setColumn(int col, int midinote, int pitch) {
     }
 }
 
-void MWPlayArea::calcGeo()
+void PlayArea::calcGeo()
 {
     _playFieldWidth=_playAreaWidth/cols;
     _playFieldHeight=_playAreaHeight/rows;
@@ -171,37 +171,37 @@ void MWPlayArea::calcGeo()
     }
 }
 
-int MWPlayArea::getMidinoteAtField(int i)
+int PlayArea::getMidinoteAtField(int i)
 {
     return fields[0][i].getF1midiNote();
 }
 
-int MWPlayArea::getColumnCount()
+int PlayArea::getColumnCount()
 {
     return cols;
 }
 
-int MWPlayArea::getPlayAreaWidth()
+int PlayArea::getPlayAreaWidth()
 {
     return _playAreaWidth;
 }
 
-int MWPlayArea::getPlayAreaHeight()
+int PlayArea::getPlayAreaHeight()
 {
     return _playAreaHeight;
 }
 
-int MWPlayArea::getPlayFieldWidth()
+int PlayArea::getPlayFieldWidth()
 {
     return _playFieldWidth;
 }
 
-int MWPlayArea::getPlayFieldHeight()
+int PlayArea::getPlayFieldHeight()
 {
     return _playFieldHeight;
 }
 
-void MWPlayArea::processTouchEvent(misuTouchEvent e)
+void PlayArea::processTouchEvent(misuTouchEvent e)
 {
     //qDebug() << "MWPlayArea::processPoint " << e.id << " x " << e.x << " y " << e.y << " t " << e.t;
 
@@ -222,7 +222,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
 
-    MWPlayfield * pf = &fields[row][col];
+    Playfield * pf = &fields[row][col];
     //qDebug() << "row " << row << " col " << col << " eventHash " << eventHash;
 
     float freq;
@@ -301,7 +301,7 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
 
     case Qt::TouchPointMoved:
         if(row!=es->row || col!=es->col) {
-            MWPlayfield * ppf = &fields[es->row][es->col];
+            Playfield * ppf = &fields[es->row][es->col];
             ppf->decPressed();
             out->noteOff(es->voiceId);
 
@@ -335,14 +335,14 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     pf->calcColor();
 }
 
-void MWPlayArea::onSetRootNote(int p)
+void PlayArea::onSetRootNote(int p)
 {
     _rootNote=p;
     config();
 }
 
 
-void MWPlayArea::setOctConf(int bottom, int top)
+void PlayArea::setOctConf(int bottom, int top)
 {
     _baseOct=bottom;
     _topOct=top;
@@ -350,21 +350,21 @@ void MWPlayArea::setOctConf(int bottom, int top)
 
 }
 
-void MWPlayArea::setScale(int n, bool v)
+void PlayArea::setScale(int n, bool v)
 {
     //qDebug() << "MWPlayArea::setScale " << n << " " << v;
     _scale[n-1]=v;
     config();
 }
 
-void MWPlayArea::onSetScale(int rootNote, QList<bool> scale)
+void PlayArea::onSetScale(int rootNote, QList<bool> scale)
 {
     _rootNote=rootNote;
     _scale=scale;
     config();
 }
 
-void MWPlayArea::onPitchChange(int rootNote, int pitch)
+void PlayArea::onPitchChange(int rootNote, int pitch)
 {
     for(int col=0;col<MAX_COLS;col++) {
         for(int row=0;row<MAX_ROWS;row++) {
@@ -373,30 +373,30 @@ void MWPlayArea::onPitchChange(int rootNote, int pitch)
     }
 }
 
-void MWPlayArea::onSendCc1(bool state)
+void PlayArea::onSendCc1(bool state)
 {
     _sendCc1 = state;
 }
 
-void MWPlayArea::setBendHori(bool b)
+void PlayArea::setBendHori(bool b)
 {
     bendHoriz=b;
     config();
 }
 
-void MWPlayArea::setBendVertTop(int b)
+void PlayArea::setBendVertTop(int b)
 {
     bendVertTop=b;
     config();
 }
 
-void MWPlayArea::setBendVertBot(int b)
+void PlayArea::setBendVertBot(int b)
 {
     bendVertBot=b;
     config();
 }
 
-void MWPlayArea::onBwModeChange(bool state)
+void PlayArea::onBwModeChange(bool state)
 {
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
@@ -405,7 +405,7 @@ void MWPlayArea::onBwModeChange(bool state)
     }
 }
 
-void MWPlayArea::onSymbolsChange(int noteSymbols)
+void PlayArea::onSymbolsChange(int noteSymbols)
 {
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
@@ -414,7 +414,7 @@ void MWPlayArea::onSymbolsChange(int noteSymbols)
     }
 }
 
-void MWPlayArea::onShowFreqsChange(bool showFreqs)
+void PlayArea::onShowFreqsChange(bool showFreqs)
 {
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
@@ -423,7 +423,7 @@ void MWPlayArea::onShowFreqsChange(bool showFreqs)
     }
 }
 
-void MWPlayArea::resize(int w, int h)
+void PlayArea::resize(int w, int h)
 {
     //qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
     _playAreaWidth=w;
@@ -431,7 +431,7 @@ void MWPlayArea::resize(int w, int h)
     calcGeo();
 }
 
-void MWPlayArea::onPressed(int id, int x, int y)
+void PlayArea::onPressed(int id, int x, int y)
 {
     //qDebug() << "MWPlayArea::onPressed id: " << id << " x: " << x << " y: " << y;
     misuTouchEvent e;
@@ -443,7 +443,7 @@ void MWPlayArea::onPressed(int id, int x, int y)
     processTouchEvent(e);
 }
 
-void MWPlayArea::onUpdated(int id, int x, int y)
+void PlayArea::onUpdated(int id, int x, int y)
 {
     //qDebug() << "MWPlayArea::onUpdated id: " << id << " x: " << x << " y: " << y;
     misuTouchEvent e;
@@ -455,7 +455,7 @@ void MWPlayArea::onUpdated(int id, int x, int y)
     processTouchEvent(e);
 }
 
-void MWPlayArea::onReleased(int id, int x, int y)
+void PlayArea::onReleased(int id, int x, int y)
 {
     //qDebug() << "MWPlayArea::onReleased id: " << id << " x: " << x << " y: " << y;
     misuTouchEvent e;
@@ -467,7 +467,7 @@ void MWPlayArea::onReleased(int id, int x, int y)
     processTouchEvent(e);
 }
 
-QList<QObject *> MWPlayArea::row0()
+QList<QObject *> PlayArea::row0()
 {
     QList<QObject*> colsList;
     for(int j=0;j<cols;j++) {
@@ -477,7 +477,7 @@ QList<QObject *> MWPlayArea::row0()
     return colsList;
 }
 
-QList<QObject *> MWPlayArea::row1()
+QList<QObject *> PlayArea::row1()
 {
     QList<QObject*> colsList;
     for(int j=0;j<cols;j++) {
@@ -487,7 +487,7 @@ QList<QObject *> MWPlayArea::row1()
     return colsList;
 }
 
-QList<QObject *> MWPlayArea::row2()
+QList<QObject *> PlayArea::row2()
 {
     QList<QObject*> colsList;
     for(int j=0;j<cols;j++) {

@@ -1,8 +1,8 @@
 #ifndef QOSCMSGPARSER_H
 #define QOSCMSGPARSER_H
 
-#include <qosctypes.h>
 #include <QAbstractSocket>
+#include "qosctypes.h"
 
 class QOscMsgParser : public QOscBase
 {

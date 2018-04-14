@@ -23,13 +23,13 @@
 
 #include "conf/types.h"
 #include "comm/mastersender.h"
-#include "mwplayfield.h"
+#include "conf/playfield.h"
 
 #define MAX_COLS 255
 #define MAX_ROWS 3
 #define EVENT_STACK_SIZE 64
 
-class MWPlayArea : public QObject
+class PlayArea : public QObject
 {
     Q_OBJECT
 
@@ -51,8 +51,8 @@ public:
         float f;
     };
 
-    MWPlayArea(MasterSender * ms, QObject *parent);
-    ~MWPlayArea();
+    PlayArea(MasterSender * ms, QObject *parent);
+    ~PlayArea();
     virtual void processTouchEvent(misuTouchEvent e);
 
     Q_INVOKABLE void resize(int w, int h);
@@ -114,7 +114,7 @@ private:
 
     // WORKING MEMORY
     // - touch field configuration
-    MWPlayfield fields[MAX_ROWS][MAX_COLS];        
+    Playfield fields[MAX_ROWS][MAX_COLS];
     int rows;
     int cols;
     // - event stack/hashmap

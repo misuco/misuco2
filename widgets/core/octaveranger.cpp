@@ -18,9 +18,9 @@
  *
  */
 
-#include "mwoctaveranger.h"
+#include "octaveranger.h"
 
-MWOctaveRanger::MWOctaveRanger(QObject *parent) : QObject(parent)
+OctaveRanger::OctaveRanger(QObject *parent) : QObject(parent)
 {
     top=7;
     mid=6;
@@ -30,12 +30,12 @@ MWOctaveRanger::MWOctaveRanger(QObject *parent) : QObject(parent)
     grabedBot=false;
 }
 
-MWOctaveRanger::~MWOctaveRanger()
+OctaveRanger::~OctaveRanger()
 {
 
 }
 
-void MWOctaveRanger::onUpdated(int id, int x)
+void OctaveRanger::onUpdated(int id, int x)
 {
     int touchOct=x/segwidth;
     if(touchOct==bottom) {
@@ -80,7 +80,7 @@ void MWOctaveRanger::onUpdated(int id, int x)
     }
 }
 
-void MWOctaveRanger::onReleased(int id)
+void OctaveRanger::onReleased(int id)
 {
     if(grabedTopTouchId == id) {
         grabedTop = false;
@@ -89,12 +89,12 @@ void MWOctaveRanger::onReleased(int id)
     }
 }
 
-void MWOctaveRanger::onResize(int w)
+void OctaveRanger::onResize(int w)
 {
     segwidth = w / noct;
 }
 
-void MWOctaveRanger::octUp()
+void OctaveRanger::octUp()
 {
     if(top<9) {
         top++;
@@ -107,7 +107,7 @@ void MWOctaveRanger::octUp()
     }
 }
 
-void MWOctaveRanger::octDown()
+void OctaveRanger::octDown()
 {
     if(bottom>0) {
         top--;

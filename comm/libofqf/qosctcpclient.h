@@ -1,9 +1,9 @@
 #ifndef QOSCTCPCLIENT_H
 #define QOSCTCPCLIENT_H
 
-#include <qosctypes.h>
-#include <qoscclientinterface.h>
 #include <QTcpSocket>
+#include "qosctypes.h"
+#include "qoscclientinterface.h"
 
 class QOscTcpClient : public QOscBase, public QOscClientInterface, public QOscServerInterface
 {

@@ -23,7 +23,7 @@
 
 #include <QObject>
 
-class MWOctaveRanger : public QObject
+class OctaveRanger : public QObject
 {
     Q_OBJECT
 
@@ -32,8 +32,8 @@ class MWOctaveRanger : public QObject
     Q_PROPERTY(int nOctaves MEMBER noct CONSTANT)
 
 public:
-    MWOctaveRanger(QObject *parent);
-    ~MWOctaveRanger();
+    OctaveRanger(QObject *parent);
+    ~OctaveRanger();
 
     Q_INVOKABLE void onUpdated(int id, int x);
     Q_INVOKABLE void onReleased(int id);
