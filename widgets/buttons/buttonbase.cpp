@@ -51,15 +51,15 @@ bool ButtonBase::selected()
 void ButtonBase::onPressed()
 {
     _pressed=1;
-    emit selectedChanged();
     pressAction();
+    emit selectedChanged();
 }
 
 void ButtonBase::onReleased()
 {
     _pressed=0;
-    emit selectedChanged();
     releaseAction();
+    emit selectedChanged();
 }
 
 void ButtonBase::pressAction()
