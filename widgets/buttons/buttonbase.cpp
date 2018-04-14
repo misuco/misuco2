@@ -80,5 +80,6 @@ void ButtonBase::setAction()
 void ButtonBase::setState(int s)
 {
     _state = s;
+    setAction();
     emit selectedChanged();
 }
