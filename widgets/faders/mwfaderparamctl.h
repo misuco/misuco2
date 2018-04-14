@@ -33,11 +33,7 @@ public:
     MWFaderParamCtl(int cc, MasterSender * ms, QObject *parent);
     ~MWFaderParamCtl();
 
-    void setValue(int v);
-
-    Q_INVOKABLE void onPressedPitch(int id);
-    Q_INVOKABLE void onUpdatedPitch(int id);
-    Q_INVOKABLE void onReleasedPitch(int id);
+    int getCc();
 
 signals:
     void controlValueChange(int value);
@@ -52,7 +48,6 @@ private:
     int _pressed;
     int _eventId;
 
-    void propagateValueChange();
 };
 
 #endif // MWFaderParamCtl_H

@@ -21,8 +21,9 @@
 #ifndef MWSound_H
 #define MWSound_H
 
-#include "conf/mglob.h"
+#include <QObject>
 #include "conf/types.h"
+#include "widgets/faders/mwfaderparamctl.h"
 
 class MWSoundPreset : public QObject
 {
@@ -38,8 +39,8 @@ class MWSoundPreset : public QObject
     Q_PROPERTY(bool selected READ isSelected NOTIFY selectedChanged)
 
 public:
-    MWSoundPreset(QObject *parent);
-    MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent);
+    MWSoundPreset(QList<QObject *> soundFaders, QObject *parent);
+    MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QList<QObject *> soundFaders, QObject *parent);
 
     int wave();
     int attack();
@@ -73,6 +74,7 @@ signals:
 
 private:
     MWSound PresetSound;
+    QList<MWFaderParamCtl*> _soundFaders;
 
     int pressed=0;
     int fontheight=8;

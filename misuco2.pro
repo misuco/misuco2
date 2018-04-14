@@ -62,7 +62,6 @@ SOURCES += main.cpp\
     widgets/presets/mwmicrotunepreset.cpp \
     conf/mwplayfield.cpp \
     widgets/mwgame.cpp \
-    conf/mglob.cpp \
     widgets/presets/mwscalepreset.cpp \
     widgets/presets/presetcollection.cpp \
     conf/purchases.cpp \
@@ -121,7 +120,6 @@ HEADERS  += \
     widgets/presets/mwmicrotunepreset.h \
     conf/mwplayfield.h \
     widgets/mwgame.h \
-    conf/mglob.h \
     widgets/presets/mwscalepreset.h \
     widgets/presets/presetcollection.h \
     conf/purchases.h \

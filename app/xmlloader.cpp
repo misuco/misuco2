@@ -132,6 +132,7 @@ void XmlLoader::decodeSynthRecord() {
                     _xmlReader.attributes().value("resonance").toString().toFloat(),
                     _xmlReader.attributes().value("mod_cutoff").toString().toFloat(),
                     _xmlReader.attributes().value("mod_resonance").toString().toFloat(),
+                    _app->_faderParamCtl,
                     this);
         connect(soundPreset,SIGNAL(setSound(MWSound*)),_app,SLOT(setSound(MWSound*)));
         connect(soundPreset,SIGNAL(editPreset()),_app->_scalePresets,SLOT(onEditPreset()));
@@ -148,7 +149,7 @@ void XmlLoader::decodeTuneRecord() {
             attId.sprintf("t%d",i);
             microtune[i]=_xmlReader.attributes().value(attId).toString().toInt();
         }
-        MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,this);
+        MWMicrotunePreset * microtunePreset = new MWMicrotunePreset(microtune,_app->_faderMicrotune,this);
         connect(microtunePreset,SIGNAL(setMicrotune(MWMicrotune*)),_app,SLOT(setMicrotune(MWMicrotune*)));
         connect(microtunePreset,SIGNAL(editPreset()),_app->_scalePresets,SLOT(onEditPreset()));
         _app->_tunePresets->append(microtunePreset);

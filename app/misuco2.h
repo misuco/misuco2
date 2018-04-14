@@ -127,6 +127,8 @@ signals:
     void scaleupdate();
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
+
+    // notify other presets on sound change
     void soundChanged();
 
     // QML
@@ -141,7 +143,6 @@ private slots:
     void setSound(MWSound* s);
     void setMicrotune(MWMicrotune* m);
     void onChannelChange(int v);
-    void onSoundChanged(int);
     void onGameStarted();
 
     void setOctConf(int bot, int top);
@@ -160,6 +161,12 @@ protected:
     bool _scalePresetsVisible;
     bool _synthPresetsVisible;
     bool _tunePresetsVisible;
+
+    // synth ctl faders
+    QList<QObject*> _faderParamCtl;
+
+    // microtuning faders
+    QList<QObject*> _faderMicrotune;
 
     // faders
     MWFaderParamCtl * faderPitchTopRange;
@@ -186,37 +193,30 @@ protected:
     int _channel;
 
 private:
-    XmlLoader    * _xmlLoader;
+    XmlLoader*  _xmlLoader;
+    MWGame*     _game;
+    Heartbeat*  _heartbeat;
 
-    MasterSender * _out;
-    SenderOscMidiGeneric *  _senderOscMidiGeneric;
-    SenderReaktor *         _senderReaktor;
+    MasterSender*           _out;
+    SenderOscMidiGeneric*   _senderOscMidiGeneric;
+    SenderReaktor*          _senderReaktor;
 
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _scaleSwitch;
     MWOctaveRanger* _OctaveRanger;
-    MWPlayArea *    _PlayArea;
-
-    // synth ctl faders
-    QList<QObject*> _faderParamCtl;
-    QList<QObject*> _faderMicrotune;
+    MWPlayArea*     _PlayArea;
 
     // right menu
-    QList<QObject *> _menu;
+    QList<QObject *>    _menu;
 
-    OpenArchive * _openArchive;
-    MWHeaderSetter * showPresets;
-    MWHeaderSetter * showMenu;
-    MWHeaderSetter * octUp;
-    MWHeaderSetter * octDown;
-
-    MWGame * _game;
-
-    Heartbeat * _heartbeat;
+    OpenArchive*        _openArchive;
+    MWHeaderSetter*     showPresets;
+    MWHeaderSetter*     showMenu;
+    MWHeaderSetter*     octUp;
+    MWHeaderSetter*     octDown;
 
     // layout
-
     int _botOct;
     int _topOct;
 

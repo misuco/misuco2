@@ -21,16 +21,17 @@
 #ifndef MWMicrotunePreset_H
 #define MWMicrotunePreset_H
 
-#include "conf/mglob.h"
+#include <QObject>
 #include "conf/types.h"
+#include "widgets/faders/mwfaderpitch.h"
 
 class MWMicrotunePreset : public QObject
 {
     Q_OBJECT
 
 public:
-    MWMicrotunePreset(QObject *parent);
-    MWMicrotunePreset(int tuning[], QObject *parent);
+    MWMicrotunePreset(QList<QObject *> tuningFaders, QObject *parent);
+    MWMicrotunePreset(int tuning[], QList<QObject *> tuningFaders, QObject *parent);
     virtual void processTouchEvent(misuTouchEvent e);
     MWMicrotune PresetMicrotune;
 
@@ -42,6 +43,7 @@ signals:
     void editPreset();
 
 private:
+    QList<MWFaderPitch*> _tuningFaders;
     int pressed=0;
     bool isSelected();
 };

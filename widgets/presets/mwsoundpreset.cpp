@@ -22,8 +22,10 @@
 #include "presetcollection.h"
 #include <QDebug>
 
-MWSoundPreset::MWSoundPreset(QObject *parent): QObject(parent)
+MWSoundPreset::MWSoundPreset(QList<QObject *> soundFaders, QObject *parent): QObject(parent)
 {
+    for(auto soundFader:soundFaders) _soundFaders.append(qobject_cast<MWFaderParamCtl*>(soundFader));
+    //_soundFaders = soundFaders;
     PresetSound.volume=800;
     PresetSound.wave_type=qrand() % 4;
     PresetSound.attack=qrand() % 100;
@@ -36,8 +38,10 @@ MWSoundPreset::MWSoundPreset(QObject *parent): QObject(parent)
     PresetSound.mod_filter_resonance=0;
 }
 
-MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QObject *parent): QObject(parent)
+MWSoundPreset::MWSoundPreset(float vol, int wav, int att, int dec, float sus, int rel, float cut, float res, float modcut, float modres, QList<QObject*> soundFaders, QObject *parent): QObject(parent)
 {
+    for(auto soundFader:soundFaders) _soundFaders.append(qobject_cast<MWFaderParamCtl*>(soundFader));
+    //_soundFaders = soundFaders;
     PresetSound.volume=vol;
     PresetSound.wave_type=wav;
     PresetSound.attack=att;
@@ -102,16 +106,40 @@ float MWSoundPreset::volume()
 
 void MWSoundPreset::overwrite()
 {
-    PresetSound.volume=MGlob::Sound.volume;
-    PresetSound.wave_type=MGlob::Sound.wave_type;
-    PresetSound.attack=MGlob::Sound.attack;
-    PresetSound.decay=MGlob::Sound.decay;
-    PresetSound.sustain=MGlob::Sound.sustain;
-    PresetSound.release=MGlob::Sound.release;
-    PresetSound.filter_cutoff=MGlob::Sound.filter_cutoff;
-    PresetSound.filter_resonance=MGlob::Sound.filter_resonance;
-    PresetSound.mod_filter_cutoff=MGlob::Sound.mod_filter_cutoff;
-    PresetSound.mod_filter_resonance=MGlob::Sound.mod_filter_resonance;
+    for(auto s:_soundFaders) {
+    switch(s->getCc()) {
+        case 102:
+            PresetSound.wave_type=s->getValue();
+            break;
+        case 103:
+            PresetSound.attack=s->getValue();
+            break;
+        case 104:
+            PresetSound.decay=s->getValue();
+            break;
+        case 105:
+            PresetSound.sustain=s->getValue();
+            break;
+        case 106:
+            PresetSound.release=s->getValue();
+            break;
+        case 107:
+            PresetSound.filter_cutoff=s->getValue();
+            break;
+        case 108:
+            PresetSound.filter_resonance=s->getValue();
+            break;
+        case 109:
+            PresetSound.mod_filter_cutoff=s->getValue();
+            break;
+        case 110:
+            PresetSound.mod_filter_resonance=s->getValue();
+            break;
+        case 111:
+            PresetSound.volume=s->getValue();
+            break;
+        }
+    }
 
     emit presetChanged();
     emit selectedChanged();
@@ -126,7 +154,7 @@ void MWSoundPreset::onPressed()
 
 void MWSoundPreset::onPressAndHold()
 {
-    qDebug() << "MWSoundPreset::onPressAndHold";
+    //qDebug() << "MWSoundPreset::onPressAndHold";
     PresetCollection::dialogContext = this;
     canceled = true;
     emit editPreset();
@@ -158,16 +186,39 @@ void MWSoundPreset::onSoundChanged()
 }
 
 bool MWSoundPreset::isSelected() {
-    if( PresetSound.volume==MGlob::Sound.volume &&
-        PresetSound.wave_type==MGlob::Sound.wave_type &&
-        PresetSound.attack==MGlob::Sound.attack &&
-        PresetSound.decay==MGlob::Sound.decay &&
-        PresetSound.sustain==MGlob::Sound.sustain &&
-        PresetSound.release==MGlob::Sound.release &&
-        PresetSound.filter_cutoff==MGlob::Sound.filter_cutoff &&
-        PresetSound.filter_resonance==MGlob::Sound.filter_resonance &&
-        PresetSound.mod_filter_cutoff==MGlob::Sound.mod_filter_cutoff &&
-        PresetSound.mod_filter_resonance==MGlob::Sound.mod_filter_resonance
-    ) return true;
-    return false;
+    for(auto s:_soundFaders) {
+    switch(s->getCc()) {
+        case 102:
+            if(PresetSound.wave_type!=s->getValue()) return false;
+            break;
+        case 103:
+            if(PresetSound.attack!=s->getValue()) return false;
+            break;
+        case 104:
+            if(PresetSound.decay!=s->getValue()) return false;
+            break;
+        case 105:
+            if(PresetSound.sustain!=s->getValue()) return false;
+            break;
+        case 106:
+            if(PresetSound.release!=s->getValue()) return false;
+            break;
+        case 107:
+            if(PresetSound.filter_cutoff!=s->getValue()) return false;
+            break;
+        case 108:
+            if(PresetSound.filter_resonance!=s->getValue()) return false;
+            break;
+        case 109:
+            if(PresetSound.mod_filter_cutoff!=s->getValue()) return false;
+            break;
+        case 110:
+            if(PresetSound.mod_filter_resonance!=s->getValue()) return false;
+            break;
+        case 111:
+            if(PresetSound.volume!=s->getValue()) return false;
+            break;
+        }
+    }
+    return true;
 }

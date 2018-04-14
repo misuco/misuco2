@@ -21,7 +21,6 @@
 #ifndef MWSCALESWITCH_H
 #define MWSCALESWITCH_H
 
-#include "conf/mglob.h"
 #include "freqtriple.h"
 #include "comm/mastersender.h"
 

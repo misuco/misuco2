@@ -21,7 +21,7 @@
 #ifndef MWFADDER_H
 #define MWFADDER_H
 
-#include "conf/mglob.h"
+#include <QObject>
 
 class MWFader : public QObject
 {
@@ -57,9 +57,9 @@ public:
     };
 
     Q_INVOKABLE void onResize(int h);
-    Q_INVOKABLE void onPressed(int id, int x, int y, int h, int w);
-    Q_INVOKABLE void onUpdated(int id, int y, int h, int w);
-    Q_INVOKABLE void onReleased();
+    Q_INVOKABLE virtual void onPressed(int id, int x, int y, int h, int w);
+    Q_INVOKABLE virtual void onUpdated(int id, int y, int h, int w);
+    Q_INVOKABLE virtual void onReleased(int id);
 
     void setMinValue(int value);
     void setMaxValue(int value);    

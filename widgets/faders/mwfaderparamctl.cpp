@@ -75,74 +75,13 @@ MWFaderParamCtl::~MWFaderParamCtl()
 {
 }
 
-void MWFaderParamCtl::setValue(int v)
+int MWFaderParamCtl::getCc()
 {
-    MWFader::setValue(v);
-    propagateValueChange();
-    emit geoChanged();
-}
-
-void MWFaderParamCtl::propagateValueChange() {
-
-    switch(_cc) {
-    case 102:
-        MGlob::Sound.wave_type=getValue();
-        break;
-    case 103:
-        MGlob::Sound.attack=getValue();
-        break;
-    case 104:
-        MGlob::Sound.decay=getValue();
-        break;
-    case 105:
-        MGlob::Sound.sustain=getValue();
-        break;
-    case 106:
-        MGlob::Sound.release=getValue();
-        break;
-    case 107:
-        MGlob::Sound.filter_cutoff=getValue();
-        break;
-    case 108:
-        MGlob::Sound.filter_resonance=getValue();
-        break;
-    case 109:
-        MGlob::Sound.mod_filter_cutoff=getValue();
-        break;
-    case 110:
-        MGlob::Sound.mod_filter_resonance=getValue();
-        break;
-    case 111:
-        MGlob::Sound.volume=getValue();
-        break;
-    }
-
-    _out->cc(0,_cc,getValue(),getValue());
-}
-
-void MWFaderParamCtl::onPressedPitch(int id)
-{
-    //qDebug() << "MWFaderPitch::onPressedPitch " << id << " pressed " << pressed << " eventId " << eventId;
-    if(_pressed < 2) {
-        _eventId=id;
-        propagateValueChange();
-    }
-}
-
-void MWFaderParamCtl::onUpdatedPitch(int id)
-{
-    //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
-    if(id == _eventId) {
-        _out->cc(0,_cc,getValue(),getValue());
-        propagateValueChange();
-    }
-}
-
-void MWFaderParamCtl::onReleasedPitch(int)
-{
+    return _cc;
 }
 
 void MWFaderParamCtl::valueChange()
 {
+    _out->cc(0,_cc,getValue(),getValue());
     emit controlValueChange(_valueDisplay);
 }

@@ -405,54 +405,49 @@ void Misuco2::toggleMenu()
 
 void Misuco2::setSound(MWSound *s)
 {
-    int i=0;
     for(auto o:_faderParamCtl) {
         auto p = qobject_cast<MWFaderParamCtl*>(o);
         if(p) {
-            switch(i) {
-            case 0:
+            switch(p->getCc()) {
+            case 102:
                 p->setValue(s->wave_type);
                 break;
-            case 1:
+            case 103:
                 p->setValue(s->attack);
                 break;
-            case 2:
+            case 104:
                 p->setValue(s->decay);
                 break;
-            case 3:
+            case 105:
                 p->setValue(s->sustain);
                 break;
-            case 4:
+            case 106:
                 p->setValue(s->release);
                 break;
-            case 5:
+            case 107:
                 p->setValue(s->filter_cutoff);
                 break;
-            case 6:
+            case 108:
                 p->setValue(s->filter_resonance);
                 break;
-            case 7:
+            case 109:
                 p->setValue(s->mod_filter_cutoff);
                 break;
-            case 8:
+            case 110:
                 p->setValue(s->mod_filter_resonance);
                 break;
-            case 9:
+            case 111:
                 p->setValue(s->volume);
                 break;
             }
         }
-        i++;
     }
-
     emit soundChanged();
 }
 
 void Misuco2::setMicrotune(MWMicrotune * m)
 {
     for(int rootNote=0;rootNote<12;rootNote++) {
-        MGlob::Microtune.tuning[rootNote] = m->tuning[rootNote];
-        //emit setPitch(rootNote,m->tuning[rootNote]);
         auto p = qobject_cast<MWFaderPitch*>(_faderMicrotune[rootNote]);
         if(p) p->setValue(m->tuning[rootNote]);
     }
@@ -463,11 +458,6 @@ void Misuco2::onChannelChange(int v)
     _channel = v;
     _senderReaktor->setChannel(v);
     _senderOscMidiGeneric->setChannel(v);
-}
-
-void Misuco2::onSoundChanged(int)
-{
-    emit soundChanged();
 }
 
 void Misuco2::onGameStarted()

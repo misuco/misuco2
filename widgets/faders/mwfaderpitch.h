@@ -39,9 +39,9 @@ public:
 
     bool selected();
 
-    Q_INVOKABLE void onPressedPitch(int id);
-    Q_INVOKABLE void onUpdatedPitch(int id);
-    Q_INVOKABLE void onReleasedPitch(int id);
+    Q_INVOKABLE void onPressed(int id, int x, int y, int h, int w) override;
+    Q_INVOKABLE void onUpdated(int id, int y, int h, int w) override;
+    Q_INVOKABLE void onReleased(int id) override;
 
 signals:
     void pitchChange(int rootNote, int pitch);

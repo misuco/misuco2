@@ -39,9 +39,10 @@ bool MWFaderPitch::selected()
     return pressed>0;
 }
 
-void MWFaderPitch::onPressedPitch(int id)
+void MWFaderPitch::onPressed(int id, int x, int y, int h, int w)
 {
     //qDebug() << "MWFaderPitch::onPressedPitch " << id << " pressed " << pressed << " eventId " << eventId;
+    MWFader::onPressed(id,x,y,h,w);
     if(pressed < 2) {
         eventId=id;
         vId=_out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
@@ -49,17 +50,19 @@ void MWFaderPitch::onPressedPitch(int id)
     }
 }
 
-void MWFaderPitch::onUpdatedPitch(int id)
+void MWFaderPitch::onUpdated(int id, int y, int h, int w)
 {
     //qDebug() << "MWFaderPitch::onUpdatedPitch " << id << " pressed " << pressed << " eventId " << eventId;
+    MWFader::onUpdated(id,y,h,w);
     if(id == eventId) {
         _out->pitch(vId,_freq->getFreq(),_freq->getMidinote(),_freq->getPitch());
     }
 }
 
-void MWFaderPitch::onReleasedPitch(int id)
+void MWFaderPitch::onReleased(int id)
 {
     //qDebug() << "MWFaderPitch::onReleasedPitch " << id << " pressed " << pressed << " eventId " << eventId;
+    MWFader::onReleased(id);
     if(id == eventId) {
         _out->noteOff(vId);
         emit selectedChanged();

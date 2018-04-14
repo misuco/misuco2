@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QObject * layout=new Misuco2();
-
     QQmlApplicationEngine engine;
     QQmlContext* ctx = engine.rootContext();
     ctx->setContextProperty("layout", layout);

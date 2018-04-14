@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "senderoscmidigeneric.h"
 #include "comm/libofqf/qoscclient.h"
-#include "conf/mglob.h"
 
 SenderOscMidiGeneric::SenderOscMidiGeneric()
 {

@@ -72,7 +72,7 @@ void MWFader::onUpdated(int id, int y, int h, int w)
     }
 }
 
-void MWFader::onReleased()
+void MWFader::onReleased(int)
 {
     pressed--;
 }

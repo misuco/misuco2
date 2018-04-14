@@ -21,7 +21,6 @@
 #ifndef MWPLAYAREA_H
 #define MWPLAYAREA_H
 
-#include "conf/mglob.h"
 #include "conf/types.h"
 #include "comm/mastersender.h"
 #include "mwplayfield.h"

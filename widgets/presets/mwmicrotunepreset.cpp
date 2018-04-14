@@ -21,16 +21,18 @@
 #include "mwmicrotunepreset.h"
 #include <QDebug>
 
-MWMicrotunePreset::MWMicrotunePreset(QObject *parent): QObject(parent)
+MWMicrotunePreset::MWMicrotunePreset(QList<QObject *> tuningFaders, QObject *parent): QObject(parent)
 {
-    for(int i=0;i<12;i++) {
+    for(auto tuningFader:tuningFaders) _tuningFaders.append(qobject_cast<MWFaderPitch*>(tuningFader));
+    for(int i=0;i<tuningFaders.size();i++) {
         PresetMicrotune.tuning[i]=rand()%200-100;
     }
 }
 
-MWMicrotunePreset::MWMicrotunePreset(int tuning[], QObject *parent): QObject(parent)
+MWMicrotunePreset::MWMicrotunePreset(int tuning[], QList<QObject *> tuningFaders, QObject *parent): QObject(parent)
 {
-    for(int i=0;i<12;i++) {
+    for(auto tuningFader:tuningFaders) _tuningFaders.append(qobject_cast<MWFaderPitch*>(tuningFader));
+    for(int i=0;i<tuningFaders.size();i++) {
         PresetMicrotune.tuning[i]=tuning[i];
     }
 }
@@ -40,8 +42,10 @@ void MWMicrotunePreset::processTouchEvent(misuTouchEvent e)
     switch(e.state) {
     case Qt::TouchPointPressed:
         if(1/*overwrite*/) {
-            for(int i=0;i<12;i++) {
-                PresetMicrotune.tuning[i]=MGlob::Microtune.tuning[i];
+            int i=0;
+            for(auto tuningFader:_tuningFaders) {
+                PresetMicrotune.tuning[i]=tuningFader->getValue();
+                i++;
             }
         }
         else {
@@ -61,10 +65,11 @@ void MWMicrotunePreset::initialSet()
 }
 
 bool MWMicrotunePreset::isSelected() {
-    bool selected = true;
-    for(int i=0;i<12;i++) {
-        if(PresetMicrotune.tuning[i]!=MGlob::Microtune.tuning[i]) selected = false;
+    int i=0;
+    for(auto tuningFader:_tuningFaders) {
+        if(PresetMicrotune.tuning[i]!=tuningFader->getValue()) return false;
+        i++;
     }
-    return selected;
+    return true;
 }
 

@@ -2,7 +2,6 @@
 #define MWGAME_H
 
 #include <QObject>
-#include "conf/mglob.h"
 #include "mwplayarea.h"
 #include "comm/isender.h"
 
