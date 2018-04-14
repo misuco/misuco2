@@ -32,42 +32,10 @@ public:
     explicit MGlob(QObject *parent = 0);
     ~MGlob();
 
-    static QString font1;
-    static int font1size;
-
-    /*
-    static QColor fgcolor;
-    static QColor bgcolor;
-    static QColor highlightcolor;
-
-    static bool bwmode;
-
-    static QColor bkeycolor;
-    static QColor wkeycolor;
-    static QColor hlbkeycolor;
-    static QColor hlwkeycolor;
-
-    static float lOff;
-    static float lOn;
-    static float sOff;
-    static float sOn;
-
-    static Pitch * MWPitch[];
-
-    static int noteSymbols;
-    static bool showFreqs;
-    */
-
     static MWSound Sound;
     static MWMicrotune Microtune;
 
     static int channel;
-
-    // that game knows where to touch
-    static int playAreaWidth;
-    static int playAreaHeight;
-    static int playFieldWidth;
-    static int playFieldHeight;
 
 };
 

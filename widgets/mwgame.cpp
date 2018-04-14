@@ -88,8 +88,9 @@ void MWGame::timerEvent(QTimerEvent *) {
         break;
     case play:
         touchEvent.id=9999;
-        touchEvent.x = _played[_playIndex]*MGlob::playFieldWidth + MGlob::playFieldWidth/2;
-        touchEvent.y = MGlob::playAreaHeight/2;
+        touchEvent.x = _played[_playIndex]*_playArea->getPlayFieldWidth();
+        touchEvent.x += _playArea->getPlayFieldWidth()/2;
+        touchEvent.y = _playArea->getPlayAreaHeight()/2;
         touchEvent.t = 0;
         if(_noteOn) {
             touchEvent.state=Qt::TouchPointReleased;

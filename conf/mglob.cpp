@@ -24,8 +24,8 @@
 #include <QDateTime>
 #include <QDebug>
 
-QString MGlob::font1("Sans");
-int MGlob::font1size(10);
+//QString MGlob::font1("Sans");
+//int MGlob::font1size(10);
 
 
 MWSound MGlob::Sound;
@@ -34,10 +34,12 @@ MWMicrotune MGlob::Microtune;
 
 int MGlob::channel = 0;
 
+/*
 int MGlob::playAreaWidth = 0;
 int MGlob::playAreaHeight = 0;
 int MGlob::playFieldWidth = 0;
 int MGlob::playFieldHeight = 0;
+*/
 
 MGlob::MGlob(QObject *parent) : QObject(parent)
 {

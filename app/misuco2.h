@@ -82,7 +82,8 @@ class Misuco2 : public QObject
     Q_PROPERTY(QList<QObject*> synthArea MEMBER _faderParamCtl CONSTANT)
     Q_PROPERTY(bool synthAreaVisible MEMBER _synthAreaVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> confPitchFaders READ confPitchFaders CONSTANT)
+    Q_PROPERTY(QObject* confPitchTopFader MEMBER faderPitchTopRange CONSTANT)
+    Q_PROPERTY(QObject* confPitchBottomFader MEMBER faderPitchBottomRange CONSTANT)
     Q_PROPERTY(QObject* confPitchHorizButton MEMBER pitchHorizontal CONSTANT)
 
     Q_PROPERTY(QObject* confSymbolFader MEMBER faderSymbols CONSTANT)
@@ -117,7 +118,6 @@ public:
     explicit Misuco2(QObject *parent = 0);
     ~Misuco2();
 
-    QList<QObject*> confPitchFaders();
     void updateMenuButtonState();
 
 signals:
@@ -125,7 +125,6 @@ signals:
     void scaleupdate();
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
-    //void symbolsChanged();
     void soundChanged();
 
     // QML
@@ -194,9 +193,6 @@ private:
     // synth ctl faders
     QList<QObject*> _faderParamCtl;
     QList<QObject*> _faderMicrotune;
-
-    // main area widgets
-    //QObject * M[4];
 
     // right menu
     QList<QObject *> _menu;

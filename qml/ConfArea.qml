@@ -34,17 +34,32 @@ Item {
                 left: parent.left
             }
             width: buttonSize * 2
-            height: parent.height - buttonSize
+            height: parent.height - buttonSize            
 
-            Repeater  {
-                model: layout.confPitchFaders
-                Loader {
-                    width: buttonSize
-                    height: parent.height
-                    property color faderColor: fgColor
-                    source: "Fader.qml"
-                }
+            Loader {
+                id: bendTopFader
+
+                width: buttonSize
+                height: parent.height - 2 * buttonSize
+
+                property QtObject modelData: layout.confPitchTopFader
+                property color faderColor: fgColor
+
+                source: "Fader.qml"
             }
+
+            Loader {
+                id: bendBottomFader
+
+                width: buttonSize
+                height: parent.height - 2 * buttonSize
+
+                property QtObject modelData: layout.confPitchBottomFader
+                property color faderColor: fgColor
+
+                source: "Fader.qml"
+            }
+
         }
 
         Loader {

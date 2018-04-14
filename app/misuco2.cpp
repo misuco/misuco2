@@ -280,14 +280,6 @@ Misuco2::~Misuco2()
     _xmlLoader->writeXml("tune.xml");
 }
 
-QList<QObject *> Misuco2::confPitchFaders()
-{
-    QList<QObject*> p;
-    p.append(faderPitchTopRange);
-    p.append(faderPitchBottomRange);
-    return p;
-}
-
 void Misuco2::updateMenuButtonState() {
 
     MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);

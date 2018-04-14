@@ -64,6 +64,10 @@ public:
     // game helper
     int getMidinoteAtField(int i);
     int getColumnCount();
+    int getPlayAreaWidth();
+    int getPlayAreaHeight();
+    int getPlayFieldWidth();
+    int getPlayFieldHeight();
 
 public slots:
     void onSetRootNote(int p);
@@ -99,6 +103,10 @@ private:
     //QLinearGradient linearGrad;
     QString cap;
     int _noteSymbols;
+    int _playAreaWidth;
+    int _playAreaHeight;
+    int _playFieldWidth;
+    int _playFieldHeight;
 
     // - networking
     MasterSender * out;

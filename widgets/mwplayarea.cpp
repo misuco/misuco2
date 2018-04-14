@@ -161,13 +161,13 @@ void MWPlayArea::setColumn(int col, int midinote, int pitch) {
 
 void MWPlayArea::calcGeo()
 {
-    MGlob::playFieldWidth=MGlob::playAreaWidth/cols;
-    MGlob::playFieldHeight=MGlob::playAreaHeight/rows;
+    _playFieldWidth=_playAreaWidth/cols;
+    _playFieldHeight=_playAreaHeight/rows;
     for(int i=0;i<cols;i++) {
-        colwidth[i]=MGlob::playFieldWidth;
+        colwidth[i]=_playFieldWidth;
     }
     for(int i=0;i<rows;i++) {
-        rowheight[i]=MGlob::playFieldHeight;
+        rowheight[i]=_playFieldHeight;
     }
 }
 
@@ -179,6 +179,26 @@ int MWPlayArea::getMidinoteAtField(int i)
 int MWPlayArea::getColumnCount()
 {
     return cols;
+}
+
+int MWPlayArea::getPlayAreaWidth()
+{
+    return _playAreaWidth;
+}
+
+int MWPlayArea::getPlayAreaHeight()
+{
+    return _playAreaHeight;
+}
+
+int MWPlayArea::getPlayFieldWidth()
+{
+    return _playFieldWidth;
+}
+
+int MWPlayArea::getPlayFieldHeight()
+{
+    return _playFieldHeight;
 }
 
 void MWPlayArea::processTouchEvent(misuTouchEvent e)
@@ -196,8 +216,8 @@ void MWPlayArea::processTouchEvent(misuTouchEvent e)
     es->y=e.y;
     int row=0;
 
-    if(MGlob::playAreaHeight>0) row = e.y*rows/MGlob::playAreaHeight;
-    int col=e.x*cols/MGlob::playAreaWidth;
+    if(_playAreaHeight>0) row = e.y*rows/_playAreaHeight;
+    int col=e.x*cols/_playAreaWidth;
 
     float yrel=(float)(e.y-row*rowheight[row])/(float)rowheight[row];
     float xrel=(float)(e.x-col*colwidth[col])/(float)colwidth[col];
@@ -406,8 +426,8 @@ void MWPlayArea::onShowFreqsChange(bool showFreqs)
 void MWPlayArea::resize(int w, int h)
 {
     //qDebug() << "MWPlayArea::resize w: " << w << " h: " << h;
-    MGlob::playAreaWidth=w;
-    MGlob::playAreaHeight=h;
+    _playAreaWidth=w;
+    _playAreaHeight=h;
     calcGeo();
 }
 
