@@ -29,15 +29,15 @@ class MWScalePreset : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int rootNote MEMBER _presetRootNote NOTIFY presetChanged)
-    Q_PROPERTY(QStringList bScale READ bscale NOTIFY presetChanged)
-    Q_PROPERTY(int bScaleSize MEMBER _scaleSize NOTIFY presetChanged)
+    Q_PROPERTY(QStringList Scale READ scale NOTIFY presetChanged)
+    Q_PROPERTY(int ScaleSize MEMBER _scaleSize NOTIFY presetChanged)
     Q_PROPERTY(bool selected READ isSelected NOTIFY selectedChanged)
 
 public:
     MWScalePreset(QObject *parent);
-    MWScalePreset(int rootNote, QList<bool> bscale, QObject *parent);
+    MWScalePreset(int rootNote, QList<bool> scale, QObject *parent);
 
-    QStringList bscale();
+    QStringList scale();
     int getRootNote();
     bool getScale(int i);
 
@@ -50,7 +50,7 @@ public:
 
 public slots:
     void onSetRootNote(int p);
-    void onSetBscale(int n, bool v);
+    void onSetScale(int n, bool v);
     void onSetScale(int rootNote, QList<bool> scale);
     void initialSet();
 

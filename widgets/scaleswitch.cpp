@@ -18,34 +18,34 @@
  *
  */
 
-#include "mwbscaleswitch.h"
+#include "scaleswitch.h"
 #include "comm/senderdebug.h"
 #include <QDebug>
 
-MWBScaleSwitch::MWBScaleSwitch(int bscaleId, MasterSender *ms, QObject * parent) : QObject(parent),
+ScaleSwitch::ScaleSwitch(int scaleId, MasterSender *ms, QObject * parent) : QObject(parent),
     _out(ms),
     _rootNote(0),
     _value(false),
     _noteSymbols(0),
     _showFreqs(false)
 {
-    //qDebug() << "MWBScaleSwitch::MWBScaleSwitch " << sizeof(Pitch);
-    _freq=new FreqTriple(bscaleId,this);
+    //qDebug() << "MWScaleSwitch::MWScaleSwitch " << sizeof(Pitch);
+    _freq=new FreqTriple(scaleId,this);
     _value=false;
     _pressed=0;
-    _bscaleId=bscaleId;
+    _scaleId=scaleId;
     _freq->setOct(4);
     _vid=0;
     _oct=6;
     _higherOct=0;
 }
 
-MWBScaleSwitch::~MWBScaleSwitch()
+ScaleSwitch::~ScaleSwitch()
 {
     _freq->deleteLater();
 }
 
-void MWBScaleSwitch::calcText()
+void ScaleSwitch::calcText()
 {
     _text1=_freq->getRootNoteString(_noteSymbols);
 
@@ -58,39 +58,39 @@ void MWBScaleSwitch::calcText()
     emit textChanged();
 }
 
-int MWBScaleSwitch::pitchId()
+int ScaleSwitch::pitchId()
 {
-    //qDebug() << "MWBScaleSwitch::pitchId " << _freq->getPitch() << " bscaleId" << bscaleId;
+    //qDebug() << "MWScaleSwitch::pitchId " << _freq->getPitch() << " scaleId" << scaleId;
     return _freq->getRootNote();
 }
 
-bool MWBScaleSwitch::selected()
+bool ScaleSwitch::selected()
 {
     return (_pressed>0 || _value);
 }
 
-void MWBScaleSwitch::onPressed()
+void ScaleSwitch::onPressed()
 {
     if(_out && _pressed == 0) _vid=_out->noteOn(_freq->getFreq(),_freq->getMidinote(),_freq->getPitch(),127);
     _pressed++;
     emit selectedChanged();
 }
 
-void MWBScaleSwitch::onReleased()
+void ScaleSwitch::onReleased()
 {
     if(_out && _pressed == 1)  {
         _out->noteOff(_vid);
         _value=!_value;
-        emit setBscale(_bscaleId,_value);
+        emit setScale(_scaleId,_value);
     }
     _pressed--;
     emit selectedChanged();
 }
 
-void MWBScaleSwitch::onSetRootNote(int rootNote)
+void ScaleSwitch::onSetRootNote(int rootNote)
 {
-    _rootNote=rootNote+_bscaleId;
-    if(_rootNote>BSCALE_SIZE) {
+    _rootNote=rootNote+_scaleId;
+    if(_rootNote>SCALE_SIZE) {
         _rootNote-=12;
         _higherOct=1;
     } else {
@@ -101,24 +101,24 @@ void MWBScaleSwitch::onSetRootNote(int rootNote)
     _freq->setRootNote(_rootNote);
     emit rootNoteChanged();
     calcText();
-    //qDebug() << "MWBScaleSwitch::setRootNote new: " << newrootNote << " bscaleId " << _bscaleId << " rootNote " << rootNote;
+    //qDebug() << "MWScaleSwitch::setRootNote new: " << newrootNote << " scaleId " << _scaleId << " rootNote " << rootNote;
 }
 
-void MWBScaleSwitch::onPitchChange(int rootNote, int pitch)
+void ScaleSwitch::onPitchChange(int rootNote, int pitch)
 {
     _freq->onPitchChange(rootNote,pitch);
 }
 
-void MWBScaleSwitch::setOctMid(int o)
+void ScaleSwitch::setOctMid(int o)
 {
     _oct = o;
     _freq->setOct(_oct + _higherOct);
 }
 
-void MWBScaleSwitch::onSetScale(int rootNote, QList<bool> scale)
+void ScaleSwitch::onSetScale(int rootNote, QList<bool> scale)
 {
-    //qDebug() << "MWBScaleSwitch::onSetScale" << bscaleId;
-    if(scale[_bscaleId-1]) {
+    //qDebug() << "MWScaleSwitch::onSetScale" << scaleId;
+    if(scale[_scaleId-1]) {
         if(!_value) {
             _value=true;
             emit selectedChanged();
@@ -132,13 +132,13 @@ void MWBScaleSwitch::onSetScale(int rootNote, QList<bool> scale)
     onSetRootNote(rootNote);
 }
 
-void MWBScaleSwitch::onSymbolsChange(int s)
+void ScaleSwitch::onSymbolsChange(int s)
 {
     _noteSymbols = s;
     calcText();
 }
 
-void MWBScaleSwitch::onShowFreqsChange(bool state)
+void ScaleSwitch::onShowFreqsChange(bool state)
 {
     _showFreqs = state;
     calcText();

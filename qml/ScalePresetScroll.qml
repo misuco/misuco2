@@ -13,13 +13,13 @@ Item {
         delegate:
         Item {
             property int cellWidth: portrait ? buttonSize : columnWidth
-            property int presetNoteWidth: cellWidth / (modelData.bScaleSize - 1);
+            property int presetNoteWidth: cellWidth / (modelData.ScaleSize - 1);
             property int presetSelected: modelData.selected;
             property int presetRootNote: modelData.rootNote;
 
             Row {
                 Repeater {
-                    model: modelData.bScale
+                    model: modelData.Scale
 
                     Rectangle {
                         property int pitchIndex: (index+presetRootNote)%12

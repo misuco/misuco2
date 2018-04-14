@@ -67,7 +67,7 @@ public:
 
 public slots:
     void onSetRootNote(int p);
-    void setBscale(int n, bool v);
+    void setScale(int n, bool v);
     void onSetScale(int rootNote, QList<bool> scale);
     void onPitchChange(int rootNote, int pitch);
 
@@ -93,7 +93,7 @@ private:
     int _baseOct;
     int _topOct;
     int _rootNote;
-    QList<bool> _bscale;
+    QList<bool> _scale;
 
     // - painting
     //QLinearGradient linearGrad;

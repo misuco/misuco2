@@ -71,7 +71,7 @@ void XmlLoader::decodeConfigRecord() {
         _app->_menuVisible=_xmlReader.attributes().value("menuVisible").toInt();
 
         _app->_rootNoteSetterVisible=_xmlReader.attributes().value("rootNoteSetterVisible").toInt();
-        _app->_bScaleSwitchVisible=_xmlReader.attributes().value("bScaleSwitchVisible").toInt();
+        _app->_ScaleSwitchVisible=_xmlReader.attributes().value("ScaleSwitchVisible").toInt();
         _app->_octaveRangerVisible=_xmlReader.attributes().value("octaveRangerVisible").toInt();
 
         _app->_playAreaVisible=_xmlReader.attributes().value("playAreaVisible").toInt();
@@ -105,14 +105,14 @@ void XmlLoader::decodeConfigRecord() {
 
 void XmlLoader::decodeScaleRecord() {
     if (_xmlReader.name() == "scale") {
-        QList<bool> bscaleRead;
-        for(int i=0;i<BSCALE_SIZE;i++) {
+        QList<bool> scaleRead;
+        for(int i=0;i<SCALE_SIZE;i++) {
             QString attId;
             attId.sprintf("b%d",i);
-            bscaleRead.append(_xmlReader.attributes().value(attId).toInt());
+            scaleRead.append(_xmlReader.attributes().value(attId).toInt());
         }
         MWScalePreset * p = new MWScalePreset(_xmlReader.attributes().value("rootNote").toString().toInt(),
-                                         bscaleRead,
+                                         scaleRead,
                                          this);
         connect(p,SIGNAL(editPreset()),_app->_scalePresets,SLOT(onEditPreset()));
         _app->_scalePresets->append(p);
@@ -177,7 +177,7 @@ void XmlLoader::writeXml(QString filename)
                     _xmlWriter.writeStartElement("scale");
                     att.sprintf("%d",widget->getRootNote());
                     _xmlWriter.writeAttribute("rootNote",att);
-                    for(int i=0;i<BSCALE_SIZE;i++) {
+                    for(int i=0;i<SCALE_SIZE;i++) {
                         att.sprintf("%d",widget->getScale(i));
                         attId.sprintf("b%d",i);
                         _xmlWriter.writeAttribute(attId,att);
@@ -262,8 +262,8 @@ void XmlLoader::writeXml(QString filename)
 
             att.sprintf("%d",_app->_rootNoteSetterVisible);
             _xmlWriter.writeAttribute("rootNoteSetterVisible",att);
-            att.sprintf("%d",_app->_bScaleSwitchVisible);
-            _xmlWriter.writeAttribute("bScaleSwitchVisible",att);
+            att.sprintf("%d",_app->_ScaleSwitchVisible);
+            _xmlWriter.writeAttribute("ScaleSwitchVisible",att);
             att.sprintf("%d",_app->_octaveRangerVisible);
             _xmlWriter.writeAttribute("octaveRangerVisible",att);
 

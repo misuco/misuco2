@@ -37,8 +37,8 @@ MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
     _baseOct = 6;
     _topOct = 7;
     _rootNote = 0;
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        _bscale.append(false);
+    for(int i=0;i<SCALE_SIZE;i++) {
+        _scale.append(false);
     }
 
     for(int i=0;i<EVENT_STACK_SIZE;i++) {
@@ -50,8 +50,8 @@ MWPlayArea::MWPlayArea(MasterSender * ms, QObject *parent) : QObject(parent),
 
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
-            fields[r][c].setF1rootNote(c%(BSCALE_SIZE+1));//.f1=new FreqTriple(c%(BSCALE_SIZE+1),this);
-            fields[r][c].setF2rootNote(c%(BSCALE_SIZE+1));//f2=new FreqTriple(c%(BSCALE_SIZE+1),this);
+            fields[r][c].setF1rootNote(c%(SCALE_SIZE+1));
+            fields[r][c].setF2rootNote(c%(SCALE_SIZE+1));
         }
     }
 
@@ -76,10 +76,10 @@ void MWPlayArea::config()
         } else {
             cols++;
         }
-        for(int note=0;note<BSCALE_SIZE;note++) {
+        for(int note=0;note<SCALE_SIZE;note++) {
             //qDebug() << "MWPlayArea::config " << note;
-            if(_bscale[note]) {
-                setColumn(cols,_rootNote+oct*12+note+1,(_rootNote+note+1)%(BSCALE_SIZE+1));
+            if(_scale[note]) {
+                setColumn(cols,_rootNote+oct*12+note+1,(_rootNote+note+1)%(SCALE_SIZE+1));
                 //qDebug() << "set column ";
                 if(bendHoriz) {
                     cols+=2;
@@ -330,17 +330,17 @@ void MWPlayArea::setOctConf(int bottom, int top)
 
 }
 
-void MWPlayArea::setBscale(int n, bool v)
+void MWPlayArea::setScale(int n, bool v)
 {
-    //qDebug() << "MWPlayArea::setBscale " << n << " " << v;
-    _bscale[n-1]=v;
+    //qDebug() << "MWPlayArea::setScale " << n << " " << v;
+    _scale[n-1]=v;
     config();
 }
 
 void MWPlayArea::onSetScale(int rootNote, QList<bool> scale)
 {
     _rootNote=rootNote;
-    _bscale=scale;
+    _scale=scale;
     config();
 }
 

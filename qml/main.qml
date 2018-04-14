@@ -64,17 +64,17 @@ Window {
         height: layout.octaveRangerVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
     }
 
-    BScaleSwitch {
-        id: bScaleSwitchRow
-        visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
+    ScaleSwitch {
+        id: scaleSwitchRow
+        visible: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         anchors.top: octaveRangerRow.bottom
         width: portrait ? parent.width - 2 * buttonSize :  parent.width - buttonSize
-        height: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
+        height: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
     }
 
     Loader {
         id: openArchiveButton
-        visible: layout.bScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
+        visible: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         anchors {
             top: octaveRangerRow.bottom
             right: parent.right
@@ -89,7 +89,7 @@ Window {
 
     RootNoteSetter {
         id: rootNoteSetterRow
-        anchors.top: bScaleSwitchRow.bottom
+        anchors.top: scaleSwitchRow.bottom
         visible: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         width: parent.width
         height: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0

@@ -18,14 +18,14 @@
  *
  */
 
-#ifndef MWBSCALESWITCH_H
-#define MWBSCALESWITCH_H
+#ifndef MWSCALESWITCH_H
+#define MWSCALESWITCH_H
 
 #include "conf/mglob.h"
 #include "freqtriple.h"
 #include "comm/mastersender.h"
 
-class MWBScaleSwitch : public QObject
+class ScaleSwitch : public QObject
 {
     Q_OBJECT
 
@@ -35,8 +35,8 @@ class MWBScaleSwitch : public QObject
     Q_PROPERTY(QString text2 MEMBER _text2 NOTIFY textChanged)
 
 public:
-    MWBScaleSwitch(int rootNote, MasterSender * ms, QObject *parent);
-    ~MWBScaleSwitch();
+    ScaleSwitch(int rootNote, MasterSender * ms, QObject *parent);
+    ~ScaleSwitch();
 
     int pitchId();
     bool selected();
@@ -45,7 +45,7 @@ public:
     Q_INVOKABLE void onReleased();
 
 signals:
-    void setBscale(int,bool);
+    void setScale(int,bool);
 
     // QML
     void rootNoteChanged();
@@ -64,7 +64,7 @@ private:
     MasterSender * _out;
     FreqTriple * _freq;
     int _rootNote;
-    int _bscaleId;
+    int _scaleId;
     int _vid;
     int _pressed;
     bool _value;
@@ -81,4 +81,4 @@ private:
     void calcText();
 };
 
-#endif // MWBSCALESWITCH_H
+#endif // MWSCALESWITCH_H

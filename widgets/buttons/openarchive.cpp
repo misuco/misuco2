@@ -11,9 +11,9 @@ void OpenArchive::onSetRootNote(int p)
     _rootNote = p;
 }
 
-void OpenArchive::onSetBscale(int n, bool v)
+void OpenArchive::onSetScale(int n, bool v)
 {
-    _bscale[n] = v;
+    _scale[n] = v;
 }
 
 void OpenArchive::releaseAction()
@@ -21,8 +21,8 @@ void OpenArchive::releaseAction()
     QString link ="http://scales.misuco.org/";
     link.append(midi2TextUrl(_rootNote));
     link.append("-");
-    for(int i=0;i<BSCALE_SIZE;i++) {
-        if(_bscale[i]) {
+    for(int i=0;i<SCALE_SIZE;i++) {
+        if(_scale[i]) {
             int currnote=_rootNote+i+1;
             link.append(midi2TextUrl(currnote%12));
             link.append("-");

@@ -8,7 +8,7 @@ Heartbeat::Heartbeat(QObject *parent) : QObject(parent),
 {
     _out = new QOscClient(QHostAddress::Broadcast,3150,this);
     _timerId = startTimer(100);
-    for(int i=0;i<BSCALE_SIZE;i++) {
+    for(int i=0;i<SCALE_SIZE;i++) {
         _scale.append(false);
     }
 }
@@ -53,7 +53,7 @@ void Heartbeat::onSetRootNote(int p)
 }
 
 
-void Heartbeat::onSetBscale(int n, bool v)
+void Heartbeat::onSetScale(int n, bool v)
 {
     _scale[n-1]=v;
     propagateScale();

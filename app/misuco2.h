@@ -26,7 +26,7 @@
 #include "widgets/mwoctaveranger.h"
 #include "conf/types.h"
 #include "widgets/faders/mwfaderparamctl.h"
-#include "widgets/mwbscaleswitch.h"
+#include "widgets/scaleswitch.h"
 #include "widgets/mwheadersetter.h"
 #include "comm/mastersender.h"
 #include "widgets/faders/mwfaderpitch.h"
@@ -56,8 +56,8 @@ class Misuco2 : public QObject
     Q_PROPERTY(QList<QObject*> rootNoteSetter MEMBER _rootNoteSetter CONSTANT)
     Q_PROPERTY(bool rootNoteSetterVisible MEMBER _rootNoteSetterVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> bScaleSwitch MEMBER _scaleSwitch CONSTANT)
-    Q_PROPERTY(bool bScaleSwitchVisible MEMBER _bScaleSwitchVisible NOTIFY layoutChange)
+    Q_PROPERTY(QList<QObject*> ScaleSwitch MEMBER _scaleSwitch CONSTANT)
+    Q_PROPERTY(bool ScaleSwitchVisible MEMBER _ScaleSwitchVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QObject* octaveRanger MEMBER _OctaveRanger CONSTANT)
     Q_PROPERTY(bool octaveRangerVisible MEMBER _octaveRangerVisible NOTIFY layoutChange)
@@ -149,7 +149,7 @@ protected:
     // widget visibility states
     bool _menuVisible;
     bool _rootNoteSetterVisible;
-    bool _bScaleSwitchVisible;
+    bool _ScaleSwitchVisible;
     bool _octaveRangerVisible;
     bool _playAreaVisible;
     bool _tuneAreaVisible;

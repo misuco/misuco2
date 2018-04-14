@@ -23,7 +23,7 @@
 
 #include <QString>
 
-#define BSCALE_SIZE 11
+#define SCALE_SIZE 11
 
 enum MWPlayfieldType {
     NORMAL,
@@ -33,7 +33,7 @@ enum MWPlayfieldType {
 };
 
 struct MWMicrotune {
-    int tuning[BSCALE_SIZE+1];
+    int tuning[SCALE_SIZE+1];
 };
 
 struct MWSound {

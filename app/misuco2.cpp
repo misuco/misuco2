@@ -33,7 +33,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _presetsVisible=true;
     _menuVisible=false;
     _rootNoteSetterVisible=true;
-    _bScaleSwitchVisible=false;
+    _ScaleSwitchVisible=false;
     _octaveRangerVisible=false;
     _playAreaVisible=true;
     _tuneAreaVisible=false;
@@ -59,7 +59,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _out->onToggleSender(1,false);
     _out->onToggleSender(3,false);
 
-    for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
+    for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
         _pitchColors.append(new PitchColor(rootNote,this));
     }    
 
@@ -69,7 +69,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),this,SLOT(setOctConf(int,int)));
 
-    for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
+    for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
         MWFaderPitch * fader = new MWFaderPitch(rootNote,_out,this);
         connect(fader,SIGNAL(pitchChange(int,int)),_PlayArea,SLOT(onPitchChange(int,int)));
         for(auto rootNoteSetter:_rootNoteSetter) {
@@ -78,8 +78,8 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         for(auto rootNoteSetter:_rootNoteSetter) {
             connect(fader,SIGNAL(pitchChange(int,int)),rootNoteSetter,SLOT(onPitchChange(int,int)));
         }
-        for(auto bscaleSwitch:_scaleSwitch) {
-            connect(fader,SIGNAL(pitchChange(int,int)),bscaleSwitch,SLOT(onPitchChange(int,int)));
+        for(auto scaleSwitch:_scaleSwitch) {
+            connect(fader,SIGNAL(pitchChange(int,int)),scaleSwitch,SLOT(onPitchChange(int,int)));
         }
         for(auto pitchColor:_pitchColors) {
             connect(fader,SIGNAL(pitchChange(int,int)),pitchColor,SLOT(onPitchChange(int,int)));
@@ -159,7 +159,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     _openArchive = new OpenArchive("archive",0,this);
 
-    for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
+    for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
         MWRootNoteSetter * rootNoteSetter = new MWRootNoteSetter(rootNote,_out,this);
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_PlayArea,SLOT(onSetRootNote(int)));
         connect(rootNoteSetter,SIGNAL(setRootNote(int)),_heartbeat,SLOT(onSetRootNote(int)));
@@ -174,11 +174,11 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         }
     }
 
-    for(int i=1;i<BSCALE_SIZE+1;i++) {
-        MWBScaleSwitch * bs = new MWBScaleSwitch(i,_out,this);
-        connect(bs,SIGNAL(setBscale(int,bool)),_PlayArea,SLOT(setBscale(int,bool)));
-        connect(bs,SIGNAL(setBscale(int,bool)),_heartbeat,SLOT(onSetBscale(int,bool)));
-        connect(bs,SIGNAL(setBscale(int,bool)),_openArchive,SLOT(onSetBscale(int,bool)));
+    for(int i=1;i<SCALE_SIZE+1;i++) {
+        ScaleSwitch * bs = new ScaleSwitch(i,_out,this);
+        connect(bs,SIGNAL(setScale(int,bool)),_PlayArea,SLOT(setScale(int,bool)));
+        connect(bs,SIGNAL(setScale(int,bool)),_heartbeat,SLOT(onSetScale(int,bool)));
+        connect(bs,SIGNAL(setScale(int,bool)),_openArchive,SLOT(onSetScale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
         for(auto rootNoteSetter:_rootNoteSetter) {
             connect(rootNoteSetter,SIGNAL(setRootNote(int)),bs,SLOT(onSetRootNote(int)));
@@ -240,15 +240,15 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(MWPlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_heartbeat,SLOT(onSetScale(int,QList<bool>)));
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[0],SLOT(onSetScale(int,QList<bool>)));
-        for(int j=1;j<BSCALE_SIZE+1;j++) {
+        for(int j=1;j<SCALE_SIZE+1;j++) {
             connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[j],SLOT(onSetScale(int,QList<bool>)));
             connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_scaleSwitch[j-1],SLOT(onSetScale(int,QList<bool>)));
         }
         for(auto rootNoteSetter:_rootNoteSetter) {
             connect(rootNoteSetter,SIGNAL(setRootNote(int)),presetButton,SLOT(onSetRootNote(int)));
         }
-        for(auto bscaleSwitch:_scaleSwitch) {
-            connect(bscaleSwitch,SIGNAL(setBscale(int,bool)),presetButton,SLOT(onSetBscale(int,bool)));
+        for(auto scaleSwitch:_scaleSwitch) {
+            connect(scaleSwitch,SIGNAL(setScale(int,bool)),presetButton,SLOT(onSetScale(int,bool)));
         }
         for(auto presetButton2:_scalePresets->getItems()) {
             connect(presetButton2,SIGNAL(setScale(int,QList<bool>)),presetButton,SLOT(onSetScale(int,QList<bool>)));
@@ -295,7 +295,7 @@ void Misuco2::updateMenuButtonState() {
     MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
     MWHeaderSetter * confAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[6]);
     MWHeaderSetter * rootButton = dynamic_cast<MWHeaderSetter *>(_menu[0]);
-    MWHeaderSetter * bscaleButton = dynamic_cast<MWHeaderSetter *>(_menu[1]);
+    MWHeaderSetter * scaleButton = dynamic_cast<MWHeaderSetter *>(_menu[1]);
     MWHeaderSetter * octaveButton = dynamic_cast<MWHeaderSetter *>(_menu[2]);
 
     if(playAreaButton) playAreaButton->setState(6,_playAreaVisible);
@@ -303,7 +303,7 @@ void Misuco2::updateMenuButtonState() {
     if(synthAreaButton) synthAreaButton->setState(8,_synthAreaVisible);
     if(confAreaButton) confAreaButton->setState(9,_confAreaVisible);
     if(rootButton) rootButton->setState(0,_rootNoteSetterVisible);
-    if(bscaleButton) bscaleButton->setState(1,_bScaleSwitchVisible);
+    if(scaleButton) scaleButton->setState(1,_ScaleSwitchVisible);
     if(octaveButton) octaveButton->setState(2,_octaveRangerVisible);
 
 }
@@ -315,7 +315,7 @@ void Misuco2::currentHeader(int id)
         _rootNoteSetterVisible=!_rootNoteSetterVisible;
         break;
     case 1:
-        _bScaleSwitchVisible=!_bScaleSwitchVisible;
+        _ScaleSwitchVisible=!_ScaleSwitchVisible;
         break;
     case 2:
         _octaveRangerVisible=!_octaveRangerVisible;
@@ -493,7 +493,7 @@ void Misuco2::onGameStarted()
     _tunePresetsVisible=false;
     _menuVisible=false;
     _rootNoteSetterVisible=false;
-    _bScaleSwitchVisible=false;
+    _ScaleSwitchVisible=false;
     _octaveRangerVisible=false;
     _synthAreaVisible=false;
     _confAreaVisible=false;

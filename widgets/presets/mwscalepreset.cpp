@@ -26,29 +26,29 @@ MWScalePreset::MWScalePreset(QObject *parent): QObject(parent)
 {
     _presetRootNote=0;
     _scaleSize=2;
-    for(int i=0;i<BSCALE_SIZE;i++) {
+    for(int i=0;i<SCALE_SIZE;i++) {
         _presetScale.append(false);
         _currentScale.append(false);
     }
     _pressed=0;
 }
 
-MWScalePreset::MWScalePreset(int rootNote, QList<bool> bscale, QObject *parent): QObject(parent)
+MWScalePreset::MWScalePreset(int rootNote, QList<bool> scale, QObject *parent): QObject(parent)
 {
     _presetRootNote=rootNote;
-    _presetScale = bscale;
+    _presetScale = scale;
     _scaleSize = 2 + _presetScale.count(true);
-    for(int i=0;i<BSCALE_SIZE;i++) {
+    for(int i=0;i<SCALE_SIZE;i++) {
         _currentScale.append(false);
     }
     _pressed=0;
 }
 
-QStringList MWScalePreset::bscale()
+QStringList MWScalePreset::scale()
 {
     QStringList l;
     l.append("1");
-    for(int i=0;i<BSCALE_SIZE;i++) {
+    for(int i=0;i<SCALE_SIZE;i++) {
         if(_presetScale[i]) l.append("1");
         else l.append("0");
     }
@@ -105,7 +105,7 @@ void MWScalePreset::onSetRootNote(int p)
     emit selectedChanged();
 }
 
-void MWScalePreset::onSetBscale(int n, bool v)
+void MWScalePreset::onSetScale(int n, bool v)
 {
     _currentScale[n-1] = v;
     emit selectedChanged();
@@ -127,10 +127,10 @@ bool MWScalePreset::isSelected()
 {
     if(_presetRootNote!=_currentRootNote ) return false;
 
-    if(_presetScale.size()<BSCALE_SIZE) return false;
-    if(_currentScale.size()<BSCALE_SIZE) return false;
+    if(_presetScale.size()<SCALE_SIZE) return false;
+    if(_currentScale.size()<SCALE_SIZE) return false;
 
-    for(int i=0;i<BSCALE_SIZE;i++) {
+    for(int i=0;i<SCALE_SIZE;i++) {
         if( _presetScale[i] != _currentScale[i] ) return false;
     }
     return true;

@@ -7,7 +7,7 @@
         <file>qml/PlayFieldBendVertBot.qml</file>
         <file>qml/PlayFieldBendHori.qml</file>
         <file>qml/RootNoteSetter.qml</file>
-        <file>qml/BScaleSwitch.qml</file>
+        <file>qml/ScaleSwitch.qml</file>
         <file>qml/OctaveRanger.qml</file>
         <file>qml/Menu.qml</file>
         <file>qml/TuneArea.qml</file>

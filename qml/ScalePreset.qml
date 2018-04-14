@@ -19,7 +19,7 @@ Item {
                     text: index
                 }
 
-                property int presetNoteWidth: columnWidth / (modelData.bScaleSize - 2);
+                property int presetNoteWidth: columnWidth / (modelData.ScaleSize - 2);
                 property int presetSelected: modelData.selected;
 
                 MouseArea {
@@ -30,7 +30,7 @@ Item {
 
                 Row {
                     Repeater {
-                        model: modelData.bScale
+                        model: modelData.Scale
 
                         Rectangle {
                             width:  modelData == "1" ? presetNoteWidth : 0

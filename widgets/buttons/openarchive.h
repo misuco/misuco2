@@ -15,14 +15,14 @@ public:
 
 public slots:
     void onSetRootNote(int p);
-    void onSetBscale(int n, bool v);
+    void onSetScale(int n, bool v);
 
 protected:
     virtual void releaseAction();
 
 private:
     int _rootNote;
-    bool _bscale[BSCALE_SIZE];
+    bool _scale[SCALE_SIZE];
 
     QString midi2TextUrl(int midinote);
 };

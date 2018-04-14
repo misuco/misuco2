@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     GridView {
-        model: layout.bScaleSwitch
+        model: layout.ScaleSwitch
 
         anchors.fill: parent
         cellWidth: buttonSize

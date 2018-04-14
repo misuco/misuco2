@@ -51,7 +51,6 @@ SOURCES += main.cpp\
     mobilesynth/mobilesynthqt52.cpp \
     widgets/mwrootnotesetter.cpp \
     widgets/mwoctaveranger.cpp \
-    widgets/mwbscaleswitch.cpp \
     widgets/mwheadersetter.cpp \
     widgets/faders/mwfaderpitch.cpp \
     widgets/faders/mwfaderparamctl.cpp \
@@ -78,7 +77,8 @@ SOURCES += main.cpp\
     widgets/buttons/sendcc1.cpp \
     widgets/buttons/togglesender.cpp \
     widgets/buttons/togglebw.cpp \
-    widgets/buttons/showfreqs.cpp
+    widgets/buttons/showfreqs.cpp \
+    widgets/scaleswitch.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -110,7 +110,6 @@ HEADERS  += \
     mobilesynth/mobilesynthqt52.h \
     widgets/mwrootnotesetter.h \
     widgets/mwoctaveranger.h \
-    widgets/mwbscaleswitch.h \
     widgets/mwheadersetter.h \
     widgets/faders/mwfaderpitch.h \
     widgets/faders/mwfaderparamctl.h \
@@ -138,7 +137,8 @@ HEADERS  += \
     widgets/buttons/sendcc1.h \
     widgets/buttons/togglesender.h \
     widgets/buttons/togglebw.h \
-    widgets/buttons/showfreqs.h
+    widgets/buttons/showfreqs.h \
+    widgets/scaleswitch.h
 
 CONFIG += mobility
 MOBILITY = 

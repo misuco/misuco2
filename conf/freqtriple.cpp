@@ -27,7 +27,7 @@ FreqTriple::FreqTriple(int rootNote, QObject *parent) :QObject(parent),
     _pitch(0),
     _oct(6)
 {
-    for(int i=0;i<BSCALE_SIZE+1;i++) {
+    for(int i=0;i<SCALE_SIZE+1;i++) {
         _pitchTable.append(0);
     }
     initFreq();
