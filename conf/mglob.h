@@ -35,8 +35,6 @@ public:
     static MWSound Sound;
     static MWMicrotune Microtune;
 
-    static int channel;
-
 };
 
 #endif // MGLOB_H

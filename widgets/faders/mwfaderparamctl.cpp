@@ -85,9 +85,6 @@ void MWFaderParamCtl::setValue(int v)
 void MWFaderParamCtl::propagateValueChange() {
 
     switch(_cc) {
-    case 3:
-        MGlob::channel=getValue();
-        break;
     case 102:
         MGlob::Sound.wave_type=getValue();
         break;

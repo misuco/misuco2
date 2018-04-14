@@ -39,14 +39,19 @@ public:
     virtual int getPort() {return port;}
     virtual char* getAddress() {return adr;}
 
+    void setChannel(int c);
+
 private:
     QOscClientInterface* oscout;
     char * adr;
     int port;
+    int _channel;
+
     int prog;              // current program
     quint8 * notestate;   // currently played notes
     quint8 * notechan;    // currently played notes chan
     int * ccstate;       // current ccval;
+
     void sendOsc(QString path, QVariant list);
 };
 

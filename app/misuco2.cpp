@@ -20,9 +20,7 @@
 
 #include <QDebug>
 #include "misuco2.h"
-#include "senderoscmidigeneric.h"
 #include "sendersupercollider.h"
-#include "senderreaktor.h"
 #include "senderdebug.h"
 #include "sendermobilesynth.h"
 #include "pitchcolor.h"
@@ -52,8 +50,10 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     _out=new MasterSender();
     _out->addSender(new SenderMobileSynth());
-    _out->addSender(new SenderOscMidiGeneric());
-    _out->addSender(new SenderReaktor());
+    _senderOscMidiGeneric = new SenderOscMidiGeneric();
+    _out->addSender(_senderOscMidiGeneric);
+    _senderReaktor = new SenderReaktor();
+    _out->addSender(_senderReaktor);
     _out->addSender(new SenderSuperCollider());
 
     _out->onToggleSender(1,false);
@@ -460,17 +460,10 @@ void Misuco2::setMicrotune(MWMicrotune * m)
 
 void Misuco2::onChannelChange(int v)
 {
-    MGlob::channel = v;
+    _channel = v;
+    _senderReaktor->setChannel(v);
+    _senderOscMidiGeneric->setChannel(v);
 }
-
-/*
-void Misuco2::onToggleSender(int v)
-{
-    if(out->isSenderEnabled(v)) out->setSenderEnabled(v,false);
-    else out->setSenderEnabled(v,true);
-    _xmlLoader->writeXml("conf.xml");
-}
-*/
 
 void Misuco2::onSoundChanged(int)
 {

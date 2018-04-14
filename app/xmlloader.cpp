@@ -233,7 +233,7 @@ void XmlLoader::writeXml(QString filename)
             _xmlWriter.writeAttribute("pitchBottomRange",att);
             att.sprintf("%d",_app->pitchHorizontal->getState());
             _xmlWriter.writeAttribute("pitchHorizontal",att);
-            att.sprintf("%d",MGlob::channel);
+            att.sprintf("%d",_app->_channel);
             _xmlWriter.writeAttribute("channel",att);
             att.sprintf("%d",_app->_sendCc1->getState());
             _xmlWriter.writeAttribute("sendCC1",att);

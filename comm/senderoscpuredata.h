@@ -36,11 +36,14 @@ public:
     virtual void reconnect();
     virtual int getPort() {return port;}
     virtual char* getAddress() {return adr;}
+    void setChannel(int c);
 
 private:
     QOscClientInterface* oscout;
     char * adr;
     int port;
+    int _channel;
+
     int prog;              // current program
     quint8 * notestate;   // currently played notes
     int * ccstate;       // current ccval;

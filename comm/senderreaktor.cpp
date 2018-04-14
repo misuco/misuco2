@@ -55,13 +55,13 @@ void SenderReaktor::noteOn(int voiceId, float, int midinote, int pitch, int vel)
     v.append(midinote);
     v.append(vel);
     QString path;
-    path.sprintf("/note/%d",MGlob::channel);
+    path.sprintf("/note/%d",_channel);
     sendOsc(path,v);
     v.clear();
     v.append(pitch);
-    path.sprintf("/pitch/%d",MGlob::channel);
+    path.sprintf("/pitch/%d",_channel);
     sendOsc(path,v);
-    notechan[voiceId%1024]=MGlob::channel;
+    notechan[voiceId%1024]=_channel;
     notestate[voiceId%1024]=midinote;
 }
 
@@ -81,7 +81,7 @@ void SenderReaktor::pitch(int, float, int, int pitch)
     QString path;
 
     v.append(pitch*64);
-    path.sprintf("/pitch/%d",MGlob::channel);
+    path.sprintf("/pitch/%d",_channel);
     sendOsc(path,v);
 }
 
@@ -101,12 +101,17 @@ void SenderReaktor::reconnect()
     oscout->setAddress(adr,port);
 }
 
+void SenderReaktor::setChannel(int c)
+{
+    _channel = c;
+}
+
 void SenderReaktor::pc(int v1)
 {
     QVariantList v;
     QString path;
     v.append(v1);
-    path.sprintf("/pc/%d",MGlob::channel);
+    path.sprintf("/pc/%d",_channel);
     sendOsc(path,v);
 }
 
@@ -123,7 +128,7 @@ void SenderReaktor::cc(int, int cc, float, float v1avg)
         QVariantList v;
         QString path;
         v.append(v1mid);
-        path.sprintf("/cc/%d/%d",MGlob::channel,cc);
+        path.sprintf("/cc/%d/%d",_channel,cc);
         sendOsc(path,v);
     }
 }

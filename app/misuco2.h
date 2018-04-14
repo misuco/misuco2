@@ -29,6 +29,8 @@
 #include "widgets/scaleswitch.h"
 #include "widgets/mwheadersetter.h"
 #include "comm/mastersender.h"
+#include "comm/senderoscmidigeneric.h"
+#include "comm/senderreaktor.h"
 #include "widgets/faders/mwfaderpitch.h"
 #include "widgets/presets/mwscalepreset.h"
 #include "widgets/presets/mwsoundpreset.h"
@@ -180,9 +182,15 @@ protected:
     PresetCollection * _synthPresets;
     PresetCollection * _tunePresets;
 
+    // channel
+    int _channel;
+
 private:
     XmlLoader    * _xmlLoader;
+
     MasterSender * _out;
+    SenderOscMidiGeneric *  _senderOscMidiGeneric;
+    SenderReaktor *         _senderReaktor;
 
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;

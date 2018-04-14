@@ -45,13 +45,13 @@ SenderOscPuredata::~SenderOscPuredata()
 void SenderOscPuredata::noteOn(int voiceId, float, int midinote, int pitch, int)
 {
     QVariantList v;
-    v.append(MGlob::channel);
+    v.append(_channel);
     v.append(midinote);
     v.append(127);
     sendOsc("/note",v);
 
     v.clear();
-    v.append(MGlob::channel);
+    v.append(_channel);
     v.append(pitch);
     sendOsc("/pitch",v);
 
@@ -62,7 +62,7 @@ void SenderOscPuredata::noteOn(int voiceId, float, int midinote, int pitch, int)
 void SenderOscPuredata::noteOff(int voiceId)
 {
     QVariantList v;
-    v.append(MGlob::channel);
+    v.append(_channel);
     v.append(notestate[voiceId%1024]);
     v.append(0);
     sendOsc("/note",v);
@@ -71,7 +71,7 @@ void SenderOscPuredata::noteOff(int voiceId)
 void SenderOscPuredata::pitch(int, float, int, int pitch)
 {
     QVariantList v;
-    v.append(MGlob::channel);
+    v.append(_channel);
     v.append(pitch);
     sendOsc("/pitch",v);
 }
@@ -92,10 +92,15 @@ void SenderOscPuredata::reconnect()
     oscout->setAddress(adr,port);
 }
 
+void SenderOscPuredata::setChannel(int c)
+{
+    _channel = c;
+}
+
 void SenderOscPuredata::pc(int v1)
 {
     QVariantList v;
-    v.append(MGlob::channel);
+    v.append(_channel);
     v.append(v1);
     sendOsc("/pc",v);
 }
@@ -111,7 +116,7 @@ void SenderOscPuredata::cc(int, int cc, float, float v1avg)
     if(v1mid!=ccstate[cc]) {
         ccstate[cc]=v1mid;
         QVariantList v;
-        v.append(MGlob::channel);
+        v.append(_channel);
         v.append(cc);
         v.append(v1mid);
         sendOsc("/cc",v);
