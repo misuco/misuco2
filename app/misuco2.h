@@ -27,7 +27,6 @@
 #include "conf/types.h"
 #include "widgets/faders/mwfaderparamctl.h"
 #include "widgets/scaleswitch.h"
-#include "widgets/mwheadersetter.h"
 #include "comm/mastersender.h"
 #include "comm/senderoscmidigeneric.h"
 #include "comm/senderreaktor.h"
@@ -42,6 +41,11 @@
 #include "widgets/buttons/togglesender.h"
 #include "widgets/buttons/togglebw.h"
 #include "widgets/buttons/showfreqs.h"
+#include "widgets/buttons/toggleheader.h"
+#include "widgets/buttons/setmainview.h"
+#include "widgets/buttons/togglemenu.h"
+#include "widgets/buttons/togglepresets.h"
+#include "widgets/buttons/octaveshift.h"
 #include "widgets/mwgame.h"
 #include "conf/purchases.h"
 #include "heartbeat.h"
@@ -101,12 +105,12 @@ class Misuco2 : public QObject
 
     Q_PROPERTY(QObject* openArchive MEMBER _openArchive  CONSTANT)
 
-    Q_PROPERTY(QObject* showPresets MEMBER showPresets CONSTANT)
-    Q_PROPERTY(QObject* showMenu MEMBER showMenu CONSTANT)
+    Q_PROPERTY(QObject* togglePresets MEMBER _togglePresets CONSTANT)
+    Q_PROPERTY(QObject* toggleMenu MEMBER _toggleMenu CONSTANT)
     Q_PROPERTY(bool menuVisible MEMBER _menuVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QObject* octUp MEMBER octUp CONSTANT)
-    Q_PROPERTY(QObject* octDown MEMBER octDown CONSTANT)
+    Q_PROPERTY(QObject* octUp MEMBER _octUp CONSTANT)
+    Q_PROPERTY(QObject* octDown MEMBER _octDown CONSTANT)
     Q_PROPERTY(int topOct MEMBER _topOct NOTIFY octConfChanged)
     Q_PROPERTY(int botOct MEMBER _botOct NOTIFY octConfChanged)
 
@@ -136,10 +140,10 @@ signals:
     void octConfChanged();
 
 private slots:    
-    void currentHeader(int id);
+    void toggleHeader(int id);
     void currentMainView(int id);
-    void togglePresets();
-    void toggleMenu();
+    void togglePresets(bool);
+    void toggleMenu(bool);
     void setSound(MWSound* s);
     void setMicrotune(MWMicrotune* m);
     void onChannelChange(int v);
@@ -161,6 +165,15 @@ protected:
     bool _scalePresetsVisible;
     bool _synthPresetsVisible;
     bool _tunePresetsVisible;
+
+    // menu
+    ToggleHeader    * _rootButton;
+    ToggleHeader    * _scaleButton;
+    ToggleHeader    * _octaveButton;
+    SetMainView     * _playAreaButton;
+    SetMainView     * _tuneAreaButton;
+    SetMainView     * _synthAreaButton;
+    SetMainView     * _confAreaButton;
 
     // synth ctl faders
     QList<QObject*> _faderParamCtl;
@@ -201,20 +214,18 @@ private:
     SenderOscMidiGeneric*   _senderOscMidiGeneric;
     SenderReaktor*          _senderReaktor;
 
+    QList<QObject*> _menu;
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
     QList<QObject*> _scaleSwitch;
     MWOctaveRanger* _OctaveRanger;
-    MWPlayArea*     _PlayArea;
-
-    // right menu
-    QList<QObject *>    _menu;
+    MWPlayArea*     _PlayArea;    
 
     OpenArchive*        _openArchive;
-    MWHeaderSetter*     showPresets;
-    MWHeaderSetter*     showMenu;
-    MWHeaderSetter*     octUp;
-    MWHeaderSetter*     octDown;
+    TogglePresets*      _togglePresets;
+    ToggleMenu*         _toggleMenu;
+    OctaveShift*        _octUp;
+    OctaveShift*        _octDown;
 
     // layout
     int _botOct;

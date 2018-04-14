@@ -98,8 +98,6 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         }
         fader->setInverted(true);
 
-        connect(fader,SIGNAL(controlValueChange(int)),this,SLOT(onSoundChanged(int)));
-
         _faderParamCtl.append(fader);
 
     }
@@ -145,17 +143,17 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _enableSupercollider = new ToggleSender("super\ncollider",3,0,this);
     connect(_enableSupercollider,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
 
-    showPresets = new MWHeaderSetter(12,this);
-    connect(showPresets,SIGNAL(togglePresets()),this,SLOT(togglePresets()));
+    _togglePresets = new TogglePresets("memo",0,this);
+    connect(_togglePresets,SIGNAL(togglePresets(bool)),this,SLOT(togglePresets(bool)));
 
-    showMenu = new MWHeaderSetter(10,this);
-    connect(showMenu,SIGNAL(toggleMenu()),this,SLOT(toggleMenu()));
+    _toggleMenu = new ToggleMenu("menu",0,this);
+    connect(_toggleMenu,SIGNAL(toggleMenu(bool)),this,SLOT(toggleMenu(bool)));
 
-    octUp = new MWHeaderSetter(23,this);
-    connect(octUp,SIGNAL(octUp()),_OctaveRanger,SLOT(octUp()));
+    _octUp = new OctaveShift("up",true,this);
+    connect(_octUp,SIGNAL(octUp()),_OctaveRanger,SLOT(octUp()));
 
-    octDown = new MWHeaderSetter(24,this);
-    connect(octDown,SIGNAL(octDown()),_OctaveRanger,SLOT(octDown()));
+    _octDown = new OctaveShift("down",false,this);
+    connect(_octDown,SIGNAL(octDown()),_OctaveRanger,SLOT(octDown()));
 
     _openArchive = new OpenArchive("archive",0,this);
 
@@ -198,29 +196,28 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(faderSymbols,SIGNAL(controlValueChange(int)),scaleSwitch,SLOT(onSymbolsChange(int)));
     }
 
-    for(int i=0;i<7;i++) {
-        int fctId=i;
-        if(i>=3) fctId+=3;
+    _rootButton = new ToggleHeader("root",0,this);
+    connect(_rootButton,SIGNAL(toggleHeader(int)),this,SLOT(toggleHeader(int)));
+    _menu.append(_rootButton);
+    _scaleButton = new ToggleHeader("scale",1,this);
+    connect(_scaleButton,SIGNAL(toggleHeader(int)),this,SLOT(toggleHeader(int)));
+    _menu.append(_scaleButton);
+    _octaveButton = new ToggleHeader("octave",2,this);
+    connect(_octaveButton,SIGNAL(toggleHeader(int)),this,SLOT(toggleHeader(int)));
+    _menu.append(_octaveButton);
 
-        MWHeaderSetter * hs = new MWHeaderSetter(fctId,this);
-        // initially lit menu buttons
-        if(i==0) hs->setState(0,1);
-        if(i==3) hs->setState(6,1);
-
-        connect(this,SIGNAL(setMenuItemState(int,int)),hs,SLOT(setState(int,int)));
-        if(i<3) {
-            connect(hs,SIGNAL(currentHeader(int)),this,SLOT(currentHeader(int)));
-        } else if(i==3) {
-            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        } else if(i==4) {
-            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        } else if(i==5) {
-            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        } else if(i==6) {
-            connect(hs,SIGNAL(currentMainView(int)),this,SLOT(currentMainView(int)));
-        }
-        _menu.append(hs);
-    }
+    _playAreaButton = new SetMainView("play",0,this);
+    connect(_playAreaButton,SIGNAL(setMainView(int)),this,SLOT(currentMainView(int)));
+    _menu.append(_playAreaButton);
+    _tuneAreaButton = new SetMainView("tune",1,this);
+    connect(_tuneAreaButton,SIGNAL(setMainView(int)),this,SLOT(currentMainView(int)));
+    _menu.append(_tuneAreaButton);
+    _synthAreaButton = new SetMainView("synth",2,this);
+    connect(_synthAreaButton,SIGNAL(setMainView(int)),this,SLOT(currentMainView(int)));
+    _menu.append(_synthAreaButton);
+    _confAreaButton = new SetMainView("conf",3,this);
+    connect(_confAreaButton,SIGNAL(setMainView(int)),this,SLOT(currentMainView(int)));
+    _menu.append(_confAreaButton);
 
     _showFreqs = new ShowFreqs("freq",0,this);
     connect(_showFreqs,SIGNAL(toggleShowFreqs(bool)),_PlayArea,SLOT(onShowFreqsChange(bool)));
@@ -281,26 +278,16 @@ Misuco2::~Misuco2()
 }
 
 void Misuco2::updateMenuButtonState() {
-
-    MWHeaderSetter * playAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[3]);
-    MWHeaderSetter * tuneAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[4]);
-    MWHeaderSetter * synthAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[5]);
-    MWHeaderSetter * confAreaButton = dynamic_cast<MWHeaderSetter *>(_menu[6]);
-    MWHeaderSetter * rootButton = dynamic_cast<MWHeaderSetter *>(_menu[0]);
-    MWHeaderSetter * scaleButton = dynamic_cast<MWHeaderSetter *>(_menu[1]);
-    MWHeaderSetter * octaveButton = dynamic_cast<MWHeaderSetter *>(_menu[2]);
-
-    if(playAreaButton) playAreaButton->setState(6,_playAreaVisible);
-    if(tuneAreaButton) tuneAreaButton->setState(7,_tuneAreaVisible);
-    if(synthAreaButton) synthAreaButton->setState(8,_synthAreaVisible);
-    if(confAreaButton) confAreaButton->setState(9,_confAreaVisible);
-    if(rootButton) rootButton->setState(0,_rootNoteSetterVisible);
-    if(scaleButton) scaleButton->setState(1,_ScaleSwitchVisible);
-    if(octaveButton) octaveButton->setState(2,_octaveRangerVisible);
-
+    _playAreaButton->setState(_playAreaVisible);
+    _tuneAreaButton->setState(_tuneAreaVisible);
+    _synthAreaButton->setState(_synthAreaVisible);
+    _confAreaButton->setState(_confAreaVisible);
+    _rootButton->setState(_rootNoteSetterVisible);
+    _scaleButton->setState(_ScaleSwitchVisible);
+    _octaveButton->setState(_octaveRangerVisible);
 }
 
-void Misuco2::currentHeader(int id)
+void Misuco2::toggleHeader(int id)
 {
     switch(id) {
     case 0:
@@ -317,7 +304,6 @@ void Misuco2::currentHeader(int id)
     emit layoutChange();
     updateMenuButtonState();
     _xmlLoader->writeXml("conf.xml");
-
 }
 
 void Misuco2::currentMainView(int id)
@@ -374,9 +360,9 @@ void Misuco2::currentMainView(int id)
     _xmlLoader->writeXml("conf.xml");
 }
 
-void Misuco2::togglePresets()
+void Misuco2::togglePresets(bool state)
 {    
-    _presetsVisible=!_presetsVisible;
+    _presetsVisible = state;
     if(_presetsVisible) {
         if(_playAreaVisible) {
             _scalePresetsVisible = true;
@@ -396,9 +382,9 @@ void Misuco2::togglePresets()
     _xmlLoader->writeXml("conf.xml");
 }
 
-void Misuco2::toggleMenu()
+void Misuco2::toggleMenu(bool state)
 {
-    _menuVisible=!_menuVisible;
+    _menuVisible=state;
     emit layoutChange();
     _xmlLoader->writeXml("conf.xml");
 }

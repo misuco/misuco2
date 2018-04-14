@@ -142,7 +142,7 @@ Window {
         width: buttonSize
         height: buttonSize
 
-        property var modelData: layout.showPresets
+        property var modelData: layout.togglePresets
         property bool transparent: true
         source: "Button.qml"
     }
@@ -157,7 +157,7 @@ Window {
         width: buttonSize
         height: buttonSize
 
-        property var modelData: layout.showMenu
+        property var modelData: layout.toggleMenu
         property bool transparent: true
         source: "Button.qml"
     }

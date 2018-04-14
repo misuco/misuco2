@@ -48,7 +48,7 @@ void XmlLoader::readXml(QString filetype)
             while (_xmlReader.readNextStartElement()) {
                 if(filetype=="conf.xml") {
                     decodeConfigRecord();
-                   _app->updateMenuButtonState();
+                    _app->updateMenuButtonState();
                 } else if(filetype=="scales.xml") {
                     decodeScaleRecord();
                 } else if(filetype=="synth.xml") {
