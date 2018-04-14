@@ -78,6 +78,7 @@ public slots:
     void setBendVertTop(int b);
     void setBendVertBot(int b);
 
+    void onBwModeChange(bool state);
     void onSymbolsChange(int noteSymbols);
     void onShowFreqsChange(bool showFreqs);
 

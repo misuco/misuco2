@@ -376,6 +376,15 @@ void MWPlayArea::setBendVertBot(int b)
     config();
 }
 
+void MWPlayArea::onBwModeChange(bool state)
+{
+    for(int r=0;r<MAX_ROWS;r++) {
+        for(int c=0;c<MAX_COLS;c++) {
+            fields[r][c].setBwMode(state);
+        }
+    }
+}
+
 void MWPlayArea::onSymbolsChange(int noteSymbols)
 {
     for(int r=0;r<MAX_ROWS;r++) {

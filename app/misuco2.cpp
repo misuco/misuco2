@@ -128,6 +128,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     connect(_sendCc1,SIGNAL(sendCc1(bool)),_PlayArea,SLOT(onSendCc1(bool)));
 
     _bwMode = new ToggleBw("BW",0,this);
+    connect(_bwMode,SIGNAL(toggleBW(bool)),_PlayArea,SLOT(onBwModeChange(bool)));
     for(auto pitchColor:_pitchColors) {
         connect(_bwMode,SIGNAL(toggleBW(bool)),pitchColor,SLOT(onBwModeChange(bool)));
     }
