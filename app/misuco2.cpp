@@ -56,8 +56,8 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _out->addSender(new SenderReaktor());
     _out->addSender(new SenderSuperCollider());
 
-    _out->setSenderEnabled(1,false);
-    _out->setSenderEnabled(3,false);
+    _out->onToggleSender(1,false);
+    _out->onToggleSender(3,false);
 
     for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
         _pitchColors.append(new PitchColor(rootNote,this));
@@ -71,8 +71,6 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     for(int rootNote=0;rootNote<BSCALE_SIZE+1;rootNote++) {
         MWFaderPitch * fader = new MWFaderPitch(rootNote,_out,this);
-        //connect (fader,SIGNAL(valueChange(int)),MGlob::MWPitch[rootNote],SLOT(setPitch(int)));
-        //connect( MGlob::MWPitch[rootNote], SIGNAL(pitchChanged()), fader, SLOT(pitchChange()));
         connect(fader,SIGNAL(pitchChange(int,int)),_PlayArea,SLOT(onPitchChange(int,int)));
         for(auto rootNoteSetter:_rootNoteSetter) {
             connect(fader,SIGNAL(pitchChange(int,int)),rootNoteSetter,SLOT(onPitchChange(int,int)));
@@ -80,7 +78,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         for(auto rootNoteSetter:_rootNoteSetter) {
             connect(fader,SIGNAL(pitchChange(int,int)),rootNoteSetter,SLOT(onPitchChange(int,int)));
         }
-        for(auto bscaleSwitch:_BScaleSwitch) {
+        for(auto bscaleSwitch:_scaleSwitch) {
             connect(fader,SIGNAL(pitchChange(int,int)),bscaleSwitch,SLOT(onPitchChange(int,int)));
         }
         for(auto pitchColor:_pitchColors) {
@@ -127,7 +125,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     connect(faderChannel,SIGNAL(controlValueChange(int)),this,SLOT(onChannelChange(int)));
 
     _sendCc1 = new SendCc1("CC1",0,this);
-    connect(_sendCc1,SIGNAL(sendCc1(bool)),_PlayArea,SLOT(sendCc1(bool)));
+    connect(_sendCc1,SIGNAL(sendCc1(bool)),_PlayArea,SLOT(onSendCc1(bool)));
 
     _bwMode = new ToggleBw("BW",0,this);
     for(auto pitchColor:_pitchColors) {
@@ -181,19 +179,22 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(bs,SIGNAL(setBscale(int,bool)),_heartbeat,SLOT(onSetBscale(int,bool)));
         connect(bs,SIGNAL(setBscale(int,bool)),_openArchive,SLOT(onSetBscale(int,bool)));
         connect(_OctaveRanger,SIGNAL(setOctMid(int)),bs,SLOT(setOctMid(int)));
-        connect(this,SIGNAL(symbolsChanged()),bs,SLOT(onSymbolsChanged()));
-        for(int j=0;j<BSCALE_SIZE+1;j++) {
-            connect(_rootNoteSetter[j],SIGNAL(setRootNote(int)),bs,SLOT(onSetRootNote(int)));
+        for(auto rootNoteSetter:_rootNoteSetter) {
+            connect(rootNoteSetter,SIGNAL(setRootNote(int)),bs,SLOT(onSetRootNote(int)));
         }
-        _BScaleSwitch.append(bs);
+        _scaleSwitch.append(bs);
     }
 
     faderSymbols = new MWFaderParamCtl(4,_out,this);
     faderSymbols->setMinValue(0);
     faderSymbols->setMaxValue(4);
     faderSymbols->setInverted(true);
+    connect(faderSymbols,SIGNAL(controlValueChange(int)),_PlayArea,SLOT(onSymbolsChange(int)));
     for(auto rootNoteSetter:_rootNoteSetter) {
-        connect(faderSymbols,SIGNAL(controlValueChange(int)),rootNoteSetter,SLOT(onSymbolsChanged(int)));
+        connect(faderSymbols,SIGNAL(controlValueChange(int)),rootNoteSetter,SLOT(onSymbolsChange(int)));
+    }
+    for(auto scaleSwitch:_scaleSwitch) {
+        connect(faderSymbols,SIGNAL(controlValueChange(int)),scaleSwitch,SLOT(onSymbolsChange(int)));
     }
 
     for(int i=0;i<7;i++) {
@@ -221,7 +222,13 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     }
 
     _showFreqs = new ShowFreqs("freq",0,this);
-    connect(_showFreqs,SIGNAL(toggleShowFreqs()),this,SLOT(onShowFreqsChange()));
+    connect(_showFreqs,SIGNAL(toggleShowFreqs(bool)),_PlayArea,SLOT(onShowFreqsChange(bool)));
+    for(auto rootNoteSetter:_rootNoteSetter) {
+        connect(_showFreqs,SIGNAL(toggleShowFreqs(bool)),rootNoteSetter,SLOT(onShowFreqsChange(bool)));
+    }
+    for(auto scaleSwitch:_scaleSwitch) {
+        connect(_showFreqs,SIGNAL(toggleShowFreqs(bool)),scaleSwitch,SLOT(onShowFreqsChange(bool)));
+    }
 
     _xmlLoader->readXml("conf.xml");
     _xmlLoader->readXml("scales.xml");
@@ -234,12 +241,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[0],SLOT(onSetScale(int,QList<bool>)));
         for(int j=1;j<BSCALE_SIZE+1;j++) {
             connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[j],SLOT(onSetScale(int,QList<bool>)));
-            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_BScaleSwitch[j-1],SLOT(onSetScale(int,QList<bool>)));
+            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_scaleSwitch[j-1],SLOT(onSetScale(int,QList<bool>)));
         }
         for(auto rootNoteSetter:_rootNoteSetter) {
             connect(rootNoteSetter,SIGNAL(setRootNote(int)),presetButton,SLOT(onSetRootNote(int)));
         }
-        for(auto bscaleSwitch:_BScaleSwitch) {
+        for(auto bscaleSwitch:_scaleSwitch) {
             connect(bscaleSwitch,SIGNAL(setBscale(int,bool)),presetButton,SLOT(onSetBscale(int,bool)));
         }
         for(auto presetButton2:_scalePresets->getItems()) {

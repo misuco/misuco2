@@ -57,7 +57,8 @@ public slots:
     void onPitchChange(int rootNote, int pitch);
     void setOctMid(int o);
     void onSetScale(int rootNote, QList<bool> scale);
-    void onSymbolsChanged();
+    void onSymbolsChange(int s);
+    void onShowFreqsChange(bool state);
 
 private:
     MasterSender * _out;

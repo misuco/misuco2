@@ -56,7 +56,7 @@ class Misuco2 : public QObject
     Q_PROPERTY(QList<QObject*> rootNoteSetter MEMBER _rootNoteSetter CONSTANT)
     Q_PROPERTY(bool rootNoteSetterVisible MEMBER _rootNoteSetterVisible NOTIFY layoutChange)
 
-    Q_PROPERTY(QList<QObject*> bScaleSwitch MEMBER _BScaleSwitch CONSTANT)
+    Q_PROPERTY(QList<QObject*> bScaleSwitch MEMBER _scaleSwitch CONSTANT)
     Q_PROPERTY(bool bScaleSwitchVisible MEMBER _bScaleSwitchVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QObject* octaveRanger MEMBER _OctaveRanger CONSTANT)
@@ -125,7 +125,7 @@ signals:
     void scaleupdate();
     void setMenuItemState(int id, int s);
     void setBendHori(bool);
-    void symbolsChanged();
+    //void symbolsChanged();
     void soundChanged();
 
     // QML
@@ -187,9 +187,9 @@ private:
 
     QList<QObject*> _pitchColors;
     QList<QObject*> _rootNoteSetter;
-    QList<QObject*> _BScaleSwitch;
+    QList<QObject*> _scaleSwitch;
     MWOctaveRanger* _OctaveRanger;
-    QObject *       _PlayArea;
+    MWPlayArea *    _PlayArea;
 
     // synth ctl faders
     QList<QObject*> _faderParamCtl;

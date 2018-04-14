@@ -75,13 +75,13 @@ void MWRootNoteSetter::onSetScale(int rootNote, QList<bool>)
     onSetRootNote(rootNote);
 }
 
-void MWRootNoteSetter::onSymbolsChanged(int noteSymbols)
+void MWRootNoteSetter::onSymbolsChange(int noteSymbols)
 {
     _noteSymbols = noteSymbols;
     calcText();
 }
 
-void MWRootNoteSetter::onShowFreqsChanged(bool showFreqs)
+void MWRootNoteSetter::onShowFreqsChange(bool showFreqs)
 {
     _showFreqs = showFreqs;
 }

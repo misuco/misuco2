@@ -43,8 +43,7 @@ public:
     void addSender(ISender * s);
 
 public slots:
-    void setSenderEnabled(int i, bool value);
-    //bool isSenderEnabled(int i);
+    void onToggleSender(int i, bool value);
 
 private:
     QList<ISender *> senders;

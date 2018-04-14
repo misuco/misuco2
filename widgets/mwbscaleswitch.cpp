@@ -132,7 +132,14 @@ void MWBScaleSwitch::onSetScale(int rootNote, QList<bool> scale)
     onSetRootNote(rootNote);
 }
 
-void MWBScaleSwitch::onSymbolsChanged()
+void MWBScaleSwitch::onSymbolsChange(int s)
 {
+    _noteSymbols = s;
+    calcText();
+}
+
+void MWBScaleSwitch::onShowFreqsChange(bool state)
+{
+    _showFreqs = state;
     calcText();
 }

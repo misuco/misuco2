@@ -108,7 +108,7 @@ void MasterSender::addSender(ISender *s)
     senderEnabled.append(true);
 }
 
-void MasterSender::setSenderEnabled(int i, bool value)
+void MasterSender::onToggleSender(int i, bool value)
 {
     if(i<senderEnabled.size()) {
         senderEnabled[i] = value;

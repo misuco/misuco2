@@ -78,8 +78,8 @@ public slots:
     void setBendVertTop(int b);
     void setBendVertBot(int b);
 
-    void onSymbolsChanged(int noteSymbols);
-    void onShowFreqsChanged(bool showFreqs);
+    void onSymbolsChange(int noteSymbols);
+    void onShowFreqsChange(bool showFreqs);
 
 signals:
     // QML

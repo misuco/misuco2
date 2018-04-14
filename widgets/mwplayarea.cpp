@@ -376,7 +376,7 @@ void MWPlayArea::setBendVertBot(int b)
     config();
 }
 
-void MWPlayArea::onSymbolsChanged(int noteSymbols)
+void MWPlayArea::onSymbolsChange(int noteSymbols)
 {
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {
@@ -385,7 +385,7 @@ void MWPlayArea::onSymbolsChanged(int noteSymbols)
     }
 }
 
-void MWPlayArea::onShowFreqsChanged(bool showFreqs)
+void MWPlayArea::onShowFreqsChange(bool showFreqs)
 {
     for(int r=0;r<MAX_ROWS;r++) {
         for(int c=0;c<MAX_COLS;c++) {

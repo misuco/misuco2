@@ -47,8 +47,8 @@ public slots:
     void onSetRootNote(int rootNote);
     void onSetScale(int rootNote, QList<bool>);
     // view properties
-    void onSymbolsChanged(int noteSymbols);
-    void onShowFreqsChanged(bool showFreqs);
+    void onSymbolsChange(int noteSymbols);
+    void onShowFreqsChange(bool showFreqs);
 
 signals:
     void setRootNote(int);
