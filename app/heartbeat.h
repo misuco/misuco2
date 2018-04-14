@@ -2,7 +2,7 @@
 #define HEARTBEAT_H
 
 #include <QObject>
-#include "conf/types.h"
+#include "models/types.h"
 #include "comm/libofqf/qoscclient.h"
 
 class Heartbeat : public QObject

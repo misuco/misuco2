@@ -22,7 +22,7 @@
 #define MWMicrotunePreset_H
 
 #include <QObject>
-#include "conf/types.h"
+#include "models/types.h"
 #include "widgets/faders/mwfaderpitch.h"
 
 class MWMicrotunePreset : public QObject

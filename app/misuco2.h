@@ -21,17 +21,20 @@
 #ifndef WLAYOUT_H
 #define WLAYOUT_H
 
-#include "widgets/core/playarea.h"
-#include "widgets/core/rootnotesetter.h"
-#include "widgets/core/octaveranger.h"
-#include "conf/types.h"
-#include "widgets/faders/mwfaderparamctl.h"
-#include "widgets/core/scaleswitch.h"
-#include "widgets/core/gamecontrol.h"
+#include "heartbeat.h"
+#include "xmlloader.h"
+#include "models/types.h"
+#include "models/purchases.h"
 #include "comm/mastersender.h"
 #include "comm/senderoscmidigeneric.h"
 #include "comm/senderreaktor.h"
+#include "widgets/core/playarea.h"
+#include "widgets/core/rootnotesetter.h"
+#include "widgets/core/octaveranger.h"
+#include "widgets/core/scaleswitch.h"
+#include "widgets/core/gamecontrol.h"
 #include "widgets/faders/mwfaderpitch.h"
+#include "widgets/faders/mwfaderparamctl.h"
 #include "widgets/presets/mwscalepreset.h"
 #include "widgets/presets/mwsoundpreset.h"
 #include "widgets/presets/mwmicrotunepreset.h"
@@ -47,9 +50,6 @@
 #include "widgets/buttons/togglemenu.h"
 #include "widgets/buttons/togglepresets.h"
 #include "widgets/buttons/octaveshift.h"
-#include "conf/purchases.h"
-#include "heartbeat.h"
-#include "xmlloader.h"
 
 class XmlLoader;
 

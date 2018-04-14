@@ -1,6 +1,6 @@
 #include <QDebug>
 #include "presetcollection.h"
-#include "conf/purchases.h"
+#include "models/purchases.h"
 #include "mwsoundpreset.h"
 #include "mwscalepreset.h"
 

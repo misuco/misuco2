@@ -22,7 +22,7 @@
 #define MWPRESET_H
 
 #include <QObject>
-#include "conf/types.h"
+#include "models/types.h"
 
 class MWScalePreset : public QObject
 {

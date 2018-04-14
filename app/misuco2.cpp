@@ -23,7 +23,7 @@
 #include "comm/sendersupercollider.h"
 #include "comm/senderdebug.h"
 #include "comm/sendermobilesynth.h"
-#include "conf/pitchcolor.h"
+#include "models/pitchcolor.h"
 
 Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader(new XmlLoader(this,this))

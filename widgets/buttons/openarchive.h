@@ -4,7 +4,7 @@
 #include <QObject>
 
 #include "buttonbase.h"
-#include "conf/types.h"
+#include "models/types.h"
 
 class OpenArchive : public ButtonBase
 {

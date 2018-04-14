@@ -22,7 +22,7 @@
 #define MWrootNoteSETTER_H
 
 #include "comm/mastersender.h"
-#include "conf/freqtriple.h"
+#include "models/freqtriple.h"
 
 class RootNoteSetter : public QObject
 {

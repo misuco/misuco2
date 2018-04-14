@@ -23,7 +23,7 @@
 
 #include <QObject>
 #include "mwfader.h"
-#include "conf/freqtriple.h"
+#include "models/freqtriple.h"
 #include "comm/mastersender.h"
 
 class MWFaderPitch : public MWFader

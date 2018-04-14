@@ -21,9 +21,9 @@
 #ifndef MWPLAYAREA_H
 #define MWPLAYAREA_H
 
-#include "conf/types.h"
+#include "models/types.h"
 #include "comm/mastersender.h"
-#include "conf/playfield.h"
+#include "models/playfield.h"
 
 #define MAX_COLS 255
 #define MAX_ROWS 3

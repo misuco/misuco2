@@ -23,7 +23,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     app/misuco2.cpp \
-    conf/freqtriple.cpp \
+    models/freqtriple.cpp \
     comm/libofqf/qoscclient.cpp \
     comm/libofqf/qosctypes.cpp \
     comm/libofqf/qosctcpclient.cpp \
@@ -50,12 +50,12 @@ SOURCES += main.cpp\
     widgets/presets/mwmicrotunepreset.cpp \
     widgets/presets/mwscalepreset.cpp \
     widgets/presets/presetcollection.cpp \
-    conf/purchases.cpp \
+    models/purchases.cpp \
     comm/mastersender.cpp \
     app/heartbeat.cpp \
     widgets/buttons/buttonbase.cpp \
     widgets/buttons/openarchive.cpp \
-    conf/pitchcolor.cpp \
+    models/pitchcolor.cpp \
     widgets/faders/mwfader.cpp \
     app/xmlloader.cpp \
     widgets/buttons/bendhorizontal.cpp \
@@ -69,7 +69,7 @@ SOURCES += main.cpp\
     widgets/buttons/togglemenu.cpp \
     widgets/buttons/togglepresets.cpp \
     widgets/buttons/octaveshift.cpp \
-    conf/playfield.cpp \
+    models/playfield.cpp \
     widgets/core/gamecontrol.cpp \
     widgets/core/octaveranger.cpp \
     widgets/core/rootnotesetter.cpp \
@@ -77,8 +77,8 @@ SOURCES += main.cpp\
 
 HEADERS  += \
     app/misuco2.h \
-    conf/types.h \
-    conf/freqtriple.h \
+    models/types.h \
+    models/freqtriple.h \
     comm/libofqf/qoscclient.h \
     comm/libofqf/qosctypes.h \
     comm/libofqf/qosctcpclient.h \
@@ -112,13 +112,13 @@ HEADERS  += \
     widgets/presets/mwmicrotunepreset.h \
     widgets/presets/mwscalepreset.h \
     widgets/presets/presetcollection.h \
-    conf/purchases.h \
+    models/purchases.h \
     comm/mastersender.h \
     app/heartbeat.h \
     widgets/buttons/buttonbase.h \
     widgets/buttons/openarchive.h \
-    conf/pitchcolor.h \
-    conf/colormacros.h \
+    models/pitchcolor.h \
+    models/colormacros.h \
     widgets/faders/mwfader.h \
     app/xmlloader.h \
     widgets/buttons/bendhorizontal.h \
@@ -132,7 +132,7 @@ HEADERS  += \
     widgets/buttons/togglemenu.h \
     widgets/buttons/togglepresets.h \
     widgets/buttons/octaveshift.h \
-    conf/playfield.h \
+    models/playfield.h \
     widgets/core/gamecontrol.h \
     widgets/core/octaveranger.h \
     widgets/core/rootnotesetter.h \

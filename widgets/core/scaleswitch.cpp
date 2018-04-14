@@ -20,7 +20,7 @@
 
 #include "scaleswitch.h"
 #include "comm/senderdebug.h"
-#include "conf/types.h"
+#include "models/types.h"
 #include <QDebug>
 
 ScaleSwitch::ScaleSwitch(int scaleId, MasterSender *ms, QObject * parent) : QObject(parent),

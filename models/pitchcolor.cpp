@@ -1,5 +1,5 @@
 #include "pitchcolor.h"
-#include "conf/colormacros.h"
+#include "models/colormacros.h"
 
 PitchColor::PitchColor(int rootNote, QObject *parent) : QObject(parent),
     _rootNote(rootNote),

@@ -22,7 +22,7 @@
 #define MWSound_H
 
 #include <QObject>
-#include "conf/types.h"
+#include "models/types.h"
 #include "widgets/faders/mwfaderparamctl.h"
 
 class MWSoundPreset : public QObject

@@ -1,5 +1,5 @@
 #include "playfield.h"
-#include "conf/colormacros.h"
+#include "models/colormacros.h"
 #include <QDebug>
 
 Playfield::Playfield(QObject *parent) : QObject(parent),

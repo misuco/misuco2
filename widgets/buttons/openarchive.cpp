@@ -1,5 +1,5 @@
 #include "openarchive.h"
-#include "conf/types.h"
+#include "models/types.h"
 #include <QDesktopServices>
 #include <QUrl>
 

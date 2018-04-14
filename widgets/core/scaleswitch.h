@@ -21,7 +21,7 @@
 #ifndef MWSCALESWITCH_H
 #define MWSCALESWITCH_H
 
-#include "conf/freqtriple.h"
+#include "models/freqtriple.h"
 #include "comm/mastersender.h"
 
 class ScaleSwitch : public QObject
