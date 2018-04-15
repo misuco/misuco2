@@ -20,10 +20,10 @@
 
 #include <QDebug>
 #include "misuco2.h"
-#include "comm/sendersupercollider.h"
-#include "comm/senderdebug.h"
-#include "comm/sendermobilesynth.h"
-#include "models/pitchcolor.h"
+#include "lib/misulib/comm/sendersupercollider.h"
+#include "lib/misulib/comm/senderdebug.h"
+#include "lib/misulib/comm/sendermobilesynth.h"
+#include "lib/misulib/models/pitchcolor.h"
 
 Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader(new XmlLoader(this,this))
