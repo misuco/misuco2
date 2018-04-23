@@ -4,7 +4,9 @@
 
 Playfield::Playfield(QObject *parent) : QObject(parent),
     f1(0,this),
-    f2(0,this)
+    f2(0,this),
+    hue1bent(0),
+    hue2bent(0)
 {}
 
 void Playfield::setF1rootNote(int r)

@@ -296,20 +296,5 @@ void FreqTriple::calcColor()
     if(_hue>1) _hue -=1;
     if(_hue<0) _hue +=1;
 
-    /*
-    if(_bwMode) {
-        if(_bw) {
-            _color0 = MGlob::wkeycolor;
-            _color1 = MGlob::hlwkeycolor;
-        } else {
-            _color0 = MGlob::bkeycolor;
-            _color1 = MGlob::hlbkeycolor;
-        }
-    } else {
-        _color0 = QColor::fromHslF(_hue,MGlob::sOff,MGlob::lOff);
-        _color1 = QColor::fromHslF(_hue,MGlob::sOn,MGlob::lOn);
-    }
-    */
-
     emit colorChanged();
 }

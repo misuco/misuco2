@@ -1,8 +1,10 @@
+#include <QDebug>
 #include "pitchcolor.h"
 #include "lib/misulib/models/colormacros.h"
 
 PitchColor::PitchColor(int rootNote, QObject *parent) : QObject(parent),
     _rootNote(rootNote),
+    _pitch(0),
     _bwMode(false),
     _pianoWhite(true)
 {
@@ -44,6 +46,7 @@ void PitchColor::calcColor()
             _colorOn = PIANO_BLACK_HL;
         }
     } else {
+        //qDebug() << "PitchColor::calcColor " << hue;
         _colorOff = QColor::fromHslF(hue,SATURATION_OFF,LIGHTNESS_OFF);
         _colorOn = QColor::fromHslF(hue,SATURATION_ON,LIGHTNESS_ON);
     }
