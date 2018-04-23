@@ -10,7 +10,6 @@
 #include "modulation.h"
 #include "oscillator.h"
 
-#include <QDebug>
 #include <qendian.h>
 
 namespace synth {
@@ -31,12 +30,10 @@ namespace synth {
     }
     
     void Controller::NoteOn(int note, float freq) {
-        //qDebug() << "controller::noteon " << note << " freq " << freq;
         key_stack_.NoteOn(note, freq);
     }
     
     void Controller::NoteOff(int note) {
-        //qDebug() << "controller::noteoff " << note;
         key_stack_.NoteOff(note);
     }
     
@@ -49,7 +46,6 @@ namespace synth {
     }
 
     void Controller::set_filter_cutoff(float frequency) {
-        qDebug() << "Cutoff " << frequency;
         key_stack_.setFilterCutoff(frequency);
     }
 
@@ -77,22 +73,18 @@ namespace synth {
     }
 
     void Controller::setAttack(int n, long a) {
-        qDebug() << "Attack " << a;
         key_stack_.setAttack(n,a);
     }
 
     void Controller::setDecay(int n, long d) {
-        qDebug() << "Decay " << d;
         key_stack_.setDecay(n,d);
     }
 
     void Controller::setSustain(int n, float s) {
-        qDebug() << "Sustain " << s;
         key_stack_.setSustain(n,s);
     }
 
     void Controller::setRelease(int n, int r) {
-        qDebug() << "Release " << r;
         key_stack_.setRelease(n,r);
     }
 
