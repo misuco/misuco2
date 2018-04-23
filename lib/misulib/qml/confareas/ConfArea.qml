@@ -45,7 +45,7 @@ Item {
                 property QtObject modelData: layout.confPitchTopFader
                 property color faderColor: fgColor
 
-                source: "Fader.qml"
+                source: "../elements/Fader.qml"
             }
 
             Loader {
@@ -57,7 +57,7 @@ Item {
                 property QtObject modelData: layout.confPitchBottomFader
                 property color faderColor: fgColor
 
-                source: "Fader.qml"
+                source: "../elements/Fader.qml"
             }
 
         }
@@ -72,7 +72,7 @@ Item {
 
             property var modelData: layout.confPitchHorizButton
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
 
     }
@@ -113,7 +113,7 @@ Item {
             property QtObject modelData: layout.confSymbolFader
             property color faderColor: fgColor
 
-            source: "Fader.qml"
+            source: "../elements/Fader.qml"
         }
 
         Loader {
@@ -127,7 +127,7 @@ Item {
 
             property var modelData: layout.confShowFreqsButton
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
 
         Loader {
@@ -140,7 +140,7 @@ Item {
 
             property var modelData: layout.confBWModeButton
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
     }
 
@@ -180,7 +180,7 @@ Item {
             property QtObject modelData: layout.confChannelFader
             property color faderColor: fgColor
 
-            source: "Fader.qml"
+            source: "../elements/Fader.qml"
         }
 
         Loader {
@@ -193,7 +193,7 @@ Item {
 
             property var modelData: layout.confCC1Button
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
 
         Loader {
@@ -207,7 +207,7 @@ Item {
 
             property var modelData: layout.confSendMobile
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
 
         Loader {
@@ -221,7 +221,7 @@ Item {
 
             property var modelData: layout.confSendPuredata
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
 
         Loader {
@@ -235,7 +235,7 @@ Item {
 
             property var modelData: layout.confSendReaktor
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
 
         Loader {
@@ -249,7 +249,7 @@ Item {
 
             property var modelData: layout.confSendSupercollider
             property bool transparent: false
-            source: "Button.qml"
+            source: "../elements/Button.qml"
         }
     }
 }

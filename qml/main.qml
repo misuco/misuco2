@@ -1,5 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
+import "../lib/misulib/qml/confareas"
+import "../lib/misulib/qml/dialogs"
+import "../lib/misulib/qml/elements"
+import "../lib/misulib/qml/playfield"
+import "../lib/misulib/qml/presets"
 
 Window {
     property bool portrait: height > width
@@ -84,7 +89,7 @@ Window {
 
         property bool transparent: true
         property var modelData: layout.openArchive
-        source: "Button.qml"
+        source: "../lib/misulib/qml/elements/Button.qml"
     }
 
     RootNoteSetter {
@@ -144,7 +149,7 @@ Window {
 
         property var modelData: layout.togglePresets
         property bool transparent: true
-        source: "Button.qml"
+        source: "../lib/misulib/qml/elements/Button.qml"
     }
 
     Loader {
@@ -159,7 +164,7 @@ Window {
 
         property var modelData: layout.toggleMenu
         property bool transparent: true
-        source: "Button.qml"
+        source: "../lib/misulib/qml/elements/Button.qml"
     }
 
     Loader {
@@ -174,7 +179,7 @@ Window {
 
         property var modelData: layout.octDown
         property bool transparent: true
-        source: "Button.qml"
+        source: "../lib/misulib/qml/elements/Button.qml"
     }
 
     Loader {
@@ -189,7 +194,7 @@ Window {
 
         property var modelData: layout.octUp
         property bool transparent: true
-        source: "Button.qml"
+        source: "../lib/misulib/qml/elements/Button.qml"
     }
 
     DialogPreset {

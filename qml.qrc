@@ -1,36 +1,35 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
-        <file>qml/PlayArea.qml</file>
-        <file>qml/PlayFieldNormal.qml</file>
-        <file>qml/PlayFieldBendVertTop.qml</file>
-        <file>qml/PlayFieldBendVertBot.qml</file>
-        <file>qml/PlayFieldBendHori.qml</file>
-        <file>qml/RootNoteSetter.qml</file>
-        <file>qml/ScaleSwitch.qml</file>
-        <file>qml/OctaveRanger.qml</file>
         <file>qml/Menu.qml</file>
-        <file>qml/TuneArea.qml</file>
-        <file>qml/ScalePreset.qml</file>
-        <file>qml/ScalePresetScroll.qml</file>
-        <file>qml/Fader.qml</file>
-        <file>qml/SynthArea.qml</file>
-        <file>qml/ConfArea.qml</file>
-        <file>qml/Button.qml</file>
-        <file>qml/SynthPresetScroll.qml</file>
-        <file>qml/icons/Sine.qml</file>
-        <file>qml/icons/Square.qml</file>
-        <file>qml/icons/Rnd.qml</file>
-        <file>qml/icons/Saw.qml</file>
-        <file>qml/icons/Tri.qml</file>
-        <file>qml/icons/Envelope.qml</file>
-        <file>qml/DialogPreset.qml</file>
+        <file>lib/misulib/qml/playfield/PlayArea.qml</file>
+        <file>lib/misulib/qml/playfield/PlayFieldNormal.qml</file>
+        <file>lib/misulib/qml/playfield/PlayFieldBendVertTop.qml</file>
+        <file>lib/misulib/qml/playfield/PlayFieldBendVertBot.qml</file>
+        <file>lib/misulib/qml/playfield/PlayFieldBendHori.qml</file>
+        <file>lib/misulib/qml/elements/RootNoteSetter.qml</file>
+        <file>lib/misulib/qml/elements/ScaleSwitch.qml</file>
+        <file>lib/misulib/qml/elements/OctaveRanger.qml</file>
+        <file>lib/misulib/qml/confareas/TuneArea.qml</file>
+        <file>lib/misulib/qml/presets/ScalePresetScroll.qml</file>
+        <file>lib/misulib/qml/elements/Fader.qml</file>
+        <file>lib/misulib/qml/confareas/SynthArea.qml</file>
+        <file>lib/misulib/qml/confareas/ConfArea.qml</file>
+        <file>lib/misulib/qml/elements/Button.qml</file>
+        <file>lib/misulib/qml/presets/SynthPresetScroll.qml</file>
+        <file>lib/misulib/qml/presets/icons/Sine.qml</file>
+        <file>lib/misulib/qml/presets/icons/Square.qml</file>
+        <file>lib/misulib/qml/presets/icons/Rnd.qml</file>
+        <file>lib/misulib/qml/presets/icons/Saw.qml</file>
+        <file>lib/misulib/qml/presets/icons/Tri.qml</file>
+        <file>lib/misulib/qml/presets/icons/Envelope.qml</file>
+        <file>lib/misulib/qml/dialogs/DialogPreset.qml</file>
+        <file>lib/misulib/qml/playfield/PlayFieldBendVertHorizBot.qml</file>
+        <file>lib/misulib/qml/playfield/PlayFieldBendVertHorizTop.qml</file>
+        <file>lib/misulib/qml/dialogs/DialogGame.qml</file>
         <file>xml/conf.xml</file>
         <file>xml/scales.xml</file>
         <file>xml/synth.xml</file>
         <file>xml/tune.xml</file>
-        <file>qml/PlayFieldBendVertHorizBot.qml</file>
-        <file>qml/PlayFieldBendVertHorizTop.qml</file>
-        <file>qml/DialogGame.qml</file>
     </qresource>
 </RCC>
