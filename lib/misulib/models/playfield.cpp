@@ -10,16 +10,22 @@ Playfield::Playfield(QObject *parent) : QObject(parent),
 void Playfield::setF1rootNote(int r)
 {
     f1.setRootNote(r);
+    calcColor();
+    calcText();
 }
 
 void Playfield::setF2rootNote(int r)
 {
     f2.setRootNote(r);
+    calcColor();
+    calcText();
 }
 
 void Playfield::setF2midiNote(int midiNote, int pitch)
 {
     f2.setMidinote(midiNote,pitch);
+    calcColor();
+    calcText();
 }
 
 float Playfield::getF2freq()
@@ -85,6 +91,8 @@ int Playfield::getPressed()
 void Playfield::setF1midiNote(int midiNote, int pitch)
 {
     f1.setMidinote(midiNote,pitch);
+    calcColor();
+    calcText();
 }
 
 float Playfield::getF1freq()
