@@ -50,6 +50,7 @@ void Playfield::setHue2Bent(float h)
     if(h>1) h-=1;
     if(h<0) h+=1;
     hue2bent = h;
+    calcColor();
 }
 
 float Playfield::getF2Hue()
@@ -117,6 +118,7 @@ void Playfield::setHue1Bent(float h)
     if(h>1) h-=1;
     if(h<0) h+=1;
     hue1bent = h;
+    calcColor();
 }
 
 float Playfield::getF1Hue()

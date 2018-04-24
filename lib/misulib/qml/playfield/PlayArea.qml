@@ -92,6 +92,7 @@ Item {
                     source: {
                         if(modelData.fieldType===1) return "PlayFieldBendVertBot.qml"
                         if(modelData.fieldType===2) return "PlayFieldBendHori.qml"
+                        if(modelData.fieldType===3) return "PlayFieldBendVertHorizBot.qml"
                         return "PlayFieldNormal.qml";
                     }
                 }

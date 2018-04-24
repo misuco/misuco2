@@ -68,6 +68,9 @@ void PlayArea::config()
      *  |.|.||.|.|.| |
      */
 
+    int currentCols=cols;
+    int currentRows=rows;
+
     cols=0;
     for(int oct=_baseOct;oct<_topOct;oct++) {
         setColumn(cols,_rootNote+oct*12,_rootNote);
@@ -94,9 +97,10 @@ void PlayArea::config()
     setColumn(cols,topnote,_rootNote);
     cols++;
 
-    calcGeo();
-
-    emit playRowsChanged();
+    if(cols!=currentCols || rows!=currentRows) {
+        calcGeo();
+        emit playRowsChanged();
+    }
 }
 
 void PlayArea::setColumn(int col, int midinote, int pitch) {
@@ -107,9 +111,11 @@ void PlayArea::setColumn(int col, int midinote, int pitch) {
     if(bendVertTop!=0) {
         fields[rows][col].setType(BEND_VERT);
         fields[rows][col].setF1midiNote(midinote,pitch);
+
         float hue = fields[rows][col].getF1Hue()+huePerNote*(float)bendVertTop;
         fields[rows][col].setHue1Bent(hue);
         fields[rows][col].setPressed(0);
+
         if(col>1 && bendHoriz) {
             fields[rows][col-1].setType(BEND_VERT_HORIZ);
             fields[rows][col-1].setF1midiNote(fields[rows][col-2].getF1midiNote(),fields[rows][col-2].getF1pitch());
@@ -139,20 +145,21 @@ void PlayArea::setColumn(int col, int midinote, int pitch) {
         fields[rows][col].setType(BEND_VERT);
         fields[rows][col].setF1midiNote(midinote,pitch);
 
-        float hue = fields[rows][col-1].getF1Hue()+huePerNote*(float)bendVertTop;
+        float hue = fields[rows][col].getF1Hue()+huePerNote*(float)bendVertBot;
         fields[rows][col].setHue1Bent(hue);
-
         fields[rows][col].setPressed(0);
+
         if(col>1 && bendHoriz) {
             fields[rows][col-1].setType(BEND_VERT_HORIZ);
             fields[rows][col-1].setF1midiNote(fields[rows][col-2].getF1midiNote(),fields[rows][col-2].getF1pitch());
 
-            float hue = fields[rows][col-1].getF1Hue()+huePerNote*(float)bendVertTop;
+            float hue = fields[rows][col-1].getF1Hue()+huePerNote*(float)bendVertBot;
             fields[rows][col-1].setHue1Bent(hue);
 
-            hue = fields[rows][col-1].getF2Hue()+huePerNote*(float)bendVertTop;
-            fields[rows][col-1].setHue2Bent(hue);
+            fields[rows][col-1].setF2midiNote(midinote,pitch);
 
+            hue = fields[rows][col-1].getF2Hue()+huePerNote*(float)bendVertBot;
+            fields[rows][col-1].setHue2Bent(hue);
             fields[rows][col-1].setPressed(0);
         }
         rows++;

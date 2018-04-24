@@ -10,8 +10,8 @@ Item {
         color: "Transparent"
 
         gradient: Gradient {
-            GradientStop { position: 1.0; color: modelData.colorF1b }
             GradientStop { position: 0.0; color: modelData.colorF1 }
+            GradientStop { position: 1.0; color: modelData.colorF1b }
         }
 
         Text {
