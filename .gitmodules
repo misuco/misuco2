@@ -1,0 +1,6 @@
+[submodule "lib/misulib"]
+	path = lib/misulib
+	url = https://github.com/misuco/misulib
+[submodule "lib/mobilesynth"]
+	path = lib/mobilesynth
+	url = https://github.com/misuco/mobilesynth
