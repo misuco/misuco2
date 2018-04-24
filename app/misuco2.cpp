@@ -132,16 +132,16 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     }
 
     _enableMobilesynth = new ToggleSender("mobile\nsynth",0,1,this);
-    connect(_enableMobilesynth,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
+    connect(_enableMobilesynth,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _enablePuredata = new ToggleSender("puredata",1,0,this);
-    connect(_enablePuredata,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
+    connect(_enablePuredata,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _enableReaktor = new ToggleSender("reaktor",2,1,this);
-    connect(_enableReaktor,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
+    connect(_enableReaktor,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _enableSupercollider = new ToggleSender("super\ncollider",3,0,this);
-    connect(_enableSupercollider,SIGNAL(toggleSender(int,bool)),_out,SLOT(onToggleSender(int,bool)));
+    connect(_enableSupercollider,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _togglePresets = new TogglePresets("memo",0,this);
     connect(_togglePresets,SIGNAL(togglePresets(bool)),this,SLOT(togglePresets(bool)));
