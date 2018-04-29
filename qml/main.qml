@@ -94,6 +94,8 @@ Window {
 
     RootNoteSetter {
         id: rootNoteSetterRow
+        model: layout.rootNoteSetter
+        pitchColors: layout.pitchColors
         anchors.top: scaleSwitchRow.bottom
         visible: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         width: parent.width
