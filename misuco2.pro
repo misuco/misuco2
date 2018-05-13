@@ -73,7 +73,9 @@ SOURCES += main.cpp\
     lib/misulib/widgets/core/gamecontrol.cpp \
     lib/misulib/widgets/core/octaveranger.cpp \
     lib/misulib/widgets/core/rootnotesetter.cpp \
-    lib/misulib/widgets/core/playarea.cpp
+    lib/misulib/widgets/core/playarea.cpp \
+    lib/misulib/widgets/core/touchhistory.cpp \
+    lib/misulib/models/touchhistoryevent.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -136,7 +138,9 @@ HEADERS  += \
     lib/misulib/widgets/core/gamecontrol.h \
     lib/misulib/widgets/core/octaveranger.h \
     lib/misulib/widgets/core/rootnotesetter.h \
-    lib/misulib/widgets/core/playarea.h
+    lib/misulib/widgets/core/playarea.h \
+    lib/misulib/widgets/core/touchhistory.h \
+    lib/misulib/models/touchhistoryevent.h
 
 CONFIG += mobility
 MOBILITY = 

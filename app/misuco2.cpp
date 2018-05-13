@@ -63,7 +63,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         _pitchColors.append(new PitchColor(rootNote,this));
     }    
 
-    _PlayArea = new PlayArea(_out, this);
+    _PlayArea = new PlayArea(_out, nullptr, this);
 
     _OctaveRanger = new OctaveRanger(this);
     connect(_OctaveRanger,SIGNAL(setOctConf(int,int)),_PlayArea,SLOT(setOctConf(int,int)));
