@@ -39,6 +39,7 @@
 #include "lib/misulib/widgets/presets/mwsoundpreset.h"
 #include "lib/misulib/widgets/presets/mwmicrotunepreset.h"
 #include "lib/misulib/widgets/presets/presetcollection.h"
+#include "lib/misulib/widgets/presets/songtextimport.h"
 #include "lib/misulib/widgets/buttons/openarchive.h"
 #include "lib/misulib/widgets/buttons/bendhorizontal.h"
 #include "lib/misulib/widgets/buttons/sendcc1.h"
@@ -120,6 +121,8 @@ class Misuco2 : public QObject
 
     Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
 
+    Q_PROPERTY(QObject* songTextImport MEMBER _songTextImport CONSTANT)
+
 public:
     explicit Misuco2(QObject *parent = 0);
     ~Misuco2();
@@ -148,6 +151,8 @@ private slots:
     void setMicrotune(MWMicrotune* m);
     void onChannelChange(int v);
     void onGameStarted();
+
+    void connectScalePresets();
 
     void setOctConf(int bot, int top);
 
@@ -208,6 +213,7 @@ protected:
 private:
     XmlLoader*  _xmlLoader;
     GameControl*     _game;
+    SongTextImport*  _songTextImport;
     Heartbeat*  _heartbeat;
 
     MasterSender*           _out;

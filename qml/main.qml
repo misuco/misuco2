@@ -211,4 +211,10 @@ Window {
         anchors.fill: parent
     }
 
+    DialogTextImport {
+        id: textImportDialog
+        visible: layout.songTextImport.visible
+        anchors.fill: parent
+    }
+
 }

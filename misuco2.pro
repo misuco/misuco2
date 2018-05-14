@@ -75,7 +75,8 @@ SOURCES += main.cpp\
     lib/misulib/widgets/core/rootnotesetter.cpp \
     lib/misulib/widgets/core/playarea.cpp \
     lib/misulib/widgets/core/touchhistory.cpp \
-    lib/misulib/models/touchhistoryevent.cpp
+    lib/misulib/models/touchhistoryevent.cpp \
+    lib/misulib/widgets/presets/songtextimport.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -140,7 +141,8 @@ HEADERS  += \
     lib/misulib/widgets/core/rootnotesetter.h \
     lib/misulib/widgets/core/playarea.h \
     lib/misulib/widgets/core/touchhistory.h \
-    lib/misulib/models/touchhistoryevent.h
+    lib/misulib/models/touchhistoryevent.h \
+    lib/misulib/widgets/presets/songtextimport.h
 
 CONFIG += mobility
 MOBILITY = 

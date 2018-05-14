@@ -31,5 +31,6 @@
         <file>xml/scales.xml</file>
         <file>xml/synth.xml</file>
         <file>xml/tune.xml</file>
+        <file>lib/misulib/qml/dialogs/DialogTextImport.qml</file>
     </qresource>
 </RCC>

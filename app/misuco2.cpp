@@ -46,6 +46,9 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _botOct=6;
     _topOct=7;    
 
+    _songTextImport = new SongTextImport(_scalePresets,this);
+    connect(_songTextImport,SIGNAL(connectScalePresets()),this,SLOT(connectScalePresets()));
+    connect(_scalePresets,SIGNAL(showImportSong()),_songTextImport,SLOT(show()));
     _heartbeat = new Heartbeat(this);
 
     _out=new MasterSender();
@@ -233,24 +236,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader->readXml("synth.xml");
     _xmlLoader->readXml("tune.xml");
 
-    for(auto presetButton:_scalePresets->getItems()) {
-        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(PlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
-        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_heartbeat,SLOT(onSetScale(int,QList<bool>)));
-        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[0],SLOT(onSetScale(int,QList<bool>)));
-        for(int j=1;j<SCALE_SIZE+1;j++) {
-            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[j],SLOT(onSetScale(int,QList<bool>)));
-            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_scaleSwitch[j-1],SLOT(onSetScale(int,QList<bool>)));
-        }
-        for(auto rootNoteSetter:_rootNoteSetter) {
-            connect(rootNoteSetter,SIGNAL(setRootNote(int)),presetButton,SLOT(onSetRootNote(int)));
-        }
-        for(auto scaleSwitch:_scaleSwitch) {
-            connect(scaleSwitch,SIGNAL(setScale(int,bool)),presetButton,SLOT(onSetScale(int,bool)));
-        }
-        for(auto presetButton2:_scalePresets->getItems()) {
-            connect(presetButton2,SIGNAL(setScale(int,QList<bool>)),presetButton,SLOT(onSetScale(int,QList<bool>)));
-        }
-    }
+    connectScalePresets();
 
     if(_scalePresets->getItemCount()>0) {
         connect(this,SIGNAL(initialSet()),_scalePresets->getItem(0),SLOT(initialSet()));
@@ -461,6 +447,28 @@ void Misuco2::onGameStarted()
     _playAreaVisible=true;
     updateMenuButtonState();
     emit layoutChange();
+}
+
+void Misuco2::connectScalePresets()
+{
+    for(auto presetButton:_scalePresets->getItems()) {
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),(PlayArea *)_PlayArea,SLOT(onSetScale(int,QList<bool>)));
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_heartbeat,SLOT(onSetScale(int,QList<bool>)));
+        connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[0],SLOT(onSetScale(int,QList<bool>)));
+        for(int j=1;j<SCALE_SIZE+1;j++) {
+            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_rootNoteSetter[j],SLOT(onSetScale(int,QList<bool>)));
+            connect(presetButton,SIGNAL(setScale(int,QList<bool>)),_scaleSwitch[j-1],SLOT(onSetScale(int,QList<bool>)));
+        }
+        for(auto rootNoteSetter:_rootNoteSetter) {
+            connect(rootNoteSetter,SIGNAL(setRootNote(int)),presetButton,SLOT(onSetRootNote(int)));
+        }
+        for(auto scaleSwitch:_scaleSwitch) {
+            connect(scaleSwitch,SIGNAL(setScale(int,bool)),presetButton,SLOT(onSetScale(int,bool)));
+        }
+        for(auto presetButton2:_scalePresets->getItems()) {
+            connect(presetButton2,SIGNAL(setScale(int,QList<bool>)),presetButton,SLOT(onSetScale(int,QList<bool>)));
+        }
+    }
 }
 
 void Misuco2::setOctConf(int bot, int top)

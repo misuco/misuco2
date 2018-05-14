@@ -111,8 +111,13 @@ void XmlLoader::decodeScaleRecord() {
             attId.sprintf("b%d",i);
             scaleRead.append(_xmlReader.attributes().value(attId).toInt());
         }
+        QString text="";
+        if(_xmlReader.attributes().hasAttribute("text")) {
+            text=_xmlReader.attributes().value("text").toString();
+        }
         MWScalePreset * p = new MWScalePreset(_xmlReader.attributes().value("rootNote").toString().toInt(),
                                          scaleRead,
+                                         text,
                                          this);
         connect(p,SIGNAL(editPreset()),_app->_scalePresets,SLOT(onEditPreset()));
         _app->_scalePresets->append(p);
@@ -176,6 +181,7 @@ void XmlLoader::writeXml(QString filename)
                 auto widget = qobject_cast<MWScalePreset*>(widgetQ);
                 if(widget) {
                     _xmlWriter.writeStartElement("scale");
+                    _xmlWriter.writeAttribute("text",widget->getText());
                     att.sprintf("%d",widget->getRootNote());
                     _xmlWriter.writeAttribute("rootNote",att);
                     for(int i=0;i<SCALE_SIZE;i++) {
