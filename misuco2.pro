@@ -76,7 +76,8 @@ SOURCES += main.cpp\
     lib/misulib/widgets/core/playarea.cpp \
     lib/misulib/widgets/core/touchhistory.cpp \
     lib/misulib/models/touchhistoryevent.cpp \
-    lib/misulib/widgets/presets/songtextimport.cpp
+    lib/misulib/widgets/presets/songtextimport.cpp \
+    lib/misulib/comm/senderthread.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -142,7 +143,8 @@ HEADERS  += \
     lib/misulib/widgets/core/playarea.h \
     lib/misulib/widgets/core/touchhistory.h \
     lib/misulib/models/touchhistoryevent.h \
-    lib/misulib/widgets/presets/songtextimport.h
+    lib/misulib/widgets/presets/songtextimport.h \
+    lib/misulib/comm/senderthread.h
 
 CONFIG += mobility
 MOBILITY = 
