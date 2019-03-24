@@ -53,6 +53,8 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     _out=new MasterSender();
     _out->addSenderThread(new SenderMobileSynth());
+    _senderQMidi = new SenderQMidi();
+    _out->addSenderThread(_senderQMidi);
     _senderOscMidiGeneric = new SenderOscMidiGeneric();
     _out->addSender(_senderOscMidiGeneric);
     _senderReaktor = new SenderReaktor();

@@ -27,6 +27,7 @@
 #include "lib/misulib/comm/mastersender.h"
 #include "lib/misulib/comm/senderoscmidigeneric.h"
 #include "lib/misulib/comm/senderreaktor.h"
+#include "lib/misulib/comm/senderqmidi.h"
 #include "lib/misulib/comm/heartbeat.h"
 #include "lib/misulib/widgets/core/playarea.h"
 #include "lib/misulib/widgets/core/rootnotesetter.h"
@@ -219,6 +220,7 @@ private:
     MasterSender*           _out;
     SenderOscMidiGeneric*   _senderOscMidiGeneric;
     SenderReaktor*          _senderReaktor;
+    SenderQMidi*            _senderQMidi;
 
     QList<QObject*> _menu;
     QList<QObject*> _pitchColors;

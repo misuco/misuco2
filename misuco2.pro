@@ -21,6 +21,8 @@ DEFINES  += QT_DEPRECATED_WARNINGS
 TARGET = misuco2
 TEMPLATE = app
 
+INCLUDEPATH += lib/qmidi/src
+
 SOURCES += main.cpp\
     app/misuco2.cpp \
     lib/misulib/models/freqtriple.cpp \
@@ -77,7 +79,10 @@ SOURCES += main.cpp\
     lib/misulib/widgets/core/touchhistory.cpp \
     lib/misulib/models/touchhistoryevent.cpp \
     lib/misulib/widgets/presets/songtextimport.cpp \
-    lib/misulib/comm/senderthread.cpp
+    lib/misulib/comm/senderthread.cpp \
+    lib/qmidi/src/QMidiOut.cpp \
+    lib/qmidi/src/QMidiFile.cpp \
+    lib/misulib/comm/senderqmidi.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -144,7 +149,10 @@ HEADERS  += \
     lib/misulib/widgets/core/touchhistory.h \
     lib/misulib/models/touchhistoryevent.h \
     lib/misulib/widgets/presets/songtextimport.h \
-    lib/misulib/comm/senderthread.h
+    lib/misulib/comm/senderthread.h \
+    lib/qmidi/src/QMidiOut.h \
+    lib/qmidi/src/QMidiFile.h \
+    lib/misulib/comm/senderqmidi.h
 
 CONFIG += mobility
 MOBILITY = 
@@ -194,6 +202,18 @@ ios {
     QT               = core network quick purchasing
     QMAKE_INFO_PLIST = ios/Info.plist
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets
+
+}
+
+
+win32 {
+        LIBS += -lwinmm
+        SOURCES += lib/qmidi/src/OS/QMidi_Win32.cpp
+}
+
+linux* {
+        LIBS += -lasound
+        SOURCES += lib/qmidi/src/OS/QMidi_ALSA.cpp
 
 }
 
