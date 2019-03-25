@@ -190,11 +190,11 @@ DISTFILES += \
     ios/Images.xcassets/AppIcon.appiconset/Icon@2x.png \
     ios/Images.xcassets/Brand Assets.launchimage/Default-568h@2x.png \
     ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork.png \
-    ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png \
+    ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png
 
 OBJECTIVE_SOURCES += \
     lib/mobilesynth/mobilesynthViewControllerRc1.mm \
-    lib/mobilesynth/AudioOutput.m \
+    lib/mobilesynth/AudioOutput.m
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
@@ -205,17 +205,21 @@ ios {
 
 }
 
+message($$QMAKESPEC)
 
-win32 {
+android* {
+        message("Android")
+        SOURCES += lib/qmidi/src/OS/QMidi_Android.cpp
+} else:linux* {
+        message("Linux")
+        LIBS += -lasound
+        SOURCES += lib/qmidi/src/OS/QMidi_ALSA.cpp
+} else:win32 {
+        message("win32")
         LIBS += -lwinmm
         SOURCES += lib/qmidi/src/OS/QMidi_Win32.cpp
 }
 
-linux* {
-        LIBS += -lasound
-        SOURCES += lib/qmidi/src/OS/QMidi_ALSA.cpp
-
-}
 
 SUBDIRS += \
     misuco2.pro

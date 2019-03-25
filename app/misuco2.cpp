@@ -52,9 +52,9 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _heartbeat = new Heartbeat(this);
 
     _out=new MasterSender();
-    _out->addSenderThread(new SenderMobileSynth());
+    _out->addSenderThread(new SenderMobileSynth(),"Mobilesynth");
     _senderQMidi = new SenderQMidi();
-    _out->addSenderThread(_senderQMidi);
+    _out->addSenderThread(_senderQMidi,"QMidi");
     _senderOscMidiGeneric = new SenderOscMidiGeneric();
     _out->addSender(_senderOscMidiGeneric);
     _senderReaktor = new SenderReaktor();
