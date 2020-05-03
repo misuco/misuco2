@@ -5,7 +5,7 @@
 XmlLoader::XmlLoader(Misuco2 *misuco2, QObject *parent) : QObject(parent),
     _app(misuco2)
 {    
-    //qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    qDebug() << "QSysInfo::productType " << QSysInfo::productType() << " homedir: " << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if(QSysInfo::productType() == "ios") {
         _configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
         //configPath=QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
@@ -16,13 +16,18 @@ XmlLoader::XmlLoader(Misuco2 *misuco2, QObject *parent) : QObject(parent),
         //configPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
         //_configPath=QStandardPaths::writableLocation(QStandardPaths::DataLocation);
         //_configPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    //} else if(QSysInfo::productType() == "ubuntu") {
+    } else if(QSysInfo::productType() == "ubuntu") {
+        _configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+    } else if(QSysInfo::productType() == "debian") {
+        _configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
     } else if(QSysInfo::productType() == "osx") {
        _configPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.misuco2";
        QDir dir(_configPath);
        if (!dir.exists()) {
            dir.mkpath(".");
        }
+    } else {
+        _configPath=QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
     }
 }
 
@@ -33,10 +38,16 @@ void XmlLoader::readXml(QString filetype)
     QFile file(filename);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QFile factoryFile(":/xml/"+filetype);
-        factoryFile.copy(filename);
+        if(!factoryFile.copy(filename)) {
+            //qDebug() << "cannot copy " << file.fileName();
+        }
         if (!file.open(QFile::ReadOnly | QFile::Text)) {
-            //qDebug() << " cannot reopen " << filename;
-            return;
+            //qDebug() << " cannot reopen " << file.fileName();
+            file.setFileName(factoryFile.fileName());
+            if (!file.open(QFile::ReadOnly | QFile::Text)) {
+                //qDebug() << " cannot open " << file.fileName();
+                return;
+            }
         }
         file.setPermissions(QFileDevice::ReadOwner|QFileDevice::WriteOwner);
     }
