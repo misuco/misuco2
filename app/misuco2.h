@@ -33,7 +33,6 @@
 #include "lib/misulib/widgets/core/rootnotesetter.h"
 #include "lib/misulib/widgets/core/octaveranger.h"
 #include "lib/misulib/widgets/core/scaleswitch.h"
-#include "lib/misulib/widgets/core/gamecontrol.h"
 #include "lib/misulib/widgets/faders/mwfaderpitch.h"
 #include "lib/misulib/widgets/faders/mwfaderparamctl.h"
 #include "lib/misulib/widgets/presets/mwscalepreset.h"
@@ -119,8 +118,6 @@ class Misuco2 : public QObject
     Q_PROPERTY(bool confAreaVisible MEMBER _confAreaVisible NOTIFY layoutChange)
 
     Q_PROPERTY(QList<QObject*> pitchColors MEMBER _pitchColors CONSTANT)
-
-    Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
 
     Q_PROPERTY(QObject* songTextImport MEMBER _songTextImport CONSTANT)
 
@@ -213,7 +210,6 @@ protected:
 
 private:
     XmlLoader*  _xmlLoader;
-    GameControl*     _game;
     SongTextImport*  _songTextImport;
     Heartbeat*  _heartbeat;
 

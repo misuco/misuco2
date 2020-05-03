@@ -141,7 +141,7 @@ Window {
 
     Loader {
         id: showPresetsButton
-        visible: layout.playAreaVisible && !layout.game.visible
+        visible: layout.playAreaVisible
         anchors {
             top: playAreaRow.top
             left: playAreaRow.left
@@ -156,7 +156,7 @@ Window {
 
     Loader {
         id: showMenuButton
-        visible: layout.playAreaVisible && !layout.game.visible
+        visible: layout.playAreaVisible
         anchors {
             top: playAreaRow.top
             right: parent.right
@@ -171,7 +171,7 @@ Window {
 
     Loader {
         id: octDown
-        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0 && !layout.game.visible
+        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0
         anchors {
             bottom: playAreaRow.bottom
             left: playAreaRow.left
@@ -186,7 +186,7 @@ Window {
 
     Loader {
         id: octUp
-        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9 && !layout.game.visible
+        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9
         anchors {
             bottom: playAreaRow.bottom
             right: parent.right
@@ -202,12 +202,6 @@ Window {
     DialogPreset {
         id: presetDialog
         visible: layout.scalePresets.dialogVisible || layout.synthPresets.dialogVisible
-        anchors.fill: parent
-    }
-
-    DialogGame {
-        id: gameDialog
-        visible: layout.game.visible
         anchors.fill: parent
     }
 

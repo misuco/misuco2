@@ -31,7 +31,6 @@ SOURCES += main.cpp\
     lib/misulib/comm/libofqf/qosctcpclient.cpp \
     lib/misulib/comm/libofqf/qoscserver.cpp \
     lib/misulib/comm/libofqf/qoscmsgparser.cpp \
-    lib/misulib/comm/senderdebug.cpp \
     lib/mobilesynth/synth/controller.cpp \
     lib/mobilesynth/synth/envelope.cpp \
     lib/mobilesynth/synth/filter.cpp \
@@ -46,7 +45,6 @@ SOURCES += main.cpp\
     lib/misulib/widgets/faders/mwfaderparamctl.cpp \
     lib/misulib/widgets/presets/mwsoundpreset.cpp \
     lib/misulib/comm/senderoscmidigeneric.cpp \
-    lib/misulib/comm/senderoscpuredata.cpp \
     lib/misulib/comm/senderreaktor.cpp \
     lib/misulib/comm/sendersupercollider.cpp \
     lib/misulib/widgets/presets/mwmicrotunepreset.cpp \
@@ -72,7 +70,6 @@ SOURCES += main.cpp\
     lib/misulib/widgets/buttons/togglepresets.cpp \
     lib/misulib/widgets/buttons/octaveshift.cpp \
     lib/misulib/models/playfield.cpp \
-    lib/misulib/widgets/core/gamecontrol.cpp \
     lib/misulib/widgets/core/octaveranger.cpp \
     lib/misulib/widgets/core/rootnotesetter.cpp \
     lib/misulib/widgets/core/playarea.cpp \
@@ -95,8 +92,6 @@ HEADERS  += \
     lib/misulib/comm/libofqf/qoscserver.h \
     lib/misulib/comm/libofqf/qoscmsgparser.h \
     lib/misulib/comm/libofqf/qoscclientinterface.h \
-    lib/misulib/comm/senderdebug.h \
-    lib/misulib/comm/isender.h \
     lib/mobilesynth/AudioOutput.h \
     lib/mobilesynth/mobilesynthViewControllerRc1.h \
     lib/mobilesynth/synth/controller.h \
@@ -115,7 +110,6 @@ HEADERS  += \
     lib/misulib/widgets/faders/mwfaderparamctl.h \
     lib/misulib/widgets/presets/mwsoundpreset.h \
     lib/misulib/comm/senderoscmidigeneric.h \
-    lib/misulib/comm/senderoscpuredata.h \
     lib/misulib/comm/sendersupercollider.h \
     lib/misulib/comm/senderreaktor.h \
     lib/misulib/widgets/presets/mwmicrotunepreset.h \
@@ -142,7 +136,6 @@ HEADERS  += \
     lib/misulib/widgets/buttons/togglepresets.h \
     lib/misulib/widgets/buttons/octaveshift.h \
     lib/misulib/models/playfield.h \
-    lib/misulib/widgets/core/gamecontrol.h \
     lib/misulib/widgets/core/octaveranger.h \
     lib/misulib/widgets/core/rootnotesetter.h \
     lib/misulib/widgets/core/playarea.h \

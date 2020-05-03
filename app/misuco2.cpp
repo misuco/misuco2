@@ -21,7 +21,6 @@
 #include <QDebug>
 #include "misuco2.h"
 #include "lib/misulib/comm/sendersupercollider.h"
-#include "lib/misulib/comm/senderdebug.h"
 #include "lib/misulib/comm/sendermobilesynth.h"
 #include "lib/misulib/models/pitchcolor.h"
 
@@ -53,16 +52,13 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     _out=new MasterSender();
     _out->addSenderThread(new SenderMobileSynth(),"Mobilesynth");
-    _senderQMidi = new SenderQMidi();
-    _out->addSenderThread(_senderQMidi,"QMidi");
+    //_senderQMidi = new SenderQMidi();
+    //_out->addSenderThread(_senderQMidi,"QMidi");
     _senderOscMidiGeneric = new SenderOscMidiGeneric();
-    _out->addSender(_senderOscMidiGeneric);
+    _out->addSenderThread(_senderOscMidiGeneric,"SenderOscMidiGeneric");
     _senderReaktor = new SenderReaktor();
-    _out->addSender(_senderReaktor);
-    _out->addSender(new SenderSuperCollider());
-
-    _out->onToggleSender(1,false);
-    _out->onToggleSender(3,false);
+    _out->addSenderThread(new SenderMobileSynth(),"SenderReaktor");
+    _out->addSenderThread(new SenderSuperCollider(),"SenderSuperCollider");
 
     for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
         _pitchColors.append(new PitchColor(rootNote,this));
@@ -137,16 +133,12 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     }
 
     _enableMobilesynth = new ToggleSender("mobile\nsynth",0,1,this);
-    connect(_enableMobilesynth,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _enablePuredata = new ToggleSender("puredata",1,0,this);
-    connect(_enablePuredata,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _enableReaktor = new ToggleSender("reaktor",2,1,this);
-    connect(_enableReaktor,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _enableSupercollider = new ToggleSender("super\ncollider",3,0,this);
-    connect(_enableSupercollider,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _togglePresets = new TogglePresets("memo",0,this);
     connect(_togglePresets,SIGNAL(togglePresets(bool)),this,SLOT(togglePresets(bool)));
@@ -250,11 +242,6 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(this,SIGNAL(initialSet()),_tunePresets->getItem(0),SLOT(initialSet()));
     }
     emit initialSet();
-
-    _game = new GameControl((PlayArea *)_PlayArea,this);
-    _out->addSender(_game);
-    connect(_game,SIGNAL(gameStarted()),this,SLOT(onGameStarted()));
-    _game->start();
 }
 
 Misuco2::~Misuco2()
@@ -296,10 +283,6 @@ void Misuco2::toggleHeader(int id)
 
 void Misuco2::currentMainView(int id)
 {    
-    if(id==0 && _playAreaVisible) {
-        _game->start();
-    }
-
     _synthPresetsVisible=false;
     _scalePresetsVisible=false;
     _tunePresetsVisible=false;
