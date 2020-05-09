@@ -52,12 +52,16 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     _out=new MasterSender();
     _out->addSenderThread(new SenderMobileSynth(),"Mobilesynth");
-    //_senderQMidi = new SenderQMidi();
+
+    _senderQMidi = new SenderQMidi();
     //_out->addSenderThread(_senderQMidi,"QMidi");
+
     _senderOscMidiGeneric = new SenderOscMidiGeneric();
     _out->addSenderThread(_senderOscMidiGeneric,"SenderOscMidiGeneric");
+
     _senderReaktor = new SenderReaktor();
-    _out->addSenderThread(new SenderMobileSynth(),"SenderReaktor");
+    _out->addSenderThread(_senderReaktor,"SenderReaktor");
+
     _out->addSenderThread(new SenderSuperCollider(),"SenderSuperCollider");
 
     for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
@@ -132,13 +136,17 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(_bwMode,SIGNAL(toggleBW(bool)),pitchColor,SLOT(onBwModeChange(bool)));
     }
 
-    _enableMobilesynth = new ToggleSender("mobile\nsynth",0,1,this);
+    _enableMobilesynth = new ToggleSender("mobile\nsynth","Mobilesynth",1,this);
+    connect(_enableMobilesynth,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
-    _enablePuredata = new ToggleSender("puredata",1,0,this);
+    _enablePuredata = new ToggleSender("osc\nmidi","SenderOscMidiGeneric",0,this);
+    connect(_enablePuredata,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
-    _enableReaktor = new ToggleSender("reaktor",2,1,this);
+    _enableReaktor = new ToggleSender("reaktor","SenderReaktor",1,this);
+    connect(_enableReaktor,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
-    _enableSupercollider = new ToggleSender("super\ncollider",3,0,this);
+    _enableSupercollider = new ToggleSender("super\ncollider","SenderSuperCollider",0,this);
+    connect(_enableSupercollider,&ToggleSender::toggleSender,_out,&MasterSender::onToggleSender);
 
     _togglePresets = new TogglePresets("memo",0,this);
     connect(_togglePresets,SIGNAL(togglePresets(bool)),this,SLOT(togglePresets(bool)));
