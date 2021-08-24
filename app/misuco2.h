@@ -27,18 +27,19 @@
 #include "lib/misulib/comm/mastersender.h"
 #include "lib/misulib/comm/senderoscmidigeneric.h"
 #include "lib/misulib/comm/senderreaktor.h"
+#include "lib/misulib/comm/senderqmidi.h"
 #include "lib/misulib/comm/heartbeat.h"
 #include "lib/misulib/widgets/core/playarea.h"
 #include "lib/misulib/widgets/core/rootnotesetter.h"
 #include "lib/misulib/widgets/core/octaveranger.h"
 #include "lib/misulib/widgets/core/scaleswitch.h"
-#include "lib/misulib/widgets/core/gamecontrol.h"
 #include "lib/misulib/widgets/faders/mwfaderpitch.h"
 #include "lib/misulib/widgets/faders/mwfaderparamctl.h"
 #include "lib/misulib/widgets/presets/mwscalepreset.h"
 #include "lib/misulib/widgets/presets/mwsoundpreset.h"
 #include "lib/misulib/widgets/presets/mwmicrotunepreset.h"
 #include "lib/misulib/widgets/presets/presetcollection.h"
+#include "lib/misulib/widgets/presets/songtextimport.h"
 #include "lib/misulib/widgets/buttons/openarchive.h"
 #include "lib/misulib/widgets/buttons/bendhorizontal.h"
 #include "lib/misulib/widgets/buttons/sendcc1.h"
@@ -118,7 +119,7 @@ class Misuco2 : public QObject
 
     Q_PROPERTY(QList<QObject*> pitchColors MEMBER _pitchColors CONSTANT)
 
-    Q_PROPERTY(QObject* game MEMBER _game CONSTANT)
+    Q_PROPERTY(QObject* songTextImport MEMBER _songTextImport CONSTANT)
 
 public:
     explicit Misuco2(QObject *parent = 0);
@@ -148,6 +149,8 @@ private slots:
     void setMicrotune(MWMicrotune* m);
     void onChannelChange(int v);
     void onGameStarted();
+
+    void connectScalePresets();
 
     void setOctConf(int bot, int top);
 
@@ -207,12 +210,13 @@ protected:
 
 private:
     XmlLoader*  _xmlLoader;
-    GameControl*     _game;
+    SongTextImport*  _songTextImport;
     Heartbeat*  _heartbeat;
 
     MasterSender*           _out;
     SenderOscMidiGeneric*   _senderOscMidiGeneric;
     SenderReaktor*          _senderReaktor;
+    SenderQMidi*            _senderQMidi;
 
     QList<QObject*> _menu;
     QList<QObject*> _pitchColors;

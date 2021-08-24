@@ -94,6 +94,8 @@ Window {
 
     RootNoteSetter {
         id: rootNoteSetterRow
+        model: layout.rootNoteSetter
+        pitchColors: layout.pitchColors
         anchors.top: scaleSwitchRow.bottom
         visible: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible)
         width: parent.width
@@ -139,7 +141,7 @@ Window {
 
     Loader {
         id: showPresetsButton
-        visible: layout.playAreaVisible && !layout.game.visible
+        visible: layout.playAreaVisible
         anchors {
             top: playAreaRow.top
             left: playAreaRow.left
@@ -154,7 +156,7 @@ Window {
 
     Loader {
         id: showMenuButton
-        visible: layout.playAreaVisible && !layout.game.visible
+        visible: layout.playAreaVisible
         anchors {
             top: playAreaRow.top
             right: parent.right
@@ -169,7 +171,7 @@ Window {
 
     Loader {
         id: octDown
-        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0 && !layout.game.visible
+        visible: (layout.playAreaVisible|| layout.tuneAreaVisible)  && layout.botOct > 0
         anchors {
             bottom: playAreaRow.bottom
             left: playAreaRow.left
@@ -184,7 +186,7 @@ Window {
 
     Loader {
         id: octUp
-        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9 && !layout.game.visible
+        visible: (layout.playAreaVisible || layout.tuneAreaVisible) && layout.topOct < 9
         anchors {
             bottom: playAreaRow.bottom
             right: parent.right
@@ -203,9 +205,9 @@ Window {
         anchors.fill: parent
     }
 
-    DialogGame {
-        id: gameDialog
-        visible: layout.game.visible
+    DialogTextImport {
+        id: textImportDialog
+        visible: layout.songTextImport.visible
         anchors.fill: parent
     }
 

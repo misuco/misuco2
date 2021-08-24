@@ -4,3 +4,9 @@
 [submodule "lib/mobilesynth"]
 	path = lib/mobilesynth
 	url = https://github.com/misuco/mobilesynth
+[submodule "qmidi"]
+	path = qmidi
+	url = https://github.com/misuco/QMidi.git
+[submodule "lib/qmidi"]
+	path = lib/qmidi
+	url = https://github.com/misuco/QMidi.git

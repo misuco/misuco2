@@ -14,12 +14,14 @@
 #
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
-QT       += core network multimedia quick purchasing
+QT       += core network multimedia quick
 CONFIG   += c++11
 DEFINES  += QT_DEPRECATED_WARNINGS
 
 TARGET = misuco2
 TEMPLATE = app
+
+INCLUDEPATH += lib/qmidi/src
 
 SOURCES += main.cpp\
     app/misuco2.cpp \
@@ -29,7 +31,6 @@ SOURCES += main.cpp\
     lib/misulib/comm/libofqf/qosctcpclient.cpp \
     lib/misulib/comm/libofqf/qoscserver.cpp \
     lib/misulib/comm/libofqf/qoscmsgparser.cpp \
-    lib/misulib/comm/senderdebug.cpp \
     lib/mobilesynth/synth/controller.cpp \
     lib/mobilesynth/synth/envelope.cpp \
     lib/mobilesynth/synth/filter.cpp \
@@ -44,7 +45,6 @@ SOURCES += main.cpp\
     lib/misulib/widgets/faders/mwfaderparamctl.cpp \
     lib/misulib/widgets/presets/mwsoundpreset.cpp \
     lib/misulib/comm/senderoscmidigeneric.cpp \
-    lib/misulib/comm/senderoscpuredata.cpp \
     lib/misulib/comm/senderreaktor.cpp \
     lib/misulib/comm/sendersupercollider.cpp \
     lib/misulib/widgets/presets/mwmicrotunepreset.cpp \
@@ -70,10 +70,16 @@ SOURCES += main.cpp\
     lib/misulib/widgets/buttons/togglepresets.cpp \
     lib/misulib/widgets/buttons/octaveshift.cpp \
     lib/misulib/models/playfield.cpp \
-    lib/misulib/widgets/core/gamecontrol.cpp \
     lib/misulib/widgets/core/octaveranger.cpp \
     lib/misulib/widgets/core/rootnotesetter.cpp \
-    lib/misulib/widgets/core/playarea.cpp
+    lib/misulib/widgets/core/playarea.cpp \
+    lib/misulib/widgets/core/touchhistory.cpp \
+    lib/misulib/models/touchhistoryevent.cpp \
+    lib/misulib/widgets/presets/songtextimport.cpp \
+    lib/misulib/comm/senderthread.cpp \
+    lib/qmidi/src/QMidiOut.cpp \
+    lib/qmidi/src/QMidiFile.cpp \
+    lib/misulib/comm/senderqmidi.cpp
 
 HEADERS  += \
     app/misuco2.h \
@@ -86,8 +92,6 @@ HEADERS  += \
     lib/misulib/comm/libofqf/qoscserver.h \
     lib/misulib/comm/libofqf/qoscmsgparser.h \
     lib/misulib/comm/libofqf/qoscclientinterface.h \
-    lib/misulib/comm/senderdebug.h \
-    lib/misulib/comm/isender.h \
     lib/mobilesynth/AudioOutput.h \
     lib/mobilesynth/mobilesynthViewControllerRc1.h \
     lib/mobilesynth/synth/controller.h \
@@ -106,7 +110,6 @@ HEADERS  += \
     lib/misulib/widgets/faders/mwfaderparamctl.h \
     lib/misulib/widgets/presets/mwsoundpreset.h \
     lib/misulib/comm/senderoscmidigeneric.h \
-    lib/misulib/comm/senderoscpuredata.h \
     lib/misulib/comm/sendersupercollider.h \
     lib/misulib/comm/senderreaktor.h \
     lib/misulib/widgets/presets/mwmicrotunepreset.h \
@@ -133,10 +136,16 @@ HEADERS  += \
     lib/misulib/widgets/buttons/togglepresets.h \
     lib/misulib/widgets/buttons/octaveshift.h \
     lib/misulib/models/playfield.h \
-    lib/misulib/widgets/core/gamecontrol.h \
     lib/misulib/widgets/core/octaveranger.h \
     lib/misulib/widgets/core/rootnotesetter.h \
-    lib/misulib/widgets/core/playarea.h
+    lib/misulib/widgets/core/playarea.h \
+    lib/misulib/widgets/core/touchhistory.h \
+    lib/misulib/models/touchhistoryevent.h \
+    lib/misulib/widgets/presets/songtextimport.h \
+    lib/misulib/comm/senderthread.h \
+    lib/qmidi/src/QMidiOut.h \
+    lib/qmidi/src/QMidiFile.h \
+    lib/misulib/comm/senderqmidi.h
 
 CONFIG += mobility
 MOBILITY = 
@@ -144,12 +153,13 @@ MOBILITY =
 DISTFILES += \
     COPYING \
     android/AndroidManifest.xml \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/res/values/libs.xml \
     android/build.gradle \
+    android/gradle.properties \
+    android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew \
     android/gradlew.bat \
+    android/res/values/libs.xml \
     ios/Images.xcassets/AppIcon.appiconset/Contents.json \
     ios/Images.xcassets/Brand Assets.launchimage/Contents.json \
     ios/Info.plist \
@@ -174,13 +184,11 @@ DISTFILES += \
     ios/Images.xcassets/AppIcon.appiconset/Icon@2x.png \
     ios/Images.xcassets/Brand Assets.launchimage/Default-568h@2x.png \
     ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork.png \
-    ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png \
+    ios/Images.xcassets/Brand Assets.launchimage/iTunesArtwork@2x.png
 
 OBJECTIVE_SOURCES += \
     lib/mobilesynth/mobilesynthViewControllerRc1.mm \
-    lib/mobilesynth/AudioOutput.m \
-
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    lib/mobilesynth/AudioOutput.m
 
 ios {
     QT               = core network quick purchasing
@@ -189,8 +197,27 @@ ios {
 
 }
 
+message($$QMAKESPEC)
+
+android* {
+        message("Android")
+        SOURCES += lib/qmidi/src/OS/QMidi_Android.cpp
+} else:linux* {
+        message("Linux")
+        LIBS += -lasound
+        SOURCES += lib/qmidi/src/OS/QMidi_ALSA.cpp
+} else:win32 {
+        message("win32")
+        LIBS += -lwinmm
+        SOURCES += lib/qmidi/src/OS/QMidi_Win32.cpp
+}
+
+
 SUBDIRS += \
     misuco2.pro
 
 RESOURCES += \
     qml.qrc
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+ANDROID_TARGET_SDK_VERSION = 31
