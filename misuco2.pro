@@ -14,7 +14,7 @@
 #
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
-QT       += core network multimedia quick purchasing
+QT       += core network multimedia quick
 CONFIG   += c++11
 DEFINES  += QT_DEPRECATED_WARNINGS
 
@@ -153,12 +153,13 @@ MOBILITY =
 DISTFILES += \
     COPYING \
     android/AndroidManifest.xml \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/res/values/libs.xml \
     android/build.gradle \
+    android/gradle.properties \
+    android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew \
     android/gradlew.bat \
+    android/res/values/libs.xml \
     ios/Images.xcassets/AppIcon.appiconset/Contents.json \
     ios/Images.xcassets/Brand Assets.launchimage/Contents.json \
     ios/Info.plist \
@@ -189,8 +190,6 @@ OBJECTIVE_SOURCES += \
     lib/mobilesynth/mobilesynthViewControllerRc1.mm \
     lib/mobilesynth/AudioOutput.m
 
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-
 ios {
     QT               = core network quick purchasing
     QMAKE_INFO_PLIST = ios/Info.plist
@@ -219,3 +218,6 @@ SUBDIRS += \
 
 RESOURCES += \
     qml.qrc
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+ANDROID_TARGET_SDK_VERSION = 31

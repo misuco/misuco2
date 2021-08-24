@@ -39,6 +39,7 @@ void XmlLoader::readXml(QString filetype)
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QFile factoryFile(":/xml/"+filetype);
         if(!factoryFile.copy(filename)) {
+            filename = ":/xml/" + filetype;
             //qDebug() << "cannot copy " << file.fileName();
         }
         if (!file.open(QFile::ReadOnly | QFile::Text)) {
