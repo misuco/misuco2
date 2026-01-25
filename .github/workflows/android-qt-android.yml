@@ -1,9 +1,10 @@
+---
 name: Build Android (Qt 5.15) - AAB + per-ABI APKs
 on:
   push:
     branches:
       - ci/android-qt-5.15-aab-apk
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   build-android:
@@ -30,14 +31,20 @@ jobs:
 
       - name: Install Android SDK, build-tools and NDK
         run: |
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          cd $ANDROID_SDK_ROOT
-          curl -sSfL "https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" -o cmdline.zip
+          mkdir -p "${ANDROID_SDK_ROOT}/cmdline-tools"
+          cd "${ANDROID_SDK_ROOT}"
+          CT_URL="https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip"
+          curl -sSfL "$CT_URL" -o cmdline.zip
           unzip -q cmdline.zip -d cmdline-tools/tmp
           mkdir -p cmdline-tools/latest
           mv cmdline-tools/tmp/cmdline-tools/* cmdline-tools/latest/
           rm -f cmdline.zip
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "platform-tools" "platforms;android-30" "build-tools;30.0.3" "ndk;21.4.7075529"
+          SDKM="${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --sdk_root="${ANDROID_SDK_ROOT}" \
+            "platform-tools" \
+            "platforms;android-30" \
+            "build-tools;30.0.3" \
+            "ndk;21.4.7075529"
         shell: bash
 
       - name: Add Android tools to PATH
@@ -54,7 +61,7 @@ jobs:
 
       - name: qmake (configure)
         run: |
-          # adjust path to .pro if needed
+          # adjust path to project .pro if needed
           qmake CONFIG+=release -r
         shell: bash
 
@@ -66,7 +73,6 @@ jobs:
       - name: Generate Android Gradle project (androiddeployqt)
         run: |
           mkdir -p build-android
-          # androiddeployqt should find the generated .json files in the build directory
           androiddeployqt --output build-android --deployment bundled || true
         shell: bash
 
@@ -74,10 +80,10 @@ jobs:
         id: find_gradle
         run: |
           set -e
-          # find first non-wrapper build.gradle (module-level)
-          gradle_build=$(find build-android -type f -name "build.gradle" | grep -v "/gradle/wrapper/" | head -n1 || true)
+          gradle_build=$(find build-android -type f -name "build.gradle" \
+            | grep -v "/gradle/wrapper/" | head -n1 || true)
           if [ -z "$gradle_build" ]; then
-            echo "No module build.gradle found, listing build-android:" >&2
+            echo "No module build.gradle found; see build-android listing" >&2
             ls -R build-android >&2 || true
             exit 1
           fi
@@ -88,8 +94,7 @@ jobs:
       - name: Configure signing (optional)
         if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
         run: |
-          cd ${{ steps.find_gradle.outputs.module_dir }}
-          # write signing properties that Gradle build can read
+          cd "${{ steps.find_gradle.outputs.module_dir }}"
           echo "MYAPP_STORE_FILE=$GITHUB_WORKSPACE/release.keystore" >> gradle.properties
           echo "MYAPP_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
           echo "MYAPP_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
@@ -98,7 +103,7 @@ jobs:
 
       - name: Build Android App Bundle (AAB)
         run: |
-          cd ${{ steps.find_gradle.outputs.module_dir }}
+          cd "${{ steps.find_gradle.outputs.module_dir }}"
           chmod +x ./gradlew
           ./gradlew bundleRelease --no-daemon
         shell: bash
@@ -109,8 +114,8 @@ jobs:
           set -e
           aab=$(find build-android -type f -name "*.aab" | head -n 1 || true)
           if [ -z "$aab" ]; then
-            # common path inside module
-            aab=$(find ${{ steps.find_gradle.outputs.module_dir }} -type f -path "*/outputs/bundle/*/*.aab" | head -n1 || true)
+            aab=$(find "${{ steps.find_gradle.outputs.module_dir }}" \
+              -type f -path "*/outputs/bundle/*/*.aab" | head -n1 || true)
           fi
           if [ -z "$aab" ]; then
             echo "No AAB produced" >&2
@@ -121,7 +126,8 @@ jobs:
 
       - name: Download bundletool
         run: |
-          curl -sSL -o bundletool.jar https://github.com/google/bundletool/releases/download/1.14.0/bundletool-all-1.14.0.jar
+          BT_URL="https://github.com/google/bundletool/releases/download/1.14.0/bundletool-all-1.14.0.jar"
+          curl -sSL -o bundletool.jar "$BT_URL"
         shell: bash
 
       - name: Produce per-ABI APKs from AAB using bundletool
@@ -130,20 +136,23 @@ jobs:
           set -e
           aab_path="${{ steps.find_aab.outputs.path }}"
           mkdir -p apks_output
-
           ABIS=("armeabi-v7a" "arm64-v8a" "x86")
           out_files=""
+          JAVA_CMD="java -jar bundletool.jar"
           for abi in "${ABIS[@]}"; do
             spec_file="device-${abi}.json"
-            cat > "$spec_file" <<EOF
-{ "supportedAbis": ["$abi"] }
-EOF
+            printf '{ "supportedAbis": ["%s"] }\n' "$abi" > "$spec_file"
             out_apks="app-${abi}.apks"
-            java -jar bundletool.jar build-apks --bundle="$aab_path" --output="$out_apks" --mode=default --device-spec="$spec_file"
+            "$JAVA_CMD" build-apks \
+              --bundle="$aab_path" \
+              --output="$out_apks" \
+              --mode=default \
+              --device-spec="$spec_file"
             mkdir -p "extracted-${abi}"
-            java -jar bundletool.jar extract-apks --apks="$out_apks" --output-dir="extracted-${abi}"
-            # pick the APK (prefer base-master or the largest file)
-            apk=$(find extracted-${abi} -type f -name "*.apk" | sort -n -r -k1 | head -n1)
+            "$JAVA_CMD" extract-apks \
+              --apks="$out_apks" \
+              --output-dir="extracted-${abi}"
+            apk=$(find "extracted-${abi}" -type f -name "*.apk" | head -n1)
             if [ -z "$apk" ]; then
               echo "No APK extracted for $abi" >&2
               exit 1
@@ -174,5 +183,3 @@ EOF
             apks_output/app-armeabi-v7a.apk
             apks_output/app-x86.apk
           track: internal
-
-
