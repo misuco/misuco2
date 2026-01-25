@@ -1,0 +1,178 @@
+name: Build Android (Qt 5.15) - AAB + per-ABI APKs
+on:
+  push:
+    branches:
+      - ci/android-qt-5.15-aab-apk
+  workflow_dispatch: {}
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
+      GRADLE_USER_HOME: ${{ runner.temp }}/.gradle
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Install Qt 5.15
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: '5.15.2'
+          host: 'linux'
+          targets: android
+
+      - name: Install Android SDK, build-tools and NDK
+        run: |
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          cd $ANDROID_SDK_ROOT
+          curl -sSfL "https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" -o cmdline.zip
+          unzip -q cmdline.zip -d cmdline-tools/tmp
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools/tmp/cmdline-tools/* cmdline-tools/latest/
+          rm -f cmdline.zip
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "platform-tools" "platforms;android-30" "build-tools;30.0.3" "ndk;21.4.7075529"
+        shell: bash
+
+      - name: Add Android tools to PATH
+        run: |
+          echo "${ANDROID_SDK_ROOT}/platform-tools" >> $GITHUB_PATH
+          echo "${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin" >> $GITHUB_PATH
+
+      - name: Prepare signing keystore (optional)
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > release.keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: qmake (configure)
+        run: |
+          # adjust path to .pro if needed
+          qmake CONFIG+=release -r
+        shell: bash
+
+      - name: Build native
+        run: |
+          make -j$(nproc)
+        shell: bash
+
+      - name: Generate Android Gradle project (androiddeployqt)
+        run: |
+          mkdir -p build-android
+          # androiddeployqt should find the generated .json files in the build directory
+          androiddeployqt --output build-android --deployment bundled || true
+        shell: bash
+
+      - name: Find generated Gradle module directory
+        id: find_gradle
+        run: |
+          set -e
+          # find first non-wrapper build.gradle (module-level)
+          gradle_build=$(find build-android -type f -name "build.gradle" | grep -v "/gradle/wrapper/" | head -n1 || true)
+          if [ -z "$gradle_build" ]; then
+            echo "No module build.gradle found, listing build-android:" >&2
+            ls -R build-android >&2 || true
+            exit 1
+          fi
+          module_dir=$(dirname "$gradle_build")
+          echo "module_dir=$module_dir" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Configure signing (optional)
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        run: |
+          cd ${{ steps.find_gradle.outputs.module_dir }}
+          # write signing properties that Gradle build can read
+          echo "MYAPP_STORE_FILE=$GITHUB_WORKSPACE/release.keystore" >> gradle.properties
+          echo "MYAPP_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
+          echo "MYAPP_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
+          echo "MYAPP_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
+        shell: bash
+
+      - name: Build Android App Bundle (AAB)
+        run: |
+          cd ${{ steps.find_gradle.outputs.module_dir }}
+          chmod +x ./gradlew
+          ./gradlew bundleRelease --no-daemon
+        shell: bash
+
+      - name: Locate AAB
+        id: find_aab
+        run: |
+          set -e
+          aab=$(find build-android -type f -name "*.aab" | head -n 1 || true)
+          if [ -z "$aab" ]; then
+            # common path inside module
+            aab=$(find ${{ steps.find_gradle.outputs.module_dir }} -type f -path "*/outputs/bundle/*/*.aab" | head -n1 || true)
+          fi
+          if [ -z "$aab" ]; then
+            echo "No AAB produced" >&2
+            exit 1
+          fi
+          echo "path=$aab" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Download bundletool
+        run: |
+          curl -sSL -o bundletool.jar https://github.com/google/bundletool/releases/download/1.14.0/bundletool-all-1.14.0.jar
+        shell: bash
+
+      - name: Produce per-ABI APKs from AAB using bundletool
+        id: produce_apks
+        run: |
+          set -e
+          aab_path="${{ steps.find_aab.outputs.path }}"
+          mkdir -p apks_output
+
+          ABIS=("armeabi-v7a" "arm64-v8a" "x86")
+          out_files=""
+          for abi in "${ABIS[@]}"; do
+            spec_file="device-${abi}.json"
+            cat > "$spec_file" <<EOF
+{ "supportedAbis": ["$abi"] }
+EOF
+            out_apks="app-${abi}.apks"
+            java -jar bundletool.jar build-apks --bundle="$aab_path" --output="$out_apks" --mode=default --device-spec="$spec_file"
+            mkdir -p "extracted-${abi}"
+            java -jar bundletool.jar extract-apks --apks="$out_apks" --output-dir="extracted-${abi}"
+            # pick the APK (prefer base-master or the largest file)
+            apk=$(find extracted-${abi} -type f -name "*.apk" | sort -n -r -k1 | head -n1)
+            if [ -z "$apk" ]; then
+              echo "No APK extracted for $abi" >&2
+              exit 1
+            fi
+            cp "$apk" "apks_output/app-${abi}.apk"
+            out_files="$out_files apks_output/app-${abi}.apk"
+          done
+          echo "files=$out_files" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-packages
+          path: |
+            ${{ steps.find_aab.outputs.path }}
+            apks_output/*.apk
+
+      - name: Publish to Google Play (optional)
+        if: ${{ secrets.GOOGLE_PLAY_JSON != '' }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ secrets.GOOGLE_PLAY_JSON }}
+          packageName: ${{ secrets.PLAY_STORE_PACKAGE_NAME }}
+          releaseFiles: |
+            ${{ steps.find_aab.outputs.path }}
+            apks_output/app-arm64-v8a.apk
+            apks_output/app-armeabi-v7a.apk
+            apks_output/app-x86.apk
+          track: internal
+
+
