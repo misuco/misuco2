@@ -21,23 +21,15 @@
 #ifndef WLAYOUT_H
 #define WLAYOUT_H
 
-#include "xmlloader.h"
 #include "lib/misulib/models/types.h"
-#include "lib/misulib/models/purchases.h"
 #include "lib/misulib/comm/mastersender.h"
 #include "lib/misulib/comm/senderoscmidigeneric.h"
 #include "lib/misulib/comm/senderreaktor.h"
 #include "lib/misulib/comm/senderqmidi.h"
 #include "lib/misulib/comm/heartbeat.h"
 #include "lib/misulib/widgets/core/playarea.h"
-#include "lib/misulib/widgets/core/rootnotesetter.h"
 #include "lib/misulib/widgets/core/octaveranger.h"
-#include "lib/misulib/widgets/core/scaleswitch.h"
-#include "lib/misulib/widgets/faders/mwfaderpitch.h"
 #include "lib/misulib/widgets/faders/mwfaderparamctl.h"
-#include "lib/misulib/widgets/presets/mwscalepreset.h"
-#include "lib/misulib/widgets/presets/mwsoundpreset.h"
-#include "lib/misulib/widgets/presets/mwmicrotunepreset.h"
 #include "lib/misulib/widgets/presets/presetcollection.h"
 #include "lib/misulib/widgets/presets/songtextimport.h"
 #include "lib/misulib/widgets/buttons/openarchive.h"

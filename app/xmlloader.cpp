@@ -1,6 +1,10 @@
 #include "xmlloader.h"
 #include <QStandardPaths>
 #include <QDir>
+#include "misuco2.h"
+#include "lib/misulib/widgets/presets/mwscalepreset.h"
+#include "lib/misulib/widgets/presets/mwsoundpreset.h"
+#include "lib/misulib/widgets/presets/mwmicrotunepreset.h"
 
 XmlLoader::XmlLoader(Misuco2 *misuco2, QObject *parent) : QObject(parent),
     _app(misuco2)

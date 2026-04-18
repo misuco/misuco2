@@ -19,10 +19,14 @@
  */
 
 #include <QDebug>
+#include "xmlloader.h"
 #include "misuco2.h"
 #include "lib/misulib/comm/sendersupercollider.h"
 #include "lib/misulib/comm/sendermobilesynth.h"
 #include "lib/misulib/models/pitchcolor.h"
+#include "lib/misulib/widgets/core/rootnotesetter.h"
+#include "lib/misulib/widgets/core/scaleswitch.h"
+#include "lib/misulib/widgets/faders/mwfaderpitch.h"
 
 Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader(new XmlLoader(this,this))

@@ -6,8 +6,6 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
-#include "misuco2.h"
-
 class Misuco2;
 
 class XmlLoader : public QObject
