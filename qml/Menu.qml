@@ -28,25 +28,25 @@ Item {
                 MultiPointTouchArea {
                     anchors.fill: parent
 
-                    onPressed: {
+                    onPressed: (touchPoints) => {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onPressed(touchPoints[i].pointId)
                         }
                     }
 
-                    onCanceled: {
+                    onCanceled: (touchPoints) => {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onReleased(touchPoints[i].pointId)
                         }
                     }
 
-                    onReleased: {
+                    onReleased: (touchPoints) => {
                         for(var i=0;i<touchPoints.length;i++) {
                             modelData.onReleased(touchPoints[i].pointId)
                         }
                     }
 
-                    onGestureStarted: {
+                    onGestureStarted: (gesture) => {
                         gesture.grab();
                     }
                 }

@@ -33,10 +33,14 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QObject * layout=new Misuco2();
+
     QQmlApplicationEngine engine;
     QQmlContext* ctx = engine.rootContext();
     ctx->setContextProperty("layout", layout);
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));    
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+    //engine.loadFromModule("misuco2", "main");
+
     if (engine.rootObjects().isEmpty())
         return -1;
 

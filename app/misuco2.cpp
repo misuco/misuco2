@@ -27,6 +27,7 @@
 Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _xmlLoader(new XmlLoader(this,this))
 {
+    qDebug() << "Misuco2::Misuco2";
     _presetsVisible=true;
     _menuVisible=false;
     _rootNoteSetterVisible=true;
@@ -51,6 +52,7 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
     _heartbeat = new Heartbeat(this);
 
     _out=new MasterSender();
+
     _out->addSenderThread(new SenderMobileSynth(),"Mobilesynth");
 
     //_senderQMidi = new SenderQMidi();
@@ -66,7 +68,9 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
 
     for(int rootNote=0;rootNote<SCALE_SIZE+1;rootNote++) {
         _pitchColors.append(new PitchColor(rootNote,this));
-    }    
+    }
+
+    qDebug() << " - new PlayArea";
 
     _PlayArea = new PlayArea(_out, nullptr, this);
 
@@ -250,6 +254,9 @@ Misuco2::Misuco2(QObject *parent) : QObject(parent),
         connect(this,SIGNAL(initialSet()),_tunePresets->getItem(0),SLOT(initialSet()));
     }
     emit initialSet();
+
+    qDebug() << "Misuco2::Misuco2 DONE";
+
 }
 
 Misuco2::~Misuco2()
