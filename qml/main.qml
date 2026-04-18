@@ -29,8 +29,8 @@ Window {
     property color hlColor: "#CC0000"
 
     visible: true
-    width: 480
-    height: 640
+    //width: 480
+    //height: 640
     title: qsTr("misuco2")
     color: bgColor
 
