@@ -22,7 +22,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick Multimedia Core5Compat)
+find_package(Qt6 REQUIRED COMPONENTS Quick Multimedia)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -205,7 +205,6 @@ target_include_directories(appMisuco2 PUBLIC
 target_link_libraries(appMisuco2
     PRIVATE Qt6::Quick
     PRIVATE Qt6::Multimedia
-    PRIVATE Qt6::Core5Compat #QRegExp
 )
 
 install(TARGETS appMisuco2
