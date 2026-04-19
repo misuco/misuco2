@@ -28,126 +28,135 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appMisuco2
     main.cpp
+
     app/misuco2.cpp
-    lib/misulib/models/freqtriple.cpp
-    lib/misulib/comm/libofqf/qoscclient.cpp
-    lib/misulib/comm/libofqf/qosctypes.cpp
-    lib/misulib/comm/libofqf/qosctcpclient.cpp
-    lib/misulib/comm/libofqf/qoscserver.cpp
-    lib/misulib/comm/libofqf/qoscmsgparser.cpp
-    lib/misulib/comm/sendermobilesynth.cpp
-    lib/misulib/widgets/faders/mwfaderpitch.cpp
-    lib/misulib/widgets/faders/mwfaderparamctl.cpp
-    lib/misulib/widgets/presets/mwsoundpreset.cpp
-    lib/misulib/comm/senderoscmidigeneric.cpp
-    lib/misulib/comm/senderreaktor.cpp
-    lib/misulib/comm/sendersupercollider.cpp
-    lib/misulib/widgets/presets/mwmicrotunepreset.cpp
-    lib/misulib/widgets/presets/mwscalepreset.cpp
-    lib/misulib/widgets/presets/presetcollection.cpp
-    lib/misulib/models/purchases.cpp
-    lib/misulib/comm/mastersender.cpp
-    lib/misulib/comm/heartbeat.cpp
-    lib/misulib/widgets/buttons/buttonbase.cpp
-    lib/misulib/widgets/buttons/openarchive.cpp
-    lib/misulib/models/pitchcolor.cpp
-    lib/misulib/widgets/faders/mwfader.cpp
-    app/xmlloader.cpp
-    lib/misulib/widgets/buttons/bendhorizontal.cpp
-    lib/misulib/widgets/buttons/sendcc1.cpp
-    lib/misulib/widgets/buttons/togglesender.cpp
-    lib/misulib/widgets/buttons/togglebw.cpp
-    lib/misulib/widgets/buttons/showfreqs.cpp
-    lib/misulib/widgets/core/scaleswitch.cpp
-    lib/misulib/widgets/buttons/toggleheader.cpp
-    lib/misulib/widgets/buttons/setmainview.cpp
-    lib/misulib/widgets/buttons/togglemenu.cpp
-    lib/misulib/widgets/buttons/togglepresets.cpp
-    lib/misulib/widgets/buttons/octaveshift.cpp
-    lib/misulib/models/playfield.cpp
-    lib/misulib/widgets/core/octaveranger.cpp
-    lib/misulib/widgets/core/rootnotesetter.cpp
-    lib/misulib/widgets/core/playarea.cpp
-    lib/misulib/widgets/core/touchhistory.cpp
-    lib/misulib/models/touchhistoryevent.cpp
-    lib/misulib/widgets/presets/songtextimport.cpp
-    lib/misulib/comm/senderthread.cpp
-    lib/qmidi/src/QMidiOut.cpp
-    lib/qmidi/src/QMidiFile.cpp
-    lib/misulib/comm/senderqmidi.cpp
     app/misuco2.h
-    lib/misulib/models/types.h
-    lib/misulib/models/freqtriple.h
-    lib/misulib/comm/libofqf/qoscclient.h
-    lib/misulib/comm/libofqf/qosctypes.h
-    lib/misulib/comm/libofqf/qosctcpclient.h
-    lib/misulib/comm/libofqf/qoscserverinterface.h
-    lib/misulib/comm/libofqf/qoscserver.h
-    lib/misulib/comm/libofqf/qoscmsgparser.h
-    lib/misulib/comm/libofqf/qoscclientinterface.h
-    lib/misulib/comm/sendermobilesynth.h
-    lib/misulib/widgets/faders/mwfaderpitch.h
-    lib/misulib/widgets/faders/mwfaderparamctl.h
-    lib/misulib/widgets/presets/mwsoundpreset.h
-    lib/misulib/comm/senderoscmidigeneric.h
-    lib/misulib/comm/sendersupercollider.h
-    lib/misulib/comm/senderreaktor.h
-    lib/misulib/widgets/presets/mwmicrotunepreset.h
-    lib/misulib/widgets/presets/mwscalepreset.h
-    lib/misulib/widgets/presets/presetcollection.h
-    lib/misulib/models/purchases.h
-    lib/misulib/comm/mastersender.h
-    lib/misulib/comm/heartbeat.h
-    lib/misulib/widgets/buttons/buttonbase.h
-    lib/misulib/widgets/buttons/openarchive.h
-    lib/misulib/models/pitchcolor.h
-    lib/misulib/models/colormacros.h
-    lib/misulib/widgets/faders/mwfader.h
+    app/xmlloader.cpp
     app/xmlloader.h
-    lib/misulib/widgets/buttons/bendhorizontal.h
-    lib/misulib/widgets/buttons/sendcc1.h
-    lib/misulib/widgets/buttons/togglesender.h
-    lib/misulib/widgets/buttons/togglebw.h
-    lib/misulib/widgets/buttons/showfreqs.h
-    lib/misulib/widgets/core/scaleswitch.h
-    lib/misulib/widgets/buttons/toggleheader.h
-    lib/misulib/widgets/buttons/setmainview.h
-    lib/misulib/widgets/buttons/togglemenu.h
-    lib/misulib/widgets/buttons/togglepresets.h
-    lib/misulib/widgets/buttons/octaveshift.h
-    lib/misulib/models/playfield.h
-    lib/misulib/widgets/core/octaveranger.h
-    lib/misulib/widgets/core/rootnotesetter.h
-    lib/misulib/widgets/core/playarea.h
-    lib/misulib/widgets/core/touchhistory.h
-    lib/misulib/models/touchhistoryevent.h
-    lib/misulib/widgets/presets/songtextimport.h
-    lib/misulib/comm/senderthread.h
-    lib/qmidi/src/QMidiOut.h
-    lib/qmidi/src/QMidiFile.h
+
+    lib/misulib/comm/heartbeat.cpp
+    lib/misulib/comm/heartbeat.h
+    lib/misulib/comm/mastersender.cpp
+    lib/misulib/comm/mastersender.h
+    lib/misulib/comm/sendermobilesynth.cpp
+    lib/misulib/comm/sendermobilesynth.h
+    lib/misulib/comm/senderoscmidigeneric.cpp
+    lib/misulib/comm/senderoscmidigeneric.h
+    lib/misulib/comm/senderqmidi.cpp
     lib/misulib/comm/senderqmidi.h
-    polymobilesynth/qt6/mobilesynth.h
-    polymobilesynth/qt6/mobilesynth.cpp
-    polymobilesynth/qt6/qt68wraper.h
-    polymobilesynth/qt6/qt68wraper.cpp
-    polymobilesynth/mobilesynth/Classes/synth/arpeggio.h
+    lib/misulib/comm/senderreaktor.cpp
+    lib/misulib/comm/senderreaktor.h
+    lib/misulib/comm/sendersupercollider.cpp
+    lib/misulib/comm/sendersupercollider.h
+    lib/misulib/comm/senderthread.cpp
+    lib/misulib/comm/senderthread.h
+
+    lib/misulib/comm/libofqf/qoscclient.cpp
+    lib/misulib/comm/libofqf/qoscclient.h
+    lib/misulib/comm/libofqf/qoscclientinterface.h
+    lib/misulib/comm/libofqf/qoscmsgparser.cpp
+    lib/misulib/comm/libofqf/qoscmsgparser.h
+    lib/misulib/comm/libofqf/qoscserver.cpp
+    lib/misulib/comm/libofqf/qoscserver.h
+    lib/misulib/comm/libofqf/qoscserverinterface.h
+    lib/misulib/comm/libofqf/qosctcpclient.cpp
+    lib/misulib/comm/libofqf/qosctcpclient.h
+    lib/misulib/comm/libofqf/qosctypes.cpp
+    lib/misulib/comm/libofqf/qosctypes.h
+
+    lib/misulib/models/colormacros.h
+    lib/misulib/models/freqtriple.cpp
+    lib/misulib/models/freqtriple.h
+    lib/misulib/models/pitchcolor.cpp
+    lib/misulib/models/pitchcolor.h
+    lib/misulib/models/playfield.cpp
+    lib/misulib/models/playfield.h
+    lib/misulib/models/touchhistoryevent.cpp
+    lib/misulib/models/touchhistoryevent.h
+    lib/misulib/models/types.h
+
+    lib/misulib/widgets/buttons/bendhorizontal.cpp
+    lib/misulib/widgets/buttons/bendhorizontal.h
+    lib/misulib/widgets/buttons/buttonbase.cpp
+    lib/misulib/widgets/buttons/buttonbase.h
+    lib/misulib/widgets/buttons/octaveshift.cpp
+    lib/misulib/widgets/buttons/octaveshift.h
+    lib/misulib/widgets/buttons/openarchive.cpp
+    lib/misulib/widgets/buttons/openarchive.h
+    lib/misulib/widgets/buttons/sendcc1.cpp
+    lib/misulib/widgets/buttons/sendcc1.h
+    lib/misulib/widgets/buttons/setmainview.cpp
+    lib/misulib/widgets/buttons/setmainview.h
+    lib/misulib/widgets/buttons/showfreqs.cpp
+    lib/misulib/widgets/buttons/showfreqs.h
+    lib/misulib/widgets/buttons/togglebw.cpp
+    lib/misulib/widgets/buttons/togglebw.h
+    lib/misulib/widgets/buttons/toggleheader.cpp
+    lib/misulib/widgets/buttons/toggleheader.h
+    lib/misulib/widgets/buttons/togglemenu.cpp
+    lib/misulib/widgets/buttons/togglemenu.h
+    lib/misulib/widgets/buttons/togglepresets.cpp
+    lib/misulib/widgets/buttons/togglepresets.h
+    lib/misulib/widgets/buttons/togglesender.cpp
+    lib/misulib/widgets/buttons/togglesender.h
+
+    lib/misulib/widgets/core/octaveranger.cpp
+    lib/misulib/widgets/core/octaveranger.h
+    lib/misulib/widgets/core/playarea.cpp
+    lib/misulib/widgets/core/playarea.h
+    lib/misulib/widgets/core/rootnotesetter.cpp
+    lib/misulib/widgets/core/rootnotesetter.h
+    lib/misulib/widgets/core/scaleswitch.cpp
+    lib/misulib/widgets/core/scaleswitch.h
+    lib/misulib/widgets/core/touchhistory.cpp
+    lib/misulib/widgets/core/touchhistory.h
+
+    lib/misulib/widgets/faders/mwfader.cpp
+    lib/misulib/widgets/faders/mwfader.h
+    lib/misulib/widgets/faders/mwfaderparamctl.cpp
+    lib/misulib/widgets/faders/mwfaderparamctl.h
+    lib/misulib/widgets/faders/mwfaderpitch.cpp
+    lib/misulib/widgets/faders/mwfaderpitch.h
+
+    lib/misulib/widgets/presets/mwmicrotunepreset.cpp
+    lib/misulib/widgets/presets/mwmicrotunepreset.h
+    lib/misulib/widgets/presets/mwscalepreset.cpp
+    lib/misulib/widgets/presets/mwscalepreset.h
+    lib/misulib/widgets/presets/mwsoundpreset.cpp
+    lib/misulib/widgets/presets/mwsoundpreset.h
+    lib/misulib/widgets/presets/presetcollection.cpp
+    lib/misulib/widgets/presets/presetcollection.h
+    lib/misulib/widgets/presets/songtextimport.cpp
+    lib/misulib/widgets/presets/songtextimport.h
+
+    lib/qmidi/src/QMidiFile.cpp
+    lib/qmidi/src/QMidiFile.h
+    lib/qmidi/src/QMidiOut.cpp
+    lib/qmidi/src/QMidiOut.h
+
     polymobilesynth/mobilesynth/Classes/synth/arpeggio.cpp
-    polymobilesynth/mobilesynth/Classes/synth/controller.h
+    polymobilesynth/mobilesynth/Classes/synth/arpeggio.h
     polymobilesynth/mobilesynth/Classes/synth/controller.cpp
-    polymobilesynth/mobilesynth/Classes/synth/envelope.h
+    polymobilesynth/mobilesynth/Classes/synth/controller.h
     polymobilesynth/mobilesynth/Classes/synth/envelope.cpp
-    polymobilesynth/mobilesynth/Classes/synth/filter.h
+    polymobilesynth/mobilesynth/Classes/synth/envelope.h
     polymobilesynth/mobilesynth/Classes/synth/filter.cpp
-    polymobilesynth/mobilesynth/Classes/synth/key_stack.h
+    polymobilesynth/mobilesynth/Classes/synth/filter.h
     polymobilesynth/mobilesynth/Classes/synth/key_stack.cpp
-    polymobilesynth/mobilesynth/Classes/synth/lag_processor.h
+    polymobilesynth/mobilesynth/Classes/synth/key_stack.h
     polymobilesynth/mobilesynth/Classes/synth/lag_processor.cpp
-    polymobilesynth/mobilesynth/Classes/synth/modulation.h
+    polymobilesynth/mobilesynth/Classes/synth/lag_processor.h
     polymobilesynth/mobilesynth/Classes/synth/modulation.cpp
-    polymobilesynth/mobilesynth/Classes/synth/oscillator.h
+    polymobilesynth/mobilesynth/Classes/synth/modulation.h
     polymobilesynth/mobilesynth/Classes/synth/oscillator.cpp
-    polymobilesynth/mobilesynth/Classes/synth/parameter.h
+    polymobilesynth/mobilesynth/Classes/synth/oscillator.h
     polymobilesynth/mobilesynth/Classes/synth/parameter.cpp
+    polymobilesynth/mobilesynth/Classes/synth/parameter.h
+
+    polymobilesynth/qt6/mobilesynth.cpp
+    polymobilesynth/qt6/mobilesynth.h
+    polymobilesynth/qt6/qt68wraper.cpp
+    polymobilesynth/qt6/qt68wraper.h
 )
 
 qt_add_qml_module(appMisuco2
