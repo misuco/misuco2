@@ -3,6 +3,8 @@ import QtQuick 2.0
 Item {
     id: root
 
+    property int menuButtonSize: width/7
+
     Row {
         Repeater  {
             model: layout.menu

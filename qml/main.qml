@@ -16,7 +16,6 @@ Window {
     property int fontSize3: portrait ? height / 48 : width / 48
 
     property int buttonSize: portrait ? width/6 : width/12
-    property int menuButtonSize: width/7
 
     property int faderRadius:  buttonSize/2
     property int buttonRadius: buttonSize/5
@@ -82,15 +81,15 @@ Window {
             id: scaleSwitchRow
             visible: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
             anchors.top: octaveRangerRow.bottom
-            width: portrait ? parent.width - 2 * buttonSize :  parent.width - buttonSize
-            height: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
+            width: parent.width //portrait ? parent.width - 2 * buttonSize :  parent.width - buttonSize
+            height: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? (portrait ? buttonSize * 2 : buttonSize) : 0
         }
 
         Loader {
             id: openArchiveButton
             visible: layout.ScaleSwitchVisible && (layout.playAreaVisible || layout.synthAreaVisible)
             anchors {
-                top: octaveRangerRow.bottom
+                top: portrait ? scaleSwitchRow.bottom :  scaleSwitchRow.top
                 right: parent.right
             }
             width: buttonSize
@@ -108,7 +107,7 @@ Window {
             anchors.top: scaleSwitchRow.bottom
             visible: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible)
             width: parent.width
-            height: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? buttonSize : 0
+            height: layout.rootNoteSetterVisible && (layout.playAreaVisible || layout.synthAreaVisible) ? (portrait ? buttonSize * 2 : buttonSize) : 0
         }
 
         PlayArea {
