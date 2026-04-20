@@ -1,9 +1,6 @@
 [submodule "lib/misulib"]
 	path = lib/misulib
 	url = https://github.com/misuco/misulib
-[submodule "lib/polymobilesynth"]
-	path = lib/polymobilesynth
-	url = https://github.com/misuco/polymobilesynth
 [submodule "lib/qmidi"]
 	path = lib/qmidi
 	url = https://github.com/misuco/QMidi.git
